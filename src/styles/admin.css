@@ -13,3 +13,26 @@
   --admin-teritary-color: #F6C00B;
   --admin-button-color: #dedede;
 }
+.custom-dropdown .dropdown-menu {
+  width: 800px; /* Adjust width as needed */
+  padding: 20px;
+}
+
+.custom-dropdown .dropdown-item {
+  display: block;
+  width: 100%;
+  padding: 0.25rem 1.5rem;
+  clear: both;
+  font-weight: 400;
+  color: #212529;
+  text-align: inherit;
+  white-space: nowrap;
+  background-color: transparent;
+  border: 0;
+}
+
+.custom-dropdown .dropdown-header {
+  font-size: 1.1rem;
+  font-weight: bold;
+  padding-top: 0;
+}

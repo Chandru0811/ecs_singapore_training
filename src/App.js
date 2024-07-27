@@ -2,6 +2,8 @@ import './App.css';
 import Admin from './Layout/Admin';
 import { useEffect, useState } from 'react';
 import UserAuth from './Layout/UserAuth';
+import './styles/admin.css';
+import './styles/client.css';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
