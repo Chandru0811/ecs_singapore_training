@@ -1,0 +1,15 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Public Sans", sans-serif;
+}
+
+:root {
+  --admin-primary-color: #fdefc2;
+  --admin-secondary-color: #fadf85;
+  --admin-background-color: #7C2C83;
+  --admin-text-color: #000;
+  --admin-teritary-color: #F6C00B;
+  --admin-button-color: #dedede;
+}
