@@ -1,7 +1,7 @@
 import './App.css';
-import Admin from './Layout/Admin';
+import Admin from './layouts/Admin';
 import { useEffect, useState } from 'react';
-import UserAuth from './Layout/UserAuth';
+import UserAuth from './layouts/UserAuth';
 import './styles/admin.css';
 import './styles/client.css';
 

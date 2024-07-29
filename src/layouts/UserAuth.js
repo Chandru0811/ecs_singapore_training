@@ -1,5 +1,5 @@
 import React from "react";
-import Login from "../Common/Login";
+import Login from "../components/Login";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 const UserAuth = ({handleLogin}) => {
