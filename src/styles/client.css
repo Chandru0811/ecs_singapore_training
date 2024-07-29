@@ -15,6 +15,7 @@
   --client-logotext-color: #4d4d4d;
   --client-line-color: #AA205E;
   --client-company-button-colr: #E8E8E8;
+  --client-button-hover: #0088eb;
 }
 
 .custom-dropdown .dropdown-menu {
@@ -35,6 +36,38 @@
   border: 0;
 }
 
+.search-icon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: #aaa; /* Adjust color as needed */
+}
+.nav-link {
+  position: relative;
+  --bs-nav-link-hover-color: var(--client-button-hover);
+  transition: color 0.3s ease-in-out;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  display: block;
+  margin-top: 5px;
+  right: 0;
+  background: var(--client-button-hover);
+  transition: width 0.3s ease-in-out;
+  -webkit-transition: width 0.3s ease-in-out;
+}
+
+.nav-link:hover::after {
+  width: 100%;
+  left: 0;
+  background: var(--client-button-hover);
+}
 .custom-dropdown .dropdown-header {
   font-size: 1.1rem;
   font-weight: bold;
