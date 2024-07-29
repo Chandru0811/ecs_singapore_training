@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   Navbar,
@@ -29,7 +29,7 @@ import { FaSearch } from "react-icons/fa";
 const Header = ({ handleLogin }) => {
   const [course, setCourse] = useState(false);
   const navigate = useNavigate();
-
+  const courseRef = useRef(null);
   const courses = [
     {
       name: "Java Developer",
@@ -82,6 +82,19 @@ const Header = ({ handleLogin }) => {
       icon: devops,
     },
   ];
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (courseRef.current && !courseRef.current.contains(event.target)) {
+        setCourse(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
   return (
     <>
       <div >
@@ -115,18 +128,29 @@ const Header = ({ handleLogin }) => {
             className="justify-content-end me-5"
           >
             <Nav className=" gap-4">
-              <button
+            {/* <div
                 className="btn btn-outline-primary rounded-0"
-                onClick={() => setCourse(!course)}
+                onMouseEnter={() => setCourse(true)}
+                // onMouseLeave={() => setCourse(false)}
               >
                 All Course{" "}
                 {course ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown />}
-              </button>
+              </div> */}
+              <div ref={courseRef}>
+                <button
+                  className="btn btn-outline-primary rounded-0"
+                  onClick={() => setCourse(!course)}
+                >
+                  All Course
+                  {course ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown />}
+                </button>
+              </div>
               <div className="form-group position-relative">
                 <input
                   type="text"
                   className="form-control"
                   placeholder="Search"
+                  style={{minWidth:"40%"}}
                 />
                 <span className="search-icon">
                   <FaSearch className="" />
@@ -153,10 +177,11 @@ const Header = ({ handleLogin }) => {
               backgroundColor: "#f1f6ff",
               borderBottom: "1px solid #7bbff4",
             }}
+            ref={courseRef}
           >
             <div className="row">
               {courses.map((course, index) => (
-                <div key={index} className="col-md-2 d-flex">
+                <div key={index} className="col-md-2 col-4 d-flex">
                   <div className="col-3">
                     <img
                       src={course.icon}
@@ -165,8 +190,8 @@ const Header = ({ handleLogin }) => {
                     />
                   </div>
                   <div
-                    className="col-9 text-start"
-                    style={{ fontSize: "0.8vw" }}
+                    className="col-9 text-start fw-light"
+                    // style={{ fontSize: "0.8vw" }}
                   >
                     <h5 className="mb-0">{course.name}</h5>
                     <p>{course.description}</p>
