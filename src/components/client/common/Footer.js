@@ -5,7 +5,7 @@ import { TbMail } from "react-icons/tb";
 
 const Footer = () => {
   return (
-    <footer
+    <div
       className="container-fluid px-0 text-light"
       style={{ backgroundColor: "#31135E" }}
     >
@@ -105,7 +105,7 @@ const Footer = () => {
           </p>
         </div>
       </div>
-    </footer>
+    </div>
   );
 };
 
