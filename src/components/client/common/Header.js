@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, NavLink } from "react-router-dom";
 import {
   Navbar,
   Nav,
@@ -110,7 +110,7 @@ const Header = ({ handleLogin }) => {
           Gap/Non IT/Any Passed outs)
         </p>
         <Navbar bg="light" expand="lg" className="shadow-lg">
-          <Navbar.Brand href="#" className="ms-3">
+        <Navbar.Brand as={NavLink} to="/home" className="ms-3">
             <img
               src={logo}
               height="40"
@@ -156,11 +156,10 @@ const Header = ({ handleLogin }) => {
                   <FaSearch className="" />
                 </span>
               </div>
-
-              <Nav.Link href="#about">About</Nav.Link>
+              <Nav.Link as={NavLink} to="/about">About</Nav.Link>
               <Nav.Link href="#job-post">Job Post</Nav.Link>
               <Nav.Link href="#blogs">Blogs</Nav.Link>
-              <Nav.Link href="#contact">Contact</Nav.Link>
+              <Nav.Link as={NavLink} to="/contact">Contact</Nav.Link>
 
               <Link to="/">
                 <Button variant="primary" className="ml-2">
