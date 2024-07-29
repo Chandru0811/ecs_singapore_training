@@ -7,7 +7,6 @@ import './styles/client.css';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  // const navigate = useNavigate();
   const handleLogin = () => {
     sessionStorage.setItem("isAuthenticated", true);
     setIsAuthenticated(true);
@@ -15,7 +14,6 @@ function App() {
 
   const handleLogout = () => {
     setIsAuthenticated(false);
-    // navigate("/")
     sessionStorage.removeItem("isAuthenticated");
   };
   useEffect(() => {

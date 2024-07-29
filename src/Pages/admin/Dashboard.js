@@ -1,9 +1,17 @@
-import React from 'react'
+import React from "react";
 
 function Dashboard() {
+  const handelLogin =()=>{
+    alert("Hii")
+  }
   return (
-    <div>Dashboard</div>
-  )
+    <div>
+      Dashboard
+      <button onClick={handelLogin} type="submit" >
+        Logout
+      </button>
+    </div>
+  );
 }
 
-export default Dashboard
+export default Dashboard;

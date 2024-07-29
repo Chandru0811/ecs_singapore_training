@@ -1,18 +1,20 @@
-import React from 'react'
-import {  useNavigate } from 'react-router-dom';
+import React from "react";
 
-const Login = ({handleLogin}) => { 
- const navigate = useNavigate();
-  const  handleLoginClick =()=>{
-    handleLogin();
-    navigate("/dashborad")
-  }
+const Login = ({ handleLogin }) => {
+  // const handleLoginClick = () => {
+  //   handleLogin();
+  // };
   return (
-    <div className='d-flex justify-content-center '>
-        <h1>Login</h1>
-        <button className='btn btn-outline-success my-5' onClick={handleLoginClick}>login</button>
+    <div className="d-flex justify-content-center ">
+      <h1>Login</h1>
+      <button
+        className="btn btn-outline-success my-5"
+        onClick={handleLogin}
+      >
+        login
+      </button>
     </div>
-  )
-}
+  );
+};
 
-export default Login
+export default Login;
