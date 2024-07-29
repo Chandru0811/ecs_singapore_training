@@ -6,13 +6,17 @@
 }
 
 :root {
-  --admin-primary-color: #fdefc2;
-  --admin-secondary-color: #fadf85;
-  --admin-background-color: #7C2C83;
-  --admin-text-color: #000;
-  --admin-teritary-color: #F6C00B;
-  --admin-button-color: #dedede;
+  --client-primary-color: #118AEF;
+  --client-secondary-color: #FECF08;
+  --client-background-color: #11235A;
+  --client-text-color: #000;
+  --client-teritary-color: #fff;
+  --client-shadow-color: #c7c2ce;
+  --client-logotext-color: #4d4d4d;
+  --client-line-color: #AA205E;
+  --client-company-button-colr: #E8E8E8;
 }
+
 .custom-dropdown .dropdown-menu {
   width: 800px; /* Adjust width as needed */
   padding: 20px;
@@ -44,3 +48,149 @@
   pointer-events: none;
   color: #aaa; /* Adjust color as needed */
 }
+
+/* Contact Start */
+.contactCard {
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 6px 12px 0px var(--client-shadow-color);
+}
+
+.logoText {
+  color: var(--client-logotext-color);
+}
+
+/* Contact End */
+
+/* / Home / */
+.Home .subhead{
+  color: var( --client-primary-color);
+}
+
+.Home .homeCard{
+  box-shadow: 0 6px 6px 0px var(--client-shadow-color);
+}
+
+.Home .homeCard .col-md-4 {
+  position: relative;
+}
+
+.Home .homeCard .col-md-4:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  width: 2px;
+  height: 80%;
+  top: 10%;
+}
+
+
+/* / landing page  / */
+.enroll-btn {
+  background-color: var(--client-primary-color);
+  color: var(--client-teritary-color);
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+.sub-content {
+  color: var(--client-primary--color);
+  text-align: start;
+}
+
+.react-multiple-carousel__arrow--left,
+.react-multiple-carousel__arrow--right {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1;
+}
+
+.react-multiple-carousel__arrow--left {
+  left: 1px;
+}
+
+.react-multiple-carousel__arrow--right {
+  right: 1%;
+}
+
+.input-title {
+  color: var(--client-primary-color);
+}
+
+/* / landing page  / */
+
+/* / About / */
+.about-banner {
+  position: relative;
+  background-image: url(../assets/client/about_bg-image.png);
+  background-repeat: no-repeat;
+  background-size: cover;
+  max-height: 80vh;
+  height: 80%;
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+
+.about-banner::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--client-primary-color);
+  opacity: 0.9;
+  z-index: 1;
+}
+
+.about-banner .content-wrapper {
+  position: relative;
+  z-index: 2;
+}
+
+.about-head {
+  text-align: start;
+  color: var(--client-teritary-color);
+  margin-top: 20%;
+}
+
+.enroll-btn {
+  background-color: var(--client-teritary-color);
+  color: var(--client-primary-color);
+}
+
+.contact-btn {
+  border: 1px solid var(--client-teritary-color);
+  color: var(--client-teritary-color);
+}
+
+.enroll-btn:hover {
+  background-color: var(--client-teritary-color) !important;
+  color: var(--client-primary-color);
+}
+
+.contact-btn:hover{
+  border: 1px solid var(--client-teritary-color) !important;
+  color: var(--client-teritary-color);
+}
+
+.company-btn{
+  background-color: var(--client-company-button-color);
+  color: var(--client-text-color);
+}
+.company-btn:active{
+  background-color: var(--client-line-color);
+  color: var(--client-teritary-color);
+}
+
+.learn-btn{
+  background-color: var(--client-background-color);
+  color: var(--client-teritary-color);
+}
+.learn-btn:hover{
+  background-color: var(--client-background-color);
+  color: var(--client-teritary-color);
+}
+/* / About End  / */
