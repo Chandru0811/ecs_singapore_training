@@ -3,6 +3,10 @@ import Login from "../components/Login";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Header from "../components/client/common/Header";
 import Footer from "../components/client/common/Footer";
+import ClientAbout from "../Pages/client/ClientAbout";
+import Contact from "../Pages/client/Contact";
+import Home from "../Pages/client/Home";
+import LandingPage from "../Pages/client/LandingPage";
 
 const UserAuth = ({ handleLogin }) => {
   return (
@@ -19,9 +23,13 @@ const UserAuth = ({ handleLogin }) => {
               zIndex: "-999",
             }}
           > */}
-            <Routes>
-              <Route path="/" element={<Login handleLogin={handleLogin} />} />
-            </Routes>
+          <Routes>
+            <Route path="/home" element={<Home />} />
+            <Route path="/" element={<Login handleLogin={handleLogin} />} />
+            <Route path="/about" element={<ClientAbout />} />
+            <Route path="/contact" element={<Contact />} />
+          </Routes>
+          <LandingPage />
           {/* </div> */}
           <Footer />
         </div>
