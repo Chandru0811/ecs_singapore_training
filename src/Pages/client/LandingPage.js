@@ -3,6 +3,7 @@ import heroImg from "../../assets/client/landing_hero_img.jpg";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import courseImg from "../../assets/client/landing_card_logo.jpg";
+import Testimonial from "./Testimonial";
 
 const responsive = {
   superLargeDesktop: {
@@ -10,12 +11,16 @@ const responsive = {
     items: 5,
   },
   desktop: {
-    breakpoint: { max: 3000, min: 1024 },
+    breakpoint: { max: 3000, min: 1200 },
+    items: 3,
+  },
+  smallDesktop: {
+    breakpoint: { max: 1200, min: 1024 },
     items: 3,
   },
   tablet: {
     breakpoint: { max: 1024, min: 464 },
-    items: 1,
+    items: 2,
   },
   mobile: {
     breakpoint: { max: 464, min: 0 },
@@ -67,7 +72,7 @@ function LandingPage() {
     <div>
       {/* banner */}
       <div className="container">
-        <div className="row py-5">
+        <div className="row py-5  d-flex align-items-center">
           <div className="col-md-7 col-12 py-3 text-start">
             <h2 className="display-3 fw-bolder text-dark">
               Let's Find The Right Course For You
@@ -77,7 +82,7 @@ function LandingPage() {
               media?
             </h6>
             <div className="py-3">
-              <button className="enroll-btn">Enroll</button>
+              <button className="enrollbtn">Enroll</button>
             </div>
           </div>
           <div className="col-md-5 col-12">
@@ -97,18 +102,18 @@ function LandingPage() {
               voluptate minus! Laudantium quidem!
             </h6>
           </div>
-          <div className="col-md-10 col-12  position-relative">
+          <div className="col-md-10 col-12  position-relative ">
             <Carousel responsive={responsive} infinite={true} autoPlay={false}>
               {cardData.map((card) => (
                 <div key={card.id}>
-                  <div className="row m-0">
+                  <div className="row m-0 py-4">
                     <div className="col-md-4 col-12 pe-auto">
                       <div
-                        className="card text-start h-100"
-                        style={{ width: "18rem" }}
+                        className="text-start card h-100 mx-1 landing-cards text-light"
+                        style={{ width: "18.5rem" }}
                       >
                         <img
-                          className="card-img-top img-fluid w-25"
+                          className="card-img-top img-fluid w-25 h-25 rounded-circle p-2"
                           src={card.img}
                           alt="Card image cap"
                         />
@@ -134,7 +139,7 @@ function LandingPage() {
             <iframe
               className="rounded"
               src="https://www.youtube.com/embed/dQw4w9WgXcQ"
-              width="600"
+              width="100%"
               height="400"
               title="YouTube Video"
             />
@@ -169,12 +174,19 @@ function LandingPage() {
                   placeholder="Enter email..."
                 />
               </div>
-              <span className="enroll-btn my-3 text-center w-25">Send</span>
+              <div className="float-end">
+                <button className="enrollbtn">Send</button>
+              </div>
             </div>
           </div>
         </div>
       </div>
       {/* input section  */}
+      {/* landing testimonial */}
+      <div className="container">
+        <Testimonial />
+      </div>
+      {/* landing testimonial */}
     </div>
   );
 }
