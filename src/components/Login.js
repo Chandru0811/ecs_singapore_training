@@ -10,7 +10,7 @@ const Login = ({handleLogin}) => {
     setShowPassword(!showPassword);
   };
 const handleLoginClikLogin=()=>{
-  navigate("/")
+  navigate("/home")
   handleLogin();
 }
   return (
