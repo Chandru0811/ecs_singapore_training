@@ -1,14 +1,18 @@
 import React, { useState } from 'react';
 import { IoEyeOffOutline, IoEyeOutline } from 'react-icons/io5';
+import { useNavigate } from 'react-router-dom';
 // import './Login.css';
 
 const Login = ({handleLogin}) => {
   const [showPassword, setShowPassword] = React.useState(false);
-
+ const navigate =useNavigate();
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
-
+const handleLoginClikLogin=()=>{
+  navigate("/")
+  handleLogin();
+}
   return (
     <div className="login-container w-100">
       <div className="container d-flex justify-content-center align-items-center vh-100">
@@ -47,7 +51,7 @@ const Login = ({handleLogin}) => {
             <div className="form-group mb-3 text-end">
               <a className="text-primary" href="#forgot-password">Forgot Password?</a>
             </div>
-            <button type="button" className="btn btn-primary w-100 mb-3" onClick={handleLogin}>Login</button>
+            <button type="button" className="btn btn-primary w-100 mb-3" onClick={handleLoginClikLogin}>Login</button>
           </form>
           <div className="divider text-center mb-4">or</div>
           <button className="btn btn-outline-primary w-100">

@@ -102,7 +102,7 @@ const Header = ({ handleLogin }) => {
           Gap/Non IT/Any Passed outs)
         </p>
         <Navbar bg="light" expand="lg" className="shadow-lg">
-        <Navbar.Brand as={NavLink} to="/home" className="ms-3">
+        <Navbar.Brand as={NavLink} to="/" className="ms-3">
             <img
               src={logo}
               height="40"
@@ -148,7 +148,7 @@ const Header = ({ handleLogin }) => {
                   <FaSearch className="" />
                 </span>
               </div>
-              <Nav.Link >Home</Nav.Link>
+              <Nav.Link as={NavLink} to="/home">Home</Nav.Link>
               <Nav.Link as={NavLink} to="/about">About</Nav.Link>
               <Nav.Link >Blogs</Nav.Link>
               <Nav.Link as={NavLink} to="/contact">Contact</Nav.Link>
