@@ -82,7 +82,12 @@ function Testimonial() {
   return (
     <div className="carousel-container-testimonial">
       <h1 className="fw-bolder py-3">Testimonial</h1>
-      <Carousel responsive={responsive} infinite={true} autoPlay={false}>
+      <Carousel
+        responsive={responsive}
+        infinite={true}
+        autoPlay={false}
+        showDots={true}
+      >
         {cardData.map((card) => (
           <div key={card.id} className="react-multi-carousel-items">
             <div className="row m-0 p-5">
