@@ -1,29 +1,26 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, NavLink } from "react-router-dom";
-import {
-  Navbar,
-  Nav,
-  Button,
-} from "react-bootstrap";
-import logo from "../../../assets/admin/CRMLogo.png";
+import { Navbar, Nav, Button } from "react-bootstrap";
+import logo from "../../../assets/client/CRMLogo.png";
 import { MdKeyboardArrowUp } from "react-icons/md";
 import { MdKeyboardArrowDown } from "react-icons/md";
-import java from "../../../assets/admin/javaicon.png";
-import react from "../../../assets/admin/reacticon.png";
-import php from "../../../assets/admin/php.png";
-import angular from "../../../assets/admin/angularicon.png";
-import aws from "../../../assets/admin/aws.png";
-import datascience from "../../../assets/admin/datasciencicon.png";
-import devops from "../../../assets/admin/devopsicon.png";
-import fultter from "../../../assets/admin/fluttericon.png";
-import python from "../../../assets/admin/pythone.png";
-import node from "../../../assets/admin//nodeicon.png";
+import java from "../../../assets/client/javaicon.png";
+import react from "../../../assets/client/reacticon.png";
+import php from "../../../assets/client/php.png";
+import angular from "../../../assets/client/angularicon.png";
+import aws from "../../../assets/client/aws.png";
+import datascience from "../../../assets/client/datasciencicon.png";
+import devops from "../../../assets/client/devopsicon.png";
+import fultter from "../../../assets/client/fluttericon.png";
+import python from "../../../assets/client/pythone.png";
+import node from "../../../assets/client//nodeicon.png";
 import { FaSearch } from "react-icons/fa";
 
 const Header = ({ handleLogin }) => {
   const [course, setCourse] = useState(false);
   const navigate = useNavigate();
   const courseRef = useRef(null);
+  const courseRef2 = useRef(null);
   const courses = [
     {
       name: "Java Developer",
@@ -78,31 +75,26 @@ const Header = ({ handleLogin }) => {
   ];
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (courseRef.current && !courseRef.current.contains(event.target)) {
+      if (courseRef.current &&courseRef2.current && !courseRef.current.contains(event.target) && !courseRef2.current.contains(event.target)) {
         setCourse(false);
       }
     };
-    document.addEventListener('mousedown', handleClickOutside);
-
+    document.addEventListener("mousedown", handleClickOutside);
 
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
- 
 
   return (
     <>
-      <div className="" style={{position:"sticky" ,top:"0",zIndex:"999"}}>
-        <p
-          className="mb-0 text-light fw-light topHeader"
-          
-        >
+      <div className="" style={{ position: "sticky", top: "0", zIndex: "999" }}>
+        <p className="mb-0 text-light fw-light topHeader">
           We offer Job Gurantee Courses (Any Degree/Diploma Canditates/Year
           Gap/Non IT/Any Passed outs)
         </p>
-        <Navbar bg="light" expand="lg" className="shadow-lg">
-        <Navbar.Brand as={NavLink} to="/" className="ms-3">
+        <Navbar bg="light" expand="lg" className="clientNav shadow-lg">
+          <Navbar.Brand as={NavLink} to="/" className="ms-3">
             <img
               src={logo}
               height="40"
@@ -117,18 +109,10 @@ const Header = ({ handleLogin }) => {
           <Navbar.Toggle aria-controls="basic-navbar-nav " />
           <Navbar.Collapse
             id="basic-navbar-nav"
-            className="justify-content-end me-5"
+            className="justify-content-end me-5 "
           >
             <Nav className=" gap-4">
-            {/* <div
-                className="btn btn-outline-primary rounded-0"
-                onMouseEnter={() => setCourse(true)}
-                // onMouseLeave={() => setCourse(false)}
-              >
-                All Course{" "}
-                {course ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown />}
-              </div> */}
-              <div ref={courseRef}>
+              <div ref={courseRef2}>
                 <button
                   className="btn btn-outline-primary rounded-0"
                   onClick={() => setCourse(!course)}
@@ -142,62 +126,63 @@ const Header = ({ handleLogin }) => {
                   type="text"
                   className="form-control"
                   placeholder="Search"
-                  style={{minWidth:"40%"}}
                 />
                 <span className="search-icon">
                   <FaSearch className="" />
                 </span>
               </div>
-              <Nav.Link as={NavLink} to="/home">Home</Nav.Link>
-              <Nav.Link as={NavLink} to="/about">About</Nav.Link>
-              <Nav.Link >Blogs</Nav.Link>
-              <Nav.Link as={NavLink} to="/contact">Contact</Nav.Link>
+              <Nav.Link as={NavLink} to="/home">
+                Home
+              </Nav.Link>
+              <Nav.Link as={NavLink} to="/about">
+                About
+              </Nav.Link>
+              <Nav.Link>Blogs</Nav.Link>
+              <Nav.Link as={NavLink} to="/contact">
+                Contact
+              </Nav.Link>
 
               <Link to="/login">
-                <Button variant="primary" className="ml-2" >
+                <Button  className="loginBtn">
                   Login
                 </Button>
               </Link>
             </Nav>
           </Navbar.Collapse>
         </Navbar>
-        </div>
-        {course && (
-          <div
-            className="container-fluid pt-4 shadow CourseDropDown"
-            style={{
-               position:"sticky",
-               top:"91px",
-               zIndex:"999",
-              backgroundColor: "#f1f6ff",
-              borderBottom: "1px solid #7bbff4",
-            }}
-            ref={courseRef}
-          >
-            <div className="row">
-              {courses.map((course, index) => (
-                <div key={index} className="col-md-2 col-4 d-flex">
-                  <div className="col-3">
-                    <img
-                      src={course.icon}
-                      alt={`icon`}
-                      className="course-icon"
-                    />
-                  </div>
-                  <div
-                    className="col-9 text-start fw-light"
-                    // style={{ fontSize: "0.8vw" }}
-                  >
-                    <h5 className="mb-0">{course.name}</h5>
-                    <p>{course.description}</p>
-                  </div>
+      </div>
+      {course && (
+        <div
+          className="container-fluid pt-4 shadow CourseDropDown"
+          style={{
+            position: "fixed",
+            // top: "91px",
+            // overflow:"auto",
+            zIndex: "99",
+            backgroundColor: "#f1f6ff",
+            borderBottom: "1px solid #7bbff4",
+          }}
+          ref={courseRef}
+        >
+          <div className="row">
+            {courses.map((course, index) => (
+              <div key={index} className="col-sm-4 col-md-2 col-6 d-flex">
+                <div className="col-3">
+                  <img src={course.icon} alt={`icon`} className="course-icon" />
                 </div>
-              ))}
-              <p className="text-info text-end mb-0">see more..</p>
-            </div>
+                <div
+                  className="col-9 text-start fw-light"
+                  // style={{ fontSize: "0.8vw" }}
+                >
+                  <h5 className="mb-0">{course.name}</h5>
+                  <p>{course.description}</p>
+                </div>
+              </div>
+            ))}
+            <p className="text-info text-end mb-0">see more..</p>
           </div>
-        )}
-      
+        </div>
+      )}
     </>
   );
 };
