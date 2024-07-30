@@ -24,12 +24,12 @@ const UserAuth = ({ handleLogin }) => {
             }}
           > */}
           <Routes>
+            <Route path="/" element={<LandingPage />} />
             <Route path="/home" element={<Home />} />
             <Route path="/" element={<Login handleLogin={handleLogin} />} />
             <Route path="/about" element={<ClientAbout />} />
             <Route path="/contact" element={<Contact />} />
           </Routes>
-          <LandingPage />
           {/* </div> */}
           <Footer />
         </div>
