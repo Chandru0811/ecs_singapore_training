@@ -3,25 +3,21 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import AdminHeader from "../components/admin/common/AdminHeader";
 import AdminFooter from "../components/admin/common/AdminFooter";
 import Dashboard from "../Pages/admin/Dashboard";
+import AdminHome from "../Pages/admin/AdminHome";
 const Admin = ({ handleLogout }) => {
   return (
     <BrowserRouter>
-      <div className="container-fluid p-0">
+      <div className="container-fluid p-0" style={{backgroundColor: '#f2f2f2'}}>
         <AdminHeader handleLogout={handleLogout} />
-        <button onClick={handleLogout} type="submit">
-          Logout
-        </button>
         <div
-          className="mt-2"
+          className=""
           style={{
             minHeight: "90vh",
-            position: "relative",
-            top: "91px",
-            zIndex: "-999",
           }}
         >
           <Routes>
-            {/* <Route path="/" element={<Dashboard />} /> */}
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/home" element={<AdminHome />} />
           </Routes>
         </div>
         <AdminFooter />

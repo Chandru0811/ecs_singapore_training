@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { IoEyeOffOutline, IoEyeOutline } from 'react-icons/io5';
 // import './Login.css';
 
-const Login = () => {
+const Login = ({handleLogin}) => {
   const [showPassword, setShowPassword] = React.useState(false);
 
   const togglePasswordVisibility = () => {
@@ -47,7 +47,7 @@ const Login = () => {
             <div className="form-group mb-3 text-end">
               <a className="text-primary" href="#forgot-password">Forgot Password?</a>
             </div>
-            <button type="submit" className="btn btn-primary w-100 mb-3">Login</button>
+            <button type="button" className="btn btn-primary w-100 mb-3" onClick={handleLogin}>Login</button>
           </form>
           <div className="divider text-center mb-4">or</div>
           <button className="btn btn-outline-primary w-100">

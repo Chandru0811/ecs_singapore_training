@@ -3,14 +3,8 @@ import { Link, useNavigate, NavLink } from "react-router-dom";
 import {
   Navbar,
   Nav,
-  NavDropdown,
   Button,
-  Container,
-  Row,
-  Col,
 } from "react-bootstrap";
-import Form from "react-bootstrap/Form";
-import InputGroup from "react-bootstrap/InputGroup";
 import logo from "../../../assets/admin/CRMLogo.png";
 import { MdKeyboardArrowUp } from "react-icons/md";
 import { MdKeyboardArrowDown } from "react-icons/md";
@@ -88,23 +82,21 @@ const Header = ({ handleLogin }) => {
         setCourse(false);
       }
     };
-
     document.addEventListener('mousedown', handleClickOutside);
+
 
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
+ 
+
   return (
     <>
-      <div >
+      <div className="" style={{position:"sticky" ,top:"0",zIndex:"999"}}>
         <p
-          className="mb-0 text-light fw-light"
-          style={{
-            backgroundColor: "#11235A",
-            padding: "2px 0",
-            // fontSize: "1vw",
-          }}
+          className="mb-0 text-light fw-light topHeader"
+          
         >
           We offer Job Gurantee Courses (Any Degree/Diploma Canditates/Year
           Gap/Non IT/Any Passed outs)
@@ -156,23 +148,27 @@ const Header = ({ handleLogin }) => {
                   <FaSearch className="" />
                 </span>
               </div>
+              <Nav.Link >Home</Nav.Link>
               <Nav.Link as={NavLink} to="/about">About</Nav.Link>
-              <Nav.Link href="#job-post">Job Post</Nav.Link>
-              <Nav.Link href="#blogs">Blogs</Nav.Link>
+              <Nav.Link >Blogs</Nav.Link>
               <Nav.Link as={NavLink} to="/contact">Contact</Nav.Link>
 
-              <Link to="/">
-                <Button variant="primary" className="ml-2">
+              <Link to="/login">
+                <Button variant="primary" className="ml-2" >
                   Login
                 </Button>
               </Link>
             </Nav>
           </Navbar.Collapse>
         </Navbar>
+        </div>
         {course && (
           <div
-            className="container-fluid pt-4 shadow"
+            className="container-fluid pt-4 shadow CourseDropDown"
             style={{
+               position:"sticky",
+               top:"91px",
+               zIndex:"999",
               backgroundColor: "#f1f6ff",
               borderBottom: "1px solid #7bbff4",
             }}
@@ -184,7 +180,7 @@ const Header = ({ handleLogin }) => {
                   <div className="col-3">
                     <img
                       src={course.icon}
-                      alt={` icon`}
+                      alt={`icon`}
                       className="course-icon"
                     />
                   </div>
@@ -201,7 +197,7 @@ const Header = ({ handleLogin }) => {
             </div>
           </div>
         )}
-      </div>
+      
     </>
   );
 };

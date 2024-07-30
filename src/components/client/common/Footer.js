@@ -12,7 +12,7 @@ import { FiGithub } from "react-icons/fi";
 const Footer = () => {
   return (
     <div
-      className="container-fluid text-light"
+      className="container-fluid text-light "
       style={{ backgroundColor: "#31135E" }}
     >
       <div className=" row px-3 pt-5">
