@@ -6,10 +6,73 @@
 }
 
 :root {
-  --admin-primary-color: #fdefc2;
+  --admin-primary-color: #118AEF;
   --admin-secondary-color: #fadf85;
   --admin-background-color: #7C2C83;
   --admin-text-color: #000;
-  --admin-teritary-color: #F6C00B;
+  --admin-teritary-color: #fff;
   --admin-button-color: #dedede;
+  --admin-header-hover-color: #2d5677;
+  --admin-paratext-color: #515B6F;
+}
+
+/* AdminHeader */
+/* .dropdown-toggle::after{
+  display: none;
+  margin-left: .255em;
+  vertical-align: .255em;
+  content: "";
+  border-top: none !important;
+    border-right: none !important;
+    border-bottom: 0;
+    border-left: none !important;
+} */
+a#basic-nav-dropdown{
+  padding-top: 3px !important;
+}
+/* .dropdown-item.active, .dropdown-item:active {
+  color: var(--admin-teritary-color) !important;
+  text-decoration: none;
+  background-color: var(--bs-dropdown-link-active-bg);
+} */
+
+.adminHeader{
+  background-color:var(--admin-primary-color) ;
+}
+.adminHeaderNav .nav-link{
+ color: var(--admin-teritary-color);
+}
+.adminHeaderNav .navbar-collapse .nav-link{
+  position: relative;
+  --bs-nav-link-hover-color: var(--admin-paratext-color) !important;
+  transition: color 0.3s ease-in-out;
+}
+.adminHeaderNav .navbar-collapse .nav-link::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  display: block;
+  margin-top: 5px;
+  right: 0;
+  background: var(--admin-teritary-color);
+  transition: width 0.3s ease-in-out;
+  -webkit-transition: width 0.3s ease-in-out;
+}
+.adminHeaderNav .navbar-collapse .nav-link:hover::after {
+  width: 100%;
+  left: 0;
+  background: var(--admin-teritary-color);
+}
+
+.adminHeaderNav .navbar-collapse .navbar-nav .nav-link.active, 
+.adminHeaderNav .navbar-collapse .navbar-nav .nav-link.show {
+  color: var(--admin-teritary-color) !important;
+}
+
+.adminHeaderNav .navbar-collapse .navbar-nav .nav-link.active::after, 
+.adminHeaderNav .navbar-collapse .navbar-nav .nav-link.show::after {
+  width: 100%;
+  left: 0;
+  background: var(--admin-teritary-color);
 }

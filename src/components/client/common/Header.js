@@ -109,19 +109,19 @@ const Header = ({ handleLogin }) => {
           <Navbar.Toggle aria-controls="basic-navbar-nav " />
           <Navbar.Collapse
             id="basic-navbar-nav"
-            className="justify-content-end me-5 "
+            className=" "
           >
-            <Nav className=" gap-4">
+            <Nav className="gap-3">
               <div ref={courseRef2}>
                 <button
-                  className="btn btn-outline-primary rounded-0"
+                  className="btn btn-outline-primary rounded-1 courseBtn"
                   onClick={() => setCourse(!course)}
                 >
                   All Course
                   {course ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown />}
                 </button>
               </div>
-              <div className="form-group position-relative">
+              <div className="form-group position-relative headerInput" style={{width:"40vw"}}>
                 <input
                   type="text"
                   className="form-control"
@@ -131,6 +131,8 @@ const Header = ({ handleLogin }) => {
                   <FaSearch className="" />
                 </span>
               </div>
+              </Nav>
+              <Nav className=" gap-4 justify-content-end me-2" style={{flexGrow: "inherit !important"}}>
               <Nav.Link as={NavLink} to="/home">
                 Home
               </Nav.Link>

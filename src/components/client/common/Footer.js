@@ -68,7 +68,7 @@ const Footer = () => {
         <div className="col-md-2 col-12 text-start mb-3">
           <h5 className="mb-4 ">Let's do it!</h5>
           <ul className="footer-social list-inline ps-0">
-            <div className="d-flex gap-2">
+          <div className="d-flex flex-wrap gap-2 ">
           <Nav.Link href="#facebook">
             <LuFacebook />
           </Nav.Link>
