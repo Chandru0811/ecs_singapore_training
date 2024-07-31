@@ -14,8 +14,8 @@ const handleLoginClikLogin=()=>{
   handleLogin();
 }
   return (
-    <div className="login-container w-100">
-      <div className="container d-flex justify-content-center align-items-center vh-100">
+    <div className="login-container w-100 mt-5">
+      <div className="container d-flex justify-content-center align-items-center ">
         <div className="login-box p-4 rounded shadow-sm bg-white">
           <h2 className="text-center mb-4">Login</h2>
           <p className="text-center mb-4">

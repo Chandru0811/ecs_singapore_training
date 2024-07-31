@@ -93,8 +93,8 @@ function LandingPage() {
       {/* banner */}
       {/* carousel section */}
       <div className="container">
-        <div className="row py-4 m-0">
-          <div className="col-md-2 col-12 py-3">
+        <div className="row py-4 m-0 ">
+          <div className="col-md-2 col-12 px-1 py-5">
             <p className="sub-content">WHAT WE GIVE</p>
             <h5 className="text-start fw-bolder">What do You Get From Us</h5>
             <h6 className="text-start fw-light">
@@ -102,24 +102,24 @@ function LandingPage() {
               voluptate minus! Laudantium quidem!
             </h6>
           </div>
-          <div className="col-md-10 col-12  position-relative ">
+          <div className="col-md-10 col-12 px-1 position-relative ">
             <Carousel responsive={responsive} infinite={true} autoPlay={false}>
               {cardData.map((card) => (
                 <div key={card.id}>
-                  <div className="row m-0 py-4">
-                    <div className="col-md-4 col-12 pe-auto">
+                  <div className="row m-0 px-1 py-5">
+                    <div className="col-md-4 col-12 px-4">
                       <div
-                        className="text-start card h-100 mx-1 landing-cards text-light"
-                        style={{ width: "18.5rem" }}
+                        className="text-start card h-100 px-3 landing-cards text-light"
+                        style={{ width: "16rem" }}
                       >
                         <img
                           className="card-img-top img-fluid w-25 h-25 rounded-circle p-2"
                           src={card.img}
                           alt="Card image cap"
                         />
-                        <div className="card-body">
-                          <h5 className="card-title">{card.title}</h5>
-                          <p className="card-text">{card.text}</p>
+                        <div>
+                          <h6 className="card-title">{card.title}</h6>
+                          <p>{card.text}</p>
                         </div>
                       </div>
                     </div>

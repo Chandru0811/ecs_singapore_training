@@ -16,15 +16,55 @@
   --client-line-color: #AA205E;
   --client-company-button-colr: #E8E8E8;
   --client-button-hover: #0088eb;
-  --client-topBor-color: #11235A;
+  --client-topBor-color: #0f2158;
   --client-paratext-color: #515B6F;
   --client-calendarbtn-color: #e7f3fd;
+  --admin-header-hover-color: #2d5677;
 }
 
 /* AdminHeader */
-.AdminHeader{
-  background-color:var(--client-background-color) ;
+.adminHeader{
+  background-color:var(--client-primary-color) ;
 }
+.adminHeaderNav .nav-link{
+ color: var(--client-teritary-color);
+}
+.adminHeaderNav .navbar-collapse .nav-link{
+  position: relative;
+  --bs-nav-link-hover-color: var(--client-paratext-color) !important;
+  transition: color 0.3s ease-in-out;
+}
+.adminHeaderNav .navbar-collapse .nav-link::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  display: block;
+  margin-top: 5px;
+  right: 0;
+  background: var(--client-teritary-color);
+  transition: width 0.3s ease-in-out;
+  -webkit-transition: width 0.3s ease-in-out;
+}
+.adminHeaderNav .navbar-collapse .nav-link:hover::after {
+  width: 100%;
+  left: 0;
+  background: var(--client-teritary-color);
+}
+
+.adminHeaderNav .navbar-collapse .navbar-nav .nav-link.active, 
+.adminHeaderNav .navbar-collapse .navbar-nav .nav-link.show {
+  color: var(--client-teritary-color) !important;
+}
+
+.adminHeaderNav .navbar-collapse .navbar-nav .nav-link.active::after, 
+.adminHeaderNav .navbar-collapse .navbar-nav .nav-link.show::after {
+  width: 100%;
+  left: 0;
+  background: var(--client-teritary-color);
+}
+
+
 /* header */
 .custom-dropdown .dropdown-menu {
   width: 800px; /* Adjust width as needed */
@@ -52,13 +92,14 @@
   pointer-events: none;
   color: #aaa; /* Adjust color as needed */
 }
-.nav-link {
+.clientNav .navbar-collapse .nav-link,
+.list-unstyled  .nav-link {
   position: relative;
   --bs-nav-link-hover-color: var(--client-button-hover);
   transition: color 0.3s ease-in-out;
 }
 
-.nav-link::after {
+.clientNav .navbar-collapse .nav-link::after {
   content: '';
   position: absolute;
   width: 0;
@@ -71,23 +112,24 @@
   -webkit-transition: width 0.3s ease-in-out;
 }
 
-.nav-link:hover::after {
+.clientNav .navbar-collapse .nav-link:hover::after {
   width: 100%;
   left: 0;
   background: var(--client-button-hover);
 }
 
-.navbar-nav .nav-link.active, 
-.navbar-nav .nav-link.show {
+.clientNav .navbar-collapse .navbar-nav .nav-link.active, 
+.clientNav .navbar-collapse .navbar-nav .nav-link.show {
   color: var(--client-button-hover);
 }
 
-.navbar-nav .nav-link.active::after, 
-.navbar-nav .nav-link.show::after {
+.clientNav .navbar-collapse .navbar-nav .nav-link.active::after, 
+.clientNav .navbar-collapse .navbar-nav .nav-link.show::after {
   width: 100%;
   left: 0;
   background: var(--client-button-hover);
 }
+
 .topHeader{
   background-color: var(--client-topBor-color);
   padding: "2px 0";
@@ -97,6 +139,11 @@
   .topHeader{
     font-size: 3.8vw;
   }
+}
+.loginBtn {
+  --bs-btn-bg: var(--client-topBor-color) !important;
+  --bs-btn-border-color: var(--client-topBor-color) !important;
+  --bs-btn-border-radius:2.5px !important;
 }
 
 /* Contact Start */
@@ -238,6 +285,10 @@ hr {
   position: relative;
 }
 
+.Home .paraContent{
+  color: var(--client-paratext-color);
+}
+
 .Home .homeCard .col-md-4:not(:last-child)::after {
   content: '';
   position: absolute;
@@ -301,6 +352,32 @@ hr {
   word-break: break-word;
 }
 
+.trainingplacements .enquiryform{
+  background-color: var(--client-button-hover);
+}
+
+.trainingplacements .enquiryform .submitBtn{
+  background-color: var(--client-teritary-color);
+  color: var(--client-button-hover);
+}
+
+.trainingplacements .enquiryform label{
+  color: var(--client-teritary-color);
+}
+
+.homeInput{
+  border: none;
+  border-bottom: 1px solid var(--client-teritary-color);
+  background-color: var(--client-primary--color);
+  border-radius: 0px;
+  color: var(--client-teritary-color);
+}
+
+.homeInput:focus{
+  color: var(--client-teritary-color);
+  background-color: var(--client-button-hover);
+}
+
 
 /* / landing page  / */
 .enrollbtn {
@@ -329,7 +406,7 @@ hr {
 }
 
 .react-multiple-carousel__arrow--right {
-  right: 1%;
+  right: 1px;
 }
 
 .landing-cards {
@@ -344,6 +421,18 @@ hr {
   z-index: 1;
 }
 
+.carousel-container {
+  height: auto !important; 
+}
+
+.carousel-item {
+  height: auto !important; 
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* landing page  */
 
 /* / / About / / */
 .about-banner {
@@ -485,7 +574,14 @@ border: 2px solid var(--client-teritary-color);
 
 .about-textWhite{
   font-weight: bold;
+  font-size: larger;
   color: var(--client-teritary-color);
+  justify-content: end;
+  align-items: end;
+}
+.imgDesign{
+  border-left: 5px solid var(--client-line-color);
+  border-radius: 5px;
 }
 .accordion-item{
   border-left: 5px solid var(--client-line-color);

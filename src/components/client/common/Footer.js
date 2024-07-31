@@ -1,5 +1,5 @@
 import React from "react";
-import logo from "../../../assets/admin/CRMLogo.png";
+import logo from "../../../assets/client/CRMLogo.png";
 import { IoLocationOutline } from "react-icons/io5";
 import { TbMail } from "react-icons/tb";
 import { Nav } from "react-bootstrap";
