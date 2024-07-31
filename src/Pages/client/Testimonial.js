@@ -30,50 +30,50 @@ const responsive = {
 const cardData = [
   {
     id: 1,
-    title: "It was very good experience",
-    name: "Leo",
-    position: "Lead Designer",
+    title: "A Wonderful Experience",
+    name: "Alice",
+    position: "Senior Developer",
     text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet, blanditiis rerum explicabo molestiae totam numquam praesentium consequatur cupiditate voluptate quas!",
     img: courseImg,
   },
   {
     id: 2,
-    title: "It was very good experience",
-    name: "Leo",
-    position: "Lead Designer",
-    text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet, blanditiis rerum explicabo molestiae totam numquam praesentium consequatur cupiditate voluptate quas!",
+    title: "Learning Made Easy",
+    name: "Bob",
+    position: "Project Manager",
+    text: "Suspendisse potenti. Ut pharetra auctor felis, a faucibus nisi volutpat vel. Integer scelerisque, elit at pellentesque malesuada, eros justo egestas purus.",
     img: courseImg,
   },
   {
     id: 3,
-    title: "It was very good experience",
-    name: "Leo",
-    position: "Lead Designer",
-    text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet, blanditiis rerum explicabo molestiae totam numquam praesentium consequatur cupiditate voluptate quas!",
+    title: "Highly Recommend",
+    name: "Charlie",
+    position: "UI/UX Designer",
+    text: "Vivamus fermentum sem ut aliquet vulputate. Morbi et dui nec neque consequat sagittis a at odio. Etiam facilisis odio nec eros congue.",
     img: courseImg,
   },
   {
     id: 4,
-    title: "It was very good experience",
-    name: "Leo",
-    position: "Lead Designer",
-    text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet, blanditiis rerum explicabo molestiae totam numquam praesentium consequatur cupiditate voluptate quas!",
+    title: "Top-notch Training",
+    name: "Diana",
+    position: "Software Engineer",
+    text: "Donec non eros sit amet arcu interdum vulputate. Cras tincidunt bibendum arcu, et ultricies orci. Quisque vitae turpis quam.",
     img: courseImg,
   },
   {
     id: 5,
-    title: "It was very good experience",
-    name: "Leo",
-    position: "Lead Designer",
-    text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet, blanditiis rerum explicabo molestiae totam numquam praesentium consequatur cupiditate voluptate quas!",
+    title: "Exceptional Quality",
+    name: "Edward",
+    position: "Backend Developer",
+    text: "Nullam tempor ligula ac erat sollicitudin, nec laoreet tortor egestas. Phasellus scelerisque leo in mi convallis, at fermentum libero sodales.",
     img: courseImg,
   },
   {
     id: 6,
-    title: "It was very good experience",
-    name: "Leo",
-    position: "Lead Designer",
-    text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet, blanditiis rerum explicabo molestiae totam numquam praesentium consequatur cupiditate voluptate quas!",
+    title: "Great Support",
+    name: "Fiona",
+    position: "QA Specialist",
+    text: "Proin at nulla varius, vulputate justo a, tempus eros. Ut vel turpis ut enim vestibulum tincidunt ac ac erat.",
     img: courseImg,
   },
 ];
@@ -107,7 +107,7 @@ function Testimonial() {
                     <div className="person-details fw-bold">
                       <h4 className="fw-bold">{card.name}</h4>
                       <div className="d-flex gap-1">
-                        <p>{card.position}</p>
+                        <p className="fw-light">{card.position}</p>
                         <div>
                           {[...Array(5)].map((_, starIndex) => (
                             <IoIosStar
