@@ -28,7 +28,7 @@ function ClientAbout() {
                                             with over 20 years of experience in the oil and petrochemical industry.
                                         </p>
                                     </div>
-                                    <div className="d-flex">
+                                    <div className="d-flex mb-4">
                                         <button className="btn enroll-btn">Enroll Now</button>
                                         <button className="btn contact-btn ms-3">Contact Us</button>
                                     </div>
@@ -130,7 +130,7 @@ function ClientAbout() {
                             <div className="row mb-4">
                                 <div className="col-md-6 col-12 mb-3 d-flex flex-column align-items-start justify-content-center">
                                     <div className="about-head1">
-                                        <div className="d-flex align-items-start justify-content-">
+                                        <div className="d-flex align-items-start justify-content-start">
                                             <div className="p-1 mx-2 mb-3" style={{ backgroundColor: "#ec9fc2", borderRadius: "5px" }}>
                                                 <BsBoxSeam color='#AA205E' size={30} />
                                             </div>
