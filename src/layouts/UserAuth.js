@@ -15,7 +15,6 @@ const UserAuth = ({ handleLogin }) => {
         <div className="container-fluid p-0">
           <Header handleLogin={handleLogin} />
           <div
-            className="my-2"
             style={{
               minHeight: "90vh",
             }}
