@@ -14,23 +14,20 @@ const UserAuth = ({ handleLogin }) => {
       <BrowserRouter>
         <div className="container-fluid p-0">
           <Header handleLogin={handleLogin} />
-          {/* <div
-            className="mt-2"
+          <div
+            className="my-2"
             style={{
               minHeight: "90vh",
-              position: "relative",
-              top: "91px",
-              zIndex: "-999",
             }}
-          > */}
+          >
           <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route path="/home" element={<Home />} />
-            <Route path="/" element={<Login handleLogin={handleLogin} />} />
+            <Route path="/login" element={<Login handleLogin={handleLogin} />} />
             <Route path="/about" element={<ClientAbout />} />
             <Route path="/contact" element={<Contact />} />
           </Routes>
-          {/* </div> */}
+          </div>
           <Footer />
         </div>
       </BrowserRouter>

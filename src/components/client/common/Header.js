@@ -1,16 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, NavLink } from "react-router-dom";
 import {
   Navbar,
   Nav,
-  NavDropdown,
   Button,
-  Container,
-  Row,
-  Col,
 } from "react-bootstrap";
-import Form from "react-bootstrap/Form";
-import InputGroup from "react-bootstrap/InputGroup";
 import logo from "../../../assets/admin/CRMLogo.png";
 import { MdKeyboardArrowUp } from "react-icons/md";
 import { MdKeyboardArrowDown } from "react-icons/md";
@@ -29,7 +23,7 @@ import { FaSearch } from "react-icons/fa";
 const Header = ({ handleLogin }) => {
   const [course, setCourse] = useState(false);
   const navigate = useNavigate();
-
+  const courseRef = useRef(null);
   const courses = [
     {
       name: "Java Developer",
@@ -82,16 +76,27 @@ const Header = ({ handleLogin }) => {
       icon: devops,
     },
   ];
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (courseRef.current && !courseRef.current.contains(event.target)) {
+        setCourse(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+ 
+
   return (
     <>
-      <div >
+      <div className="" style={{position:"sticky" ,top:"0",zIndex:"999"}}>
         <p
-          className="mb-0 text-light fw-light"
-          style={{
-            backgroundColor: "#11235A",
-            padding: "2px 0",
-            // fontSize: "1vw",
-          }}
+          className="mb-0 text-light fw-light topHeader"
+          
         >
           We offer Job Gurantee Courses (Any Degree/Diploma Canditates/Year
           Gap/Non IT/Any Passed outs)
@@ -115,57 +120,73 @@ const Header = ({ handleLogin }) => {
             className="justify-content-end me-5"
           >
             <Nav className=" gap-4">
-              <button
+            {/* <div
                 className="btn btn-outline-primary rounded-0"
-                onClick={() => setCourse(!course)}
+                onMouseEnter={() => setCourse(true)}
+                // onMouseLeave={() => setCourse(false)}
               >
                 All Course{" "}
                 {course ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown />}
-              </button>
+              </div> */}
+              <div ref={courseRef}>
+                <button
+                  className="btn btn-outline-primary rounded-0"
+                  onClick={() => setCourse(!course)}
+                >
+                  All Course
+                  {course ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown />}
+                </button>
+              </div>
               <div className="form-group position-relative">
                 <input
                   type="text"
                   className="form-control"
                   placeholder="Search"
+                  style={{minWidth:"40%"}}
                 />
                 <span className="search-icon">
                   <FaSearch className="" />
                 </span>
               </div>
+              <Nav.Link >Home</Nav.Link>
               <Nav.Link as={NavLink} to="/about">About</Nav.Link>
-              <Nav.Link href="#job-post">Job Post</Nav.Link>
-              <Nav.Link href="#blogs">Blogs</Nav.Link>
+              <Nav.Link >Blogs</Nav.Link>
               <Nav.Link as={NavLink} to="/contact">Contact</Nav.Link>
 
-              <Link to="/">
-                <Button variant="primary" className="ml-2">
+              <Link to="/login">
+                <Button variant="primary" className="ml-2" >
                   Login
                 </Button>
               </Link>
             </Nav>
           </Navbar.Collapse>
         </Navbar>
+        </div>
         {course && (
           <div
-            className="container-fluid pt-4 shadow"
+            className="container-fluid pt-4 shadow CourseDropDown"
             style={{
+               position:"sticky",
+               top:"91px",
+               zIndex:"999",
               backgroundColor: "#f1f6ff",
               borderBottom: "1px solid #7bbff4",
             }}
+            ref={courseRef}
           >
             <div className="row">
               {courses.map((course, index) => (
-                <div key={index} className="col-md-2 d-flex">
+                <div key={index} className="col-md-2 col-4 d-flex">
                   <div className="col-3">
                     <img
                       src={course.icon}
-                      alt={` icon`}
+                      alt={`icon`}
                       className="course-icon"
                     />
                   </div>
                   <div
-                    className="col-9 text-start"
-                    style={{ fontSize: "0.8vw" }}
+                    className="col-9 text-start fw-light"
+                    // style={{ fontSize: "0.8vw" }}
                   >
                     <h5 className="mb-0">{course.name}</h5>
                     <p>{course.description}</p>
@@ -176,7 +197,7 @@ const Header = ({ handleLogin }) => {
             </div>
           </div>
         )}
-      </div>
+      
     </>
   );
 };
