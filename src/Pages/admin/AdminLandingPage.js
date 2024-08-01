@@ -6,6 +6,7 @@ import courseImg from "../../assets/client/landing_card_logo.jpg";
 import { useFormik } from "formik";
 import { FaEdit, FaSave, FaTimes } from "react-icons/fa";
 import { Modal } from "react-bootstrap";
+import ReactPlayer from "react-player";
 
 const responsive = {
   superLargeDesktop: {
@@ -88,6 +89,7 @@ function AdminLandingPage() {
       landingPageSecondDescription: `Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ducimus, voluptate minus! Laudantium quidem!`,
       landingPageHeroImg: heroImg,
       landingCarouselCards: cardData,
+      landingIframe: `https://www.youtube.com/embed/dQw4w9WgXcQ`,
     },
     onSubmit: (values) => {
       console.log("Form data", values);
@@ -159,6 +161,13 @@ function AdminLandingPage() {
   return (
     <>
       <form onSubmit={formik.handleSubmit}>
+        <div className="d-flex justify-content-between p-3 bg-light">
+          <h3 className="fw-bold">Landing Page</h3>
+          <button type="button" className="btn btn-sm btn-danger">
+            Publish
+          </button>
+        </div>
+
         <div>
           {/* banner */}
           <div className="container">
@@ -494,13 +503,51 @@ function AdminLandingPage() {
             <div className="row">
               <div className="col-md-7 col-12 px-5 text-start">
                 <h4 className="fw-bold py-2">Available Online Live Courses</h4>
-                <iframe
-                  className="rounded"
-                  src="https://www.youtube.com/embed/dQw4w9WgXcQ"
-                  width="100%"
-                  height="400"
-                  title="YouTube Video"
-                />
+                {isEditing === "landingIframe" ? (
+                  <div>
+                    <div className="d-flex">
+                      <button
+                        onClick={() => handleSaveClick("landingIframe")}
+                        className="btn btn-sm link-primary ms-2"
+                        style={{ width: "fit-content" }}
+                      >
+                        <FaSave />
+                      </button>
+                      <button
+                        onClick={handleCancel}
+                        className="btn btn-sm link-danger ms-2"
+                        style={{ width: "fit-content" }}
+                      >
+                        <FaTimes />
+                      </button>
+                    </div>
+                    <input
+                      type="video"
+                      name="landingIframe"
+                      {...formik.getFieldProps("landingIframe")}
+                      onChange={formik.handleChange}
+                      className="form-control"
+                    />
+                  </div>
+                ) : (
+                  <div>
+                    <button
+                      onClick={() => handleEditClick("landingIframe")}
+                      className="btn btn-sm link-secondary"
+                      style={{ width: "fit-content" }}
+                    >
+                      <FaEdit />
+                    </button>
+                    <ReactPlayer
+                      url={formik.values.landingIframe}
+                      controls
+                      className="rounded"
+                      width="100%"
+                      height="400px"
+                      title="YouTube Video"
+                    />
+                  </div>
+                )}
               </div>
               <div className="col-md-5 col-12 p-5">
                 <div className="card text-start p-4 py-3">

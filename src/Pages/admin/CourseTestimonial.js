@@ -1,67 +1,78 @@
 import React, { useState } from "react";
-import courseImg from "../../assets/client/landing_card_logo.jpg";
+import courseImg from "../../assets/client/avatar.png";
 import { useFormik } from "formik";
-import { FaEdit, FaSave, FaTimes, FaTrash } from "react-icons/fa";
+import { FaEdit, FaTrash } from "react-icons/fa";
 import { Modal } from "react-bootstrap";
+import { IoIosStar } from "react-icons/io";
 
 const cardData = [
   {
     id: 1,
-    title: "A Wonderful Experience",
     name: "Alice",
-    position: "Senior Developer",
+    rating: "5.0",
     description:
       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet, blanditiis rerum explicabo molestiae totam numquam praesentium consequatur cupiditate voluptate quas!",
     CardImg: courseImg,
   },
   {
     id: 2,
-    title: "Learning Made Easy",
     name: "Bob",
-    position: "Project Manager",
+    rating: "4.0",
     description:
       "Suspendisse potenti. Ut pharetra auctor felis, a faucibus nisi volutpat vel. Integer scelerisque, elit at pellentesque malesuada, eros justo egestas purus.",
     CardImg: courseImg,
   },
   {
     id: 3,
-    title: "Highly Recommend",
     name: "Charlie",
-    position: "UI/UX Designer",
+    rating: "5.0",
     description:
       "Vivamus fermentum sem ut aliquet vulputate. Morbi et dui nec neque consequat sagittis a at odio. Etiam facilisis odio nec eros congue.",
     CardImg: courseImg,
   },
   {
     id: 4,
-    title: "Top-notch Training",
     name: "Diana",
-    position: "Software Engineer",
+    rating: "5.0",
     description:
       "Donec non eros sit amet arcu interdum vulputate. Cras tincidunt bibendum arcu, et ultricies orci. Quisque vitae turpis quam.",
     CardImg: courseImg,
   },
   {
     id: 5,
-    title: "Exceptional Quality",
     name: "Edward",
-    position: "Backend Developer",
+    rating: "4.0",
     description:
       "Nullam tempor ligula ac erat sollicitudin, nec laoreet tortor egestas. Phasellus scelerisque leo in mi convallis, at fermentum libero sodales.",
     CardImg: courseImg,
   },
   {
     id: 6,
-    title: "Great Support",
     name: "Fiona",
-    position: "QA Specialist",
+    rating: "5.0",
     description:
       "Proin at nulla varius, vulputate justo a, tempus eros. Ut vel turpis ut enim vestibulum tincidunt ac ac erat.",
     CardImg: courseImg,
   },
+  {
+    id: 7,
+    name: "Grace",
+    rating: "4.0",
+    description:
+      "Fusce non justo et neque semper consectetur. Sed auctor, nunc sed tincidunt vulputate, justo mi iaculis neque, in convallis dolor mi nec arcu.",
+    CardImg: courseImg,
+  },
+  {
+    id: 8,
+    name: "Henry",
+    rating: "5.0",
+    description:
+      "Nullam convallis, quam nec lobortis tristique, justo nisi efficitur dui, in fermentum orci neque vel ipsum.",
+    CardImg: courseImg,
+  },
 ];
 
-function AdminTestimonials() {
+function CourseTestimonial() {
   const [show, setShow] = useState(false);
   const [selectedCard, setSelectedCard] = useState(null);
 
@@ -150,7 +161,7 @@ function AdminTestimonials() {
     <div>
       <form onSubmit={formik.handleSubmit}>
         <div className="d-flex justify-content-between p-3 bg-light">
-          <h3 className="fw-bold"> Tesimmonials</h3>
+          <h3 className="fw-bold">Course Tesimmonials</h3>
           <button
             type="button"
             className="btn btn-sm btn-primary"
@@ -162,52 +173,68 @@ function AdminTestimonials() {
 
         <div className="row m-0 p-3">
           {formik.values.testimonialCards.map((cards) => (
-            <div key={cards.id} className="col-md-4 col-12 p-2 ">
-              <div className="card h-100">
-                <div className="d-flex justify-content-between align-items-start p-2">
-                  <button
-                    type="button"
-                    onClick={() => handleShow(cards)}
-                    className="btn link-light ms-2"
-                    style={{
-                      width: "fit-content",
-                      height: "fit-content",
-                    }}
-                  >
-                    <FaEdit className="text-primary" />
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handleDeleteCard(cards.id)}
-                    className="btn link-light ms-2"
-                    style={{
-                      width: "fit-content",
-                      height: "fit-content",
-                    }}
-                  >
-                    <FaTrash className="text-danger" />
-                  </button>
+            <div key={cards.id} className="col-md-3 col-12 p-2 ">
+              <div className="h-100 course-cards">
+                <div className="head-content">
+                  <div className="d-flex justify-content-between align-items-start p-2">
+                    <button
+                      type="button"
+                      onClick={() => handleShow(cards)}
+                      className="btn link-light ms-2"
+                      style={{
+                        width: "fit-content",
+                        height: "fit-content",
+                      }}
+                    >
+                      <FaEdit className="text-light" />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleDeleteCard(cards.id)}
+                      className="btn link-light ms-2"
+                      style={{
+                        width: "fit-content",
+                        height: "fit-content",
+                      }}
+                    >
+                      <FaTrash className="text-light" />
+                    </button>
+                  </div>
+                  <div className="text-start">
+                    <div className="d-flex justify-content-between align-items-center px-2">
+                      <div
+                        className="d-flex align-items-center"
+                        style={{ width: "20%" }}
+                      >
+                        <img
+                          className="img-fluid rounded-circle"
+                          src={cards.CardImg}
+                          alt="Admin Testimonial"
+                        />
+                        <span>
+                          <h5 className="text-light fw-bold ps-1">
+                            {cards.name}
+                          </h5>
+                        </span>
+                      </div>
+
+                      <div className="rating">
+                        <p className="text-light">
+                          Rating
+                          <span
+                            className="ms-2 rounded fw-light px-1"
+                            style={{ border: "2px solid #fff" }}
+                          >
+                            {cards.rating}
+                            <IoIosStar size={12} style={{ color: "white" }} />
+                          </span>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div className="card-body text-start">
-                  <div className="d-flex align-items-center">
-                    <div className="w-25 h-25 fit-content">
-                      <img
-                        className="img-fluid rounded-circle p-2"
-                        src={cards.CardImg}
-                        alt="Admin Testimonial"
-                      />
-                    </div>
-                    <div>
-                      <h5 className="card-title">{cards.name}</h5>
-                      <h6 className="card-subtitle mb-2 text-muted">
-                        {cards.position}
-                      </h6>
-                    </div>
-                  </div>
-                  <div className="p-2">
-                    <h5>{cards.title}</h5>
-                    <p className="card-text">{cards.description}</p>
-                  </div>
+                <div className="p-3 text-secondary text-start">
+                  <p className="card-text">{cards.description}</p>
                 </div>
               </div>
             </div>
@@ -242,28 +269,14 @@ function AdminTestimonials() {
               />
             </div>
             <div className="p-2">
-              <label htmlFor="position">Position</label>
+              <label htmlFor="rating">Rating</label>
               <input
-                type="text"
-                name="position"
-                value={selectedCard ? selectedCard.position : ""}
+                type="number"
+                name="rating"
+                value={selectedCard ? selectedCard.rating : ""}
                 onChange={handleModalChange}
                 className="form-control"
               />
-            </div>
-            <div className="p-2">
-              <label htmlFor="title">Title</label>
-              <p>
-                <b>
-                  <input
-                    type="text"
-                    name="title"
-                    value={selectedCard ? selectedCard.title : ""}
-                    onChange={handleModalChange}
-                    className="form-control"
-                  />
-                </b>
-              </p>
             </div>
             <div className="p-2">
               <label htmlFor="description">Description</label>
@@ -306,4 +319,4 @@ function AdminTestimonials() {
   );
 }
 
-export default AdminTestimonials;
+export default CourseTestimonial;

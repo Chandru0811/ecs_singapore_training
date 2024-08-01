@@ -41,11 +41,7 @@ function CategoryAdd() {
 
   return (
     <>
-      <button
-        type="button"
-        className="btn btn-sm btn-primary mx-2"
-        onClick={handleShow}
-      >
+      <button className="btn btn-sm btn-primary" onClick={handleShow}>
         Add Category
       </button>
 
