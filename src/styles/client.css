@@ -187,6 +187,7 @@ hr {
 .react-calendar__month-view__weekdays__weekday abbr {
   text-decoration: none !important;
   color: var(--client-paratext-color);
+  cursor: pointer;
 }
 
 .react-calendar__navigation__prev2-button,
@@ -300,10 +301,10 @@ hr {
 .time-slot-btn {
   background-color: var(--client-teritary-color);
   border: 1px solid var(--client-primary-color);
-  padding: 10px;
-  margin: 5px 0;
+  padding: 8px;
+  margin-bottom: 10px;
   width: 80%;
-  text-align: left;
+  text-align: center;
   cursor: pointer;
   font-size: 16px;
   border-radius: 5px;
@@ -314,6 +315,71 @@ hr {
 .time-slot-btn:hover {
   border: 2px solid var(--client-primary-color);
   font-weight: 700;
+}
+
+.time-slot-btn.selected {
+  background-color: var(--client-primary-color);
+  border: 2px solid var(--client-primary-color);
+  color: var(--client-teritary-color);
+  font-weight: 700;
+  width: 50%;
+}
+
+.time-slot-btn-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.next-btn {
+  padding: 8px;
+  margin-left: 10px;
+  color: var(--client-teritary-color);
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 16px;
+  margin-bottom: 10px;
+  border: 2px solid var(--client-cardHover-color);
+  background-color: var(--client-teritary-color);
+  color: var(--client-cardHover-color);
+  font-weight: 500;
+}
+
+.next-btn:hover{
+  border: 2px solid var(--client-cardHover-color);
+  background-color: var(--client-cardHover-color);
+  color: var(--client-teritary-color);
+  font-weight: 700;
+}
+
+.time-slots{
+  max-height: 350px;
+  overflow-y: auto;
+  border: none;
+  padding: 10px;
+}
+
+.calendar-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.time-zone {
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+  margin-left: 25px;
+}
+
+.back-arrow{
+  color: var(--client-cardHover-color);
+  font-size: 1.5rem;
+}
+
+.back-arrow:hover {
+  color: var(--client-background-color);
+  font-size: 1.5rem;
 }
 
 /* Contact End */
@@ -486,8 +552,6 @@ hr {
   background-image: url(../assets/client/about_bg-image.png);
   background-repeat: no-repeat;
   background-size: cover;
-  /* max-height: 80vh;
-  height: 80%; */
   overflow-x: hidden;
   overflow-y: hidden;
 }
@@ -657,3 +721,19 @@ border: 2px solid var(--client-teritary-color);
   text-align: center;
   width: 400px;
 }
+
+/* / Course testimonial  / */
+.course-cards {
+  border: 2px solid var(--client-button-hover);
+  border-radius: 20px;
+}
+.video-card {
+  border: 2px solid var(--client-button-hover);
+}
+.course-cards .head-content {
+  background: var(--client-button-hover);
+  border-radius: 1rem 1rem 0 0;
+  margin: 0;
+  padding: 5px 0;
+}
+/* / Course testimonial  / */
