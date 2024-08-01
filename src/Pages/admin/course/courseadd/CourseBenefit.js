@@ -6,13 +6,12 @@ const CourseBenefit = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const formik = useFormik({
       initialValues: {
-        day: "",
-        courseStartData: "",
-        courseEndDate: "",
-        courseStartTime: "",
-        duration: "",
-        noOfSlots: "",
-        amountPayable: "",
+        benefitsTitle: "",
+        keyFeature: [
+          {
+            keyFeatures: "",
+          },
+        ],
       },
       // validationSchema: validationSchema,
       onSubmit: async (values) => {
@@ -58,13 +57,28 @@ const CourseBenefit = forwardRef(
         // }
       },
     });
+    const addRow = () => {
+      formik.setFieldValue("keyFeature", [
+        ...formik.values.keyFeature,
+        {
+          keyFeatures: "",
+        },
+      ]);
+    };
+    const removeRow = () => {
+      const updatedRow = [...formik.values.keyFeature];
+      updatedRow.pop();
+      formik.setFieldValue("keyFeature", updatedRow);
+    };
+
     useImperativeHandle(ref, () => ({
       courseBenefit: formik.handleSubmit,
     }));
     return (
-      <div className="container my-5">
-        <form onSubmit={formik.handleSubmit}>
-          <div className="container-fluid">
+      <div className="container my-4">
+        <div className="container-fluid">
+          <h4 className="mb-4 fw-bold text-start">Course Benefit</h4>
+          <form onSubmit={formik.handleSubmit}>
             <div className="row px-1">
               <div className="col-md-6 col-12 mb-3">
                 <div className="text-start">
@@ -92,81 +106,52 @@ const CourseBenefit = forwardRef(
                 </div>
               </div>
               <div className="col-md-6 col-12 mb-3">
-                <div className="text-start">
-                  <label>Subtitle</label>
-                </div>
-                <div className="input-group mb-3">
-                  <input
-                    type="text"
-                    className={`form-control   ${
-                      formik.touched.benefitsSubtitle &&
-                      formik.errors.benefitsSubtitle
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                    aria-label="benefitsSubtitle"
-                    aria-describedby="basic-addon1"
-                    {...formik.getFieldProps("benefitsSubtitle")}
-                  />
-                  {formik.touched.benefitsSubtitle &&
-                    formik.errors.benefitsSubtitle && (
-                      <div className="invalid-feedback">
-                        {formik.errors.benefitsSubtitle}
-                      </div>
-                    )}
-                </div>
-              </div>
-              <div className="col-md-6 col-12 mb-3">
-                <div className="text-start">
-                  <label>Key Features</label>
-                </div>
-                <div className="input-group mb-3">
-                  <input
-                    type="text"
-                    className={`form-control   ${
-                      formik.touched.keyFeatures && formik.errors.keyFeatures
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                    aria-label="keyFeatures"
-                    aria-describedby="basic-addon1"
-                    {...formik.getFieldProps("keyFeatures")}
-                  />
-                  {formik.touched.keyFeatures && formik.errors.keyFeatures && (
-                    <div className="invalid-feedback">
-                      {formik.errors.keyFeatures}
+                {formik.values.keyFeature.map((feature, index) => (
+                  <div key={index}>
+                    <div className="text-start">
+                      <label>Key Features</label>
                     </div>
-                  )}
-                </div>
-              </div>
-              <div className="col-md-6 col-12 mb-3">
-                <div className="text-start">
-                  <label>Key Points</label>
-                </div>
-                <div className="input-group mb-3">
-                  <input
-                    type="text"
-                    className={`form-control   ${
-                      formik.touched.keyFeaturesPoints &&
-                      formik.errors.keyFeaturesPoints
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                    aria-label="keyFeaturesPoints"
-                    aria-describedby="basic-addon1"
-                    {...formik.getFieldProps("keyFeaturesPoints")}
-                  />
-                  {formik.touched.keyFeaturesPoints &&
-                    formik.errors.keyFeaturesPoints && (
-                      <div className="invalid-feedback">
-                        {formik.errors.keyFeaturesPoints}
-                      </div>
-                    )}
-                </div>
+                    <div className="input-group mb-3">
+                      <input
+                        type="text"
+                        className={`form-control ${
+                          formik.touched.keyFeature?.[index]?.keyFeatures &&
+                          formik.errors.keyFeature?.[index]?.keyFeatures
+                            ? "is-invalid"
+                            : ""
+                        }`}
+                        aria-label="keyFeatures"
+                        aria-describedby="basic-addon1"
+                        {...formik.getFieldProps(
+                          `keyFeature.${index}.keyFeatures`
+                        )}
+                      />
+                      {formik.touched.keyFeature?.[index]?.keyFeatures &&
+                        formik.errors.keyFeature?.[index]?.keyFeatures && (
+                          <div className="invalid-feedback">
+                            {formik.errors.keyFeature[index].keyFeatures}
+                          </div>
+                        )}
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
+          </form>
+          <div className="container d-flex justify-content-end">
+            <button className="btn btn-sm btn-primary mx-2" onClick={addRow}>
+              Add More
+            </button>
+            {formik.values.keyFeature.length > 1 && (
+              <button
+                className="btn btn-sm btn-danger mx-2"
+                onClick={removeRow}
+              >
+                X
+              </button>
+            )}
           </div>
-        </form>
+        </div>
       </div>
     );
   }

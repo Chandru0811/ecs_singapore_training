@@ -137,7 +137,7 @@ const CourseStepAdd = () => {
             />
           )}
 
-          <div className="container-fluid p-1 d-flex align-items-center justify-content-center">
+          <div className="container-fluid p-1 d-flex align-items-center justify-content-center px-4">
           {activeStep > 0 && (
             <button
               className="btn btn-danger btn-sm"

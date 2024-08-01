@@ -14,28 +14,26 @@
   --admin-button-color: #dedede;
   --admin-header-hover-color: #2d5677;
   --admin-paratext-color: #515B6F;
+  --admin-background1-color: #11235A;
+
 }
 
 /* AdminHeader */
-/* .dropdown-toggle::after{
-  display: none;
-  margin-left: .255em;
-  vertical-align: .255em;
-  content: "";
-  border-top: none !important;
-    border-right: none !important;
-    border-bottom: 0;
-    border-left: none !important;
-} */
-a#basic-nav-dropdown{
-  padding-top: 3px !important;
-}
-/* .dropdown-item.active, .dropdown-item:active {
-  color: var(--admin-teritary-color) !important;
-  text-decoration: none;
-  background-color: var(--bs-dropdown-link-active-bg);
-} */
 
+a#basic-nav-dropdown{
+  padding-bottom: 3px !important;
+}
+a#basic-nav-dropdownDot{
+  padding-bottom: 3px !important;
+}
+
+a#basic-nav-dropdown::after {
+  content: none; 
+
+}
+a#basic-nav-dropdownDot::after {
+  content: none; 
+}
 .adminHeader{
   background-color:var(--admin-primary-color) ;
 }
@@ -75,4 +73,75 @@ a#basic-nav-dropdown{
   width: 100%;
   left: 0;
   background: var(--admin-teritary-color);
+}
+
+/* / Admin About / */
+.adminAbout-banner {
+  position: relative;
+  background-image: url(../assets/client/about_bg-image.png);
+  background-repeat: no-repeat;
+  background-size: cover;
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+
+.adminAbout-banner::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--client-primary-color);
+  opacity: 0.9;
+  z-index: 1;
+}
+
+.adminAbout .content-wrapper {
+  position: relative;
+  z-index: 2;
+}
+
+.adminAbout-head {
+  text-align: start;
+  color: var(--client-teritary-color);
+  margin-top: 20%;
+ 
+}
+.adminAbout h1{
+  border-left: 5px solid var(--admin-line-color);
+  border-radius: 5px;
+}
+
+.adminAbout-banner1 {
+  position: relative;
+  background-image: url(../assets/client/about_bg-image-1.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+
+.adminAbout-banner1::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--admin-background1-color);
+  opacity: 0.9;
+  z-index: 1;
+}
+
+.adminAbout-banner1 .content-wrapper1 {
+  position: relative;
+  z-index: 2;
+}
+
+.aboutAbout-head1 {
+  text-align: start;
+  color: var(--admin-teritary-color);
+  margin-top: 20%;
+ 
 }

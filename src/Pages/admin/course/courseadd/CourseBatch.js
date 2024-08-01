@@ -6,13 +6,17 @@ const CourseBatch = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const formik = useFormik({
       initialValues: {
-        day: "",
-        courseStartData: "",
-        courseEndDate: "",
-        courseStartTime: "",
-        duration: "",
-        noOfSlots: "",
-        amountPayable: "",
+        courseBatch: [
+          {
+            day: "",
+            courseStartData: "",
+            courseEndDate: "",
+            courseStartTime: "",
+            duration: "",
+            noOfSlots: "",
+            amountPayable: "",
+          },
+        ],
       },
       // validationSchema: validationSchema,
       onSubmit: async (values) => {
@@ -58,186 +62,240 @@ const CourseBatch = forwardRef(
         // }
       },
     });
+    const addRow = () => {
+      formik.setFieldValue("courseBatch", [
+        ...formik.values.courseBatch,
+        {
+          day: "",
+          courseStartData: "",
+          courseEndDate: "",
+          courseStartTime: "",
+          duration: "",
+          noOfSlots: "",
+          amountPayable: "",
+        },
+      ]);
+    };
+    const removeRow = () => {
+      const updatedRow = [...formik.values.courseBatch];
+      updatedRow.pop();
+      formik.setFieldValue("courseBatch", updatedRow);
+    };
     useImperativeHandle(ref, () => ({
       courseBatch: formik.handleSubmit,
     }));
     return (
-      <div className="container my-5">
+      <div className="container my-4">
+        <div className="container-fluid">
+          <h4 className="mb-4 fw-bold text-start">Course Batch</h4>
           <form onSubmit={formik.handleSubmit}>
-            <div className="container-fluid">
-              <div className="row px-1">
+            {formik.values.courseBatch.map((batch, index) => (
+              <div className="row px-1" key={index}>
                 <div className="col-md-6 col-12 mb-3">
                   <div className="text-start">
-                    <label>day</label>
+                    <label>Day</label>
                   </div>
                   <div className="input-group mb-3">
                     <input
                       type="date"
-                      className={`form-control   ${
-                        formik.touched.day && formik.errors.day
+                      className={`form-control ${
+                        formik.touched.courseBatch?.[index]?.day &&
+                        formik.errors.courseBatch?.[index]?.day
                           ? "is-invalid"
                           : ""
                       }`}
                       aria-label="day"
                       aria-describedby="basic-addon1"
-                      {...formik.getFieldProps("day")}
+                      {...formik.getFieldProps(`courseBatch.${index}.day`)}
                     />
-                    {formik.touched.day && formik.errors.day && (
-                      <div className="invalid-feedback">
-                        {formik.errors.day}
-                      </div>
-                    )}
+                    {formik.touched.courseBatch?.[index]?.day &&
+                      formik.errors.courseBatch?.[index]?.day && (
+                        <div className="invalid-feedback">
+                          {formik.errors.courseBatch[index].day}
+                        </div>
+                      )}
                   </div>
                 </div>
+
                 <div className="col-md-6 col-12 mb-3">
                   <div className="text-start">
-                    <label>courseStartData</label>
+                    <label>Course Start Date</label>
                   </div>
                   <div className="input-group mb-3">
                     <input
-                      type="text"
-                      className={`form-control   ${
-                        formik.touched.courseStartData &&
-                        formik.errors.courseStartData
+                      type="date"
+                      className={`form-control ${
+                        formik.touched.courseBatch?.[index]?.courseStartData &&
+                        formik.errors.courseBatch?.[index]?.courseStartData
                           ? "is-invalid"
                           : ""
                       }`}
                       aria-label="courseStartData"
                       aria-describedby="basic-addon1"
-                      {...formik.getFieldProps("courseStartData")}
+                      {...formik.getFieldProps(
+                        `courseBatch.${index}.courseStartData`
+                      )}
                     />
-                    {formik.touched.courseStartData &&
-                      formik.errors.courseStartData && (
+                    {formik.touched.courseBatch?.[index]?.courseStartData &&
+                      formik.errors.courseBatch?.[index]?.courseStartData && (
                         <div className="invalid-feedback">
-                          {formik.errors.courseStartData}
+                          {formik.errors.courseBatch[index].courseStartData}
                         </div>
                       )}
                   </div>
                 </div>
+
                 <div className="col-md-6 col-12 mb-3">
                   <div className="text-start">
-                    <label>courseEndDate</label>
+                    <label>Course End Date</label>
                   </div>
                   <div className="input-group mb-3">
                     <input
-                      type="text"
-                      className={`form-control   ${
-                        formik.touched.courseEndDate &&
-                        formik.errors.courseEndDate
+                      type="date"
+                      className={`form-control ${
+                        formik.touched.courseBatch?.[index]?.courseEndDate &&
+                        formik.errors.courseBatch?.[index]?.courseEndDate
                           ? "is-invalid"
                           : ""
                       }`}
                       aria-label="courseEndDate"
                       aria-describedby="basic-addon1"
-                      {...formik.getFieldProps("courseEndDate")}
+                      {...formik.getFieldProps(
+                        `courseBatch.${index}.courseEndDate`
+                      )}
                     />
-                    {formik.touched.courseEndDate &&
-                      formik.errors.courseEndDate && (
+                    {formik.touched.courseBatch?.[index]?.courseEndDate &&
+                      formik.errors.courseBatch?.[index]?.courseEndDate && (
                         <div className="invalid-feedback">
-                          {formik.errors.courseEndDate}
+                          {formik.errors.courseBatch[index].courseEndDate}
                         </div>
                       )}
                   </div>
                 </div>
+
                 <div className="col-md-6 col-12 mb-3">
                   <div className="text-start">
-                    <label>courseStartTime</label>
+                    <label>Course Start Time</label>
                   </div>
                   <div className="input-group mb-3">
                     <input
-                      type="text"
-                      className={`form-control   ${
-                        formik.touched.courseStartTime &&
-                        formik.errors.courseStartTime
+                      type="time"
+                      className={`form-control ${
+                        formik.touched.courseBatch?.[index]?.courseStartTime &&
+                        formik.errors.courseBatch?.[index]?.courseStartTime
                           ? "is-invalid"
                           : ""
                       }`}
                       aria-label="courseStartTime"
                       aria-describedby="basic-addon1"
-                      {...formik.getFieldProps("courseStartTime")}
+                      {...formik.getFieldProps(
+                        `courseBatch.${index}.courseStartTime`
+                      )}
                     />
-                    {formik.touched.courseStartTime &&
-                      formik.errors.courseStartTime && (
+                    {formik.touched.courseBatch?.[index]?.courseStartTime &&
+                      formik.errors.courseBatch?.[index]?.courseStartTime && (
                         <div className="invalid-feedback">
-                          {formik.errors.courseStartTime}
+                          {formik.errors.courseBatch[index].courseStartTime}
                         </div>
                       )}
                   </div>
                 </div>
+
                 <div className="col-md-6 col-12 mb-3">
                   <div className="text-start">
-                    <label>duration</label>
+                    <label>Duration</label>
                   </div>
                   <div className="input-group mb-3">
                     <input
                       type="text"
-                      className={`form-control   ${
-                        formik.touched.duration && formik.errors.duration
+                      className={`form-control ${
+                        formik.touched.courseBatch?.[index]?.duration &&
+                        formik.errors.courseBatch?.[index]?.duration
                           ? "is-invalid"
                           : ""
                       }`}
                       aria-label="duration"
                       aria-describedby="basic-addon1"
-                      {...formik.getFieldProps("duration")}
+                      {...formik.getFieldProps(`courseBatch.${index}.duration`)}
                     />
-                    {formik.touched.duration && formik.errors.duration && (
-                      <div className="invalid-feedback">
-                        {formik.errors.duration}
-                      </div>
-                    )}
+                    {formik.touched.courseBatch?.[index]?.duration &&
+                      formik.errors.courseBatch?.[index]?.duration && (
+                        <div className="invalid-feedback">
+                          {formik.errors.courseBatch[index].duration}
+                        </div>
+                      )}
                   </div>
                 </div>
+
                 <div className="col-md-6 col-12 mb-3">
                   <div className="text-start">
-                    <label>noOfSlots</label>
+                    <label>No of Slots</label>
                   </div>
                   <div className="input-group mb-3">
                     <input
                       type="text"
-                      className={`form-control   ${
-                        formik.touched.noOfSlots && formik.errors.noOfSlots
+                      className={`form-control ${
+                        formik.touched.courseBatch?.[index]?.noOfSlots &&
+                        formik.errors.courseBatch?.[index]?.noOfSlots
                           ? "is-invalid"
                           : ""
                       }`}
                       aria-label="noOfSlots"
                       aria-describedby="basic-addon1"
-                      {...formik.getFieldProps("noOfSlots")}
+                      {...formik.getFieldProps(
+                        `courseBatch.${index}.noOfSlots`
+                      )}
                     />
-                    {formik.touched.noOfSlots && formik.errors.noOfSlots && (
-                      <div className="invalid-feedback">
-                        {formik.errors.noOfSlots}
-                      </div>
-                    )}
+                    {formik.touched.courseBatch?.[index]?.noOfSlots &&
+                      formik.errors.courseBatch?.[index]?.noOfSlots && (
+                        <div className="invalid-feedback">
+                          {formik.errors.courseBatch[index].noOfSlots}
+                        </div>
+                      )}
                   </div>
                 </div>
+
                 <div className="col-md-6 col-12 mb-3">
                   <div className="text-start">
-                    <label>amountPayable</label>
+                    <label>Amount Payable</label>
                   </div>
                   <div className="input-group mb-3">
                     <input
                       type="text"
-                      className={`form-control   ${
-                        formik.touched.amountPayable &&
-                        formik.errors.amountPayable
+                      className={`form-control ${
+                        formik.touched.courseBatch?.[index]?.amountPayable &&
+                        formik.errors.courseBatch?.[index]?.amountPayable
                           ? "is-invalid"
                           : ""
                       }`}
                       aria-label="amountPayable"
                       aria-describedby="basic-addon1"
-                      {...formik.getFieldProps("amountPayable")}
+                      {...formik.getFieldProps(
+                        `courseBatch.${index}.amountPayable`
+                      )}
                     />
-                    {formik.touched.amountPayable &&
-                      formik.errors.amountPayable && (
+                    {formik.touched.courseBatch?.[index]?.amountPayable &&
+                      formik.errors.courseBatch?.[index]?.amountPayable && (
                         <div className="invalid-feedback">
-                          {formik.errors.amountPayable}
+                          {formik.errors.courseBatch[index].amountPayable}
                         </div>
                       )}
                   </div>
                 </div>
               </div>
-            </div>
+            ))}
           </form>
+          <div className="container ">
+            <button className="btn btn-sm btn-primary mx-3" onClick={addRow}>
+              Add More
+            </button>
+            {formik.values.courseBatch.length > 1 && (
+              <button className="btn btn-sm btn-danger" onClick={removeRow}>
+                X
+              </button>
+            )}
+          </div>
+        </div>
       </div>
     );
   }

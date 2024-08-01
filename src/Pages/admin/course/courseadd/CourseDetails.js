@@ -62,14 +62,15 @@ const CourseDetails = forwardRef(
       courseDetails: formik.handleSubmit,
     }));
     return (
-      <div className="container my-5">
+      <div className="container my-4">
         <form onSubmit={formik.handleSubmit}>
           <div className="container">
+          <h4 className="mb-4 fw-bold text-start">Course Details</h4>
             <div className="row px-1">
               <div className="col-md-6 col-12 mb-3">
                 <div className="text-start">
                   <lable>
-                    Logo<span className="text-danger">*</span>{" "}
+                    Logo<span className="text-danger">*</span>
                   </lable>
                 </div>
                 <input
@@ -202,11 +203,6 @@ const CourseDetails = forwardRef(
                     </div>
                   )}
               </div>
-              {/* <div className="d-flex justify-content-end">
-            <button type="submit" className="btn btn-sm btn-primary">
-              Submit
-            </button>
-          </div> */}
             </div>
           </div>
         </form>

@@ -5,6 +5,7 @@ import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import { NavLink } from "react-router-dom";
 import { CgProfile } from "react-icons/cg";
+import { HiDotsHorizontal } from "react-icons/hi";
 
 function AdminHeader({ handleLogout }) {
   const handelLogin = () => {
@@ -24,7 +25,7 @@ function AdminHeader({ handleLogout }) {
             <Nav.Link as={NavLink} to={"/course"} className="me-1">
               Course
             </Nav.Link>
-            <Nav.Link href="#Contact" className="me-1">
+            <Nav.Link as={NavLink} to={"/contact"} className="me-1">
               Contact
             </Nav.Link>
             <Nav.Link as={NavLink} to="/about" className="me-1">
@@ -36,11 +37,32 @@ function AdminHeader({ handleLogout }) {
             <Nav.Link as={NavLink} to="/categories" className="me-1">
               Categories
             </Nav.Link>
+            <Nav.Link as={NavLink} to="/CourseTestimonial" className="me-1">
+              CourseTestimonial
+            </Nav.Link>
+            <Nav.Link
+              as={NavLink}
+              to="/CourseVideoTestimonial"
+              className="me-1"
+            >
+              CourseVideoTestimonial
+            </Nav.Link>
+            <Nav.Link as={NavLink} to="/headerfooter" className="me-1">
+              HeaderFooter
+            </Nav.Link>
             
           </Nav>
           <Nav className="container"> 
           <NavDropdown
-            title={<CgProfile size={30} className=""/>}
+            title={<HiDotsHorizontal size={25} />}
+            id="basic-nav-dropdownDot"
+          >
+            <NavDropdown.Item style={{ color: "#343a40" }}>
+              Another action
+            </NavDropdown.Item>
+          </NavDropdown>
+          <NavDropdown
+            title={<CgProfile size={30} />}
             id="basic-nav-dropdown"
           >
             <NavDropdown.Item
