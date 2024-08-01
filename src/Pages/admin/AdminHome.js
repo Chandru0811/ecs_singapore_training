@@ -24,11 +24,12 @@ import SunIcon from "../../assets/client/pointsImg.png";
 import ContactUs from "../../assets/client/phoneImg.png";
 import CirclePoints from "../../assets/client/circlePoint.png";
 import { AiOutlinePlus, AiOutlineMinus } from 'react-icons/ai';
-import { Formik, Form, Field } from 'formik';
+import { Formik, Field } from 'formik';
 import { useFormik } from "formik";
 import { FaEdit, FaSave, FaTimes, FaPlus, FaTrash } from "react-icons/fa";
-import { Modal } from 'react-bootstrap';
+import { Modal, Button, Form } from 'react-bootstrap';
 import { IoIosCloseCircleOutline, IoMdAdd } from "react-icons/io";
+import { GiCard10Diamonds, GiCard10Spades } from 'react-icons/gi';
 
 function AdminHome() {
   const [activeIndex, setActiveIndex] = useState(null);
@@ -36,39 +37,6 @@ function AdminHome() {
   const toggleAccordion = (index) => {
     setActiveIndex(activeIndex === index ? null : index);
   };
-
-  const coursesData = [
-    {
-      title: 'Programming Languages',
-      items: ['Python', 'Java', 'JavaScript', 'C++', 'Ruby'],
-      icon: SunIcon,
-    },
-    {
-      title: 'Web Development',
-      items: ['Full-Stack Web Development', 'Front-End Development', 'Back-End Development'],
-      icon: SunIcon,
-    },
-    {
-      title: 'Mobile App Development',
-      items: ['Android Development:', 'iOS Development', 'Cross-Platform Development'],
-      icon: SunIcon,
-    },
-    {
-      title: 'Data Science and ML',
-      items: ['Android Development:', 'iOS Development', 'Cross-Platform Development'],
-      icon: SunIcon,
-    },
-    {
-      title: 'Cloud Computing and DevOps',
-      items: ['Cloud Fundamentals', 'DevOps Essentials', 'AWS Certification'],
-      icon: SunIcon,
-    },
-    {
-      title: 'Cybersecurity',
-      items: ['Cybersecurity Fundamentals', 'Ethical Hacking and Penetration Testing', 'Secure Coding Practices'],
-      icon: SunIcon,
-    },
-  ];
 
   const pointsData = [
     'Comprehensive ECS Solutions',
@@ -86,6 +54,7 @@ function AdminHome() {
   const [isEditing, setIsEditing] = useState(null);
   const [isAdding, setIsAdding] = useState(false);
   const [newCard, setNewCard] = useState({ img: '', text: '', para: '' });
+  const [newCompanyLogo, setNewCompanyLogo] = useState();
 
   const formik = useFormik({
     initialValues: {
@@ -98,37 +67,8 @@ function AdminHome() {
       herocardText1: 'Learning Format Online Bootcamp',
       herocardText2: 'Course Duration',
       herocardText3: 'Next Course Starts at October 12, 2024',
-      featurecardImg1: Card1,
-      featurecardImg2: Card2,
-      featurecardImg3: Card3,
-      featurecardImg4: Card4,
-      featurecardImg5: Card5,
-      featurecardImg6: Card6,
-      featurecardText1: 'Industry’s  Expertise',
-      featurecardText2: 'Certifications',
-      featurecardText3: 'Experiences',
-      featurecardText4: 'Best Partners',
-      featurecardText5: 'Profesional Trainers',
-      featurecardText6: 'Case Studies',
-      featurecardPara1: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s,',
-      featurecardPara2: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s,',
-      featurecardPara3: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s,',
-      featurecardPara4: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s,',
-      featurecardPara5: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s,',
-      featurecardPara6: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s,',
-      companylogoImg1: Amazon,
-      companylogoImg2: Microsoft,
-      companylogoImg3: Google,
-      companylogoImg4: Ibm,
-      companylogoImg5: Delloite,
-      companylogoImg6: Hp,
-      companylogoImg7: WellsFargo,
-      companylogoImg8: Tcs,
-      companylogoImg9: Zoho,
-      companylogoImg10: Hsbc,
       trainingOverviewPara: 'Welcome to our comprehensive Cloud ECS (Elastic Container Service) Training Program! This course is designed to equip you with the essential knowledge and skills needed to effectively manage and deploy containerized applications using ECS, one of the most powerful container orchestration services available today.',
       contactNumber: '1800-212-7688',
-      // coursesCards: [
       //   {
       //     id: 1,
       //     icon: SunIcon,
@@ -224,6 +164,158 @@ function AdminHome() {
           description: []
         },
       ],
+      whyjoinCards: [
+        {
+          id: 1,
+          featurecardImg: Card1,
+          featurecardText: 'Industry’s  Expertise',
+          featurecardPara: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s,',
+          description: []
+        },
+        {
+          id: 2,
+          featurecardImg: Card2,
+          featurecardText: 'Certifications',
+          featurecardPara: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s,',
+          description: []
+        },
+        {
+          id: 3,
+          featurecardImg: Card3,
+          featurecardText: 'Experiences',
+          featurecardPara: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s,',
+          description: []
+        },
+        {
+          id: 4,
+          featurecardImg: Card4,
+          featurecardText: 'Best Partners',
+          featurecardPara: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s,',
+          description: []
+        },
+        {
+          id: 5,
+          featurecardImg: Card5,
+          featurecardText: 'Profesional Trainers',
+          featurecardPara: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s,',
+          description: []
+        },
+        {
+          id: 6,
+          featurecardImg: Card6,
+          featurecardText: 'Case Studies',
+          featurecardPara: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s,',
+          description: []
+        }
+      ],
+      companiesLogo: [
+        {
+          id: 1,
+          companyLogoImg: Amazon
+        },
+        {
+          id: 2,
+          companyLogoImg: Microsoft
+        },
+        {
+          id: 3,
+          companyLogoImg: Google
+        },
+        {
+          id: 4,
+          companyLogoImg: Ibm
+        },
+        {
+          id: 5,
+          companyLogoImg: Delloite
+        },
+        {
+          id: 6,
+          companyLogoImg: Hp
+        },
+        {
+          id: 7,
+          companyLogoImg: WellsFargo
+        },
+        {
+          id: 8,
+          companyLogoImg: Tcs
+        },
+        {
+          id: 9,
+          companyLogoImg: Zoho
+        },
+        {
+          id: 10,
+          companyLogoImg: Hsbc
+        },
+      ],
+      coursesData: [
+        {
+          id: 1,
+          title: 'Programming Languages',
+          items: ['Python', 'Java', 'JavaScript', 'C++', 'Ruby'],
+        },
+        {
+          id: 2,
+          title: 'Web Development',
+          items: ['Full-Stack Web Development', 'Front-End Development', 'Back-End Development'],
+        },
+        {
+          id: 3,
+          title: 'Mobile App Development',
+          items: ['Android Development:', 'iOS Development', 'Cross-Platform Development'],
+        },
+        {
+          id: 4,
+          title: 'Data Science and ML',
+          items: ['Android Development:', 'iOS Development', 'Cross-Platform Development'],
+        },
+        {
+          id: 5,
+          title: 'Cloud Computing and DevOps',
+          items: ['Cloud Fundamentals', 'DevOps Essentials', 'AWS Certification'],
+        },
+        {
+          id: 6,
+          title: 'Cybersecurity',
+          items: ['Cybersecurity Fundamentals', 'Ethical Hacking and Penetration Testing', 'Secure Coding Practices'],
+        },
+      ],
+      pointsData: [
+        {
+          id: 1,
+          pointText: 'Comprehensive ECS Solutions',
+        },
+        {
+          id: 2,
+          pointText: 'Certified Professional',
+        },
+        {
+          id: 3,
+          pointText: 'Advanced Security and Compliance',
+        },
+        {
+          id: 4,
+          pointText: 'Expert Team',
+        },
+        {
+          id: 5,
+          pointText: 'Performance Optimization',
+        },
+        {
+          id: 6,
+          pointText: 'Certified Professional',
+        },
+        {
+          id: 7,
+          pointText: 'Seamless Integration and Automation',
+        },
+        {
+          id: 8,
+          pointText: '24/7 Support',
+        }
+      ]
     },
     onSubmit: (values) => {
       console.log("Home Datas", values);
@@ -254,6 +346,80 @@ function AdminHome() {
       reader.readAsDataURL(file);
     }
   };
+  //Training Overview Points
+  const [newPoint, setNewPoint] = useState('');
+  const [showPointsModal, setShowPointsModal] = useState(false);
+
+  const handleOpenModalPoints = () => setShowPointsModal(true);
+  const handleClosePointsModal = () => setShowPointsModal(false);
+
+  const handleAddPoint = () => {
+    formik.setFieldValue('pointsData', [
+      ...formik.values.pointsData,
+      { id: formik.values.pointsData.length + 1, pointText: newPoint },
+    ]);
+    setNewPoint('');
+    handleClosePointsModal();
+    console.log("Updated Formik values:", formik.values);
+  };
+
+  const handleChangeNewPoint = (e) => setNewPoint(e.target.value);
+  console.log("New Points:", formik.values);
+
+  //Why Join us 
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const handleCardUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        // Update the corresponding featurecardImg field
+        const updatedCards = formik.values.whyjoinCards.map((card) =>
+          card.id === isEditing ? { ...card, featurecardImg: reader.result } : card
+        );
+        // formik.setFieldValue("whyjoinCards", updatedCards);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleModalSubmit = () => {
+    formik.setFieldValue('whyjoinCards', [
+      ...formik.values.whyjoinCards,
+      { ...newCard, id: formik.values.whyjoinCards.length + 1 },
+    ]);
+    setIsModalVisible(false);
+    setNewCard({ featurecardImg: '', featurecardText: '', featurecardPara: '' });
+    console.log("Updated Formik values:", formik.values);
+  };
+
+  //Companies Logo
+  const [isModalImage, setIsModalImage] = useState(false);
+  const handleCompanyLogoUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        // Update the corresponding featurecardImg field
+        const updatedCards = formik.values.companiesLogo.map((logo) =>
+          logo.id === isEditing ? { ...logo, companyLogoImg: reader.result } : logo
+        );
+        formik.setFieldValue("companiesLogo", updatedCards);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleCompanyLogoSubmit = () => {
+    formik.setFieldValue('companiesLogo', [
+      ...formik.values.companiesLogo,
+      { ...newCompanyLogo, id: formik.values.companiesLogo.length + 1 },
+    ]);
+    setIsModalImage(false);
+    setNewCompanyLogo({ companyLogoImg: '' });
+    console.log("Updated Formik values:", formik.values);
+    formik.handleSubmit();
+  };
 
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
@@ -261,6 +427,7 @@ function AdminHome() {
       const reader = new FileReader();
       reader.onloadend = () => {
         formik.setFieldValue('heroImg', reader.result);
+        console.log("Updated Formik values:", formik.values);
       };
       reader.readAsDataURL(file);
     }
@@ -295,6 +462,7 @@ function AdminHome() {
       return accordion;
     });
     formik.setFieldValue("aboutAccordion", newAboutAccordion);
+    console.log("Updated Formik values:", formik.values);
   };
 
   const handleDeleteDescription = (accordionIndex, descIndex) => {
@@ -343,111 +511,63 @@ function AdminHome() {
   const [show, setShow] = useState(false);
   const [newAccordion, setNewAccordion] = useState({ accordionQuestion: '', accordionAnswer: '' });
 
-  // Courses
-  const [coursesCards, setCoursesCards] = useState([
-    {
-      id: 1,
-      icon: SunIcon,
-      courseTitle: "Programming Languages",
-      description: ["Python", "Java", "JavaScript", "C++", "Ruby"],
-    },
-    {
-      id: 2,
-      icon: SunIcon,
-      courseTitle: "Web Development",
-      description: ["Full-Stack Web Development", "Front-End Development", "Back-End Development"],
-    },
-    {
-      id: 3,
-      icon: SunIcon,
-      courseTitle: "Mobile App Development",
-      description: ["Android Development", "iOS Development", "Cross-Platform Development"],
-    },
-    {
-      id: 4,
-      icon: SunIcon,
-      courseTitle: "Data Science and ML",
-      description: ["Data Science with Python", "Machine Learning", "Data Engineering"],
-    },
-    {
-      id: 5,
-      icon: SunIcon,
-      courseTitle: "Cloud Computing and DevOps",
-      description: ["Cloud Fundamentals", "DevOps Essentials", "AWS Certification"],
-    },
-    {
-      id: 6,
-      icon: SunIcon,
-      courseTitle: "Cybersecurity",
-      description: ["Cybersecurity Fundamentals", "Ethical Hacking and Penetration Testing", "Secure Coding Practices"],
-    },
-  ]);
-
   const [newCourse, setNewCourse] = useState({ courseTitle: "", description: [""] });
   const [showModal, setShowModal] = useState(false);
   const handleAddCourse = () => {
+    setNewCourse({ courseTitle: '', description: [''] });
+    setIsEditing(false);
     setShowModal(true);
-    setNewCourse({ courseTitle: "", description: [""] });
   };
 
   const handleEditCourse = (index) => {
-    setIsEditing(true);
-    setEditingIndex(index);
-    setNewCourse(coursesCards[index]);
+    setNewCourse(formik.values.coursesData[index]);
+    setIsEditing(index);
     setShowModal(true);
   };
 
-  const handleSaveCourse = () => {
-    if (isEditing) {
-      const updatedCourses = [...coursesCards];
-      updatedCourses[editingIndex] = newCourse;
-      setCoursesCards(updatedCourses);
-    } else {
-      setCoursesCards([...coursesCards, { ...newCourse, id: coursesCards.length + 1 }]);
-    }
-    setShowModal(false);
-    setIsEditing(false);
-    setNewCourse({ courseTitle: "", description: [""] });
-  };
-
   const handleDeleteCourse = (index) => {
-    const updatedCourses = coursesCards.filter((_, i) => i !== index);
-    setCoursesCards(updatedCourses);
+    formik.setFieldValue('coursesData', formik.values.coursesData.filter((_, i) => i !== index));
   };
 
   const handleChangeNewCourse = (e) => {
-    const { name, value } = e.target;
-    setNewCourse({ ...newCourse, [name]: value });
+    setNewCourse({ ...newCourse, courseTitle: e.target.value });
   };
 
   const handlePointsChange = (e, index) => {
-    const updatedDescriptions = newCourse.description.map((desc, i) =>
+    const updatedDescription = newCourse.description.map((desc, i) =>
       i === index ? e.target.value : desc
     );
-    setNewCourse({ ...newCourse, description: updatedDescriptions });
-  };
-
-  const handleAddPoints = () => {
-    setNewCourse({ ...newCourse, description: [...newCourse.description, ""] });
+    setNewCourse({ ...newCourse, description: updatedDescription });
   };
 
   const handleDeletePoints = (index) => {
-    const updatedDescriptions = newCourse.description.filter((_, i) => i !== index);
-    setNewCourse({ ...newCourse, description: updatedDescriptions });
+    setNewCourse({ ...newCourse, description: newCourse.description.filter((_, i) => i !== index) });
   };
 
-  const handleCloseModal = () => {
-    setShowModal(false);
-    setIsEditing(false);
-    setNewCourse({ courseTitle: "", description: [""] });
+  const handleAddPoints = () => {
+    setNewCourse({ ...newCourse, description: [...newCourse.description, ''] });
   };
 
-  // Training Overview Points
+  const handleSaveCourse = () => {
+    if (isEditing !== false) {
+      const updatedCourses = formik.values.coursesData.map((course, index) =>
+        index === isEditing ? { ...course, title: newCourse.courseTitle, items: newCourse.description } : course
+      );
+      formik.setFieldValue('coursesData', updatedCourses);
+    } else {
+      formik.setFieldValue('coursesData', [
+        ...formik.values.coursesData,
+        { id: formik.values.coursesData.length + 1, title: newCourse.courseTitle, items: newCourse.description },
+      ]);
+    }
+    formik.handleSubmit();
+  };
+
   return (
     <div className='container Home'>
       <form onSubmit={formik.handleSubmit}>
         {/* Hero */}
-        <div className='row mb-3'>
+        <div className='row mt-3'>
           <div className='col-lg-7'>
             <div className='d-flex mb-3'>
               <img src={Star} alt="homestar" style={{ width: "30px", height: "30px" }} />
@@ -522,7 +642,7 @@ function AdminHome() {
           </div>
         </div>
         {/* Card */}
-        <div className='card homeCard mb-3'>
+        <div className='card homeCard mb-5'>
           <div className='card-body'>
             <div className='row d-flex pt-3'>
               <div className='col-md-4 d-flex justify-content-center'>
@@ -619,619 +739,206 @@ function AdminHome() {
           </div>
         </div>
         {/* {/ Why Join Us /} */}
-        <div className='whyjoinus mb-3'>
+        <div className='whyjoinus mb-5'>
           <div className='d-flex justify-content-between'>
-            <h1 className='secondheading text-start'>Why Join with Us</h1>
-            <FaPlus className="mt-3 mb-3" />
-          </div>
-          <div className='row mb-3'>
-            <div className='col-md-4'>
-              <div className='card'>
-                <div className='card-body text-start'>
-                  {isEditing === 'featurecard1' ? (
-                    <>
-                      <div className="d-flex justify-content-center mb-2">
-                        <FaSave onClick={handleSaveClick} className="text-secondary" />
-                        <FaTimes onClick={handleCancel} style={{ marginLeft: '10px' }} className="text-secondary" />
-                      </div>
-                      <div>
-                        <input
-                          type="file"
-                          name="featurecardImg1"
-                          accept="image/*"
-                          onChange={handleCardImageUpload}
-                        />
-                        <input
-                          type="text"
-                          name="featurecardText1"
-                          value={formik.values.featurecardText1}
-                          onChange={formik.handleChange}
-                          className="form-control"
-                        />
-                        <textarea
-                          name="featurecardPara1"
-                          value={formik.values.featurecardPara1}
-                          onChange={formik.handleChange}
-                          className="form-control"
-                        />
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <FaEdit onClick={() => handleEditClick("featurecard1")} className="text-secondary mx-2" />
-                      <div className='d-flex'>
-                        <img src={formik.values.featurecardImg1} alt='BookImg' style={{ width: "30px", height: "30px" }} />
-                        <p className='pt-2 mx-2'>{formik.values.featurecardText1}</p>
-                      </div>
-                      <p className='text-start subpara paraContent'>{formik.values.featurecardPara1}</p>
-                    </>
-                  )}
-                </div>
-              </div>
-            </div>
-            <div className='col-md-4'>
-              <div className='card'>
-                <div className='card-body text-start'>
-                  {isEditing === 'featurecard2' ? (
-                    <>
-                      <div className="d-flex justify-content-center mb-2">
-                        <FaSave onClick={handleSaveClick} className="text-secondary" />
-                        <FaTimes onClick={handleCancel} style={{ marginLeft: '10px' }} className="text-secondary" />
-                      </div>
-                      <div>
-                        <input
-                          type="file"
-                          name="featurecardImg2"
-                          accept="image/*"
-                          onChange={handleCardImageUpload}
-                        />
-                        <input
-                          type="text"
-                          name="featurecardText2"
-                          value={formik.values.featurecardText2}
-                          onChange={formik.handleChange}
-                          className="form-control"
-                        />
-                        <textarea
-                          name="featurecardPara2"
-                          value={formik.values.featurecardPara2}
-                          onChange={formik.handleChange}
-                          className="form-control"
-                        />
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <FaEdit onClick={() => handleEditClick("featurecard2")} className="text-secondary mx-2" />
-                      <div className='d-flex'>
-                        <img src={formik.values.featurecardImg2} alt='BookImg' style={{ width: "30px", height: "30px" }} />
-                        <p className='pt-2 mx-2'>{formik.values.featurecardText2}</p>
-                      </div>
-                      <p className='text-start subpara paraContent'>{formik.values.featurecardPara2}</p>
-                    </>
-                  )}
-                </div>
-              </div>
-            </div>
-            <div className='col-md-4'>
-              <div className='card'>
-                <div className='card-body text-start'>
-                  {isEditing === 'featurecard3' ? (
-                    <>
-                      <div className="d-flex justify-content-center mb-2">
-                        <FaSave onClick={handleSaveClick} className="text-secondary" />
-                        <FaTimes onClick={handleCancel} style={{ marginLeft: '10px' }} className="text-secondary" />
-                      </div>
-                      <div>
-                        <input
-                          type="file"
-                          name="featurecardImg3"
-                          accept="image/*"
-                          onChange={handleCardImageUpload}
-                        />
-                        <input
-                          type="text"
-                          name="featurecardText3"
-                          value={formik.values.featurecardText3}
-                          onChange={formik.handleChange}
-                          className="form-control"
-                        />
-                        <textarea
-                          name="featurecardPara3"
-                          value={formik.values.featurecardPara3}
-                          onChange={formik.handleChange}
-                          className="form-control"
-                        />
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <FaEdit onClick={() => handleEditClick("featurecard3")} className="text-secondary mx-2" />
-                      <div className='d-flex'>
-                        <img src={formik.values.featurecardImg3} alt='BookImg' style={{ width: "30px", height: "30px" }} />
-                        <p className='pt-2 mx-2'>{formik.values.featurecardText3}</p>
-                      </div>
-                      <p className='text-start subpara paraContent'>{formik.values.featurecardPara3}</p>
-                    </>
-                  )}
-                </div>
-              </div>
-            </div>
+            <h1 className='secondheading text-star mb-3'>Why Join with Us</h1>
+            <FaPlus className='mt-3 mb-3' onClick={() => setIsModalVisible(true)} />
           </div>
           <div className='row'>
-            <div className='col-md-4'>
-              <div className='card'>
-                <div className='card-body text-start'>
-                  {isEditing === 'featurecard4' ? (
-                    <>
-                      <div className="d-flex justify-content-center mb-2">
-                        <FaSave onClick={handleSaveClick} className="text-secondary" />
-                        <FaTimes onClick={handleCancel} style={{ marginLeft: '10px' }} className="text-secondary" />
-                      </div>
-                      <div>
-                        <input
-                          type="file"
-                          name="featurecardImg4"
-                          accept="image/*"
-                          onChange={handleCardImageUpload}
-                        />
-                        <input
-                          type="text"
-                          name="featurecardText4"
-                          value={formik.values.featurecardText4}
-                          onChange={formik.handleChange}
-                          className="form-control"
-                        />
-                        <textarea
-                          name="featurecardPara4"
-                          value={formik.values.featurecardPara4}
-                          onChange={formik.handleChange}
-                          className="form-control"
-                        />
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <FaEdit onClick={() => handleEditClick("featurecard4")} className="text-secondary mx-2" />
-                      <div className='d-flex'>
-                        <img src={formik.values.featurecardImg4} alt='BookImg' style={{ width: "30px", height: "30px" }} />
-                        <p className='pt-2 mx-2'>{formik.values.featurecardText4}</p>
-                      </div>
-                      <p className='text-start subpara paraContent'>{formik.values.featurecardPara4}</p>
-                    </>
-                  )}
+            {formik.values.whyjoinCards.map((card, index) => (
+              <div key={card.id} className='col-md-4 mb-3'>
+                <div className='card'>
+                  <div className='card-body text-start'>
+                    {isEditing === card.id ? (
+                      <>
+                        <div className='d-flex justify-content-center mb-2'>
+                          <FaSave onClick={handleSaveClick} className='text-secondary' />
+                          <FaTimes onClick={handleCancel} style={{ marginLeft: '10px' }} className='text-secondary' />
+                        </div>
+                        <div>
+                          <input
+                            type='file'
+                            name={`featurecardImg${index + 1}`}
+                            accept='image/*'
+                            onChange={handleCardUpload}
+                          />
+                          <input
+                            type='text'
+                            name={`featurecardText${index + 1}`}
+                            value={card.featurecardText}
+                            onChange={(e) => {
+                              const updatedCards = formik.values.whyjoinCards.map((item) =>
+                                item.id === card.id ? { ...item, featurecardText: e.target.value } : item
+                              );
+                              formik.setFieldValue('whyjoinCards', updatedCards);
+                            }}
+                            className='form-control'
+                          />
+                          <textarea
+                            name={`featurecardPara${index + 1}`}
+                            value={card.featurecardPara}
+                            onChange={(e) => {
+                              const updatedCards = formik.values.whyjoinCards.map((item) =>
+                                item.id === card.id ? { ...item, featurecardPara: e.target.value } : item
+                              );
+                              formik.setFieldValue('whyjoinCards', updatedCards);
+                            }}
+                            className='form-control'
+                          />
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <FaEdit onClick={() => handleEditClick(card.id)} className='text-secondary mx-2' />
+                        <div className='d-flex'>
+                          <img src={card.featurecardImg} alt='Feature' style={{ width: '30px', height: '30px' }} />
+                          <p className='pt-2 mx-2'>{card.featurecardText}</p>
+                        </div>
+                        <p className='text-start subpara paraContent'>{card.featurecardPara}</p>
+                      </>
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className='col-md-4'>
-              <div className='card'>
-                <div className='card-body text-start'>
-                  {isEditing === 'featurecard5' ? (
-                    <>
-                      <div className="d-flex justify-content-center mb-2">
-                        <FaSave onClick={handleSaveClick} className="text-secondary" />
-                        <FaTimes onClick={handleCancel} style={{ marginLeft: '10px' }} className="text-secondary" />
-                      </div>
-                      <div>
-                        <input
-                          type="file"
-                          name="featurecardImg5"
-                          accept="image/*"
-                          onChange={handleCardImageUpload}
-                        />
-                        <input
-                          type="text"
-                          name="featurecardText5"
-                          value={formik.values.featurecardText5}
-                          onChange={formik.handleChange}
-                          className="form-control"
-                        />
-                        <textarea
-                          name="featurecardPara5"
-                          value={formik.values.featurecardPara5}
-                          onChange={formik.handleChange}
-                          className="form-control"
-                        />
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <FaEdit onClick={() => handleEditClick("featurecard5")} className="text-secondary mx-2" />
-                      <div className='d-flex'>
-                        <img src={formik.values.featurecardImg5} alt='BookImg' style={{ width: "30px", height: "30px" }} />
-                        <p className='pt-2 mx-2'>{formik.values.featurecardText5}</p>
-                      </div>
-                      <p className='text-start subpara paraContent'>{formik.values.featurecardPara5}</p>
-                    </>
-                  )}
-                </div>
-              </div>
-            </div>
-            <div className='col-md-4'>
-              <div className='card'>
-                <div className='card-body text-start'>
-                  {isEditing === 'featurecard6' ? (
-                    <>
-                      <div className="d-flex justify-content-center mb-2">
-                        <FaSave onClick={handleSaveClick} className="text-secondary" />
-                        <FaTimes onClick={handleCancel} style={{ marginLeft: '10px' }} className="text-secondary" />
-                      </div>
-                      <div>
-                        <input
-                          type="file"
-                          name="featurecardImg6"
-                          accept="image/*"
-                          onChange={handleCardImageUpload}
-                        />
-                        <input
-                          type="text"
-                          name="featurecardText6"
-                          value={formik.values.featurecardText6}
-                          onChange={formik.handleChange}
-                          className="form-control"
-                        />
-                        <textarea
-                          name="featurecardPara6"
-                          value={formik.values.featurecardPara6}
-                          onChange={formik.handleChange}
-                          className="form-control"
-                        />
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <FaEdit onClick={() => handleEditClick("featurecard6")} className="text-secondary mx-2" />
-                      <div className='d-flex'>
-                        <img src={formik.values.featurecardImg6} alt='BookImg' style={{ width: "30px", height: "30px" }} />
-                        <p className='pt-2 mx-2'>{formik.values.featurecardText6}</p>
-                      </div>
-                      <p className='text-start subpara paraContent'>{formik.values.featurecardPara6}</p>
-                    </>
-                  )}
-                </div>
-              </div>
-            </div>
+            ))}
           </div>
-          <Modal show={showModal} onHide={handleCloseModal}>
-            <Modal.Header closeButton>
-              {/* <Modal.Title>{isEditing ? "Edit Course" : "Add New Course"}</Modal.Title> */}
-            </Modal.Header>
-            <Modal.Body>
-              <input
-                type="file"
-                name="companylogoImage"
-                accept="image/*"
-                onChange={handleCardImageUpload}
-              />
-            </Modal.Body>
-            <Modal.Footer>
-              <FaSave onClick={handleSaveCourse} className="mx-2 text-primary" />
-              <FaTimes onClick={handleCloseModal} className="text-danger" />
-            </Modal.Footer>
-          </Modal>
         </div>
+        {/* Modal for Adding New Card */}
+        <Modal show={isModalVisible} onHide={() => setIsModalVisible(false)}>
+          <Modal.Header closeButton>
+            <Modal.Title>Add New Card</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <input
+              type='text'
+              placeholder='Title'
+              value={newCard.featurecardText}
+              onChange={(e) => setNewCard({ ...newCard, featurecardText: e.target.value })}
+              className='form-control mb-2'
+            />
+            <textarea
+              placeholder='Description'
+              value={newCard.featurecardPara}
+              onChange={(e) => setNewCard({ ...newCard, featurecardPara: e.target.value })}
+              className='form-control mb-2'
+            />
+            <input
+              type='file'
+              accept='image/*'
+              onChange={(e) => {
+                const file = e.target.files[0];
+                if (file) {
+                  const reader = new FileReader();
+                  reader.onloadend = () => {
+                    setNewCard({ ...newCard, featurecardImg: reader.result });
+                  };
+                  reader.readAsDataURL(file);
+                }
+              }}
+              className='form-control mb-2'
+            />
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant='secondary' onClick={() => setIsModalVisible(false)}>
+              Cancel
+            </Button>
+            <Button variant='primary' onClick={handleModalSubmit}>
+              Save
+            </Button>
+          </Modal.Footer>
+        </Modal>
         {/* {/ Top Companies Hiring /} */}
-        <div className='topcompanies mb-3'>
+        <div className='topcompanies mb-5'>
           <div className='d-flex justify-content-between'>
             <h1 className='secondheading text-start'>Top Companies Hiring</h1>
-            <FaPlus />
+            <FaPlus className='mt-3 mb-3' onClick={() => setIsModalImage(true)} />
           </div>
           <div className='row g-2 d-flex justify-content-between mb-3'>
-            <div className='col-6 col-md-2'>
-              <div className='card'>
-                <div className='card-body d-flex align-items-center justify-content-center'>
-                  {isEditing === 'companiescard1' ? (
-                    <>
-                      <div className="d-flex justify-content-center mb-2">
-                        <FaSave onClick={handleSaveClick} className="text-secondary" />
-                        <FaTimes onClick={handleCancel} style={{ marginLeft: '10px' }} className="text-secondary" />
-                      </div>
-                      <div>
-                        <input
-                          type="file"
-                          name="companylogoImg1"
-                          accept="image/*"
-                          onChange={handleCardImageUpload}
-                        />
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <div className='d-flex flex-coloumn'>
-                        <FaEdit onClick={() => handleEditClick("companiescard1")} className="text-secondary mx-2" />
-                        <img src={formik.values.companylogoImg1} alt='BookImg' style={{ width: "100px", height: "100px" }} />
-                      </div>
-                    </>
-                  )}
+            {formik.values.companiesLogo.map((logo, index) => (
+              <div key={logo.id} className='col-md-2 col-6 mb-3'>
+                <div className='card'>
+                  <div className='card-body d-flex align-items-center justify-content-center'>
+                    {isEditing === logo.id ? (
+                      <>
+                        <div className="d-flex justify-content-center mb-2">
+                          <FaSave onClick={handleSaveClick} className="text-secondary" />
+                          <FaTimes onClick={handleCancel} style={{ marginLeft: '10px' }} className="text-secondary" />
+                        </div>
+                        <div>
+                          <input
+                            type="file"
+                            name={`companyLogoImg${index + 1}`}
+                            accept="image/*"
+                            onChange={handleCompanyLogoUpload}
+                            style={{ width: "100px", height: "100px" }}
+                          />
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <FaEdit onClick={() => handleEditClick(logo.id)} className='text-secondary mx-2' />
+                        <div className='d-flex'>
+                          <img src={logo.companyLogoImg} alt='LogoImg' style={{ width: "100px", height: "100px" }} />
+                        </div>
+                      </>
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className='col-6 col-md-2'>
-              <div className='card'>
-                <div className='card-body d-flex align-items-center justify-content-center'>
-                  {isEditing === 'companiescard2' ? (
-                    <>
-                      <div className="d-flex justify-content-center mb-2">
-                        <FaSave onClick={handleSaveClick} className="text-secondary" />
-                        <FaTimes onClick={handleCancel} style={{ marginLeft: '10px' }} className="text-secondary" />
-                      </div>
-                      <div>
-                        <input
-                          type="file"
-                          name="companylogoImg2"
-                          accept="image/*"
-                          onChange={handleCardImageUpload}
-                        />
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <div className='d-flex flex-coloumn'>
-                        <FaEdit onClick={() => handleEditClick("companiescard2")} className="text-secondary mx-2" />
-                        <img src={formik.values.companylogoImg2} alt='BookImg' style={{ width: "100px", height: "100px" }} />
-                      </div>
-                    </>
-                  )}
-                </div>
-              </div>
-            </div>
-            <div className='col-6 col-md-2'>
-              <div className='card'>
-                <div className='card-body d-flex align-items-center justify-content-center'>
-                  {isEditing === 'companiescard3' ? (
-                    <>
-                      <div className="d-flex justify-content-center mb-2">
-                        <FaSave onClick={handleSaveClick} className="text-secondary" />
-                        <FaTimes onClick={handleCancel} style={{ marginLeft: '10px' }} className="text-secondary" />
-                      </div>
-                      <div>
-                        <input
-                          type="file"
-                          name="companylogoImg3"
-                          accept="image/*"
-                          onChange={handleCardImageUpload}
-                        />
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <div className='d-flex flex-coloumn'>
-                        <FaEdit onClick={() => handleEditClick("companiescard3")} className="text-secondary mx-2" />
-                        <img src={formik.values.companylogoImg3} alt='BookImg' style={{ width: "100px", height: "100px" }} />
-                      </div>
-                    </>
-                  )}
-                </div>
-              </div>
-            </div>
-            <div className='col-6 col-md-2'>
-              <div className='card'>
-                <div className='card-body d-flex align-items-center justify-content-center'>
-                  {isEditing === 'companiescard4' ? (
-                    <>
-                      <div className="d-flex justify-content-center mb-2">
-                        <FaSave onClick={handleSaveClick} className="text-secondary" />
-                        <FaTimes onClick={handleCancel} style={{ marginLeft: '10px' }} className="text-secondary" />
-                      </div>
-                      <div>
-                        <input
-                          type="file"
-                          name="companylogoImg4"
-                          accept="image/*"
-                          onChange={handleCardImageUpload}
-                        />
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <div className='d-flex flex-coloumn'>
-                        <FaEdit onClick={() => handleEditClick("companiescard4")} className="text-secondary mx-2" />
-                        <img src={formik.values.companylogoImg4} alt='BookImg' style={{ width: "100px", height: "100px" }} />
-                      </div>
-                    </>
-                  )}
-                </div>
-              </div>
-            </div>
-            <div className='col-6 col-md-2'>
-              <div className='card'>
-                <div className='card-body d-flex align-items-center justify-content-center'>
-                  {isEditing === 'companiescard5' ? (
-                    <>
-                      <div className="d-flex justify-content-center mb-2">
-                        <FaSave onClick={handleSaveClick} className="text-secondary" />
-                        <FaTimes onClick={handleCancel} style={{ marginLeft: '10px' }} className="text-secondary" />
-                      </div>
-                      <div>
-                        <input
-                          type="file"
-                          name="companylogoImg5"
-                          accept="image/*"
-                          onChange={handleCardImageUpload}
-                        />
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <div className='d-flex flex-coloumn'>
-                        <FaEdit onClick={() => handleEditClick("companiescard5")} className="text-secondary mx-2" />
-                        <img src={formik.values.companylogoImg5} alt='BookImg' style={{ width: "100px", height: "100px" }} />
-                      </div>
-                    </>
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className='row g-2 d-flex justify-content-between mb-3'>
-            <div className='col-6 col-md-2'>
-              <div className='card'>
-                <div className='card-body d-flex align-items-center justify-content-center'>
-                  {isEditing === 'companiescard6' ? (
-                    <>
-                      <div className="d-flex justify-content-center mb-2">
-                        <FaSave onClick={handleSaveClick} className="text-secondary" />
-                        <FaTimes onClick={handleCancel} style={{ marginLeft: '10px' }} className="text-secondary" />
-                      </div>
-                      <div>
-                        <input
-                          type="file"
-                          name="companylogoImg6"
-                          accept="image/*"
-                          onChange={handleCardImageUpload}
-                        />
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <div className='d-flex flex-coloumn'>
-                        <FaEdit onClick={() => handleEditClick("companiescard6")} className="text-secondary mx-2" />
-                        <img src={formik.values.companylogoImg6} alt='BookImg' style={{ width: "100px", height: "100px" }} />
-                      </div>
-                    </>
-                  )}
-                </div>
-              </div>
-            </div>
-            <div className='col-6 col-md-2'>
-              <div className='card'>
-                <div className='card-body d-flex align-items-center justify-content-center'>
-                  {isEditing === 'companiescard7' ? (
-                    <>
-                      <div className="d-flex justify-content-center mb-2">
-                        <FaSave onClick={handleSaveClick} className="text-secondary" />
-                        <FaTimes onClick={handleCancel} style={{ marginLeft: '10px' }} className="text-secondary" />
-                      </div>
-                      <div>
-                        <input
-                          type="file"
-                          name="companylogoImg7"
-                          accept="image/*"
-                          onChange={handleCardImageUpload}
-                        />
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <div className='d-flex flex-coloumn'>
-                        <FaEdit onClick={() => handleEditClick("companiescard7")} className="text-secondary mx-2" />
-                        <img src={formik.values.companylogoImg7} alt='BookImg' style={{ width: "100px", height: "100px" }} />
-                      </div>
-                    </>
-                  )}
-                </div>
-              </div>
-            </div>
-            <div className='col-6 col-md-2'>
-              <div className='card'>
-                <div className='card-body d-flex align-items-center justify-content-center'>
-                  {isEditing === 'companiescard8' ? (
-                    <>
-                      <div className="d-flex justify-content-center mb-2">
-                        <FaSave onClick={handleSaveClick} className="text-secondary" />
-                        <FaTimes onClick={handleCancel} style={{ marginLeft: '10px' }} className="text-secondary" />
-                      </div>
-                      <div>
-                        <input
-                          type="file"
-                          name="companylogoImg8"
-                          accept="image/*"
-                          onChange={handleCardImageUpload}
-                        />
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <div className='d-flex flex-coloumn'>
-                        <FaEdit onClick={() => handleEditClick("companiescard8")} className="text-secondary mx-2" />
-                        <img src={formik.values.companylogoImg8} alt='BookImg' style={{ width: "100px", height: "100px" }} />
-                      </div>
-                    </>
-                  )}
-                </div>
-              </div>
-            </div>
-            <div className='col-6 col-md-2'>
-              <div className='card'>
-                <div className='card-body d-flex align-items-center justify-content-center'>
-                  {isEditing === 'companiescard9' ? (
-                    <>
-                      <div className="d-flex justify-content-center mb-2">
-                        <FaSave onClick={handleSaveClick} className="text-secondary" />
-                        <FaTimes onClick={handleCancel} style={{ marginLeft: '10px' }} className="text-secondary" />
-                      </div>
-                      <div>
-                        <input
-                          type="file"
-                          name="companylogoImg9"
-                          accept="image/*"
-                          onChange={handleCardImageUpload}
-                        />
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <div className='d-flex flex-coloumn'>
-                        <FaEdit onClick={() => handleEditClick("companiescard9")} className="text-secondary mx-2" />
-                        <img src={formik.values.companylogoImg9} alt='BookImg' style={{ width: "100px", height: "100px" }} />
-                      </div>
-                    </>
-                  )}
-                </div>
-              </div>
-            </div>
-            <div className='col-6 col-md-2'>
-              <div className='card'>
-                <div className='card-body d-flex align-items-center justify-content-center'>
-                  {isEditing === 'companiescard10' ? (
-                    <>
-                      <div className="d-flex justify-content-center mb-2">
-                        <FaSave onClick={handleSaveClick} className="text-secondary" />
-                        <FaTimes onClick={handleCancel} style={{ marginLeft: '10px' }} className="text-secondary" />
-                      </div>
-                      <div>
-                        <input
-                          type="file"
-                          name="companylogoImg10"
-                          accept="image/*"
-                          onChange={handleCardImageUpload}
-                        />
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <div className='d-flex flex-coloumn'>
-                        <FaEdit onClick={() => handleEditClick("companiescard10")} className="text-secondary mx-2" />
-                        <img src={formik.values.companylogoImg10} alt='BookImg' style={{ width: "100px", height: "100px" }} />
-                      </div>
-                    </>
-                  )}
-                </div>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
+        {/* Add Companies Logo */}
+        <Modal show={isModalImage} onHide={() => setIsModalImage(false)}>
+          <Modal.Header closeButton>
+            <Modal.Title>Add New Card</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <input
+              type='file'
+              accept='image/*'
+              onChange={(e) => {
+                const file = e.target.files[0];
+                if (file) {
+                  const reader = new FileReader();
+                  reader.onloadend = () => {
+                    setNewCard({ ...newCard, companyLogoImg: reader.result });
+                  };
+                  reader.readAsDataURL(file);
+                }
+              }}
+              className='form-control mb-2'
+            />
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant='secondary' onClick={() => setIsModalImage(false)}>
+              Cancel
+            </Button>
+            <Button variant='primary' onClick={handleCompanyLogoSubmit}>
+              Save
+            </Button>
+          </Modal.Footer>
+        </Modal>
         {/* {/ Courses /} */}
-        <div className='Courses mb-3'>
+        <div className='Courses mt-3'>
           <div className='d-flex justify-content-between'>
-            <h1 className='secondheading text-start'>10+ Courses</h1>
+            <h1 className='secondheading text-start mb-3'>10+ Courses</h1>
             <FaPlus onClick={handleAddCourse} className="mt-3 mb-3" />
           </div>
           <div className='row'>
-            {coursesCards.map((course, index) => (
+            {formik.values.coursesData.map((course, index) => (
               <div className='col-md-4 mb-4' key={course.id}>
                 <div className="d-flex align-items-end justify-content-end p-3">
                   <FaEdit onClick={() => handleEditCourse(index)} />
                   <FaTrash onClick={() => handleDeleteCourse(index)} className="text-danger ms-3" />
                 </div>
                 <div className='card' style={{ height: "250px" }}>
-                  <h5 className='card-header text-center'>{course.courseTitle}</h5>
+                  <h5 className='card-header text-center'>{course.title}</h5>
                   <div className='card-body'>
                     <ul className='list-unstyled'>
-                      {course.description.map((item, i) => (
+                      {course.items.map((item, i) => (
                         <li key={i} className='d-flex align-items-center mb-2'>
-                          <img src={course.icon} alt='icon' style={{ width: '20px', height: '20px' }} className='mr-2' />
+                          <img src={SunIcon} alt='icon' style={{ width: '20px', height: '20px' }} className='mr-2' />
                           <span>{item}</span>
                         </li>
                       ))}
@@ -1241,9 +948,9 @@ function AdminHome() {
               </div>
             ))}
           </div>
-          <Modal show={showModal} onHide={handleCloseModal}>
+          <Modal show={showModal} onHide={() => setShowModal(false)}>
             <Modal.Header closeButton>
-              <Modal.Title>{isEditing ? "Edit Course" : "Add New Course"}</Modal.Title>
+              <Modal.Title>{isEditing !== null ? "Edit Course" : "Add New Course"}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
               <input
@@ -1268,14 +975,14 @@ function AdminHome() {
             </Modal.Body>
             <Modal.Footer>
               <FaSave onClick={handleSaveCourse} className="mx-2 text-primary" />
-              <FaTimes onClick={handleCloseModal} className="text-danger" />
+              <FaTimes onClick={() => setShowModal(false)} className="text-danger" />
             </Modal.Footer>
           </Modal>
         </div>
         {/* {/ Training Overview /} */}
-        <div className='trainingOverview mb-3'>
+        <div className='trainingOverview mt-3'>
           <div className='row d-flex'>
-            <h1 className='secondheading text-start'>Cloud Ecs Training Overview</h1>
+            <h1 className='secondheading text-start mb-3'>Cloud Ecs Training Overview</h1>
             <div className='col-md-8'>
               {isEditing === 'overviewPara' ? (
                 <>
@@ -1335,21 +1042,50 @@ function AdminHome() {
               </div>
             </div>
           </div>
-          {/* {/ Points   /} */}
+        </div>
+        {/* {/ Points   /} */}
+        <div>
+          <div className='d-flex justify-content-end'>
+            <FaPlus type="submit" onClick={handleOpenModalPoints} style={{ cursor: 'pointer', fontSize: '24px' }} />
+          </div>
           <div className="PointsSection py-4">
             <div className="points-container row">
-              {pointsData.map((point, index) => (
+              {formik.values.pointsData.map((point, index) => (
                 <div className="point-item col-md-3 mb-3" key={index}>
                   <img src={CirclePoints} alt='circleImg' style={{ width: "30px", height: "30px" }} />
-                  <span className="mx-2 point-text">{point}</span>
+                  <span className="mx-2 point-text">{point.pointText}</span>
                 </div>
               ))}
             </div>
           </div>
+          <Modal show={showPointsModal} onHide={handleClosePointsModal}>
+            <Modal.Header closeButton>
+              <Modal.Title>Add New Point</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <Form.Group>
+                <Form.Label>Point Text</Form.Label>
+                <Form.Control
+                  type="text"
+                  value={newPoint}
+                  onChange={handleChangeNewPoint}
+                  placeholder="Enter new point"
+                />
+              </Form.Group>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={handleClosePointsModal}>
+                Close
+              </Button>
+              <Button variant="primary" onClick={handleAddPoint}>
+                Add Point
+              </Button>
+            </Modal.Footer>
+          </Modal>
         </div>
         {/* {/ Training and Placements /} */}
-        <div className='trainingplacements mb-3'>
-          <h1 className='secondheading text-start'>Cloud Ecs , Software Training and Placements in India</h1>
+        <div className='trainingplacements mt-3 mb-5'>
+          <h1 className='secondheading text-start mb-3'>Cloud Ecs , Software Training and Placements in India</h1>
           <div className='row d-flex'>
             <div className="col-md-6 col-12">
               <div className="accordion" id="accordionExample">
@@ -1492,7 +1228,6 @@ function AdminHome() {
                 </form>
               </div>
             </div>
-
           </div>
         </div>
       </form>

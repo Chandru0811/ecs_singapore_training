@@ -10,11 +10,19 @@ import Course from "../Pages/admin/course/Course";
 import CourseStepAdd from "../Pages/admin/course/CourseStepAdd";
 import AdminTestimonials from "../Pages/admin/AdminTestimonials";
 import Category from "../Pages/admin/Categories/Category";
+import CourseTestimonial from "../Pages/admin/CourseTestimonial";
+import CourseVideoTestimonial from "../Pages/admin/CourseVideoTestimonial";
+import CourseStepEdit from "../Pages/admin/course/CourseStepEdit";
+import HeaderFooter from "../Pages/admin/HeaderFooter";
+import CourseView from "../Pages/admin/course/CourseView";
 
 const Admin = ({ handleLogout }) => {
   return (
     <BrowserRouter>
-      <div className="container-fluid p-0" style={{ backgroundColor: '#f2f2f2' }}>
+      <div
+        className="container-fluid p-0"
+        style={{ backgroundColor: "#f2f2f2" }}
+      >
         <AdminHeader handleLogout={handleLogout} />
         <div
           className=""
@@ -29,8 +37,16 @@ const Admin = ({ handleLogout }) => {
             <Route path="/about" element={<AdminAbout />} />
             <Route path="/course" element={<Course />} />
             <Route path="/courseadd" element={<CourseStepAdd />} />
+            <Route path="/courseEdit" element={<CourseStepEdit />} />
             <Route path="/testimonials" element={<AdminTestimonials />} />
             <Route path="/categories" element={<Category />} />
+            <Route path="/CourseTestimonial" element={<CourseTestimonial />} />
+            <Route path="/headerfooter" element={<HeaderFooter />} />
+            <Route path="/contact" element={<CourseView />} />
+            <Route
+              path="/CourseVideoTestimonial"
+              element={<CourseVideoTestimonial />}
+            />
           </Routes>
         </div>
         <AdminFooter />

@@ -6,7 +6,7 @@ import 'react-calendar/dist/Calendar.css';
 import { FiPhoneCall } from "react-icons/fi";
 import { IoMailOpenOutline } from "react-icons/io5";
 import { LuMapPin } from "react-icons/lu";
-import { FaCircleArrowRight } from "react-icons/fa6";
+import { FaCircleArrowRight, FaCircleArrowLeft } from "react-icons/fa6";
 import { BiSolidQuoteRight } from "react-icons/bi";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -16,6 +16,7 @@ function ContactUs() {
   const [timeSlots, setTimeSlots] = useState([]);
   const [singaporeTime, setSingaporeTime] = useState('');
   const [selectedTime, setSelectedTime] = useState(null);
+  const [showForm, setShowForm] = useState(false);
 
   const handleDateChange = (newDate) => {
     setDate(newDate);
@@ -23,16 +24,24 @@ function ContactUs() {
   };
 
   const generateTimeSlots = (selectedDate) => {
-    const startHour = 11; // 11 AM
-    const endHour = 18; // 6 PM
+    const startHour = 10;
+    const endHour = 19;
+    const intervalMinutes = 30; // 30 minutes interval
     const slots = [];
-  
-    for (let hour = startHour; hour <= endHour; hour++) { // Change < to <=
-      const time = new Date(selectedDate);
-      time.setHours(hour, 0, 0);
-      slots.push(time);
+
+    for (let hour = startHour; hour < endHour; hour++) {
+      for (let minutes = 0; minutes < 60; minutes += intervalMinutes) {
+        const time = new Date(selectedDate);
+        time.setHours(hour, minutes, 0);
+        slots.push(time);
+      }
     }
-  
+
+    // For the final slot at 7:00 PM
+    const finalTime = new Date(selectedDate);
+    finalTime.setHours(endHour, 0, 0);
+    slots.push(finalTime);
+
     setTimeSlots(slots);
   };
 
@@ -58,50 +67,90 @@ function ContactUs() {
     return () => clearInterval(interval);
   }, []);
 
-  const validationSchema = Yup.object({
+  const validationSchema1 = Yup.object({
+    fullName: Yup.string().required("*Full Name is required"),
+    email: Yup.string()
+      .email("*Invalid Email Address")
+      .required("*Email is required"),
+    phoneNumber: Yup.string()
+      .matches(/^\d+$/, "*Must be a Number")
+      .min(8, "*Invalid Phone Number")
+      .max(10, "*Invalid Phone Number")
+      .required("*Phone Number is required")
+  });
+
+  const formik1 = useFormik({
+    initialValues: {
+      fullName: "",
+      email: "",
+      phoneNumber: "",
+      message: ""
+    },
+    validationSchema: validationSchema1,
+    onSubmit: (values) => {
+      console.log("Contact Datas:", values);
+    },
+  });
+
+  const validationSchema2 = Yup.object({
     firstName: Yup.string().required("*First Name is required"),
     lastName: Yup.string().required("*Last Name is required"),
     email: Yup.string()
       .email("*Invalid Email Address")
       .required("*Email is required"),
-    phoneNumbar: Yup.string().required("*Phone Number is required")
+    phoneNumber: Yup.string()
+      .matches(/^\d+$/, "*Must be a Number")
+      .min(8, "*Invalid Phone Number")
+      .max(10, "*Invalid Phone Number")
+      .required("*Phone Number is required")
   });
 
-  const formik = useFormik({
+  const formik2 = useFormik({
     initialValues: {
       firstName: "",
       lastName: "",
       email: "",
-      phoneNumbar: "",
+      phoneNumber: "",
       message: ""
     },
-    validationSchema: validationSchema,
+    validationSchema: validationSchema2,
     onSubmit: (values) => {
-      console.log("Contact Data:", values);
+      console.log("Contact Datas:", values);
     },
   });
 
-  // Calculate the max date to show in the calendar
   const today = new Date();
-  const maxDate = new Date(today.getFullYear(), today.getMonth() + 3, 0); // End of the third month from now
+  const maxDate = new Date(today.getFullYear(), today.getMonth() + 3, 0);
 
-  // Dynamically adjust column classes based on whether a date is selected
-  const leftColumnClass = date ? 'col-md-4 col-12' : 'col-md-6 col-12';
-  const rightColumnClass = date ? 'col-md-8 col-12' : 'col-md-6 col-12';
-
-  // Helper function to check if the selected date is a weekend
   const isWeekend = (date) => {
     const day = date.getDay();
-    return day === 0 || day === 6; // 0 is Sunday, 6 is Saturday
+    return day === 0 || day === 6;
   };
 
-  // Function to disable Saturday and Sunday
   const tileDisabled = ({ date, view }) => {
     if (view === 'month') {
       return isWeekend(date);
     }
     return false;
   };
+
+  const formatSelectedDate = () => {
+    if (!date) return '';
+    const options = { weekday: 'long', month: 'long', day: 'numeric' };
+    return date.toLocaleDateString('en-US', options);
+  };
+
+  const handleNextClick = () => {
+    setShowForm(true);
+  };
+
+  const handleBackClick = () => {
+    setShowForm(false);
+  };
+
+  const leftColumnClass = date && !showForm ? 'col-md-4 col-12' : 'col-md-6 col-12';
+  const calendarColumnClass = date && !showForm ? 'col-md-4 col-12' : 'col-md-6 col-12';
+  const rightColumnClass = date && !showForm ? 'col-md-3 col-12' : 'col-md-6 col-12';
 
   return (
     <section className='mt-5 contactUs'>
@@ -133,43 +182,121 @@ function ContactUs() {
                     </div>
                   </div>
                 </div>
-                <div className={rightColumnClass + ' py-4 text-start contactCard-right'}>
-                  <h5 className='fw-bold mb-4 mx-2'>Select a Date & Time</h5>
-                  <div className='row justify-content-center'>
-                    <div className={date ? 'col-md-6' : 'col-md-12'}>
-                      <Calendar
-                        onChange={handleDateChange}
-                        value={date}
-                        minDate={today}
-                        maxDate={maxDate}
-                        minDetail="month"
-                        maxDetail="month"
-                        tileDisabled={tileDisabled}
-                        className='mb-4'
-                      />
-                      <h5 className='fw-bold mb-3 mx-2'>Time Zone</h5>
-                      <div className='mx-4 d-flex align-items-center'>
-                        <FaGlobeAsia color='#515B6F' /><span className='mx-1'>Singapore Time ({singaporeTime})</span>
-                      </div>
-                    </div>
-                    {date && !isWeekend(date) && (
-                      <div className='col-md-4'>
-                        <h5 className='fw-bold mb-4 mx-2'>Select a Time Slot</h5>
-                        <div className="time-slots">
-                          {timeSlots.map((time, index) => (
-                            <button
-                              key={index}
-                              className={`time-slot-btn ${selectedTime === time ? 'selected' : ''}`}
-                              onClick={() => handleTimeSlotClick(time)}
-                            >
-                              {time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })}
-                            </button>
-                          ))}
+                {!showForm && (
+                  <div className={calendarColumnClass + ' py-4 text-start contactCard-right'}>
+                    <h5 className='fw-bold mb-4 mx-2'>Select a Date & Time</h5>
+                    <div className='row'>
+                      <div className='col-md-12'>
+                        <div className="calendar-container">
+                          <Calendar
+                            onChange={handleDateChange}
+                            value={date}
+                            minDate={today}
+                            maxDate={maxDate}
+                            minDetail="month"
+                            maxDetail="month"
+                            tileDisabled={tileDisabled}
+                            className='mb-4'
+                          />
+                        </div>
+                        <h5 className='fw-bold mb-3 mx-2'>Time Zone</h5>
+                        <div className='time-zone'>
+                          <FaGlobeAsia color='#515B6F' /><span className='mx-1'>Singapore Time ({singaporeTime})</span>
                         </div>
                       </div>
-                    )}
+                    </div>
                   </div>
-                </div>
+                )}
+                {date && !isWeekend(date) && !showForm && (
+                  <div className={rightColumnClass + ' py-4 text-start'}>
+                    <h6 className='mb-4 mt-3 mx-5'>{formatSelectedDate()}</h6>
+                    <div className="time-slots">
+                      {timeSlots.map((time, index) => (
+                        <div key={index} className="time-slot-btn-container">
+                          <button
+                            className={`time-slot-btn ${selectedTime === time ? 'selected' : ''}`}
+                            onClick={() => handleTimeSlotClick(time)}
+                          >
+                            {time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })}
+                          </button>
+                          {selectedTime === time && (
+                            <button className="next-btn" onClick={handleNextClick}>Next</button>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                {showForm && (
+                  <div className='col-md-6 contactCard-right'>
+                    <div className="back-arrow text-start mt-3" onClick={handleBackClick} style={{ cursor: 'pointer' }}>
+                      <FaCircleArrowLeft />
+                    </div>
+                    <div className='row mt-3'>
+                      <div className='offset-1 col-10 text-start'>
+                        <h2 className='mb-3'>Add your Details</h2>
+                        <form onSubmit={formik1.handleSubmit}>
+                        <div className='mb-3'>
+                          <label className='form-label'>Full Name<span className='text-danger'>*</span></label>
+                          <input type='text'
+                            className={`form-control ${formik1.touched.fullName && formik1.errors.fullName
+                              ? "is-invalid"
+                              : ""
+                              }`}
+                            {...formik1.getFieldProps("fullName")}
+                          />
+                          {formik1.touched.fullName && formik1.errors.fullName && (
+                            <div className="invalid-feedback">
+                              {formik1.errors.fullName}
+                            </div>
+                          )}
+                        </div>
+                        <div className='mb-3'>
+                          <label className='form-label'>Email<span className='text-danger'>*</span></label>
+                          <input type='text'
+                            className={`form-control ${formik1.touched.email && formik1.errors.email
+                              ? "is-invalid"
+                              : ""
+                              }`}
+                            {...formik1.getFieldProps("email")}
+                          />
+                          {formik1.touched.email && formik1.errors.email && (
+                            <div className="invalid-feedback">
+                              {formik1.errors.email}
+                            </div>
+                          )}
+                        </div>
+                        <div className='mb-3'>
+                          <label className='form-label'>Phone Number<span className='text-danger'>*</span></label>
+                          <input type='text'
+                            className={`form-control ${formik1.touched.phoneNumber && formik1.errors.phoneNumber
+                              ? "is-invalid"
+                              : ""
+                              }`}
+                            {...formik1.getFieldProps("phoneNumber")}
+                          />
+                          {formik1.touched.phoneNumber && formik1.errors.phoneNumber && (
+                            <div className="invalid-feedback">
+                              {formik1.errors.phoneNumber}
+                            </div>
+                          )}
+                        </div>
+                        <div className='mb-4'>
+                          <label className='form-label'>Message</label>
+                          <textarea 
+                          rows={5} 
+                          className='form-control'
+                          {...formik1.getFieldProps("message")}
+                          />
+                        </div>
+                        <div className='mb-5'>
+                          <button type='submit' className='btn btn-primary'>Schedule the Event</button>
+                        </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -203,7 +330,7 @@ function ContactUs() {
                 <div className='col-lg-9 col-12'>
                   <h3 className='text-start fw-bold'>Email</h3>
                   <hr className='my-4' />
-                  <p className='text-start fw-medium paraText'>info@ecscloudinfotech.com</p>
+                  <p className='text-start fw-medium mailto:paratext'>info@ecscloudinfotech.com</p>
                 </div>
               </div>
             </div>
@@ -234,73 +361,73 @@ function ContactUs() {
         <div className='container py-5'>
           <div className='row py-5'>
             <div className='col-lg-6 col-12'>
-              <form onSubmit={formik.handleSubmit}>
+              <form onSubmit={formik2.handleSubmit}>
                 <div className='card text-start p-5' style={{ border: "none", borderRadius: "30px" }}>
                   <h3 className='fw-bold mb-5'>We Are Ready To Help You</h3>
                   <div className='mb-3'>
                     <label className='form-label'>First Name<span className='text-danger'>*</span></label>
                     <input type='text'
-                      className={`form-control ${formik.touched.firstName && formik.errors.firstName
+                      className={`form-control ${formik2.touched.firstName && formik2.errors.firstName
                         ? "is-invalid"
                         : ""
                         }`}
-                      {...formik.getFieldProps("firstName")}
+                      {...formik2.getFieldProps("firstName")}
                     />
-                    {formik.touched.firstName && formik.errors.firstName && (
+                    {formik2.touched.firstName && formik2.errors.firstName && (
                       <div className="invalid-feedback">
-                        {formik.errors.firstName}
+                        {formik2.errors.firstName}
                       </div>
                     )}
                   </div>
                   <div className='mb-3'>
                     <label className='form-label'>Last Name<span className='text-danger'>*</span></label>
                     <input type='text'
-                      className={`form-control ${formik.touched.lastName && formik.errors.lastName
+                      className={`form-control ${formik2.touched.lastName && formik2.errors.lastName
                         ? "is-invalid"
                         : ""
                         }`}
-                      {...formik.getFieldProps("lastName")}
+                      {...formik2.getFieldProps("lastName")}
                     />
-                    {formik.touched.lastName && formik.errors.lastName && (
+                    {formik2.touched.lastName && formik2.errors.lastName && (
                       <div className="invalid-feedback">
-                        {formik.errors.lastName}
+                        {formik2.errors.lastName}
                       </div>
                     )}
                   </div>
                   <div className='mb-3'>
                     <label className='form-label'>Email<span className='text-danger'>*</span></label>
                     <input type='text'
-                      className={`form-control ${formik.touched.email && formik.errors.email
+                      className={`form-control ${formik2.touched.email && formik2.errors.email
                         ? "is-invalid"
                         : ""
                         }`}
-                      {...formik.getFieldProps("email")}
+                      {...formik2.getFieldProps("email")}
                     />
-                    {formik.touched.email && formik.errors.email && (
+                    {formik2.touched.email && formik2.errors.email && (
                       <div className="invalid-feedback">
-                        {formik.errors.email}
+                        {formik2.errors.email}
                       </div>
                     )}
                   </div>
                   <div className='mb-3'>
                     <label className='form-label'>Phone Number<span className='text-danger'>*</span></label>
                     <input type='text'
-                      className={`form-control ${formik.touched.phoneNumbar && formik.errors.phoneNumbar
+                      className={`form-control ${formik2.touched.phoneNumber && formik2.errors.phoneNumber
                         ? "is-invalid"
                         : ""
                         }`}
-                      {...formik.getFieldProps("phoneNumbar")}
+                      {...formik2.getFieldProps("phoneNumber")}
                     />
-                    {formik.touched.phoneNumbar && formik.errors.phoneNumbar && (
+                    {formik2.touched.phoneNumber && formik2.errors.phoneNumber && (
                       <div className="invalid-feedback">
-                        {formik.errors.phoneNumbar}
+                        {formik2.errors.phoneNumber}
                       </div>
                     )}
                   </div>
                   <div className='mb-4'>
                     <label className='form-label'>Message</label>
                     <textarea className='form-control' rows={5}
-                      {...formik.getFieldProps("message")}
+                      {...formik2.getFieldProps("message")}
                     ></textarea>
                   </div>
                   <div className='mb-3'>
