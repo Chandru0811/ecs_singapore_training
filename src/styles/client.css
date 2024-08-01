@@ -18,52 +18,12 @@
   --client-button-hover: #0088eb;
   --client-topBor-color: #0f2158;
   --client-paratext-color: #515B6F;
-  --client-calendarbtn-color: #e7f3fd;
+  --client-calendarbtn-color: #e2eef8;
+  --client-calendar-hover: #b3d8f6;
+  --client-cardHover-color: #e41111;
   --admin-header-hover-color: #2d5677;
+  --client-contactbg-color: #e5e5e5;
 }
-
-/* AdminHeader */
-.adminHeader{
-  background-color:var(--client-primary-color) ;
-}
-.adminHeaderNav .nav-link{
- color: var(--client-teritary-color);
-}
-.adminHeaderNav .navbar-collapse .nav-link{
-  position: relative;
-  --bs-nav-link-hover-color: var(--client-paratext-color) !important;
-  transition: color 0.3s ease-in-out;
-}
-.adminHeaderNav .navbar-collapse .nav-link::after {
-  content: '';
-  position: absolute;
-  width: 0;
-  height: 2px;
-  display: block;
-  margin-top: 5px;
-  right: 0;
-  background: var(--client-teritary-color);
-  transition: width 0.3s ease-in-out;
-  -webkit-transition: width 0.3s ease-in-out;
-}
-.adminHeaderNav .navbar-collapse .nav-link:hover::after {
-  width: 100%;
-  left: 0;
-  background: var(--client-teritary-color);
-}
-
-.adminHeaderNav .navbar-collapse .navbar-nav .nav-link.active, 
-.adminHeaderNav .navbar-collapse .navbar-nav .nav-link.show {
-  color: var(--client-teritary-color) !important;
-}
-
-.adminHeaderNav .navbar-collapse .navbar-nav .nav-link.active::after, 
-.adminHeaderNav .navbar-collapse .navbar-nav .nav-link.show::after {
-  width: 100%;
-  left: 0;
-  background: var(--client-teritary-color);
-}
-
 
 /* header */
 .custom-dropdown .dropdown-menu {
@@ -140,6 +100,30 @@
     font-size: 3.8vw;
   }
 }
+
+@media (max-width: 1265px) and (min-width: 1115px) {
+  .courseBtn {
+    width: 11vw;
+  }
+}
+@media (max-width: 1115px) and (min-width: 990px) {
+  .courseBtn {
+    width: 13vw;
+  }
+}
+@media (max-width: 1268px) and (min-width: 1060px) {
+  .headerInput {
+    width: 27vw !important;
+  }
+}
+
+@media (max-width: 1065px) and (min-width: 990px) {
+  .headerInput {
+    width: 22vw !important;
+  }
+}
+
+
 .loginBtn {
   --bs-btn-bg: var(--client-topBor-color) !important;
   --bs-btn-border-color: var(--client-topBor-color) !important;
@@ -159,6 +143,10 @@
 }
 
 .contactUs .col-md-6 {
+  padding-right: 0;
+}
+
+.contactUs .col-md-4 {
   padding-right: 0;
 }
 
@@ -207,8 +195,10 @@ hr {
 }
 
 .react-calendar__navigation__arrow {
-  font-size: 2rem;
+  font-size: 2.5rem;
+  padding-bottom: 7px;
 }
+
 .react-calendar__navigation__arrow{
   background-color: var(--client-calendarbtn-color) !important;
   border-radius: 50%;
@@ -230,46 +220,102 @@ hr {
   color: var(--client-primary-color);
 }
 
-.react-calendar__tile--now {
-  background: none !important;
-  position: relative;
-  color: var(--client-text-color) !important;
-}
-
-.react-calendar__tile--now:after {
-  content: '';
-  position: absolute;
-  bottom: 8px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background-color: var(--client-paratext-color); 
-}
-
 .react-calendar__month-view__days__day--weekend {
   color: var(--client-paratext-color) !important;
   background: none !important;
+  font-weight: 300 !important;
 }
 
 .react-calendar__tile--active {
-  background-color: var(--client-primary--color);
+  background-color: #118AEF !important;
   border-radius: 50%;
   color: var(--client-teritary-color) !important;
+  font-weight: 700;
 }
 
 .react-calendar__tile {
   background-color: var(--client-calendarbtn-color);
   border-radius: 50%;
   color: var( --client-primary-color);
+  font-weight: 700;
+  padding: 15px;
 }
 
 .react-calendar__tile:hover {
-  background-color: var(--client-calendarbtn-color) !important;
+  background-color: var(--client-calendar-hover) !important;
   border-radius: 50%;
   color: var( --client-primary-color);
+  font-weight: 700;
 }
+
+.contactDetails{
+  border-radius: 30px;
+  border: 3px solid var(--client-shadow-color);
+  height: 13rem;
+}
+
+.contactDetails:hover{
+  border-radius: 30px;
+  border: 3px solid var(--client-cardHover-color);
+}
+
+.paraText{
+  color: var(--client-paratext-color);
+}
+
+.arrow-icon{
+  position: relative;
+  margin: -59px;
+  margin-left: 14rem;
+}
+
+@media (max-width: 991px) {
+  .contactDetails{
+    border-radius: 30px;
+    border: 3px solid var(--client-shadow-color);
+    height: 15rem;
+  }
+
+  .arrow-icon{
+    position: relative;
+    margin: -59px;
+    margin-left: 20rem;
+  }
+}
+
+.arrow-icon a {
+  color: var(--client-cardHover-color);
+  font-size: 3.2rem;
+}
+
+.arrow-icon a:hover {
+  color: var(--client-background-color);
+  font-size: 3.2rem;
+}
+
+.contactDetails1{
+  background-color: var(--client-contactbg-color);
+}
+
+.time-slot-btn {
+  background-color: var(--client-teritary-color);
+  border: 1px solid var(--client-primary-color);
+  padding: 10px;
+  margin: 5px 0;
+  width: 80%;
+  text-align: left;
+  cursor: pointer;
+  font-size: 16px;
+  border-radius: 5px;
+  font-weight: 500;
+  color: var(--client-primary-color);
+}
+
+.time-slot-btn:hover {
+  border: 2px solid var(--client-primary-color);
+  font-weight: 700;
+}
+
 /* Contact End */
 
 /* / Home / */
@@ -596,6 +642,9 @@ border: 2px solid var(--client-teritary-color);
 } 
 .accordion-body{
   border-left: 5px solid var(--client-line-color);
+}
+.accordion-button:focus {
+  box-shadow: none !important;
 }
 /* / / About End  / / */
 
