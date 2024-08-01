@@ -61,9 +61,9 @@ function Category() {
           <button className="btn btn-sm btn-danger">Publish</button>
         </div>
       </div>
-      <div className="card shadow border-0 my-4 p-4" style={{ height: "75vh" }}>
+      <div>
         <div className="table-responsive p-2">
-          <table ref={tableRef} className="table">
+          <table ref={tableRef} className="display">
             <thead className="thead-light">
               <tr className="text-start">
                 <th
