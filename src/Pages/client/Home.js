@@ -79,7 +79,7 @@ function Home() {
   return (
     <div className='container Home'>
       {/* Hero */}
-      <div className='row'>
+      <div className='row mt-3'>
         <div className='col-lg-7'>
           <div className='d-flex  mb-3'>
             <img src={Star} alt="homestar" style={{ width: "30px", height: "30px" }} />
@@ -108,7 +108,7 @@ function Home() {
         </div>
       </div>
       {/* Card */}
-      <div className='card homeCard mb-3'>
+      <div className='card homeCard mb-5'>
         <div className='card-body'>
           <div className='row d-flex pt-3'>
             <div className='col-md-4 d-flex justify-content-center'>
@@ -129,8 +129,8 @@ function Home() {
         </div>
       </div>
       {/* {/ Why Join Us /} */}
-      <div className='whyjoinus mb-3'>
-        <h1 className='secondheading text-start'>Why Join with Us</h1>
+      <div className='whyjoinus mb-5'>
+        <h1 className='secondheading text-start mb-3'>Why Join with Us</h1>
         <div className='row mb-3'>
           <div className='col-md-4'>
             <div className='card'>
@@ -203,8 +203,8 @@ function Home() {
         </div>
       </div>
       {/* {/ Top Companies Hiring /} */}
-      <div className='topcompanies mb-3'>
-        <h1 className='secondheading text-start'>Top Companies Hiring</h1>
+      <div className='topcompanies mb-5'>
+        <h1 className='secondheading text-start mb-3'>Top Companies Hiring</h1>
         <div className='row g-2 d-flex justify-content-between mb-3'>
           <div className='col-6 col-md-2'>
             <div className='card'>
@@ -282,8 +282,8 @@ function Home() {
         </div>
       </div>
       {/* {/ Courses /} */}
-      <div className='Courses mb-3'>
-        <h1 className='secondheading text-start'>10+ Courses</h1>
+      <div className='Courses mt-3'>
+        <h1 className='secondheading text-start mb-3'>10+ Courses</h1>
         <div className='row'>
           {coursesData.map((course, index) => (
             <div className='col-md-4 mb-4' key={index}>
@@ -315,9 +315,9 @@ function Home() {
         </div>
       </div>
       {/* {/ Training Overview /} */}
-      <div className='trainingOverview mb-3'>
+      <div className='trainingOverview mt-3'>
         <div className='row d-flex'>
-          <h1 className='secondheading text-start'>Cloud Ecs Training Overview</h1>
+          <h1 className='secondheading text-start mb-3'>Cloud Ecs Training Overview</h1>
           <div className='col-md-8'>
             <p className='text-start paraContent'>Welcome to our comprehensive Cloud ECS (Elastic Container Service) Training Program! This course is designed to equip you with the essential knowledge and skills needed to effectively manage and deploy containerized applications using ECS, one of the most powerful container orchestration services available today.</p>
           </div>
@@ -347,8 +347,8 @@ function Home() {
         </div>
       </div>
       {/* {/ Training and Placements /} */}
-      <div className='trainingplacements mb-3'>
-        <h1 className='secondheading text-start'>Cloud Ecs , Software Training and Placements in India</h1>
+      <div className='trainingplacements mt-3 mb-5'>
+        <h1 className='secondheading text-start mb-3'>Cloud Ecs , Software Training and Placements in India</h1>
         <div className='row d-flex'>
           <div className="col-md-6 col-12">
             <div className="accordion" id="accordionExample">
