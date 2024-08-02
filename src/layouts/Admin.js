@@ -13,7 +13,6 @@ import Category from "../Pages/admin/Categories/Category";
 import CourseTestimonial from "../Pages/admin/CourseTestimonial";
 import CourseVideoTestimonial from "../Pages/admin/CourseVideoTestimonial";
 import CourseStepEdit from "../Pages/admin/course/CourseStepEdit";
-import HeaderFooter from "../Pages/admin/HeaderFooter";
 import CourseView from "../Pages/admin/course/CourseView";
 import Courses from "../Pages/admin/Courses";
 import AdminContact from "../Pages/admin/AdminContact";
@@ -45,7 +44,6 @@ const Admin = ({ handleLogout }) => {
             <Route path="/testimonials" element={<AdminTestimonials />} />
             <Route path="/categories" element={<Category />} />
             <Route path="/CourseTestimonial" element={<CourseTestimonial />} />
-            <Route path="/headerfooter" element={<HeaderFooter />} />
             <Route path="/courseView" element={<CourseView />} />
             <Route path="/courses" element={<Courses />} />
             <Route path="/contact" element={<AdminContact />} />

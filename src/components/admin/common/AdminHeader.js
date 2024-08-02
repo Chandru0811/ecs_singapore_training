@@ -47,9 +47,6 @@ function AdminHeader({ handleLogout }) {
             >
               CourseVideoTestimonial
             </Nav.Link>
-            <Nav.Link as={NavLink} to="/headerfooter" className="me-1" style={{fontWeight:"150"}}>
-              HeaderFooter
-            </Nav.Link>
             <Nav.Link as={NavLink} to="/courses" className="me-1">
              ClientCourse
             </Nav.Link>
