@@ -15,13 +15,17 @@ import CourseVideoTestimonial from "../Pages/admin/CourseVideoTestimonial";
 import CourseStepEdit from "../Pages/admin/course/CourseStepEdit";
 import HeaderFooter from "../Pages/admin/HeaderFooter";
 import CourseView from "../Pages/admin/course/CourseView";
+import Courses from "../Pages/admin/Courses";
+import AdminContact from "../Pages/admin/AdminContact";
+import HeaderEdit from "../Pages/admin/HeaderEdit";
+import {FooterEdit} from "../Pages/admin/FooterEdit";
+import { PrivacyPolicy } from "../Pages/admin/PrivacyPolicy";
 
 const Admin = ({ handleLogout }) => {
   return (
     <BrowserRouter>
       <div
         className="container-fluid p-0"
-        style={{ backgroundColor: "#f2f2f2" }}
       >
         <AdminHeader handleLogout={handleLogout} />
         <div
@@ -43,6 +47,11 @@ const Admin = ({ handleLogout }) => {
             <Route path="/CourseTestimonial" element={<CourseTestimonial />} />
             <Route path="/headerfooter" element={<HeaderFooter />} />
             <Route path="/courseView" element={<CourseView />} />
+            <Route path="/courses" element={<Courses />} />
+            <Route path="/contact" element={<AdminContact />} />
+            <Route path="/headeredit" element={<HeaderEdit />} />
+            <Route path="/footeredit" element={<FooterEdit />} />
+            <Route path="/privacypolicy" element={<PrivacyPolicy />} />
             <Route
               path="/CourseVideoTestimonial"
               element={<CourseVideoTestimonial />}

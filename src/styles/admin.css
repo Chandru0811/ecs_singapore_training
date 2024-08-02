@@ -145,3 +145,12 @@ a#basic-nav-dropdownDot::after {
   margin-top: 20%;
  
 }
+
+/* Courses Home */
+.CoursesHome .courseheader{
+  color: var(--admin-primary-color);
+}
+
+.CoursesHome .coursepara{
+  font-size: 18px;
+}
