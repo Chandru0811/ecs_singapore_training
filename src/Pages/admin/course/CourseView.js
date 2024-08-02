@@ -32,8 +32,8 @@ function CourseView() {
                         <div className="row ">
                             <div className="offset-1 col-10">
                             
-                            <div className="container" style={{ border: "1px solid #118AEF" }}>
-                                <div className="row mb-3">
+                            <div className="container shadow" style={{ border: "1px solid #118AEF" }}>
+                                <div className="row mb-3 ">
 
                                     <div className="col-md-5 col-12 mt-2 d-flex flex-column align-items-start justify-content-start">
                                         <p>Course Syllabus :</p>

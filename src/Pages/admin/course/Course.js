@@ -55,9 +55,9 @@ const Course = () => {
           <button className="btn btn-sm btn-danger mx-2">Publish</button>
         </div>
       </div>
-      <div className="card shadow border-0 my-4 p-4" style={{ height: "75vh" }}>
+      <div>
         <div className="table-responsive p-2">
-          <table ref={tableRef} className="table">
+          <table ref={tableRef} className="display">
             <thead className="thead-light">
               <tr className="text-start">
                 <th
@@ -86,12 +86,13 @@ const Course = () => {
                   <td>{data.description}</td>
                   <td>
                     <div className="d-flex justify-content-center">
-                      <button className="btn btn-light border-2 btn-sm mx-1">
+                      <Link to={"/courseView"}> 
+                     <button className="btn btn-light border-2 btn-sm mx-1">
                         <FaEye />
-                      </button>
-                      <button className="btn btn-light border-2 btn-sm mx-1">
+                      </button></Link>
+                      <Link to={"/courseEdit"}> <button className="btn btn-light border-2 btn-sm mx-1">
                         <FaEdit  />
-                      </button>
+                      </button></Link>
                       <button className="btn btn-light border-2 btn-sm mx-1">
                         <FaTrash />
                       </button>

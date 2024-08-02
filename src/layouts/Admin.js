@@ -42,7 +42,7 @@ const Admin = ({ handleLogout }) => {
             <Route path="/categories" element={<Category />} />
             <Route path="/CourseTestimonial" element={<CourseTestimonial />} />
             <Route path="/headerfooter" element={<HeaderFooter />} />
-            <Route path="/contact" element={<CourseView />} />
+            <Route path="/courseView" element={<CourseView />} />
             <Route
               path="/CourseVideoTestimonial"
               element={<CourseVideoTestimonial />}
