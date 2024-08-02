@@ -147,9 +147,6 @@ const Header = ({ handleLogin }) => {
               <Nav.Link as={NavLink} to="/about">
                 About
               </Nav.Link>
-              <Nav.Link as={NavLink} to={"/usercourse"}>
-                Course
-              </Nav.Link>
               <Nav.Link as={NavLink} to="/contact">
                 Contact
               </Nav.Link>
@@ -189,7 +186,7 @@ const Header = ({ handleLogin }) => {
                 </div>
               </div>
             ))}
-            <Link to={"/usercourse"}>
+            <Link to={"/course"}>
               <p className="text-info text-end mb-0">see more..</p>
             </Link>
           </div>
