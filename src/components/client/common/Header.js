@@ -75,7 +75,12 @@ const Header = ({ handleLogin }) => {
   ];
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (courseRef.current &&courseRef2.current && !courseRef.current.contains(event.target) && !courseRef2.current.contains(event.target)) {
+      if (
+        courseRef.current &&
+        courseRef2.current &&
+        !courseRef.current.contains(event.target) &&
+        !courseRef2.current.contains(event.target)
+      ) {
         setCourse(false);
       }
     };
@@ -107,10 +112,7 @@ const Header = ({ handleLogin }) => {
           </Navbar.Brand>
 
           <Navbar.Toggle aria-controls="basic-navbar-nav " />
-          <Navbar.Collapse
-            id="basic-navbar-nav"
-            className=" "
-          >
+          <Navbar.Collapse id="basic-navbar-nav" className=" ">
             <Nav className="gap-3">
               <div ref={courseRef2}>
                 <button
@@ -121,7 +123,10 @@ const Header = ({ handleLogin }) => {
                   {course ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown />}
                 </button>
               </div>
-              <div className="form-group position-relative headerInput" style={{width:"40vw"}}>
+              <div
+                className="form-group position-relative headerInput"
+                style={{ width: "40vw" }}
+              >
                 <input
                   type="text"
                   className="form-control"
@@ -131,23 +136,26 @@ const Header = ({ handleLogin }) => {
                   <FaSearch className="" />
                 </span>
               </div>
-              </Nav>
-              <Nav className=" gap-4 justify-content-end me-2" style={{flexGrow: "inherit !important"}}>
+            </Nav>
+            <Nav
+              className=" gap-4 justify-content-end me-2"
+              style={{ flexGrow: "inherit !important" }}
+            >
               <Nav.Link as={NavLink} to="/home">
                 Home
               </Nav.Link>
               <Nav.Link as={NavLink} to="/about">
                 About
               </Nav.Link>
-              <Nav.Link>Blogs</Nav.Link>
+              <Nav.Link as={NavLink} to={"/usercourse"}>
+                Course
+              </Nav.Link>
               <Nav.Link as={NavLink} to="/contact">
                 Contact
               </Nav.Link>
 
               <Link to="/login">
-                <Button  className="loginBtn">
-                  Login
-                </Button>
+                <Button className="loginBtn">Login</Button>
               </Link>
             </Nav>
           </Navbar.Collapse>
@@ -181,7 +189,9 @@ const Header = ({ handleLogin }) => {
                 </div>
               </div>
             ))}
-            <p className="text-info text-end mb-0">see more..</p>
+            <Link to={"/usercourse"}>
+              <p className="text-info text-end mb-0">see more..</p>
+            </Link>
           </div>
         </div>
       )}

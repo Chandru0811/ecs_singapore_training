@@ -151,13 +151,18 @@ function AdminTestimonials() {
       <form onSubmit={formik.handleSubmit}>
         <div className="d-flex justify-content-between p-3 bg-light">
           <h3 className="fw-bold"> Tesimmonials</h3>
-          <button
-            type="button"
-            className="btn btn-sm btn-primary"
-            onClick={handleAddCardClick}
-          >
-            Add Cards
-          </button>
+          <div className="d-flex">
+            <button
+              type="button"
+              className="btn btn-sm btn-primary mx-2"
+              onClick={handleAddCardClick}
+            >
+              Add Cards
+            </button>
+            <button type="button" className="btn btn-sm btn-danger">
+              publish
+            </button>
+          </div>
         </div>
 
         <div className="row m-0 p-3">

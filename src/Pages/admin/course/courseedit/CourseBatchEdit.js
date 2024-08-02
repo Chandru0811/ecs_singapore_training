@@ -76,25 +76,25 @@ const CourseBatchEdit = forwardRef(
         // }
       },
     });
-    // const addRow = () => {
-    //   formik.setFieldValue("courseBatch", [
-    //     ...formik.values.courseBatch,
-    //     {
-    //       day: "",
-    //       courseStartData: "",
-    //       courseEndDate: "",
-    //       courseStartTime: "",
-    //       duration: "",
-    //       noOfSlots: "",
-    //       amountPayable: "",
-    //     },
-    //   ]);
-    // };
-    // const removeRow = () => {
-    //   const updatedRow = [...formik.values.courseBatch];
-    //   updatedRow.pop();
-    //   formik.setFieldValue("courseBatch", updatedRow);
-    // };
+    const addRow = () => {
+      formik.setFieldValue("courseBatch", [
+        ...formik.values.courseBatch,
+        {
+          day: "",
+          courseStartData: "",
+          courseEndDate: "",
+          courseStartTime: "",
+          duration: "",
+          noOfSlots: "",
+          amountPayable: "",
+        },
+      ]);
+    };
+    const removeRow = () => {
+      const updatedRow = [...formik.values.courseBatch];
+      updatedRow.pop();
+      formik.setFieldValue("courseBatch", updatedRow);
+    };
     useImperativeHandle(ref, () => ({
       courseBatchEdit: formik.handleSubmit,
     }));
@@ -304,7 +304,7 @@ const CourseBatchEdit = forwardRef(
               </div>
             ))}
           </form>
-          {/* <div className="container ">
+          <div className="container ">
             <button className="btn btn-sm btn-primary mx-3" onClick={addRow}>
               Add More
             </button>
@@ -313,7 +313,7 @@ const CourseBatchEdit = forwardRef(
                 X
               </button>
             )}
-          </div> */}
+          </div>
         </div>
       </div>
     );

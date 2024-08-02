@@ -87,19 +87,19 @@ const CourseBenefitEdit = forwardRef(
         // }
       },
     });
-    // const addRow = () => {
-    //   formik.setFieldValue("keyFeature", [
-    //     ...formik.values.keyFeature,
-    //     {
-    //       keyFeatures: "",
-    //     },
-    //   ]);
-    // };
-    // const removeRow = () => {
-    //   const updatedRow = [...formik.values.keyFeature];
-    //   updatedRow.pop();
-    //   formik.setFieldValue("keyFeature", updatedRow);
-    // };
+    const addRow = () => {
+      formik.setFieldValue("keyFeature", [
+        ...formik.values.keyFeature,
+        {
+          keyFeatures: "",
+        },
+      ]);
+    };
+    const removeRow = () => {
+      const updatedRow = [...formik.values.keyFeature];
+      updatedRow.pop();
+      formik.setFieldValue("keyFeature", updatedRow);
+    };
 
     useImperativeHandle(ref, () => ({
       courseBenefitEdit: formik.handleSubmit,
@@ -173,7 +173,7 @@ const CourseBenefitEdit = forwardRef(
               </div>
             </div>
           </form>
-          {/* <div className="container d-flex justify-content-end">
+          <div className="container d-flex justify-content-end">
             <button className="btn btn-sm btn-primary mx-2" onClick={addRow}>
               Add More
             </button>
@@ -185,7 +185,7 @@ const CourseBenefitEdit = forwardRef(
                 X
               </button>
             )}
-          </div> */}
+          </div>
         </div>
       </div>
     );

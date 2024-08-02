@@ -99,29 +99,32 @@ function Testimonial() {
                   <div className="d-flex pt-3">
                     <div className="landing-card-img">
                       <img
-                        className=" img-fluid rounded-circle p-3"
+                        className=" img-fluid rounded-circle p-2"
                         src={card.img}
                         alt="Card image cap"
                       />
                     </div>
                     <div className="person-details fw-bold">
                       <h4 className="fw-bold">{card.name}</h4>
-                      <div className="d-flex gap-1">
-                        <p className="fw-light">{card.position}</p>
-                        <div>
+                      <div className="d-flex">
+                        <span className="fw-light">{card.position}</span>
+                        <span>
                           {[...Array(5)].map((_, starIndex) => (
                             <IoIosStar
                               key={starIndex}
                               style={{ color: "gold" }}
                             />
                           ))}
-                        </div>
+                        </span>
                       </div>
                     </div>
                   </div>
-                  <div className="card-body py-1">
+                  <div
+                    className="card-body py-1"
+                    style={{ minHeight: "200px" }}
+                  >
                     <h6 className="fw-bold">{card.title}</h6>
-                    <p className="card-text">{card.text}</p>
+                    <p className="card-text ">{card.text}</p>
                   </div>
                 </div>
               </div>

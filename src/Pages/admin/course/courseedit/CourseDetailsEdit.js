@@ -78,6 +78,7 @@ const CourseDetailsEdit = forwardRef(
 
     return (
       <div className="container my-5">
+        <h4 className="mb-4 fw-bold text-start">Course Batch</h4>
         <form onSubmit={formik.handleSubmit}>
           <div className="container">
             <div className="row px-1">
