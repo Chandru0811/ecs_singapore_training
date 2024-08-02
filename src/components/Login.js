@@ -1,18 +1,18 @@
-import React, { useState } from 'react';
-import { IoEyeOffOutline, IoEyeOutline } from 'react-icons/io5';
-import { Link, useNavigate } from 'react-router-dom';
+import React from "react";
+import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
+import { Link, useNavigate } from "react-router-dom";
 // import './Login.css';
 
-const Login = ({handleLogin}) => {
+const Login = ({ handleLogin }) => {
   const [showPassword, setShowPassword] = React.useState(false);
- const navigate =useNavigate();
+  const navigate = useNavigate();
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
-const handleLoginClikLogin=()=>{
-  navigate("/home")
-  handleLogin();
-}
+  const handleLoginClikLogin = () => {
+    navigate("/home");
+    handleLogin();
+  };
   return (
     <div className="login-container w-100 mt-5">
       <div className="container d-flex justify-content-center align-items-center ">
@@ -23,11 +23,20 @@ const handleLoginClikLogin=()=>{
           </p>
           <form>
             <div className="form-group mb-3 text-start">
-              <label htmlFor="email" className="form-label">Email ID</label>
-              <input type="email" id="email" className="form-control form-control-sm" required />
+              <label htmlFor="email" className="form-label">
+                Email ID
+              </label>
+              <input
+                type="email"
+                id="email"
+                className="form-control form-control-sm"
+                required
+              />
             </div>
             <div className="form-group mb-3 text-start">
-              <label htmlFor="password" className="form-label">Password</label>
+              <label htmlFor="password" className="form-label">
+                Password
+              </label>
               <div className="input-group">
                 <input
                   type={showPassword ? "text" : "password"}
@@ -39,9 +48,12 @@ const handleLoginClikLogin=()=>{
                   type="button"
                   className="btn btn-outline-secondary p-0 border-0"
                   onClick={togglePasswordVisibility}
-                  style={{ borderRadius: '0 0.25rem 0.25rem 0' }}
+                  style={{ borderRadius: "0 0.25rem 0.25rem 0" }}
                 >
-                  <span className="input-group-text" style={{ cursor: "pointer", borderRadius: "0" }}>
+                  <span
+                    className="input-group-text"
+                    style={{ cursor: "pointer", borderRadius: "0" }}
+                  >
                     {showPassword ? <IoEyeOffOutline /> : <IoEyeOutline />}
                   </span>
                 </button>
@@ -51,16 +63,25 @@ const handleLoginClikLogin=()=>{
             <div className="form-group mb-3 text-end">
               <Link to={"/forgotpassword"}>Forgot Password?</Link>
             </div>
-            <button type="button" className="btn btn-primary w-100 mb-3" onClick={handleLoginClikLogin}>Login</button>
+            <button
+              type="button"
+              className="btn btn-primary w-100 mb-3"
+              onClick={handleLoginClikLogin}
+            >
+              Login
+            </button>
           </form>
           <div className="divider text-center mb-4">or</div>
           <button className="btn btn-outline-primary w-100">
-            <img src="https://img.icons8.com/color/16/000000/google-logo.png" alt="Google logo" className="me-2" />
+            <img
+              src="https://img.icons8.com/color/16/000000/google-logo.png"
+              alt="Google logo"
+              className="me-2"
+            />
             Sign in with Google
           </button>
         </div>
       </div>
-
     </div>
   );
 };

@@ -1,9 +1,24 @@
-import React from 'react'
+// api.js
+import axios from "axios";
 
-function BaseUrl() {
-  return (
-    <div>BaseUrl</div>
-  )
-}
+const api = axios.create({
+  baseURL: "http://127.0.0.1:8000/api/",
+});
 
-export default BaseUrl
+// Add a request interceptor
+api.interceptors.request.use(
+  function (config) {
+    const token = sessionStorage.getItem("token");
+
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+
+    return config;
+  },
+  function (error) {
+    return Promise.reject(error);
+  }
+);
+
+export default api;
