@@ -9,6 +9,7 @@ import { LiaTelegram } from "react-icons/lia";
 import { FiFigma } from "react-icons/fi";
 import { FiGitlab } from "react-icons/fi";
 import { FiGithub } from "react-icons/fi";
+import EnrollModel from "../../../Pages/admin/EnrollModel";
 const Footer = () => {
   return (
     <div
@@ -16,9 +17,9 @@ const Footer = () => {
       style={{ backgroundColor: "#31135E" }}
     >
       <div className=" row px-3 pt-5">
-        <div className="col-md-3 col-12  mb-0 ">
+        <div className="col-md-3 col-12  mb-0 text-start">
           <div className="">
-          <img src={logo} alt="ECS Training" className="img-fluid h-25 w-25 mb-3" />
+          <img src={logo} alt="ECS Training" className="img-fluid  mb-3" style={{height:'15%',width:"15%"}} />
           <span>ECS</span><span>Training</span>
           </div>
           <p className="fw-light text-start">
@@ -50,9 +51,7 @@ const Footer = () => {
         <div className="col-md-2 col-6 mb-md-0 text-start">
           <h5 className="mb-4 ">For Businesses</h5>
           <ul className="list-unstyled ">
-          <Nav.Link href="#job-post" className="mb-2">Job Post</Nav.Link>
           <Nav.Link href="#courses" className="mb-2">Courses</Nav.Link>
-          <Nav.Link href="##careers" className="mb-2">Careers</Nav.Link>
           </ul>
         </div>
         <div className="col-md-2 col-6 mb-md-0 text-start">
@@ -60,7 +59,6 @@ const Footer = () => {
           <ul className="list-unstyled">
             <div className="d-flex flex-column">
           <Nav.Link href="#about" className="mb-2">About</Nav.Link>
-          <Nav.Link href="#blogs" className="mb-2">Blogs</Nav.Link>
           <Nav.Link href="#contact-us" className="mb-2">Contact Us</Nav.Link>
           </div>
           </ul>
@@ -89,14 +87,14 @@ const Footer = () => {
           </Nav.Link>
           </div>
           </ul>
-          <button className="footer-btn border-0 rounded-pill mt-3 px-3 py-2">Enroll Now</button>
+          <EnrollModel />
         </div>
       </div>
       <hr className="mt-0 mb-3" />
       <div className="container-fluid">
       <div className=" row pb-3">
-        <div className="col-md-6 col-12">
-          <div className="">
+        <div className="col-md-6 col-12 text-start">
+          <div className="" style={{ color: "#a0a0a0" }}>
             <span className="me-3">Privacy Policy</span>
             <span>Terms of Use</span>
           </div>

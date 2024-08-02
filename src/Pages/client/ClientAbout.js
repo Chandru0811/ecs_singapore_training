@@ -10,6 +10,7 @@ import AsianStudent from '../../assets/client/About-Aisian-student-scaled.jpeg'
 import { TbMessage2Exclamation } from "react-icons/tb";
 import { BsBoxSeam } from "react-icons/bs";
 import Testimonial from './Testimonial';
+import EnrollModel from '../admin/EnrollModel';
 
 function ClientAbout() {
     return (
@@ -29,7 +30,8 @@ function ClientAbout() {
                                         </p>
                                     </div>
                                     <div className="d-flex mb-4">
-                                        <button className="btn enroll-btn">Enroll Now</button>
+                                        {/* <button className="btn enroll-btn">Enroll Now</button> */}
+                                        <EnrollModel />
                                         <button className="btn contact-btn ms-3">Contact Us</button>
                                     </div>
                                 </div>
