@@ -4,6 +4,8 @@ import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import courseImg from "../../assets/client/landing_card_logo.jpg";
 import Testimonial from "./Testimonial";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 
 const responsive = {
   superLargeDesktop: {
@@ -67,9 +69,37 @@ const cardData = [
   },
 ];
 
+
 function LandingPage() {
+
+  const validationSchema = Yup.object({
+    fullName: Yup.string()
+    .required("*Full Name is required"),
+    email: Yup.string()
+      .email("*Invalid email address")
+      .required("*Email is required"),
+      mobileNumber: Yup.string()
+      
+      .required("*Number is required"),
+  
+  });
+
+  const formik = useFormik({
+    initialValues: {
+     
+      fullName: "",
+      email: "",
+      mobileNumber: "",
+    },
+    validationSchema: validationSchema,
+    onSubmit: (values) => {
+      console.log("Form data", values);
+    },
+  });
+
   return (
     <div>
+      <form onSubmit={formik.handleSubmit}>
       {/* banner */}
       <div className="container">
         <div className="row py-5  d-flex align-items-center">
@@ -102,26 +132,21 @@ function LandingPage() {
               voluptate minus! Laudantium quidem!
             </h6>
           </div>
-          <div className="col-md-10 col-12 px-1 position-relative ">
+          <div className="col-md-10 col-12 px-1">
             <Carousel responsive={responsive} infinite={true} autoPlay={false}>
               {cardData.map((card) => (
                 <div key={card.id}>
-                  <div className="row m-0 px-1 py-5">
-                    <div className="col-md-4 col-12 px-4">
-                      <div
-                        className="text-start card h-100 px-3 landing-cards text-light"
-                        style={{ width: "16rem" }}
-                      >
-                        <img
-                          className="card-img-top img-fluid w-25 h-25 rounded-circle p-2"
-                          src={card.img}
-                          alt="Card image cap"
-                        />
-                        <div>
-                          <h6 className="card-title">{card.title}</h6>
-                          <p>{card.text}</p>
-                        </div>
-                      </div>
+                  <div className="mx-4 my-5 p-2 bg-primary text-light h-75 text-start shadow rounded card">
+                    <div>
+                      <img
+                        src={card.img}
+                        alt="courseImg"
+                        className="img-fluid rounded-circle"
+                      />
+                    </div>
+                    <div>
+                      <h5>{card.title}</h5>
+                      <p>{card.text}</p>
                     </div>
                   </div>
                 </div>
@@ -150,32 +175,62 @@ function LandingPage() {
               <div className="py-3">
                 <label htmlFor="fullName">Full Name</label>
                 <input
-                  className="form-control"
-                  type="text"
-                  name="fullName"
-                  placeholder="Enter Full Name..."
-                />
+                        type="fullName"
+                        className={`form-control ${
+                          formik.touched.fullName && formik.errors.fullName
+                            ? "is-invalid"
+                            : ""
+                        }`}
+                        style={{ borderRadius: "3px" }}
+                        placeholder="Enter fullName"
+                        {...formik.getFieldProps("fullName")}
+                      />
+                      {formik.touched.fullName && formik.errors.fullName && (
+                        <div className="invalid-feedback">
+                          {formik.errors.fullName}
+                        </div>
+                      )}
               </div>
               <div className="py-3">
                 <label htmlFor="mobileNumber">Mobile Number</label>
                 <input
-                  className="form-control"
-                  type="text"
-                  name="mobileNumber"
-                  placeholder="Enter mobile number..."
-                />
+                        type="mobileNumber"
+                        className={`form-control ${
+                          formik.touched.mobileNumber && formik.errors.mobileNumber
+                            ? "is-invalid"
+                            : ""
+                        }`}
+                        style={{ borderRadius: "3px" }}
+                        placeholder="Enter mobileNumber"
+                        {...formik.getFieldProps("mobileNumber")}
+                      />
+                      {formik.touched.mobileNumber && formik.errors.mobileNumber && (
+                        <div className="invalid-feedback">
+                          {formik.errors.mobileNumber}
+                        </div>
+                      )}
               </div>
               <div className="py-3">
                 <label htmlFor="email">Email</label>
                 <input
-                  className="form-control"
-                  type="email"
-                  name="email"
-                  placeholder="Enter email..."
-                />
+                        type="email"
+                        className={`form-control ${
+                          formik.touched.email && formik.errors.email
+                            ? "is-invalid"
+                            : ""
+                        }`}
+                        style={{ borderRadius: "3px" }}
+                        placeholder="Enter email"
+                        {...formik.getFieldProps("email")}
+                      />
+                      {formik.touched.email && formik.errors.email && (
+                        <div className="invalid-feedback">
+                          {formik.errors.email}
+                        </div>
+                      )}
               </div>
               <div className="float-end">
-                <button className="enrollbtn">Send</button>
+                <button type="submit" className="enrollbtn">Send</button>
               </div>
             </div>
           </div>
@@ -187,6 +242,7 @@ function LandingPage() {
         <Testimonial />
       </div>
       {/* landing testimonial */}
+      </form>
     </div>
   );
 }

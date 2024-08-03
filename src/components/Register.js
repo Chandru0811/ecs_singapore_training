@@ -10,7 +10,7 @@ const Register = ({handleLogin}) => {
 
   const validationSchema = Yup.object({
     fullName: Yup.string()
-    .required("*Email is required"),
+    .required("*Full Name is required"),
     email: Yup.string()
       .email("*Invalid email address")
       .required("*Email is required"),
