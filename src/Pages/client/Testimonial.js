@@ -7,22 +7,22 @@ import { IoIosStar } from "react-icons/io";
 const responsive = {
   superLargeDesktop: {
     breakpoint: { max: 4000, min: 3000 },
-    items: 4,
+    items: 5,
   },
   desktop: {
-    breakpoint: { max: 3000, min: 1024 },
+    breakpoint: { max: 3000, min: 1200 },
     items: 3,
   },
-  laptop: {
-    breakpoint: { max: 1024, min: 768 },
-    items: 2,
+  smallDesktop: {
+    breakpoint: { max: 1200, min: 1024 },
+    items: 3,
   },
   tablet: {
-    breakpoint: { max: 768, min: 320 },
-    items: 1,
+    breakpoint: { max: 1024, min: 464 },
+    items: 2,
   },
   mobile: {
-    breakpoint: { max: 320, min: 0 },
+    breakpoint: { max: 464, min: 0 },
     items: 1,
   },
 };
@@ -80,7 +80,7 @@ const cardData = [
 
 function Testimonial() {
   return (
-    <div className="carousel-container-testimonial">
+    <div>
       <h1 className="fw-bolder py-3">Testimonial</h1>
       <Carousel
         responsive={responsive}
@@ -88,46 +88,27 @@ function Testimonial() {
         autoPlay={false}
         showDots={true}
       >
-        {cardData.map((card) => (
-          <div key={card.id} className="react-multi-carousel-items">
-            <div className="row m-0 p-5">
-              <div className="col-md-4 col-12">
-                <div
-                  className="card shadow border-0 h-100 text-start"
-                  style={{ width: "18rem" }}
-                >
-                  <div className="d-flex pt-3">
-                    <div className="landing-card-img">
-                      <img
-                        className=" img-fluid rounded-circle p-2"
-                        src={card.img}
-                        alt="Card image cap"
-                      />
-                    </div>
-                    <div className="person-details fw-bold">
-                      <h4 className="fw-bold">{card.name}</h4>
-                      <div className="d-flex">
-                        <span className="fw-light">{card.position}</span>
-                        <span>
-                          {[...Array(5)].map((_, starIndex) => (
-                            <IoIosStar
-                              key={starIndex}
-                              style={{ color: "gold" }}
-                            />
-                          ))}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                  <div
-                    className="card-body py-1"
-                    style={{ minHeight: "200px" }}
-                  >
-                    <h6 className="fw-bold">{card.title}</h6>
-                    <p className="card-text ">{card.text}</p>
-                  </div>
-                </div>
+        {cardData.map((card, index) => (
+          <div key={index} className="mx-4 my-5 p-1 h-75 shadow rounded card">
+            <div className="d-flex align-items-center">
+              <div>
+                <img src={card.img} alt={card.title} className="img-fluid" />
               </div>
+              <div className="text-start">
+                <h5>{card.name}</h5>
+                <p>
+                  {card.position}
+                  <span>
+                    {[...Array(5)].map((_, starIndex) => (
+                      <IoIosStar key={starIndex} style={{ color: "gold" }} />
+                    ))}
+                  </span>
+                </p>
+              </div>
+            </div>
+            <div className="p-2 fit-content">
+              <h5 className="text-start">{card.title}</h5>
+              <p className="text-start">{card.text}</p>
             </div>
           </div>
         ))}
