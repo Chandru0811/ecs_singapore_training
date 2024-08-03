@@ -27,24 +27,54 @@ function AdminHeader({ handleLogout }) {
             >
               Home
             </Nav.Link>
-            {/* <Nav.Link as={NavLink} to={"/course"} className="me-1 " style={{fontWeight:"150"}}>
+            <Nav.Link
+              as={NavLink}
+              to={"/course"}
+              className="me-1 "
+              style={{ fontWeight: "150" }}
+            >
               Course
             </Nav.Link>
-            <Nav.Link as={NavLink} to={"/contact"} className="me-1" style={{fontWeight:"150"}}>
+            <Nav.Link
+              as={NavLink}
+              to={"/contact"}
+              className="me-1"
+              style={{ fontWeight: "150" }}
+            >
               Contact
             </Nav.Link>
-            <Nav.Link as={NavLink} to="/about" className="me-1" style={{fontWeight:"150"}}>
+            <Nav.Link
+              as={NavLink}
+              to="/about"
+              className="me-1"
+              style={{ fontWeight: "150" }}
+            >
               About
             </Nav.Link>
-            <Nav.Link as={NavLink} to="/testimonials" className="me-1" style={{fontWeight:"150"}}>
+            <Nav.Link
+              as={NavLink}
+              to="/testimonials"
+              className="me-1"
+              style={{ fontWeight: "150" }}
+            >
               Testimonials
             </Nav.Link>
-            <Nav.Link as={NavLink} to="/categories" className="me-1" style={{fontWeight:"150"}}>
+            <Nav.Link
+              as={NavLink}
+              to="/categories"
+              className="me-1"
+              style={{ fontWeight: "150" }}
+            >
               Categories
             </Nav.Link>
-            <Nav.Link as={NavLink} to="/CourseTestimonial" className="me-1" style={{fontWeight:"150"}}>
+            <Nav.Link
+              as={NavLink}
+              to="/CourseTestimonial"
+              className="me-1"
+              style={{ fontWeight: "150" }}
+            >
               CourseTestimonial
-            </Nav.Link> */}
+            </Nav.Link>
             <Nav.Link
               as={NavLink}
               to="/CourseVideoTestimonial"
