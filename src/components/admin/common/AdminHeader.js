@@ -19,10 +19,15 @@ function AdminHeader({ handleLogout }) {
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav ">
           <Nav className="me-auto ">
-            <Nav.Link as={NavLink} to="/home" className="me-1 " style={{fontWeight:"150"}}>
+            <Nav.Link
+              as={NavLink}
+              to="/home"
+              className="me-1 "
+              style={{ fontWeight: "150" }}
+            >
               Home
             </Nav.Link>
-            <Nav.Link as={NavLink} to={"/course"} className="me-1 " style={{fontWeight:"150"}}>
+            {/* <Nav.Link as={NavLink} to={"/course"} className="me-1 " style={{fontWeight:"150"}}>
               Course
             </Nav.Link>
             <Nav.Link as={NavLink} to={"/contact"} className="me-1" style={{fontWeight:"150"}}>
@@ -39,16 +44,17 @@ function AdminHeader({ handleLogout }) {
             </Nav.Link>
             <Nav.Link as={NavLink} to="/CourseTestimonial" className="me-1" style={{fontWeight:"150"}}>
               CourseTestimonial
-            </Nav.Link>
+            </Nav.Link> */}
             <Nav.Link
               as={NavLink}
               to="/CourseVideoTestimonial"
-              className="me-1" style={{fontWeight:"150"}}
+              className="me-1"
+              style={{ fontWeight: "150" }}
             >
               CourseVideoTestimonial
             </Nav.Link>
             <Nav.Link as={NavLink} to="/courses" className="me-1">
-             ClientCourse
+              ClientCourse
             </Nav.Link>
             <Nav.Link as={NavLink} to="/headeredit" className="me-1">
               Header
@@ -60,29 +66,29 @@ function AdminHeader({ handleLogout }) {
               PrivacyPolicy
             </Nav.Link>
           </Nav>
-          <Nav className="container"> 
-          <NavDropdown
-            title={<HiDotsHorizontal size={25} />}
-            id="basic-nav-dropdownDot"
-          >
-            <NavDropdown.Item style={{ color: "#343a40" }}>
-              Another action
-            </NavDropdown.Item>
-          </NavDropdown>
-          <NavDropdown
-            title={<CgProfile size={30} />}
-            id="basic-nav-dropdown"
-          >
-            <NavDropdown.Item
-              onClick={handleLogout}
-              style={{ color: "#007bff" }}
+          <Nav className="container">
+            <NavDropdown
+              title={<HiDotsHorizontal size={25} />}
+              id="basic-nav-dropdownDot"
             >
-              Logout
-            </NavDropdown.Item>
-            <NavDropdown.Item style={{ color: "#343a40" }}>
-              Another action
-            </NavDropdown.Item>
-          </NavDropdown>
+              <NavDropdown.Item style={{ color: "#343a40" }}>
+                Another action
+              </NavDropdown.Item>
+            </NavDropdown>
+            <NavDropdown
+              title={<CgProfile size={30} />}
+              id="basic-nav-dropdown"
+            >
+              <NavDropdown.Item
+                onClick={handleLogout}
+                style={{ color: "#007bff" }}
+              >
+                Logout
+              </NavDropdown.Item>
+              <NavDropdown.Item style={{ color: "#343a40" }}>
+                Another action
+              </NavDropdown.Item>
+            </NavDropdown>
           </Nav>
         </Navbar.Collapse>
       </Navbar>
