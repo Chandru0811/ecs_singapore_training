@@ -108,18 +108,6 @@ function AdminHeader({ handleLogout }) {
             </Nav.Link>
             </NavDropdown.Item>
           </NavDropdown>
-          <NavDropdown
-            title={<CgProfile size={30} />}
-            id="basic-nav-dropdown"
-          >
-            <NavDropdown.Item
-              onClick={handleLogout}
-              style={{ color: "#007bff" }}
-            >
-              <NavDropdown.Item style={{ color: "#343a40" }}>
-                Another action
-              </NavDropdown.Item>
-            </NavDropdown>
             <NavDropdown
               title={<CgProfile size={30} />}
               id="basic-nav-dropdown"
