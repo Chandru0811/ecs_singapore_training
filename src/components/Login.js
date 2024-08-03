@@ -3,6 +3,8 @@ import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
 import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import api from "../config/BaseUrl";
+import toast from "react-hot-toast";
 
 const Login = ({ handleLogin }) => {
   const [showPassword, setShowPassword] = React.useState(false);
@@ -26,10 +28,38 @@ const Login = ({ handleLogin }) => {
       password: "",
     },
     validationSchema: validationSchema,
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       console.log("login:", values);
-      navigate("/home");
-      handleLogin();
+      try {
+        const response = await api.post(`login`, values);
+        if (response.status === 200) {
+          const { role, id, name, email } = response.data.data.userDetails;
+          const { token } = response.data.data;
+          const { message } = response.data;
+
+          toast.success(message);
+          sessionStorage.setItem("token", token);
+          sessionStorage.setItem("role", role);
+          sessionStorage.setItem("userId", id);
+          sessionStorage.setItem("userName", name);
+          sessionStorage.setItem("email", email);
+          if (role === "0") {
+            handleLogin();
+          }
+          navigate("/");
+        } else {
+          toast.error(response.data.message);
+        }
+      } catch (error) {
+        if (error.response && error.response.status === 402) {
+          if (error.response.data.message) {
+            toast.error(error.response.data.message);
+          }
+        } else {
+          toast.error(error);
+          toast.error(error.response.data.message);
+        }
+      }
     },
   });
 
