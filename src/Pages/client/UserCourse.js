@@ -11,7 +11,6 @@ import Zoho from "../../assets/client/zoho.png";
 import { FaArrowRightLong } from "react-icons/fa6";
 import { ImUserPlus } from "react-icons/im";
 import { Link } from "react-router-dom";
-import "react-tabs/style/react-tabs.css";
 import ReactPlayer from "react-player";
 
 const responsive = {
