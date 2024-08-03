@@ -15,9 +15,12 @@ import fultter from "../../../assets/client/fluttericon.png";
 import python from "../../../assets/client/pythone.png";
 import node from "../../../assets/client//nodeicon.png";
 import { FaSearch } from "react-icons/fa";
+import ImageURL from "../../../config/ImageURL";
+import api from "../../../config/BaseUrl";
 
 const Header = ({ handleLogin }) => {
   const [course, setCourse] = useState(false);
+  const [apiData, setApiData] = useState({});
   const navigate = useNavigate();
   const courseRef = useRef(null);
   const courseRef2 = useRef(null);
@@ -91,24 +94,35 @@ const Header = ({ handleLogin }) => {
     };
   }, []);
 
+  const getData = async () => {
+    try {
+      const response = await api.get("header");
+      setApiData(response.data.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+  useEffect(() => {
+    getData();
+  }, []);
+
   return (
     <>
       <div className="" style={{ position: "sticky", top: "0", zIndex: "999" }}>
         <p className="mb-0 text-light fw-light topHeader">
-          We offer Job Gurantee Courses (Any Degree/Diploma Canditates/Year
-          Gap/Non IT/Any Passed outs)
+         {apiData.top_bar}
         </p>
         <Navbar bg="light" expand="lg" className="clientNav shadow-lg">
           <Navbar.Brand as={NavLink} to="/" className="ms-3">
             <img
-              src={logo}
+              src={`${ImageURL}${apiData.logo_path}`}
               height="40"
               className="d-inline-block align-top"
               alt="ECS Training"
             />
-
-            <span>ECS </span>
-            <span>Training</span>
+           <div>
+           <span>{apiData.title}</span>
+           </div>
           </Navbar.Brand>
 
           <Navbar.Toggle aria-controls="basic-navbar-nav " />

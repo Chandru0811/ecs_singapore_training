@@ -78,11 +78,11 @@ function CourseView() {
 
     return (
         <section className="mt-1 container-fluid">
-            <div className="container-fluid mb-5" style={{ border: "1px solid #118AEF" }}>
-                <div className="row mt-4">
+            <div className="mb-5" style={{ border: "1px solid #118AEF" }}>
+                <div className="row mt-4 mx-2">
                     <div className="col-md-7 col-12 d-flex flex-column align-items-start justify-content-start">
                         <div>
-                            <img src={courseValue.coursesLogo} alt='logo' className="img-fluid"></img>
+                            <img src={courseValue.coursesLogo} alt='logo' className="img-fluid" style={{minHeight:"10vh"}}></img>
                         </div>
                         <div>
                             <h1 className="text-start" style={{ color: "#118AEF" }}>{courseValue.coursesTitle}</h1>
@@ -118,9 +118,9 @@ function CourseView() {
                     </div>
                 </div>
             </div>
-            <div className="container-fluid mt-5 mb-5">
+            <div className=" mt-5 mb-5">
                 <div className="row">
-                    <div className="col-md-6 col-12 d-flex flex-column align-items-start justify-content-start px-5">
+                    <div className="col-md-6 col-12">
                         <h5 className="text-start">Batch Schedule for AWS Master Program</h5>
                         <div className="table-responsive">
                             <table className="table">
@@ -152,7 +152,7 @@ function CourseView() {
                             <p> <a href="#" className="ms-2">Request a Callback</a></p>
                         </div>
                     </div>
-                    <div className="col-md-6 col-12 d-flex flex-column align-items-start justify-content-start">
+                    <div className="col-md-6 col-12 flex-column ">
                         <div className="row text-start mb-2">
                             <h4 style={{ color: "#118AEF" }}>{courseValue.courseBenefit}</h4>
                             <p>{courseValue.courseBenefitContent}</p>
@@ -172,7 +172,7 @@ function CourseView() {
                     </div>
                 </div>
             </div>
-            <div className="container-fluid mb-5">
+            <div className="mb-5">
                 <div className="row">
                     <div className="col-md-7 col-12 px-5 mb-4">
                         <div className="row mb-5">
