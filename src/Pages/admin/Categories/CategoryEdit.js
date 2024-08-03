@@ -3,42 +3,70 @@ import React, { useEffect, useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 import * as Yup from "yup";
 import { FaEdit } from "react-icons/fa";
+import api from "../../../config/BaseUrl";
+import toast from "react-hot-toast";
 
-function CategoryEdit({ tableData }) {
+const validationSchema = Yup.object({
+  title: Yup.string().required("title is required"),
+  description: Yup.string(),
+});
+
+function CategoryEdit({ id, onSuccess }) {
   const [show, setShow] = useState(false);
+  const [loadIndicator, setLoadIndicator] = useState(false);
 
-  const handleClose = () => {
-    setShow(false);
-    formik.resetForm();
-  };
-
-  const handleShow = () => {
-    formik.setValues(tableData);
-    setShow(true);
-  };
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
   const formik = useFormik({
     initialValues: {
-      categoryImg: null,
+      logo: null,
       title: "",
       description: "",
     },
+    validationSchema: validationSchema,
     onSubmit: async (values) => {
-      const formData = new FormData();
-      formData.append("categoryImg", values.categoryImg);
-      formData.append("title", values.title);
-      formData.append("description", values.description);
+      setLoadIndicator(true);
+      try {
+        const formData = new FormData();
+        formData.append("_method", "PUT");
+        formData.append("logo", values.logo);
+        formData.append("title", values.title);
+        formData.append("description", values.description);
 
-      // Simulate form submission
-      console.log("Submitted Data:", values);
+        const response = await api.post(`category/${id}`, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
 
-      handleClose();
+        if (response.status === 200) {
+          onSuccess();
+          handleClose();
+          toast.success(response.data.message);
+        } else {
+          toast.error(response.data.message);
+        }
+      } catch (error) {
+        const errorMessage = error.response?.data?.message || error.message;
+        toast.error(errorMessage);
+      } finally {
+        setLoadIndicator(false);
+      }
     },
   });
 
   useEffect(() => {
-    formik.setValues(tableData);
-  }, [tableData]);
+    const getData = async () => {
+      try {
+        const response = await api.get(`category/${id}`);
+        formik.setValues(response.data.data);
+      } catch (error) {
+        console.error("Error fetching data ", error);
+      }
+    };
+    getData();
+  }, []);
 
   return (
     <>
@@ -58,24 +86,12 @@ function CategoryEdit({ tableData }) {
               </label>
               <input
                 type="file"
-                name="categoryImg"
-                className={`form-control ${
-                  formik.touched.categoryImg && formik.errors.categoryImg
-                    ? "is-invalid"
-                    : ""
-                }`}
+                name="logo"
+                className={`form-control`}
                 onChange={(event) => {
-                  formik.setFieldValue(
-                    "categoryImg",
-                    event.currentTarget.files[0]
-                  );
+                  formik.setFieldValue("logo", event.currentTarget.files[0]);
                 }}
               />
-              {formik.touched.categoryImg && formik.errors.categoryImg && (
-                <div className="invalid-feedback">
-                  {formik.errors.categoryImg}
-                </div>
-              )}
             </div>
             <div className="mb-2">
               <label className="form-label">
@@ -84,11 +100,7 @@ function CategoryEdit({ tableData }) {
               <input
                 type="text"
                 name="title"
-                className={`form-control ${
-                  formik.touched.title && formik.errors.title
-                    ? "is-invalid"
-                    : ""
-                }`}
+                className={`form-control ${formik.touched.title && formik.errors.title ? "is-invalid" : ""}`}
                 {...formik.getFieldProps("title")}
               />
               {formik.touched.title && formik.errors.title && (
@@ -107,7 +119,10 @@ function CategoryEdit({ tableData }) {
               <Button variant="secondary" onClick={handleClose}>
                 Close
               </Button>
-              <Button variant="primary" type="submit">
+              <Button variant="primary" type="submit" disabled={loadIndicator}>
+                {loadIndicator && (
+                  <span className="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+                )}
                 Submit
               </Button>
             </Modal.Footer>

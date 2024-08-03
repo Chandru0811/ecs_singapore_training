@@ -2,15 +2,18 @@ import { useFormik } from "formik";
 import React, { useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 import * as Yup from "yup";
+import api from "../../../config/BaseUrl";
+import toast from "react-hot-toast";
 
 const validationSchema = Yup.object({
-  categoryImg: Yup.mixed().required("Image is required"),
+  logo: Yup.mixed().required("Image is required"),
   title: Yup.string().required("title is required"),
   description: Yup.string(),
 });
 
-function CategoryAdd() {
+function CategoryAdd({ onSuccess }) {
   const [show, setShow] = useState(false);
+  const [loadIndicator, setLoadIndicator] = useState(false);
 
   const handleClose = () => {
     setShow(false);
@@ -21,21 +24,38 @@ function CategoryAdd() {
 
   const formik = useFormik({
     initialValues: {
-      categoryImg: null,
+      logo: null,
       title: "",
       description: "",
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      const formData = new FormData();
-      formData.append("categoryImg", values.categoryImg);
-      formData.append("title", values.title);
-      formData.append("description", values.description);
+      setLoadIndicator(true);
+      try {
+        const formData = new FormData();
+        formData.append('logo', values.logo);
+        formData.append('title', values.title);
+        formData.append('description', values.description);
 
-      // Simulate form submission
-      console.log("Submitted Data:", values);
+        const response = await api.post("category", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
 
-      handleClose();
+        if (response.status === 200) {
+          onSuccess();
+          handleClose();
+          toast.success(response.data.message);
+        } else {
+          toast.error(response.data.message);
+        }
+      } catch (error) {
+        const errorMessage = error.response?.data?.message || error.message;
+        toast.error(errorMessage);
+      } finally {
+        setLoadIndicator(false);
+      }
     },
   });
 
@@ -46,7 +66,7 @@ function CategoryAdd() {
       </button>
 
       <Modal show={show} onHide={handleClose}>
-        <Modal.Header>
+        <Modal.Header closeButton>
           <Modal.Title>Add Category</Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -58,22 +78,21 @@ function CategoryAdd() {
               <div className="mb-3">
                 <input
                   type="file"
-                  name="categoryImg"
-                  className={`form-control ${
-                    formik.touched.categoryImg && formik.errors.categoryImg
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  name="logo"
+                  className={`form-control ${formik.touched.logo && formik.errors.logo
+                    ? "is-invalid"
+                    : ""
+                    }`}
                   onChange={(event) => {
                     formik.setFieldValue(
-                      "categoryImg",
+                      "logo",
                       event.currentTarget.files[0]
                     );
                   }}
                 />
-                {formik.touched.categoryImg && formik.errors.categoryImg && (
+                {formik.touched.logo && formik.errors.logo && (
                   <div className="invalid-feedback">
-                    {formik.errors.categoryImg}
+                    {formik.errors.logo}
                   </div>
                 )}
               </div>
@@ -86,11 +105,10 @@ function CategoryAdd() {
                 <input
                   type="text"
                   name="title"
-                  className={`form-control ${
-                    formik.touched.title && formik.errors.title
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-control ${formik.touched.title && formik.errors.title
+                    ? "is-invalid"
+                    : ""
+                    }`}
                   {...formik.getFieldProps("title")}
                 />
                 {formik.touched.title && formik.errors.title && (
@@ -115,7 +133,13 @@ function CategoryAdd() {
               >
                 Close
               </Button>
-              <Button className="btn btn-sm" type="submit">
+              <Button className="btn btn-sm btn-primary" type="submit" disabled={loadIndicator}>
+                {loadIndicator && (
+                  <span
+                    className="spinner-border spinner-border-sm me-2"
+                    aria-hidden="true"
+                  ></span>
+                )}
                 Submit
               </Button>
             </Modal.Footer>

@@ -19,6 +19,7 @@ import AdminContact from "../Pages/admin/AdminContact";
 import HeaderEdit from "../Pages/admin/HeaderEdit";
 import {FooterEdit} from "../Pages/admin/FooterEdit";
 import { PrivacyPolicy } from "../Pages/admin/PrivacyPolicy";
+import { Toaster } from "react-hot-toast";
 
 const Admin = ({ handleLogout }) => {
   return (
@@ -26,6 +27,14 @@ const Admin = ({ handleLogout }) => {
       <div
         className="container-fluid p-0"
       >
+         <Toaster
+          toastOptions={{
+            style: {
+              background: "rgb(51 65 85)",
+              color: "#fff",
+            },
+          }}
+        />
         <AdminHeader handleLogout={handleLogout} />
         <div
           className=""

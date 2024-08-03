@@ -6,18 +6,18 @@
 }
 
 :root {
-  --client-primary-color: #118AEF;
-  --client-secondary-color: #FECF08;
-  --client-background-color: #11235A;
+  --client-primary-color: #118aef;
+  --client-secondary-color: #040403;
+  --client-background-color: #11235a;
   --client-text-color: #000;
   --client-teritary-color: #fff;
   --client-shadow-color: #c7c2ce;
   --client-logotext-color: #4d4d4d;
-  --client-line-color: #AA205E;
-  --client-company-button-colr: #E8E8E8;
+  --client-line-color: #aa205e;
+  --client-company-button-colr: #e8e8e8;
   --client-button-hover: #0088eb;
   --client-topBor-color: #0f2158;
-  --client-paratext-color: #515B6F;
+  --client-paratext-color: #515b6f;
   --client-calendarbtn-color: #e2eef8;
   --client-calendar-hover: #b3d8f6;
   --client-cardHover-color: #e41111;
@@ -53,14 +53,14 @@
   color: #aaa; /* Adjust color as needed */
 }
 .clientNav .navbar-collapse .nav-link,
-.list-unstyled  .nav-link {
+.list-unstyled .nav-link {
   position: relative;
   --bs-nav-link-hover-color: var(--client-button-hover);
   transition: color 0.3s ease-in-out;
 }
 
 .clientNav .navbar-collapse .nav-link::after {
-  content: '';
+  content: "";
   position: absolute;
   width: 0;
   height: 2px;
@@ -78,25 +78,24 @@
   background: var(--client-button-hover);
 }
 
-.clientNav .navbar-collapse .navbar-nav .nav-link.active, 
+.clientNav .navbar-collapse .navbar-nav .nav-link.active,
 .clientNav .navbar-collapse .navbar-nav .nav-link.show {
   color: var(--client-button-hover);
 }
 
-.clientNav .navbar-collapse .navbar-nav .nav-link.active::after, 
+.clientNav .navbar-collapse .navbar-nav .nav-link.active::after,
 .clientNav .navbar-collapse .navbar-nav .nav-link.show::after {
   width: 100%;
   left: 0;
   background: var(--client-button-hover);
 }
 
-.topHeader{
+.topHeader {
   background-color: var(--client-topBor-color);
   padding: "2px 0";
-
 }
 @media (max-width: 576px) {
-  .topHeader{
+  .topHeader {
     font-size: 3.8vw;
   }
 }
@@ -123,11 +122,10 @@
   }
 }
 
-
 .loginBtn {
   --bs-btn-bg: var(--client-topBor-color) !important;
   --bs-btn-border-color: var(--client-topBor-color) !important;
-  --bs-btn-border-radius:2.5px !important;
+  --bs-btn-border-radius: 2.5px !important;
 }
 
 /* Contact Start */
@@ -200,7 +198,7 @@ hr {
   padding-bottom: 7px;
 }
 
-.react-calendar__navigation__arrow{
+.react-calendar__navigation__arrow {
   background-color: var(--client-calendarbtn-color) !important;
   border-radius: 50%;
   color: var(--client-primary-color);
@@ -228,7 +226,7 @@ hr {
 }
 
 .react-calendar__tile--active {
-  background-color: #118AEF !important;
+  background-color: #118aef !important;
   border-radius: 50%;
   color: var(--client-teritary-color) !important;
   font-weight: 700;
@@ -237,7 +235,7 @@ hr {
 .react-calendar__tile {
   background-color: var(--client-calendarbtn-color);
   border-radius: 50%;
-  color: var( --client-primary-color);
+  color: var(--client-primary-color);
   font-weight: 700;
   padding: 15px;
 }
@@ -245,39 +243,39 @@ hr {
 .react-calendar__tile:hover {
   background-color: var(--client-calendar-hover) !important;
   border-radius: 50%;
-  color: var( --client-primary-color);
+  color: var(--client-primary-color);
   font-weight: 700;
 }
 
-.contactDetails{
+.contactDetails {
   border-radius: 30px;
   border: 3px solid var(--client-shadow-color);
   height: 13rem;
 }
 
-.contactDetails:hover{
+.contactDetails:hover {
   border-radius: 30px;
   border: 3px solid var(--client-cardHover-color);
 }
 
-.paraText{
+.paraText {
   color: var(--client-paratext-color);
 }
 
-.arrow-icon{
+.arrow-icon {
   position: relative;
   margin: -59px;
   margin-left: 14rem;
 }
 
 @media (max-width: 991px) {
-  .contactDetails{
+  .contactDetails {
     border-radius: 30px;
     border: 3px solid var(--client-shadow-color);
     height: 15rem;
   }
 
-  .arrow-icon{
+  .arrow-icon {
     position: relative;
     margin: -59px;
     margin-left: 20rem;
@@ -294,7 +292,7 @@ hr {
   font-size: 3.2rem;
 }
 
-.contactDetails1{
+.contactDetails1 {
   background-color: var(--client-contactbg-color);
 }
 
@@ -345,14 +343,14 @@ hr {
   font-weight: 500;
 }
 
-.next-btn:hover{
+.next-btn:hover {
   border: 2px solid var(--client-cardHover-color);
   background-color: var(--client-cardHover-color);
   color: var(--client-teritary-color);
   font-weight: 700;
 }
 
-.time-slots{
+.time-slots {
   max-height: 350px;
   overflow-y: auto;
   border: none;
@@ -372,7 +370,7 @@ hr {
   margin-left: 25px;
 }
 
-.back-arrow{
+.back-arrow {
   color: var(--client-cardHover-color);
   font-size: 1.5rem;
 }
@@ -385,11 +383,11 @@ hr {
 /* Contact End */
 
 /* / Home / */
-.Home .subhead{
-  color: var( --client-primary-color);
+.Home .subhead {
+  color: var(--client-primary-color);
 }
 
-.Home .homeCard{
+.Home .homeCard {
   box-shadow: 0 6px 6px 0px var(--client-shadow-color);
 }
 
@@ -397,12 +395,12 @@ hr {
   position: relative;
 }
 
-.Home .paraContent{
+.Home .paraContent {
   color: var(--client-paratext-color);
 }
 
 .Home .homeCard .col-md-4:not(:last-child)::after {
-  content: '';
+  content: "";
   position: absolute;
   right: 0;
   width: 2px;
@@ -411,19 +409,19 @@ hr {
   top: 10%;
 }
 
-.Home .secondheading{
- color: var(--client-logotext-color);
+.Home .secondheading {
+  color: var(--client-logotext-color);
 }
 
-.whyjoinus .card{
+.whyjoinus .card {
   box-shadow: 0 3px 3px 0px var(--client-shadow-color);
 }
 
-.whyjoinus .cardhead{
+.whyjoinus .cardhead {
   margin-right: 10px;
 }
 
-.Courses .card-header{
+.Courses .card-header {
   background-color: var(--client-button-hover);
   color: var(--client-teritary-color);
 }
@@ -464,20 +462,20 @@ hr {
   word-break: break-word;
 }
 
-.trainingplacements .enquiryform{
+.trainingplacements .enquiryform {
   background-color: var(--client-button-hover);
 }
 
-.trainingplacements .enquiryform .submitBtn{
+.trainingplacements .enquiryform .submitBtn {
   background-color: var(--client-teritary-color);
   color: var(--client-button-hover);
 }
 
-.trainingplacements .enquiryform label{
+.trainingplacements .enquiryform label {
   color: var(--client-teritary-color);
 }
 
-.homeInput{
+.homeInput {
   border: none;
   border-bottom: 1px solid var(--client-teritary-color);
   background-color: var(--client-primary--color);
@@ -485,11 +483,10 @@ hr {
   color: var(--client-teritary-color);
 }
 
-.homeInput:focus{
+.homeInput:focus {
   color: var(--client-teritary-color);
   background-color: var(--client-button-hover);
 }
-
 
 /* / landing page  / */
 .enrollbtn {
@@ -534,11 +531,11 @@ hr {
 }
 
 .carousel-container {
-  height: auto !important; 
+  height: auto !important;
 }
 
 .carousel-item {
-  height: auto !important; 
+  height: auto !important;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -577,9 +574,8 @@ hr {
   text-align: start;
   color: var(--client-teritary-color);
   margin-top: 20%;
- 
 }
-.about-head h1{
+.about-head h1 {
   border-left: 5px solid var(--client-line-color);
   border-radius: 5px;
 }
@@ -630,12 +626,10 @@ hr {
 .tab .nav-link.active {
   color: var(--client-teritary-color);
   background-color: var(--client-line-color);
- 
 }
 .tab .nav-link.inActive {
   color: var(--client-teritary-color);
-  background-color:var(--client-company-button-colr);
- 
+  background-color: var(--client-company-button-colr);
 }
 
 .nav-tabs {
@@ -674,37 +668,36 @@ hr {
   text-align: start;
   color: var(--client-teritary-color);
   margin-top: 20%;
- 
 }
 
-.about-card{
-background-color: transparent;
-border: 2px solid var(--client-teritary-color);
+.about-card {
+  background-color: transparent;
+  border: 2px solid var(--client-teritary-color);
 }
 
-.about-textWhite{
+.about-textWhite {
   font-weight: bold;
   font-size: larger;
   color: var(--client-teritary-color);
   justify-content: end;
   align-items: end;
 }
-.imgDesign{
+.imgDesign {
   border-left: 5px solid var(--client-line-color);
   border-radius: 5px;
 }
-.accordion-item{
+.accordion-item {
   border-left: 5px solid var(--client-line-color);
-  border-radius: 0px 5px ;
+  border-radius: 0px 5px;
   border: none;
   border-bottom: 1px solid rgba(0, 0, 0, 0.123);
 }
-.accordion-button:not(.collapsed){
+.accordion-button:not(.collapsed) {
   border-left: 5px solid var(--client-line-color);
   background-color: var(--client-teritary-color);
   color: var(--client-text-color);
-} 
-.accordion-body{
+}
+.accordion-body {
   border-left: 5px solid var(--client-line-color);
 }
 .accordion-button:focus {
@@ -737,3 +730,87 @@ border: 2px solid var(--client-teritary-color);
   padding: 5px 0;
 }
 /* / Course testimonial  / */
+
+.custom-tabs {
+  width: 100%;
+}
+
+.tabs-header {
+  display: flex;
+  justify-content: center;
+}
+
+.tabs-header button {
+  margin: 0px 2px !important;
+  border: none;
+  border-radius: 5px !important;
+  background-color: #f0f0f0;
+  cursor: pointer;
+  display: inline-flex;
+  justify-content: center;
+  transition: background-color 0.3s ease;
+}
+
+.tabs-header button.active,
+.tabs-header button:hover:not([disabled]) {
+  background-color: var(--client-primary-color);
+  color: white;
+}
+
+.tabs-header button[disabled] {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.tabs-content {
+  /* padding: 20px; */
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+}
+.review-cards {
+  border: 2px solid var(--client-button-hover);
+  border-radius: 20px;
+}
+
+.review-cards .header {
+  border-radius: 18px 18px 0 0;
+}
+.video-card {
+  border: 2px solid var(--client-button-hover);
+  border-radius: 10px;
+}
+.rating-review {
+  border: 2px solid white;
+  border-radius: 5px;
+  font-size: small;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* / Loader / */
+.spinner-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80vh;
+}
+
+.spinner {
+  border: 8px solid #f3f3f3;
+  border-top: 8px solid #3498db;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+/* / Loader / */
