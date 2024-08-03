@@ -213,7 +213,7 @@ function UserCourse() {
         <Carousel responsive={responsive} infinite={true} autoPlay={false}>
           {cardData.map((card, index) => (
             <div
-              className="mx-3 my-5 h-75 rounded"
+              className="mx-4 my-5 h-75 rounded"
               style={{
                 border: "2px solid #118AEF",
                 cursor: "pointer",
