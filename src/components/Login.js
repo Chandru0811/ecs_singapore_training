@@ -1,7 +1,8 @@
 import React from "react";
 import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
 import { Link, useNavigate } from "react-router-dom";
-// import './Login.css';
+import { useFormik } from "formik";
+import * as Yup from "yup";
 
 const Login = ({ handleLogin }) => {
   const [showPassword, setShowPassword] = React.useState(false);
@@ -9,10 +10,29 @@ const Login = ({ handleLogin }) => {
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
-  const handleLoginClikLogin = () => {
-    navigate("/home");
-    handleLogin();
-  };
+
+  const validationSchema = Yup.object({
+    email: Yup.string()
+      .email("*Invalid Email Address")
+      .required("*Email is required"),
+    password: Yup.string()
+      .min(8, "*Password must be at least 8 characters")
+      .required("*Password is required"),
+  });
+
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+    validationSchema: validationSchema,
+    onSubmit: (values) => {
+      console.log("login:", values);
+      navigate("/home");
+      handleLogin();
+    },
+  });
+
   return (
     <div className="login-container w-100 mt-5">
       <div className="container d-flex justify-content-center align-items-center ">
@@ -21,17 +41,24 @@ const Login = ({ handleLogin }) => {
           <p className="text-center mb-4">
             Don't have an account? <Link to={"/register"}>Register</Link>
           </p>
-          <form>
+          <form onSubmit={formik.handleSubmit}>
             <div className="form-group mb-3 text-start">
               <label htmlFor="email" className="form-label">
                 Email ID
               </label>
               <input
-                type="email"
-                id="email"
-                className="form-control form-control-sm"
-                required
+                type="text"
+                placeholder="Enter Your Email"
+                className={`form-control ${
+                  formik.touched.email && formik.errors.email
+                    ? "is-invalid"
+                    : ""
+                }`}
+                {...formik.getFieldProps("email")}
               />
+              {formik.touched.email && formik.errors.email && (
+                <div className="invalid-feedback">{formik.errors.email}</div>
+              )}
             </div>
             <div className="form-group mb-3 text-start">
               <label htmlFor="password" className="form-label">
@@ -40,34 +67,34 @@ const Login = ({ handleLogin }) => {
               <div className="input-group">
                 <input
                   type={showPassword ? "text" : "password"}
-                  id="password"
-                  className="form-control form-control-sm"
-                  required
+                  placeholder="Enter Password"
+                  className={`form-control password ${
+                    formik.touched.password && formik.errors.password
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  {...formik.getFieldProps("password")}
+                  name="password"
                 />
-                <button
-                  type="button"
-                  className="btn btn-outline-secondary p-0 border-0"
+                <span
+                  className="input-group-text passwordIcon"
+                  id="basic-addon1"
                   onClick={togglePasswordVisibility}
-                  style={{ borderRadius: "0 0.25rem 0.25rem 0" }}
                 >
-                  <span
-                    className="input-group-text"
-                    style={{ cursor: "pointer", borderRadius: "0" }}
-                  >
-                    {showPassword ? <IoEyeOffOutline /> : <IoEyeOutline />}
-                  </span>
-                </button>
+                  {showPassword ? <IoEyeOffOutline /> : <IoEyeOutline />}
+                </span>
+                {formik.touched.password && formik.errors.password && (
+                  <div className="invalid-feedback">
+                    {formik.errors.password}
+                  </div>
+                )}
               </div>
             </div>
 
             <div className="form-group mb-3 text-end">
               <Link to={"/forgotpassword"}>Forgot Password?</Link>
             </div>
-            <button
-              type="button"
-              className="btn btn-primary w-100 mb-3"
-              onClick={handleLoginClikLogin}
-            >
+            <button type="submit" className="btn btn-primary w-100 mb-3">
               Login
             </button>
           </form>
