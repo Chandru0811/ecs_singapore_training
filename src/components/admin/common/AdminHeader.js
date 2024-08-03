@@ -37,28 +37,6 @@ function AdminHeader({ handleLogout }) {
             <Nav.Link as={NavLink} to="/categories" className="me-1" style={{fontWeight:"150"}}>
               Categories
             </Nav.Link>
-            <Nav.Link as={NavLink} to="/CourseTestimonial" className="me-1" style={{fontWeight:"150"}}>
-              CourseTestimonial
-            </Nav.Link>
-            <Nav.Link
-              as={NavLink}
-              to="/CourseVideoTestimonial"
-              className="me-1" style={{fontWeight:"150"}}
-            >
-              CourseVideoTestimonial
-            </Nav.Link>
-            <Nav.Link as={NavLink} to="/courses" className="me-1">
-             ClientCourse
-            </Nav.Link>
-            <Nav.Link as={NavLink} to="/headeredit" className="me-1">
-              Header
-            </Nav.Link>
-            <Nav.Link as={NavLink} to="/footeredit" className="me-1">
-              Footer
-            </Nav.Link>
-            <Nav.Link as={NavLink} to="/privacypolicy" className="me-1">
-              PrivacyPolicy
-            </Nav.Link>
           </Nav>
           <Nav className="container"> 
           <NavDropdown
@@ -66,7 +44,38 @@ function AdminHeader({ handleLogout }) {
             id="basic-nav-dropdownDot"
           >
             <NavDropdown.Item style={{ color: "#343a40" }}>
-              Another action
+            <Nav.Link as={NavLink} to="/privacypolicy" className="me-1">
+              PrivacyPolicy
+            </Nav.Link>
+            </NavDropdown.Item>
+            <NavDropdown.Item style={{ color: "#343a40" }}>
+            <Nav.Link as={NavLink} to="/footeredit" className="me-1">
+              Footer
+            </Nav.Link>
+            </NavDropdown.Item>
+            <NavDropdown.Item style={{ color: "#343a40" }}>
+            <Nav.Link as={NavLink} to="/headeredit" className="me-1">
+              Header
+            </Nav.Link>
+            </NavDropdown.Item>
+            <NavDropdown.Item style={{ color: "#343a40" }}>
+            <Nav.Link as={NavLink} to="/courses" className="me-1">
+             ClientCourse
+            </Nav.Link>
+            </NavDropdown.Item>
+            <NavDropdown.Item style={{ color: "#343a40" }}>
+            <Nav.Link
+              as={NavLink}
+              to="/CourseVideoTestimonial"
+              className="me-1" style={{fontWeight:"150"}}
+            >
+              CourseVideoTestimonial
+            </Nav.Link>
+            </NavDropdown.Item>
+            <NavDropdown.Item style={{ color: "#343a40" }}>
+            <Nav.Link as={NavLink} to="/CourseTestimonial" className="me-1" style={{fontWeight:"150"}}>
+              CourseTestimonial
+            </Nav.Link>
             </NavDropdown.Item>
           </NavDropdown>
           <NavDropdown

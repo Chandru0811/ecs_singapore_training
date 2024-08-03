@@ -26,6 +26,9 @@ a#basic-nav-dropdown{
 a#basic-nav-dropdownDot{
   padding-bottom: 3px !important;
 }
+a#basic-nav-dropdownDot a{
+  color: #000;
+}
 
 a#basic-nav-dropdown::after {
   content: none; 

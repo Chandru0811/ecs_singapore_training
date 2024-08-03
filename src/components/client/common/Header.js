@@ -174,19 +174,21 @@ const Header = ({ handleLogin }) => {
           <div className="row">
             {courses.map((course, index) => (
               <div key={index} className="col-sm-4 col-md-2 col-6 d-flex">
-                <div className="col-3">
+                <Link to={"/course"} style={{textDecoration:"none"}} onClick={()=>(setCourse(false))}>
+                <div className="col-3" >
                   <img src={course.icon} alt={`icon`} className="course-icon" />
                 </div>
                 <div
-                  className="col-9 text-start fw-light"
-                  // style={{ fontSize: "0.8vw" }}
+                  className="col-9 text-start text-dark fw-light"
+                  style={{textDecoration:"none"}}
                 >
                   <h5 className="mb-0">{course.name}</h5>
                   <p>{course.description}</p>
                 </div>
+            </Link>
               </div>
             ))}
-            <Link to={"/course"}>
+            <Link to={"/course"} style={{textDecoration:"none"}} onClick={()=>(setCourse(false))}>
               <p className="text-info text-end mb-0">see more..</p>
             </Link>
           </div>

@@ -14,6 +14,7 @@ import Tcs from "../../assets/client/tcs.png";
 import Zoho from "../../assets/client/zoho.png";
 import { FaArrowRightLong } from "react-icons/fa6";
 import { ImUserPlus } from "react-icons/im";
+import { Link } from "react-router-dom";
 
 const responsive = {
   superLargeDesktop: {
@@ -222,6 +223,7 @@ function UserCourse() {
               onMouseEnter={() => setHoveredIndex(index)}
               onMouseLeave={() => setHoveredIndex(null)}
             >
+              <Link to={"/courseview"} style={{textDecoration:"none" ,}} className="text-dark">
               <div key={card.id}>
                 <div className="card-content container-fluid px-0">
                   <div
@@ -301,6 +303,7 @@ function UserCourse() {
                   )}
                 </div>
               </div>
+              </Link>
             </div>
           ))}
         </Carousel>

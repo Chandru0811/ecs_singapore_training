@@ -10,6 +10,7 @@ import Home from "../Pages/client/Home";
 import LandingPage from "../Pages/client/LandingPage";
 import Register from "../components/Register";
 import UserCourse from "../Pages/client/UserCourse";
+import UserCourseView from "../Pages/client/UserCourseView";
 
 const UserAuth = ({ handleLogin }) => {
   return (
@@ -31,6 +32,7 @@ const UserAuth = ({ handleLogin }) => {
             <Route path="/about" element={<ClientAbout />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/course" element={<UserCourse />} />
+            <Route path="/courseview" element={<UserCourseView />} />
           </Routes>
           </div>
           <Footer />
