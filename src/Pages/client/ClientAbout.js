@@ -11,6 +11,7 @@ import { TbMessage2Exclamation } from "react-icons/tb";
 import { BsBoxSeam } from "react-icons/bs";
 import Testimonial from './Testimonial';
 import EnrollModel from '../admin/EnrollModel';
+import { Link } from 'react-router-dom';
 
 function ClientAbout() {
     return (
@@ -119,7 +120,11 @@ function ClientAbout() {
                                         </div>
                                     </Tab>
                                 </Tabs>
-                                <button className="learn-btn">Learn More</button>
+                                <a href="https://ecscloudinfotech.com/ecs/">
+                                <button className="learn-btn">
+  Learn More
+</button>
+</a>
                             </div>
                         </div>
                     </div>
@@ -140,7 +145,8 @@ function ClientAbout() {
                                         </div>
                                         <h1 className="display-5 fw-bold">The feature of Courses that you will benefit from</h1>
                                     </div>
-                                    <button className="btn contact-btn">All Courses</button>
+                                    < Link to="/course">
+                                    <button className="btn contact-btn">All Courses</button></Link>
                                 </div>
                                 <div className="col-md-6 col-12 d-flex align-items-center justify-content-center">
                                     <div className="row">

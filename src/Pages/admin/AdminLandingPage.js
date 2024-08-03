@@ -8,6 +8,9 @@ import { FaEdit, FaSave, FaTimes } from "react-icons/fa";
 import { Modal } from "react-bootstrap";
 import ReactPlayer from "react-player";
 
+import * as Yup from "yup";
+
+
 const responsive = {
   superLargeDesktop: {
     breakpoint: { max: 4000, min: 3000 },
@@ -79,7 +82,17 @@ function AdminLandingPage() {
   const [isEditing, setIsEditing] = useState(null);
   const [show, setShow] = useState(false);
   const [selectedCard, setSelectedCard] = useState(null);
-
+  const validationSchema = Yup.object({
+    fullName: Yup.string()
+    .required("*Full Name is required"),
+    email: Yup.string()
+      .email("*Invalid email address")
+      .required("*Email is required"),
+      mobileNumber: Yup.string()
+      
+      .required("*Number is required"),
+  
+  });
   const formik = useFormik({
     initialValues: {
       LandingPageHeading: `Let's Find The Right Course For You`,
@@ -90,12 +103,18 @@ function AdminLandingPage() {
       landingPageHeroImg: heroImg,
       landingCarouselCards: cardData,
       landingIframe: `https://www.youtube.com/embed/dQw4w9WgXcQ`,
+      fullName: "",
+      email: "",
+      mobileNumber: "",
     },
+    validationSchema: validationSchema,
     onSubmit: (values) => {
       console.log("Form data", values);
     },
   });
+  
 
+ 
   const handleEditClick = (field) => {
     setIsEditing(field);
   };
@@ -555,32 +574,62 @@ function AdminLandingPage() {
                   <div className="py-3">
                     <label htmlFor="fullName">Full Name</label>
                     <input
-                      className="form-control"
-                      type="text"
-                      name="fullName"
-                      placeholder="Enter Full Name..."
-                    />
+                        type="fullName"
+                        className={`form-control ${
+                          formik.touched.fullName && formik.errors.fullName
+                            ? "is-invalid"
+                            : ""
+                        }`}
+                        style={{ borderRadius: "3px" }}
+                        placeholder="Enter fullName"
+                        {...formik.getFieldProps("fullName")}
+                      />
+                      {formik.touched.fullName && formik.errors.fullName && (
+                        <div className="invalid-feedback">
+                          {formik.errors.fullName}
+                        </div>
+                      )}
                   </div>
                   <div className="py-3">
                     <label htmlFor="mobileNumber">Mobile Number</label>
                     <input
-                      className="form-control"
-                      type="text"
-                      name="mobileNumber"
-                      placeholder="Enter mobile number..."
-                    />
+                        type="mobileNumber"
+                        className={`form-control ${
+                          formik.touched.mobileNumber && formik.errors.mobileNumber
+                            ? "is-invalid"
+                            : ""
+                        }`}
+                        style={{ borderRadius: "3px" }}
+                        placeholder="Enter mobileNumber"
+                        {...formik.getFieldProps("mobileNumber")}
+                      />
+                      {formik.touched.mobileNumber && formik.errors.mobileNumber && (
+                        <div className="invalid-feedback">
+                          {formik.errors.mobileNumber}
+                        </div>
+                      )}
                   </div>
                   <div className="py-3">
                     <label htmlFor="email">Email</label>
                     <input
-                      className="form-control"
-                      type="email"
-                      name="email"
-                      placeholder="Enter email..."
-                    />
+                        type="email"
+                        className={`form-control ${
+                          formik.touched.email && formik.errors.email
+                            ? "is-invalid"
+                            : ""
+                        }`}
+                        style={{ borderRadius: "3px" }}
+                        placeholder="Enter email"
+                        {...formik.getFieldProps("email")}
+                      />
+                      {formik.touched.email && formik.errors.email && (
+                        <div className="invalid-feedback">
+                          {formik.errors.email}
+                        </div>
+                      )}
                   </div>
                   <div className="float-end">
-                    <button className="enrollbtn">Send</button>
+                    <button type="submit" className="enrollbtn">Send</button>
                   </div>
                 </div>
               </div>
