@@ -8,12 +8,13 @@ import { GrInstagram } from "react-icons/gr";
 import { useFormik } from "formik";
 import api from '../../config/BaseUrl';
 import ImageURL from "../../config/ImageURL";
+import toast from "react-hot-toast";
 
 export const FooterEdit = () => {
   const [isEditing, setIsEditing] = useState(null);
   const [editMode, setEditMode] = useState({});
   const [apiData, setApiData] = useState({});
-  
+
   const formik = useFormik({
     initialValues: {
       footer_title: "",
@@ -67,23 +68,22 @@ export const FooterEdit = () => {
     getData();
   }, []);
 
-  const handleImageChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        formik.setFieldValue("logo_path", reader.result);
-      };
-      reader.readAsDataURL(file);
+  const handelFooterPublish = async () => {
+    try {
+      const response = await api.post(`publish/footer`)
+      if (response.status === 200) {
+        toast.success(response.data.message)
+      }
+    } catch (e) {
+      toast.error("Error Publishing Data", e?.response?.data?.message)
     }
-  };
-
+  }
   return (
     <div>
       <div className="card-header d-flex align-items-center px-0 py-3 mb-2 bg-light">
         <h3 className="fw-bold">Footer</h3>
         <div className="container-fluid d-flex justify-content-end">
-          <button className="btn btn-sm btn-danger mx-2">Publish</button>
+          <button className="btn btn-sm btn-danger mx-2" onClick={handelFooterPublish}>Publish</button>
         </div>
       </div>
       <div
@@ -93,7 +93,7 @@ export const FooterEdit = () => {
         <div className=" row px-3 pt-5">
           <div className="col-md-3 col-12 text-start  mb-0 ">
             <div className="">
-              <img src={`${ImageURL}${apiData.logo_path}`} alt="Logo" className="img-fluid mb-3" style={{ height: '15%', width: "15%" }}  />
+              <img src={`${ImageURL}${apiData.logo_path}`} alt="Logo" className="img-fluid mb-3" style={{ height: '15%', width: "15%" }} />
               <span className="mx-1">{apiData.footer_title}</span>
             </div>
             {isEditing === "footer_content" ? (
@@ -455,7 +455,7 @@ export const FooterEdit = () => {
                 <div className="d-flex justify-content-end">
 
                   <p className="mb-0" style={{ color: "#a0a0a0" }}>
-                  {apiData.copyrights}
+                    {apiData.copyrights}
                   </p>
                   <button
                     onClick={() => handleEditClick("copyrights")}
