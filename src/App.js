@@ -7,6 +7,7 @@ import './styles/client.css';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  
   const handleLogin = () => {
     sessionStorage.setItem("isAuthenticated", true);
     setIsAuthenticated(true);
