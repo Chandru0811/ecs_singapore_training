@@ -27,7 +27,7 @@ a#basic-nav-dropdownDot{
   padding-bottom: 3px !important;
 }
 a#basic-nav-dropdownDot a{
-  color: #000;
+  color: var(--admin-text-color);
 }
 
 a#basic-nav-dropdown::after {
@@ -43,6 +43,47 @@ a#basic-nav-dropdownDot::after {
 .adminHeaderNav .nav-link{
  color: var(--admin-teritary-color);
 }
+.me-auto.navbar-nav {
+  font-size: 14px;
+}
+.dropdown a.me-1.nav-link{
+  color: var(--admin-text-color);
+  position: relative;
+  --bs-nav-link-hover-color: var(--admin-paratext-color) !important;
+  transition: color 0.3s ease-in-out;
+}
+.dropdown .dropdown-item:active{
+  --bs-dropdown-link-active-bg: #f8f9fa !important;
+}
+
+.dropdown a.me-1.nav-link::after{
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  display: block;
+  margin-top: 5px;
+  right: 0;
+  background: var(--admin-primary-color);
+  transition: width 0.3s ease-in-out;
+  -webkit-transition: width 0.3s ease-in-out; 
+}
+.dropdown a.me-1.nav-link:hover::after{
+  width: 100%;
+  left: 0;
+  background: var(--admin-primary-color);
+}
+.adminHeaderNav .navbar-collapse .navbar-nav .dropdown a.me-1.nav-link.active,
+.adminHeaderNav .navbar-collapse .navbar-nav .dropdown a.me-1.nav-link.show{
+  color: var(--admin-primary-color) !important;
+}
+.adminHeaderNav .navbar-collapse .navbar-nav .dropdown a.me-1.nav-link.active::after,
+.adminHeaderNav .navbar-collapse .navbar-nav .dropdown a.me-1.nav-link.show::after{
+  width: 100%;
+  left: 0;
+  background: var(--admin-primary-color);
+}
+
 .adminHeaderNav .navbar-collapse .nav-link{
   position: relative;
   --bs-nav-link-hover-color: var(--admin-paratext-color) !important;
@@ -56,14 +97,14 @@ a#basic-nav-dropdownDot::after {
   display: block;
   margin-top: 5px;
   right: 0;
-  background: var(--admin-teritary-color);
+  background: var(--admin-primary-color);
   transition: width 0.3s ease-in-out;
   -webkit-transition: width 0.3s ease-in-out;
 }
 .adminHeaderNav .navbar-collapse .nav-link:hover::after {
   width: 100%;
   left: 0;
-  background: var(--admin-teritary-color);
+  background: var(--admin-primary-color);
 }
 
 .adminHeaderNav .navbar-collapse .navbar-nav .nav-link.active, 

@@ -149,7 +149,7 @@ function AdminTestimonials() {
   return (
     <div>
       <form onSubmit={formik.handleSubmit}>
-        <div className="d-flex justify-content-between p-3 bg-light">
+        <div className="d-flex justify-content-between p-2 bg-light">
           <h3 className="fw-bold"> Tesimmonials</h3>
           <div className="d-flex">
             <button

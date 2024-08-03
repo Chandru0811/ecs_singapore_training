@@ -89,10 +89,10 @@ function Courses() {
 
     return (
         <div className='container-fluid' style={{ backgroundColor: "#FAFCFF" }}>
-                <div className="container d-flex justify-content-between py-2">
-                    <h1>Courses</h1>
-                    <button type="submit" className="btn btn-primary" onClick={formik.handleSubmit}>Publish</button>
-                </div>
+                <div className='d-flex align-items-center justify-content-between p-2'>
+                <h4>Courses</h4>
+                <button className="btn btn-primary">Publish</button>
+            </div>
             <div className='container'>
                 <form onSubmit={formik.handleSubmit}>
                     <div className='row CoursesHome'>

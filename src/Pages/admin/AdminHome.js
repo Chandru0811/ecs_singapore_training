@@ -588,12 +588,12 @@ function AdminHome() {
     formik.handleSubmit();
   };
 
-  return (
-    <div className='container Home'>
-        <div className="d-flex justify-content-between p-2 bg-light">
+  return (<> 
+        <div className=" container-fluid d-flex justify-content-between p-2 bg-light">
         <h3 className="fw-bold">Home</h3>
           <button className="btn btn-sm btn-danger">Publish</button>
       </div>
+    <div className='container Home'>
       <form onSubmit={formik.handleSubmit}>
         {/* Hero */}
         <div className='container-fluid row mt-3'>
@@ -1300,6 +1300,7 @@ function AdminHome() {
         </div>
       </div>
     </div>
+    </>
   );
 }
 
