@@ -1,29 +1,26 @@
 import React, { useState } from "react";
 import { Modal } from "react-bootstrap";
-import courseImg from "../../../assets/client/pythone.png";
 import { FaEye } from "react-icons/fa";
-import { useFormik } from "formik";
+import api from "../../../config/BaseUrl";
+import ImageURL from "../../../config/ImageURL";
 
-function CategoryView({ tableData }) {
+function CategoryView({ id }) {
   const [show, setShow] = useState(false);
+  const [data, setData] = useState({});
 
   const handleClose = () => setShow(false);
 
-  const handleShow = () => {
-    formik.setValues(tableData);
-    setShow(true);
+  const handleShow = async () => {
+    try {
+      const response = await api.get(`/category/${id}`);
+      setData(response.data.data);
+      setShow(true);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setShow(true);
+    }
   };
-
-  const formik = useFormik({
-    initialValues: {
-      image: courseImg,
-      title: "",
-      description: "",
-    },
-    onSubmit: (values) => {
-      console.log(values);
-    },
-  });
 
   return (
     <>
@@ -46,7 +43,14 @@ function CategoryView({ tableData }) {
                     </p>
                   </div>
                   <div className="col-6">
-                    <img src={formik.values.image} alt="category" />
+                    <p className="text-muted text-sm">
+                      : <img src={`${ImageURL}${data.logo_path}`} alt={data.title}
+                        style={{
+                          width: "50px",
+                          height: "50px",
+                          objectFit: "cover",
+                        }} />
+                    </p>
                   </div>
                 </div>
               </div>
@@ -59,7 +63,7 @@ function CategoryView({ tableData }) {
                   </div>
                   <div className="col-6">
                     <p className="text-muted text-sm">
-                      : {formik.values.title}
+                      : {data.title}
                     </p>
                   </div>
                 </div>
@@ -73,7 +77,7 @@ function CategoryView({ tableData }) {
                   </div>
                   <div className="col-6">
                     <p className="text-muted text-sm">
-                      : {formik.values.description}
+                      : {data.description}
                     </p>
                   </div>
                 </div>

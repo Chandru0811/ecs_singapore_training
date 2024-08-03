@@ -9,6 +9,7 @@ import { useFormik } from "formik";
 
 function AdminContact() {
     const [isEditing, setIsEditing] = useState(null);
+    const [editingContactMap, setEditingContactMap] = useState("");
 
     const iconsMap = {
         FiPhoneCall: <FiPhoneCall color='#e41111' size={60} />,
@@ -36,16 +37,22 @@ function AdminContact() {
             contactMap: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.8044732252415!2d103.81118677348974!3d1.2916846617631323!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31da1bb95520771b%3A0xf2b9dfa378aa9a6e!2sThe%20Alexcier!5e0!3m2!1sen!2sin!4v1722418479744!5m2!1sen!2sin"
         },
         onSubmit: (values) => {
-            console.log("Contact Datas:", values);
+            console.log("Contact Data:", values);
             setIsEditing(null);
         },
     });
 
     const handleEditClick = (field) => {
         setIsEditing(field);
+        if (field === "contactMap") {
+            setEditingContactMap(formik.values.contactMap);
+        }
     };
 
     const handleSaveClick = () => {
+        if (isEditing === "contactMap") {
+            formik.setFieldValue("contactMap", editingContactMap);
+        }
         formik.handleSubmit();
     };
 
@@ -98,6 +105,7 @@ function AdminContact() {
                                                     {formik.values.contactCardContent1}
                                                     <FaEdit size={20}
                                                         className="text-secondary ms-3"
+                                                        style={{ cursor: "pointer" }}
                                                         onClick={() => handleEditClick('contactCardContent1')}
                                                     />
                                                 </p>
@@ -107,7 +115,7 @@ function AdminContact() {
                                 </div>
                             </div>
                             <div className='arrow-icon mb-5'>
-                                <a href={formik.values.contactCardLink1} target="_blank"><FaCircleArrowRight /></a>
+                                <a href={formik.values.contactCardLink1} target="_blank" rel="noopener noreferrer"><FaCircleArrowRight /></a>
                             </div>
                         </div>
                         <div className='col-lg-6 col-xl-4 col-12'>
@@ -137,6 +145,7 @@ function AdminContact() {
                                                     {formik.values.contactCardContent2}
                                                     <FaEdit size={20}
                                                         className="text-secondary ms-3"
+                                                        style={{ cursor: "pointer" }}
                                                         onClick={() => handleEditClick('contactCardContent2')}
                                                     />
                                                 </p>
@@ -146,7 +155,7 @@ function AdminContact() {
                                 </div>
                             </div>
                             <div className='arrow-icon mb-5'>
-                                <a href={formik.values.contactCardLink2} target="_blank"><FaCircleArrowRight /></a>
+                                <a href={formik.values.contactCardLink2} target="_blank" rel="noopener noreferrer"><FaCircleArrowRight /></a>
                             </div>
                         </div>
                         <div className='col-lg-6 col-xl-4 col-12'>
@@ -175,6 +184,7 @@ function AdminContact() {
                                                     {formik.values.contactCardContent3}
                                                     <FaEdit size={20}
                                                         className="text-secondary ms-3"
+                                                        style={{ cursor: "pointer" }}
                                                         onClick={() => handleEditClick('contactCardContent3')}
                                                     />
                                                 </p>
@@ -184,7 +194,7 @@ function AdminContact() {
                                 </div>
                             </div>
                             <div className='arrow-icon mb-5'>
-                                <a href={formik.values.contactCardLink3} target="_blank"><FaCircleArrowRight /></a>
+                                <a href={formik.values.contactCardLink3} target="_blank" rel="noopener noreferrer"><FaCircleArrowRight /></a>
                             </div>
                         </div>
                     </div>
@@ -248,6 +258,7 @@ function AdminContact() {
                                         {formik.values.contactHeading}
                                         <FaEdit size={25}
                                             className="text-secondary ms-3"
+                                            style={{ cursor: "pointer" }}
                                             onClick={() => handleEditClick('contactHeading')}
                                         />
                                     </h1>
@@ -269,6 +280,7 @@ function AdminContact() {
                                         {formik.values.contactContent}
                                         <FaEdit size={20}
                                             className="text-dark ms-3"
+                                            style={{ cursor: "pointer" }}
                                             onClick={() => handleEditClick('contactContent')}
                                         />
                                     </p>
@@ -293,6 +305,7 @@ function AdminContact() {
                                             {formik.values.contactSubheading}
                                             <FaEdit size={20}
                                                 className="text-secondary ms-3"
+                                                style={{ cursor: "pointer" }}
                                                 onClick={() => handleEditClick('contactSubheading')}
                                             />
                                         </h5>
@@ -304,15 +317,15 @@ function AdminContact() {
                                             type="text"
                                             className="form-control me-2"
                                             name="contactMap"
-                                            value={formik.values.contactMap}
-                                            onChange={formik.handleChange}
+                                            value={editingContactMap}
+                                            onChange={(e) => setEditingContactMap(e.target.value)}
                                         />
                                         <FaSave onClick={handleSaveClick} className="text-primary mt-2" />
                                         <FaTimes onClick={handleCancel} className="ms-2 text-danger mt-2" />
                                     </div>
                                 ) : null}
                                 {isEditing !== 'contactMap' && (
-                                    <FaEdit onClick={() => handleEditClick("contactMap")} className="text-secondary " />
+                                    <FaEdit size={20} onClick={() => handleEditClick("contactMap")} className="text-secondary" style={{ cursor: "pointer" }} />
                                 )}
                                 <div className='card' style={{ borderRadius: "30px" }}>
                                     <iframe
