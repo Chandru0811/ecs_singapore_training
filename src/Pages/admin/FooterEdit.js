@@ -14,6 +14,8 @@ export const FooterEdit = () => {
   const [isEditing, setIsEditing] = useState(null);
   const [editMode, setEditMode] = useState({});
   const [apiData, setApiData] = useState({});
+  const [loading, setLoadIndicator] = useState(false);
+
 
   const formik = useFormik({
     initialValues: {
@@ -30,6 +32,7 @@ export const FooterEdit = () => {
     },
     onSubmit: async (values) => {
       console.log("Form data", values);
+      setLoadIndicator(true);
       try {
         const response = await api.post("update/footer", values);
         console.log("Response data:", response.data);
@@ -37,6 +40,8 @@ export const FooterEdit = () => {
         setIsEditing(null);
       } catch (error) {
         console.error("Error saving data:", error);
+      }finally{
+        setLoadIndicator(false);
       }
     },
   });
@@ -83,7 +88,23 @@ export const FooterEdit = () => {
       <div className="card-header d-flex align-items-center px-0 py-3 mb-2 bg-light">
         <h3 className="fw-bold">Footer</h3>
         <div className="container-fluid d-flex justify-content-end">
-          <button className="btn btn-sm btn-danger mx-2" onClick={handelFooterPublish}>Publish</button>
+          {/* <button className="btn btn-sm btn-danger mx-2" onClick={handelFooterPublish}>Publish</button> */}
+          <button
+                  type="submit"
+                  className="btn btn-sm btn-danger mx-2"
+                  disabled={loading}
+                  onClick={handelFooterPublish}
+                >
+                  {loading ? (
+                    <span
+                      className="spinner-border spinner-border-sm"
+                      aria-hidden="true"
+                    ></span>
+                  ) : (
+                    <span></span>
+                  )}
+                   Publish
+                   </button>
         </div>
       </div>
       <div
