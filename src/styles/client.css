@@ -99,7 +99,8 @@
     font-size: 3.8vw;
   }
 }
-
+.courseBtn{
+min-width: 9.5vw;}
 @media (max-width: 1265px) and (min-width: 1115px) {
   .courseBtn {
     width: 11vw;
@@ -108,6 +109,11 @@
 @media (max-width: 1115px) and (min-width: 990px) {
   .courseBtn {
     width: 13vw;
+  }
+}
+@media (max-width: 415px) and (min-width: 300px) {
+  .courseBtn {
+    width: 8vw;
   }
 }
 @media (max-width: 1268px) and (min-width: 1060px) {
