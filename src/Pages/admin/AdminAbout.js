@@ -311,16 +311,19 @@ function AdminAbout() {
                                                                 style={{ margin: '0 auto', width: '300px' }}
                                                             />
                                                         </div>
-                                                    ) : (
-                                                        <div>
-                                                            <FaEdit onClick={() => handleEditClick('aboutHeroImg')} className="text-warning" />
-                                                            <img
-                                                                src={formik.values.aboutHeroImg}
-                                                                alt='About Hero'
-                                                                className="img-fluid"
-                                                            />
-                                                        </div>
+                                                    ) : null}
+                                                    {isEditing !== 'aboutHeroImg' && (
+                                                        <FaEdit onClick={() => handleEditClick("aboutHeroImg")} className="text-warning " />
                                                     )}
+                                                    <div>
+                                                        {/* <FaEdit onClick={() => handleEditClick('aboutHeroImg')} className="text-warning" /> */}
+                                                        <img
+                                                            src={formik.values.aboutHeroImg}
+                                                            alt='About Hero'
+                                                            className="img-fluid"
+                                                        />
+                                                    </div>
+
                                                 </div>
                                             </div>
                                         </div>
@@ -333,23 +336,29 @@ function AdminAbout() {
                 <div className="container mb-4">
                     <div className="row">
                         <div className="col-md-6 col-12 mb-3 d-flex align-items-center justify-content-center">
-                            {isEditing === 'aboutImage' ? (
-                                <div>
-                                    <div className="d-flex justify-content-center mb-2">
-                                        <FaSave onClick={handleSaveClick} className="text-secondary" />
-                                        <FaTimes onClick={handleCancel} style={{ marginLeft: '10px' }} className="text-secondary" />
+                            <div>
+                                {isEditing === 'aboutImage' ? (
+                                    <div>
+                                        <div className="d-flex justify-content-center mb-2">
+                                            <FaSave onClick={handleSaveClick} className="text-secondary" />
+                                            <FaTimes onClick={handleCancel} style={{ marginLeft: '10px' }} className="text-secondary" />
+                                        </div>
+                                        <input type="file"
+                                            onChange={(e) => handleFileChange(e, 'aboutImage')}
+                                            className="form-control mb-3"
+                                            style={{ margin: '0 auto', width: '300px' }} />
                                     </div>
-                                    <input type="file"
-                                        onChange={(e) => handleFileChange(e, 'aboutImage')}
-                                        className="form-control"
-                                        style={{ margin: '0 auto', width: '300px' }} />
-                                </div>
-                            ) : (
+                                ) : null}
                                 <div>
-                                    <FaEdit onClick={() => handleEditClick('aboutImage')} className="text-secondary" />
-                                    <img src={formik.values.aboutImage} alt='img' className="img-fluid" />
+                                    {isEditing !== 'aboutImage' && (
+                                        <FaEdit onClick={() => handleEditClick("aboutImage")} className="text-secondary " />
+                                    )}
+                                    <div>
+                                        {/* <FaEdit onClick={() => handleEditClick('aboutImage')} className="text-secondary" /> */}
+                                        <img src={formik.values.aboutImage} alt='img' className="img-fluid" />
+                                    </div>
                                 </div>
-                            )}
+                            </div>
                         </div>
                         <div className="col-md-6 col-12">
                             <div className="d-flex text-start">
@@ -734,7 +743,7 @@ function AdminAbout() {
                 <div className="container mb-4">
                     <div className="row">
                         <div className="col-md-6 col-12 mb-3 d-flex align-items-center justify-content-center">
-                            <div  >
+                            <div>
                                 {isEditing === 'aboutAsianStudent' ? (
                                     <div>
                                         <div className="d-flex justify-content-center mb-2">
@@ -745,17 +754,20 @@ function AdminAbout() {
                                             type="file"
                                             name="aboutAsianStudent"
                                             onChange={(e) => handleFileChange(e, 'aboutAsianStudent')}
-                                            className="form-control"
+                                            className="form-control mb-3"
                                             style={{ margin: '0 auto', width: '300px' }}
                                         />
                                     </div>
-                                ) : (
-                                    <><FaEdit onClick={() => handleEditClick('aboutAsianStudent')} className="text-secondary" />
-                                        <div className="imgDesign">
-                                            <img src={formik.values.aboutAsianStudent} alt='img' className="img-fluid" />
-                                        </div>
-                                    </>
-                                )}
+                                ) : null}
+                                <>
+                                    {isEditing !== 'aboutAsianStudent' && (
+                                        <FaEdit onClick={() => handleEditClick("aboutAsianStudent")} className="text-secondary " />
+                                    )}
+                                    <div className="imgDesign">
+                                        <img src={formik.values.aboutAsianStudent} alt='img' className="img-fluid" />
+                                    </div>
+                                </>
+
                             </div>
                         </div>
                         <div className="col-md-6 col-12">
@@ -794,7 +806,7 @@ function AdminAbout() {
                             <>
                                 <div className="accordion" id="accordionExample">
                                     <div className="d-flex align-items-center justify-content-end">
-                                        <FaPlus onClick={handleAddAccordion} className="mt-3 mb-3" /> Add New
+                                        <button onClick={handleAddAccordion} className=" btn mt-3 mb-3"><FaPlus /> Add New</button>
                                     </div>
                                     {formik.values.aboutAccordion.map((accordion, accordionIndex) => (
                                         <div className="accordion-item mb-2" key={accordion.id}>
@@ -901,7 +913,6 @@ function AdminAbout() {
                     </div>
                 </div>
             </form>
-
         </section >
     );
 }
