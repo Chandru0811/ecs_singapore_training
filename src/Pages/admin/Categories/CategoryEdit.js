@@ -7,8 +7,8 @@ import api from "../../../config/BaseUrl";
 import toast from "react-hot-toast";
 
 const validationSchema = Yup.object({
-  title: Yup.string().required("title is required"),
-  description: Yup.string(),
+  title: Yup.string().required("*Title is required"),
+  description: Yup.string().required("*Description is required")
 });
 
 function CategoryEdit({ id, onSuccess }) {
@@ -30,7 +30,9 @@ function CategoryEdit({ id, onSuccess }) {
       try {
         const formData = new FormData();
         formData.append("_method", "PUT");
-        formData.append("logo", values.logo);
+        if (values.logo) {
+          formData.append("logo", values.logo);
+        }
         formData.append("title", values.title);
         formData.append("description", values.description);
 
@@ -66,7 +68,7 @@ function CategoryEdit({ id, onSuccess }) {
       }
     };
     getData();
-  }, []);
+  }, [id]);
 
   return (
     <>
@@ -81,9 +83,7 @@ function CategoryEdit({ id, onSuccess }) {
         <Modal.Body>
           <form onSubmit={formik.handleSubmit}>
             <div className="mb-2">
-              <label className="form-label">
-                Image<span className="text-danger">*</span>
-              </label>
+              <label className="form-label">Image</label>
               <input
                 type="file"
                 name="logo"
@@ -108,12 +108,15 @@ function CategoryEdit({ id, onSuccess }) {
               )}
             </div>
             <div className="mb-2">
-              <label className="form-label">Description</label>
+              <label className="form-label">Description<span className="text-danger">*</span></label>
               <textarea
                 name="description"
-                className="form-control"
+                className={`form-control ${formik.touched.description && formik.errors.description ? "is-invalid" : ""}`}
                 {...formik.getFieldProps("description")}
               />
+              {formik.touched.description && formik.errors.description && (
+                <div className="invalid-feedback">{formik.errors.description}</div>
+              )}
             </div>
             <Modal.Footer>
               <Button variant="secondary" onClick={handleClose}>

@@ -73,7 +73,7 @@ function Category() {
         <h3 className="fw-bold">Categories</h3>
         <div className="container-fluid d-flex justify-content-end">
           <CategoryAdd onSuccess={refreshData} />
-          <button className="btn btn-sm btn-danger mx-2">Publish</button>
+          <button className="btn btn-danger mx-2">Publish</button>
         </div>
       </div>
       <div>
@@ -114,10 +114,10 @@ function Category() {
                     <td>{data.description}</td>
                     <td>
                       <div className="d-flex justify-content-center">
-                        <button className="btn btn-light border-2 btn-sm">
+                        <button className="btn">
                           <CategoryView id={data.id} />
                         </button>
-                        <button className="btn btn-light border-2 btn-sm mx-2">
+                        <button className="btn mx-2">
                           <CategoryEdit id={data.id} onSuccess={refreshData} />
                         </button>
                         <DeleteModel onSuccess={refreshData} path={`/category/${data.id}`} />
