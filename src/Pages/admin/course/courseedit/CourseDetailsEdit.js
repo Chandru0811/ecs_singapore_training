@@ -3,28 +3,40 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 
 const data = {
+  logo: "",
   title: "Test Course",
   description:
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vel lacus vel turpis consectetur luctus.",
   category: "Technology",
-  discountAmount: 10,
-  totalAmount: 100,
-  amountPayable: 90,
+  offerPrice: 10,
+  orginalPrice: 100,
 };
 
 const CourseDetailsEdit = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
+    const validationSchema = Yup.object({
+      logo: Yup.string().required("Logo is required*"),
+      title: Yup.string().required("Title is required*"),
+      description: Yup.string().required("Description is required*"),
+      category: Yup.string().required("Category is required*"),
+      offerPrice: Yup.number()
+        .required("Offer Price is required*")
+        .positive("Offer Price must be a positive number"),
+      orginalPrice: Yup.number()
+        .required("Original Price is required*")
+        .positive("Original Price must be a positive number"),
+    });
+
     const formik = useFormik({
       initialValues: {
         logo: "",
         title: "",
         description: "",
         category: "",
-        discountAmount: "",
-        totalAmount: "",
-        amountPayable: "",
+        offerPrice: "",
+        orginalPrice: "",
       },
-      // validationSchema: validationSchema,
+      validationSchema: validationSchema,
       onSubmit: async (values) => {
         console.log("object", values);
         handleNext();
@@ -84,9 +96,9 @@ const CourseDetailsEdit = forwardRef(
             <div className="row px-1">
               <div className="col-md-6 col-12 mb-3">
                 <div className="text-start">
-                  <lable>
-                    Logo<span className="text-danger">*</span>{" "}
-                  </lable>
+                  <label>
+                    Logo<span className="text-danger">*</span>
+                  </label>
                 </div>
                 <input
                   className="form-control"
@@ -97,11 +109,12 @@ const CourseDetailsEdit = forwardRef(
                   onBlur={formik.handleBlur}
                 />
                 {formik.touched.logo && formik.errors.logo && (
-                  <div className="error text-danger">
+                  <div className="error text-danger text-start">
                     <small>{formik.errors.logo}</small>
                   </div>
                 )}
               </div>
+
               <div className="col-md-6 col-12 mb-3">
                 <div className="text-start">
                   <label>Title</label>
@@ -116,7 +129,7 @@ const CourseDetailsEdit = forwardRef(
                   value={formik.values.title}
                 />
                 {formik.touched.title && formik.errors.title && (
-                  <div className="error text-danger">
+                  <div className="error text-danger text-start">
                     <small>{formik.errors.title}</small>
                   </div>
                 )}
@@ -135,7 +148,7 @@ const CourseDetailsEdit = forwardRef(
                   value={formik.values.category}
                 />
                 {formik.touched.category && formik.errors.category && (
-                  <div className="error text-danger">
+                  <div className="error text-danger text-start">
                     <small>{formik.errors.category}</small>
                   </div>
                 )}
@@ -154,70 +167,50 @@ const CourseDetailsEdit = forwardRef(
                   value={formik.values.description}
                 />
                 {formik.touched.description && formik.errors.description && (
-                  <div className="error text-danger">
+                  <div className="error text-danger text-start">
                     <small>{formik.errors.description}</small>
                   </div>
                 )}
               </div>
               <div className="col-md-6 col-12 mb-3">
                 <div className="text-start">
-                  <label>Total Amount</label>
+                  <label>Orginal Price</label>
                 </div>
                 <input
                   type="text"
                   className="form-control"
-                  id="totalAmount"
-                  name="totalAmount"
+                  id="orginalPrice"
+                  name="orginalPrice"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  value={formik.values.totalAmount}
+                  value={formik.values.orginalPrice}
                 />
-                {formik.touched.totalAmount && formik.errors.totalAmount && (
-                  <div className="error text-danger">
-                    <small>{formik.errors.totalAmount}</small>
+                {formik.touched.orginalPrice && formik.errors.orginalPrice && (
+                  <div className="error text-danger text-start">
+                    <small>{formik.errors.orginalPrice}</small>
                   </div>
                 )}
               </div>
               <div className="col-md-6 col-12 mb-3">
                 <div className="text-start">
-                  <label>Discount Amount</label>
+                  <label>Offer Price</label>
                 </div>
                 <input
                   type="text"
                   className="form-control"
-                  id="discountAmount"
-                  name="discountAmount"
+                  id="offerPrice"
+                  name="offerPrice"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  value={formik.values.discountAmount}
+                  value={formik.values.offerPrice}
                 />
-                {formik.touched.discountAmount &&
-                  formik.errors.discountAmount && (
-                    <div className="error text-danger">
-                      <small>{formik.errors.discountAmount}</small>
-                    </div>
-                  )}
+                {formik.touched.offerPrice && formik.errors.offerPrice && (
+                  <div className="error text-danger text-start">
+                    <small>{formik.errors.offerPrice}</small>
+                  </div>
+                )}
               </div>
-              <div className="col-md-6 col-12 mb-3">
-                <div className="text-start">
-                  <label>Amount Payable</label>
-                </div>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="amountPayable"
-                  name="amountPayable"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.amountPayable}
-                />
-                {formik.touched.amountPayable &&
-                  formik.errors.amountPayable && (
-                    <div className="error text-danger">
-                      <small>{formik.errors.amountPayable}</small>
-                    </div>
-                  )}
-              </div>
+
               {/* <div className="d-flex justify-content-end">
             <button type="submit" className="btn btn-sm btn-primary">
               Submit

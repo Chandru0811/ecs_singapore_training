@@ -34,6 +34,15 @@ const data = {
 
 const CourseBenefitEdit = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
+    const validationSchema = Yup.object().shape({
+      benefitsTitle: Yup.string().required("Title is required"),
+      keyFeature: Yup.array().of(
+        Yup.object().shape({
+          keyFeatures: Yup.string().required("Key feature is required"),
+        })
+      ),
+    });
+
     const formik = useFormik({
       initialValues: {
         benefitsTitle: "",
@@ -43,7 +52,7 @@ const CourseBenefitEdit = forwardRef(
           },
         ],
       },
-      // validationSchema: validationSchema,
+      validationSchema: validationSchema,
       onSubmit: async (values) => {
         console.log("object", values);
         handleNext();
@@ -134,7 +143,7 @@ const CourseBenefitEdit = forwardRef(
                   />
                   {formik.touched.benefitsTitle &&
                     formik.errors.benefitsTitle && (
-                      <div className="invalid-feedback">
+                      <div className="invalid-feedback text-start">
                         {formik.errors.benefitsTitle}
                       </div>
                     )}
@@ -163,7 +172,7 @@ const CourseBenefitEdit = forwardRef(
                       />
                       {formik.touched.keyFeature?.[index]?.keyFeatures &&
                         formik.errors.keyFeature?.[index]?.keyFeatures && (
-                          <div className="invalid-feedback">
+                          <div className="invalid-feedback text-start">
                             {formik.errors.keyFeature[index].keyFeatures}
                           </div>
                         )}

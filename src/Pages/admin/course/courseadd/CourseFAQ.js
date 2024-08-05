@@ -4,6 +4,14 @@ import * as Yup from "yup";
 
 const CourseFAQ = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
+    const validationSchema = Yup.object().shape({
+      faq: Yup.array().of(
+        Yup.object().shape({
+          faQTitle: Yup.string().required("Title is required*"),
+          faqSubDescription: Yup.string().required("Description is required*"),
+        })
+      ),
+    });
     const formik = useFormik({
       initialValues: {
         faq: [
@@ -13,7 +21,7 @@ const CourseFAQ = forwardRef(
           },
         ],
       },
-      // validationSchema: validationSchema,
+      validationSchema: validationSchema,
       onSubmit: async (values) => {
         console.log("object", values);
         handleNext();
@@ -100,7 +108,7 @@ const CourseFAQ = forwardRef(
                     />
                     {formik.touched.faq?.[index]?.faQTitle &&
                       formik.errors.faq?.[index]?.faQTitle && (
-                        <div className="invalid-feedback">
+                        <div className="invalid-feedback text-start">
                           {formik.errors.faq[index].faQTitle}
                         </div>
                       )}
@@ -128,7 +136,7 @@ const CourseFAQ = forwardRef(
                     />
                     {formik.touched.faq?.[index]?.faqSubDescription &&
                       formik.errors.faq?.[index]?.faqSubDescription && (
-                        <div className="invalid-feedback">
+                        <div className="invalid-feedback text-start">
                           {formik.errors.faq[index].faqSubDescription}
                         </div>
                       )}
