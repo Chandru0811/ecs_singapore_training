@@ -41,7 +41,7 @@ const formik = useFormik({
   return (
     <div className="login-container w-100 mt-5">
       <div className="container d-flex justify-content-center align-items-center ">
-        <div className="login-box p-4 rounded shadow-sm bg-white">
+        <div className="login-box p-4 rounded shadow-lg bg-white">
           <h2 className="text-center mb-4">Forgot Password</h2>
           
           <form onSubmit={formik.handleSubmit}>

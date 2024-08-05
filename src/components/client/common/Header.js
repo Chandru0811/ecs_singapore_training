@@ -112,7 +112,7 @@ const Header = ({ handleLogin }) => {
         <p className="mb-0 text-light fw-light topHeader">
          {apiData?.top_bar}
         </p>
-        <Navbar bg="light" expand="lg" className="clientNav shadow-lg">
+        <Navbar bg="light" expand="lg" className="clientNav shadow">
           <Navbar.Brand as={NavLink} to="/" className="ms-3">
             <img
               src={`${ImageURL}${apiData?.logo_path}`}

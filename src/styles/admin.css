@@ -198,3 +198,12 @@ a#basic-nav-dropdownDot::after {
 .CoursesHome .coursepara{
   font-size: 18px;
 }
+
+
+/* enroll Model */
+.modal-content{
+  border-radius: 1px  ;
+}
+.custom-placeholder::placeholder {
+  font-size: .8em; /* Adjust font size as needed */
+}

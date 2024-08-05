@@ -86,11 +86,11 @@ function Testimonial() {
         responsive={responsive}
         infinite={true}
         autoPlay={false}
-        showDots={true}
+        showDots={false}
       >
         {cardData.map((card, index) => (
           <div key={index} className="mx-4 my-5 p-1 h-75 shadow rounded card">
-            <div className="d-flex align-items-center">
+            <div className="d-flex align-items-center px-2">
               <div>
                 <img src={card.img} alt={card.title} className="img-fluid" />
               </div>

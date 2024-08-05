@@ -5,11 +5,9 @@ function Dashboard() {
     alert("Hii")
   }
   return (
-    <div>
-      Dashboard
-      <button onClick={handelLogin} type="submit" >
-        Logout
-      </button>
+    <div className="container-fluid my-2">
+      <h2 className="d-flex justify-content-center align-items-center">Coming Soon...</h2>
+      
     </div>
   );
 }

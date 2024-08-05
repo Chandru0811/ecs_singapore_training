@@ -25,6 +25,7 @@ const UserAuth = ({ handleLogin }) => {
           >
           <Routes>
             <Route path="/" element={<LandingPage />} />
+            <Route path="*" element={<LandingPage />} />
             <Route path="/home" element={<Home />} />
             <Route path="/login" element={<Login handleLogin={handleLogin} />} />
             <Route path="/forgotpassword" element={<ForgotPassword/>} />

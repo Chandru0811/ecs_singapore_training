@@ -6,6 +6,7 @@ import courseImg from "../../assets/client/landing_card_logo.jpg";
 import Testimonial from "./Testimonial";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import EnrollModel from "../admin/EnrollModel";
 
 const responsive = {
   superLargeDesktop: {
@@ -112,7 +113,7 @@ function LandingPage() {
               media?
             </h6>
             <div className="py-3">
-              <button className="enrollbtn">Enroll</button>
+              <EnrollModel from={"Landing"} />
             </div>
           </div>
           <div className="col-md-5 col-12">
