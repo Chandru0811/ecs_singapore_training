@@ -110,18 +110,18 @@ const Header = ({ handleLogin }) => {
     <>
       <div className="" style={{ position: "sticky", top: "0", zIndex: "999" }}>
         <p className="mb-0 text-light fw-light topHeader">
-         {apiData.top_bar}
+         {apiData?.top_bar}
         </p>
         <Navbar bg="light" expand="lg" className="clientNav shadow-lg">
           <Navbar.Brand as={NavLink} to="/" className="ms-3">
             <img
-              src={`${ImageURL}${apiData.logo_path}`}
+              src={`${ImageURL}${apiData?.logo_path}`}
               height="40"
               className="d-inline-block align-top"
               alt="ECS Training"
             />
            <div>
-           <span>{apiData.title}</span>
+           {/* <span>{apiData?.title}</span> */}
            </div>
           </Navbar.Brand>
 

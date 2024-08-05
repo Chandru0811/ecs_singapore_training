@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Link, } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Navbar, Nav, Button } from "react-bootstrap";
 import logo from "../../assets/client/CRMLogo.png";
 import { MdKeyboardArrowUp } from "react-icons/md";
@@ -23,6 +23,8 @@ import ImageURL from "../../config/ImageURL";
 const HeaderFooter = () => {
   const [course, setCourse] = useState(false);
   const [headerData, setHeaderData] = useState();
+  const [loading, setLoadIndicator] = useState(false);
+
   const courseRef = useRef(null);
   const courseRef2 = useRef(null);
   const courses = [
@@ -103,19 +105,25 @@ const HeaderFooter = () => {
     },
     onSubmit: async (values) => {
       console.log("object",values.header)
+      setLoadIndicator(true);
       const formData = new FormData();
       formData.append("top_bar", values.HeadingText);
-      if(typeof header !="string"){
-      formData.append("logo_image", values.header);
+      if (
+        values.header instanceof ArrayBuffer ||
+        values.header instanceof Blob
+      ) {
+        formData.append("logo_image", values.header);
       }
       try {
-        const response = await api.post("update/header",formData);
+        const response = await api.post("update/header", formData);
         if (response.status === 200) {
           getData();
           console.log("updated", response.data);
         }
       } catch (e) {
         console.log("object", e);
+      }finally{
+        setLoadIndicator(false);
       }
     },
   });
@@ -150,20 +158,19 @@ const HeaderFooter = () => {
     const file = event.target.files[0];
     if (file) {
       formik.setFieldValue("header", file);
-      
     }
   };
   // publish Data
-  const publishData= async()=>{
+  const publishData = async () => {
     try {
       const response = await api.post("publish/header");
       if (response.status === 200) {
-        console.log("published successfully!")
+        console.log("published successfully!");
       }
     } catch (e) {
       console.log("object", e);
     }
-  } 
+  };
 
   useEffect(() => {
     getData();
@@ -175,7 +182,23 @@ const HeaderFooter = () => {
         <div className="card-header d-flex align-items-center px-0 py-3 mb-2 bg-light">
           <h3 className="fw-bold">Header</h3>
           <div className="container-fluid d-flex justify-content-end">
-            <button className="btn btn-sm btn-danger mx-2" onClick={publishData}>Publish</button>
+            {/* <button className="btn btn-sm btn-danger mx-2" onClick={publishData}>Publish</button> */}
+            <button
+                  type="submit"
+                  className="btn btn-sm btn-danger mx-2"
+                  disabled={loading}
+                  onClick={publishData}
+                >
+                  {loading ? (
+                    <span
+                      className="spinner-border spinner-border-sm"
+                      aria-hidden="true"
+                    ></span>
+                  ) : (
+                    <span></span>
+                  )}
+                   Publish
+                   </button>
           </div>
         </div>
         <div
@@ -224,7 +247,7 @@ const HeaderFooter = () => {
           )}
 
           <Navbar bg="light" expand="lg" className="clientNav shadow-lg px-1">
-            <Navbar.Brand className="">
+            <Navbar.Brand className="w-50">
               {isEditing === "header" ? (
                 <div>
                   <div className="d-flex">
@@ -250,7 +273,10 @@ const HeaderFooter = () => {
                   />
                 </div>
               ) : (
-                <div>
+                <div
+                  className="d-flex align-items-center"
+                  style={{ width: "75%", height: "auto" }}
+                >
                   <button
                     onClick={() => handleEditClick("header")}
                     className="btn btn-sm link-secondary"
@@ -259,35 +285,21 @@ const HeaderFooter = () => {
                     <FaEdit />
                   </button>
                   {formik.values.header && (
-                      <img
-                        src={`${ImageURL}${headerData?.logo_path}`}
-                        alt="logo"
-                        className="img-fluid w-25"
-                       />
-                      //  <img
-                      //   src={URL.createObjectURL(
-                      //     `${ImageURL}${headerData?.logo_path}`
-                      //   )}
-                      //   alt="logo"
-                      //   className="img-fluid"
-                      // />
-                    )
-                    //  : (
-                    //   <></>
-                    //   // <img
-                    //   //   src={URL.createObjectURL(
-                    //   //     `${ImageURL}${headerData?.logo_path}`
-                    //   //   )}
-                    //   //   alt="logo"
-                    //   //   className="img-fluid"
-                    //   // />
-                    // )
-                    }
+                    <img
+                      src={`${ImageURL}${headerData?.logo_path}`}
+                      alt="logo"
+                      className="img-fluid"
+                      style={{
+                        width: "75%",
+                        height: "auto",
+                        objectFit: "contain",
+                      }}
+                    />
+                  )}
                 </div>
               )}
 
-              <span>ECS </span>
-              <span>Training</span>
+              {/* <span className="d-flex">ECS </span> */}
             </Navbar.Brand>
 
             <Navbar.Toggle aria-controls="basic-navbar-nav " />
@@ -320,18 +332,12 @@ const HeaderFooter = () => {
                 className=" gap-4 justify-content-end me-2"
                 style={{ flexGrow: "inherit !important" }}
               >
-                <Nav.Link >
-                  Home
-                </Nav.Link>
-                <Nav.Link >
-                  About
-                </Nav.Link>
+                <Nav.Link>Home</Nav.Link>
+                <Nav.Link>About</Nav.Link>
                 <Nav.Link>Blogs</Nav.Link>
-                <Nav.Link >
-                  Contact
-                </Nav.Link>
+                <Nav.Link>Contact</Nav.Link>
 
-                <Link >
+                <Link>
                   <Button className="loginBtn">Login</Button>
                 </Link>
               </Nav>
