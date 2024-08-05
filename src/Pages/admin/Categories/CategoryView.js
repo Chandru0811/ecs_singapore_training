@@ -30,7 +30,7 @@ function CategoryView({ id }) {
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>View Categories</Modal.Title>
+          <Modal.Title>View Category</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <div className="container">

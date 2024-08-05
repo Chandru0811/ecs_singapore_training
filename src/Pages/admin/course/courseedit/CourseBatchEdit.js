@@ -5,12 +5,13 @@ import * as Yup from "yup";
 const data = {
   courseBatch: [
     {
-      day: "Monday",
-      courseStartData: "2022-01-01",
-      courseEndDate: "2022-01-02",
-      courseStartTime: "09:00",
-      duration: "1 hour",
-      noOfSlots: 20,
+      date: "",
+      day: "",
+      courseStartDate: "",
+      courseEndDate: "",
+      courseStartTime: "",
+      courseEndTime: "",
+      duration: "",
       amountPayable: 100,
     },
   ],
@@ -18,21 +19,28 @@ const data = {
 
 const CourseBatchEdit = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
+    const validationSchema = Yup.object().shape({
+      courseBatch: Yup.array().of(
+        Yup.object().shape({
+          date: Yup.string().required("Date is required*"),
+          day: Yup.string().required("Day is required*"),
+          courseStartDate: Yup.string().required(
+            "Course Start Date is required*"
+          ),
+          courseEndDate: Yup.string().required("Course End Date is required*"),
+          courseStartTime: Yup.string().required(
+            "Course Start Time is required*"
+          ),
+          courseEndTime: Yup.string().required("Course End Time is required*"),
+          duration: Yup.string().required("Duration is required*"),
+          amountPayable: Yup.number().required("Amount Payable is required*"),
+        })
+      ),
+    });
+
     const formik = useFormik({
-      initialValues: {
-        courseBatch: [
-          {
-            day: "",
-            courseStartData: "",
-            courseEndDate: "",
-            courseStartTime: "",
-            duration: "",
-            noOfSlots: "",
-            amountPayable: "",
-          },
-        ],
-      },
-      // validationSchema: validationSchema,
+      initialValues: data,
+      validationSchema: validationSchema,
       onSubmit: async (values) => {
         console.log("object", values);
         handleNext();
@@ -71,30 +79,60 @@ const CourseBatchEdit = forwardRef(
         //   }
         // } catch (error) {
         //   toast.error(error);
-        // }finally {
+        // } finally {
         //   setLoadIndicators(false);
         // }
       },
     });
+
+    const calculateDuration = (startTime, endTime) => {
+      const [startHour, startMinute] = startTime.split(":").map(Number);
+      const [endHour, endMinute] = endTime.split(":").map(Number);
+
+      const start = new Date(0, 0, 0, startHour, startMinute, 0);
+      const end = new Date(0, 0, 0, endHour, endMinute, 0);
+
+      let diff = (end - start) / 60000; // difference in minutes
+      const hours = Math.floor(diff / 60);
+      const minutes = diff % 60;
+
+      return `${hours}h ${minutes}m`;
+    };
+
+    const handleTimeChange = (index, field, value) => {
+      formik.setFieldValue(`courseBatch.${index}.${field}`, value);
+
+      const startTime = formik.values.courseBatch[index].courseStartTime;
+      const endTime = formik.values.courseBatch[index].courseEndTime;
+
+      if (startTime && endTime) {
+        const duration = calculateDuration(startTime, endTime);
+        formik.setFieldValue(`courseBatch.${index}.duration`, duration);
+      }
+    };
+
     const addRow = () => {
       formik.setFieldValue("courseBatch", [
         ...formik.values.courseBatch,
         {
+          date: "",
           day: "",
-          courseStartData: "",
+          courseStartDate: "",
           courseEndDate: "",
           courseStartTime: "",
+          courseEndTime: "",
           duration: "",
-          noOfSlots: "",
           amountPayable: "",
         },
       ]);
     };
+
     const removeRow = () => {
       const updatedRow = [...formik.values.courseBatch];
       updatedRow.pop();
       formik.setFieldValue("courseBatch", updatedRow);
     };
+
     useImperativeHandle(ref, () => ({
       courseBatchEdit: formik.handleSubmit,
     }));
@@ -112,24 +150,52 @@ const CourseBatchEdit = forwardRef(
               <div className="row px-1" key={index}>
                 <div className="col-md-6 col-12 mb-3">
                   <div className="text-start">
-                    <label>Day</label>
+                    <label>Date</label>
                   </div>
                   <div className="input-group mb-3">
                     <input
                       type="date"
                       className={`form-control ${
+                        formik.touched.courseBatch?.[index]?.date &&
+                        formik.errors.courseBatch?.[index]?.date
+                          ? "is-invalid"
+                          : ""
+                      }`}
+                      {...formik.getFieldProps(`courseBatch.${index}.date`)}
+                    />
+                    {formik.touched.courseBatch?.[index]?.date &&
+                      formik.errors.courseBatch?.[index]?.date && (
+                        <div className="invalid-feedback text-start">
+                          {formik.errors.courseBatch[index].date}
+                        </div>
+                      )}
+                  </div>
+                </div>
+
+                <div className="col-md-6 col-12 mb-3">
+                  <div className="text-start">
+                    <label>Day</label>
+                  </div>
+                  <div className="input-group mb-3">
+                    <select
+                      className={`form-select ${
                         formik.touched.courseBatch?.[index]?.day &&
                         formik.errors.courseBatch?.[index]?.day
                           ? "is-invalid"
                           : ""
                       }`}
-                      aria-label="day"
-                      aria-describedby="basic-addon1"
                       {...formik.getFieldProps(`courseBatch.${index}.day`)}
-                    />
+                    >
+                      <option value="" label="Select day" />
+                      <option value="Monday" label="Monday" />
+                      <option value="Tuesday" label="Tuesday" />
+                      <option value="Wednesday" label="Wednesday" />
+                      <option value="Thursday" label="Thursday" />
+                      <option value="Friday" label="Friday" />
+                    </select>
                     {formik.touched.courseBatch?.[index]?.day &&
                       formik.errors.courseBatch?.[index]?.day && (
-                        <div className="invalid-feedback">
+                        <div className="invalid-feedback text-start">
                           {formik.errors.courseBatch[index].day}
                         </div>
                       )}
@@ -144,21 +210,19 @@ const CourseBatchEdit = forwardRef(
                     <input
                       type="date"
                       className={`form-control ${
-                        formik.touched.courseBatch?.[index]?.courseStartData &&
-                        formik.errors.courseBatch?.[index]?.courseStartData
+                        formik.touched.courseBatch?.[index]?.courseStartDate &&
+                        formik.errors.courseBatch?.[index]?.courseStartDate
                           ? "is-invalid"
                           : ""
                       }`}
-                      aria-label="courseStartData"
-                      aria-describedby="basic-addon1"
                       {...formik.getFieldProps(
-                        `courseBatch.${index}.courseStartData`
+                        `courseBatch.${index}.courseStartDate`
                       )}
                     />
-                    {formik.touched.courseBatch?.[index]?.courseStartData &&
-                      formik.errors.courseBatch?.[index]?.courseStartData && (
-                        <div className="invalid-feedback">
-                          {formik.errors.courseBatch[index].courseStartData}
+                    {formik.touched.courseBatch?.[index]?.courseStartDate &&
+                      formik.errors.courseBatch?.[index]?.courseStartDate && (
+                        <div className="invalid-feedback text-start">
+                          {formik.errors.courseBatch[index].courseStartDate}
                         </div>
                       )}
                   </div>
@@ -177,15 +241,13 @@ const CourseBatchEdit = forwardRef(
                           ? "is-invalid"
                           : ""
                       }`}
-                      aria-label="courseEndDate"
-                      aria-describedby="basic-addon1"
                       {...formik.getFieldProps(
                         `courseBatch.${index}.courseEndDate`
                       )}
                     />
                     {formik.touched.courseBatch?.[index]?.courseEndDate &&
                       formik.errors.courseBatch?.[index]?.courseEndDate && (
-                        <div className="invalid-feedback">
+                        <div className="invalid-feedback text-start">
                           {formik.errors.courseBatch[index].courseEndDate}
                         </div>
                       )}
@@ -205,16 +267,50 @@ const CourseBatchEdit = forwardRef(
                           ? "is-invalid"
                           : ""
                       }`}
-                      aria-label="courseStartTime"
-                      aria-describedby="basic-addon1"
                       {...formik.getFieldProps(
                         `courseBatch.${index}.courseStartTime`
                       )}
+                      onChange={(e) =>
+                        handleTimeChange(
+                          index,
+                          "courseStartTime",
+                          e.target.value
+                        )
+                      }
                     />
                     {formik.touched.courseBatch?.[index]?.courseStartTime &&
                       formik.errors.courseBatch?.[index]?.courseStartTime && (
-                        <div className="invalid-feedback">
+                        <div className="invalid-feedback text-start">
                           {formik.errors.courseBatch[index].courseStartTime}
+                        </div>
+                      )}
+                  </div>
+                </div>
+
+                <div className="col-md-6 col-12 mb-3">
+                  <div className="text-start">
+                    <label>Course End Time</label>
+                  </div>
+                  <div className="input-group mb-3">
+                    <input
+                      type="time"
+                      className={`form-control ${
+                        formik.touched.courseBatch?.[index]?.courseEndTime &&
+                        formik.errors.courseBatch?.[index]?.courseEndTime
+                          ? "is-invalid"
+                          : ""
+                      }`}
+                      {...formik.getFieldProps(
+                        `courseBatch.${index}.courseEndTime`
+                      )}
+                      onChange={(e) =>
+                        handleTimeChange(index, "courseEndTime", e.target.value)
+                      }
+                    />
+                    {formik.touched.courseBatch?.[index]?.courseEndTime &&
+                      formik.errors.courseBatch?.[index]?.courseEndTime && (
+                        <div className="invalid-feedback text-start">
+                          {formik.errors.courseBatch[index].courseEndTime}
                         </div>
                       )}
                   </div>
@@ -233,42 +329,13 @@ const CourseBatchEdit = forwardRef(
                           ? "is-invalid"
                           : ""
                       }`}
-                      aria-label="duration"
-                      aria-describedby="basic-addon1"
                       {...formik.getFieldProps(`courseBatch.${index}.duration`)}
+                      readOnly
                     />
                     {formik.touched.courseBatch?.[index]?.duration &&
                       formik.errors.courseBatch?.[index]?.duration && (
-                        <div className="invalid-feedback">
+                        <div className="invalid-feedback text-start">
                           {formik.errors.courseBatch[index].duration}
-                        </div>
-                      )}
-                  </div>
-                </div>
-
-                <div className="col-md-6 col-12 mb-3">
-                  <div className="text-start">
-                    <label>No of Slots</label>
-                  </div>
-                  <div className="input-group mb-3">
-                    <input
-                      type="text"
-                      className={`form-control ${
-                        formik.touched.courseBatch?.[index]?.noOfSlots &&
-                        formik.errors.courseBatch?.[index]?.noOfSlots
-                          ? "is-invalid"
-                          : ""
-                      }`}
-                      aria-label="noOfSlots"
-                      aria-describedby="basic-addon1"
-                      {...formik.getFieldProps(
-                        `courseBatch.${index}.noOfSlots`
-                      )}
-                    />
-                    {formik.touched.courseBatch?.[index]?.noOfSlots &&
-                      formik.errors.courseBatch?.[index]?.noOfSlots && (
-                        <div className="invalid-feedback">
-                          {formik.errors.courseBatch[index].noOfSlots}
                         </div>
                       )}
                   </div>
@@ -280,22 +347,20 @@ const CourseBatchEdit = forwardRef(
                   </div>
                   <div className="input-group mb-3">
                     <input
-                      type="text"
+                      type="number"
                       className={`form-control ${
                         formik.touched.courseBatch?.[index]?.amountPayable &&
                         formik.errors.courseBatch?.[index]?.amountPayable
                           ? "is-invalid"
                           : ""
                       }`}
-                      aria-label="amountPayable"
-                      aria-describedby="basic-addon1"
                       {...formik.getFieldProps(
                         `courseBatch.${index}.amountPayable`
                       )}
                     />
                     {formik.touched.courseBatch?.[index]?.amountPayable &&
                       formik.errors.courseBatch?.[index]?.amountPayable && (
-                        <div className="invalid-feedback">
+                        <div className="invalid-feedback text-start">
                           {formik.errors.courseBatch[index].amountPayable}
                         </div>
                       )}
@@ -303,17 +368,25 @@ const CourseBatchEdit = forwardRef(
                 </div>
               </div>
             ))}
-          </form>
-          <div className="container ">
-            <button className="btn btn-sm btn-primary mx-3" onClick={addRow}>
-              Add More
-            </button>
-            {formik.values.courseBatch.length > 1 && (
-              <button className="btn btn-sm btn-danger" onClick={removeRow}>
-                X
+            <div className="container">
+              <button
+                className="btn btn-sm btn-primary mx-3"
+                type="button"
+                onClick={addRow}
+              >
+                Add More
               </button>
-            )}
-          </div>
+              {formik.values.courseBatch.length > 1 && (
+                <button
+                  className="btn btn-sm btn-danger"
+                  type="button"
+                  onClick={removeRow}
+                >
+                  Remove
+                </button>
+              )}
+            </div>
+          </form>
         </div>
       </div>
     );

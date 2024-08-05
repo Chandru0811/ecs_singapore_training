@@ -1,77 +1,99 @@
-import React, { forwardRef, useImperativeHandle } from "react";
+import React, {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useState,
+} from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import toast from "react-hot-toast";
+import api from "../../../../config/BaseUrl";
 
 const CourseDetails = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
+    const [categoryData, setCategoryData] = useState([]);
+    const validationSchema = Yup.object({
+      logo: Yup.string().required("Logo is required*"),
+      title: Yup.string().required("Title is required*"),
+      description: Yup.string().required("Description is required*"),
+      category_id: Yup.string().required("Category is required*"),
+      offerPrice: Yup.number()
+        .required("Offer Price is required*")
+        .positive("Offer Price must be a positive number"),
+      orginalPrice: Yup.number()
+        .required("Original Price is required*")
+        .positive("Original Price must be a positive number"),
+    });
+
+    const getCategoryData = async () => {
+      try {
+        const categoryResponse = await api.get("category");
+        setCategoryData(categoryResponse.data.data);
+      } catch (error) {
+        toast.error(
+          "Error Fetching Data: " + error?.categoryResponse?.data?.message
+        );
+      }
+    };
+    useEffect(() => {
+      getCategoryData();
+    }, []);
+
     const formik = useFormik({
       initialValues: {
         logo: "",
         title: "",
         description: "",
-        category: "",
-        discountAmount: "",
-        totalAmount: "",
-        amountPayable: "",
+        category_id: "",
+        offerPrice: "",
+        orginalPrice: "",
       },
-      // validationSchema: validationSchema,
+      validationSchema: validationSchema,
       onSubmit: async (values) => {
         console.log("object", values);
-        handleNext();
-        // setLoadIndicators(true);
-        // try {
-        //   const formData = new FormData();
+        try {
+          const formData = new FormData();
 
-        //   // Add each data field manually to the FormData object
-        //   formData.append("role", values.role);
-        //   formData.append("teacherName", values.teacherName);
-        //   formData.append("dateOfBirth", values.dateOfBirth);
-        //   formData.append("idType", values.idType);
-        //   formData.append("idNo", values.idNo);
-        //   formData.append("citizenship", values.citizenship);
-        //   formData.append("shortIntroduction", values.shortIntroduction);
-        //   formData.append("gender", values.gender);
-        //   formData.append("file", values.file);
+          // Add each data field manually to the FormData object
+          formData.append("logo", values.logo);
+          formData.append("title", values.title);
+          formData.append("description", values.description);
+          formData.append("category_id", values.category_id);
+          formData.append("price", values.orginalPrice);
+          formData.append("offer_price", values.offerPrice);
+          // Perform the API call to create a new user with profile image
 
-        //   const response = await api.post(
-        //     "/createUserWithProfileImage",
-        //     formData,
-        //     {
-        //       headers: {
-        //         "Content-Type": "multipart/form-data",
-        //       },
-        //     }
-        //   );
+          const response = await api.post("courses", formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          });
 
-        //   if (response.status === 201) {
-        //     const user_id = response.data.user_id;
-        //     toast.success(response.data.message);
-        //     setFormData((prv) => ({ ...prv, ...values, user_id }));
-        //     handleNext();
-        //   } else {
-        //     toast.error(response.data.message);
-        //   }
-        // } catch (error) {
-        //   toast.error(error);
-        // }finally {
-        //   setLoadIndicators(false);
-        // }
+          if (response.status === 200) {
+            toast.success(response.data.message);
+            handleNext();
+          } else {
+            toast.error(response.data.message);
+          }
+        } catch (error) {
+          toast.error(error);
+        }
       },
     });
     useImperativeHandle(ref, () => ({
       courseDetails: formik.handleSubmit,
     }));
     return (
-      <div className="container my-4">
+      <div className="container my-5">
+        <h4 className="mb-4 fw-bold text-start">Course Batch</h4>
         <form onSubmit={formik.handleSubmit}>
           <div className="container">
-          <h4 className="mb-4 fw-bold text-start">Course Details</h4>
             <div className="row px-1">
               <div className="col-md-6 col-12 mb-3">
                 <div className="text-start">
-                  <lable>
+                  <label>
                     Logo<span className="text-danger">*</span>
-                  </lable>
+                  </label>
                 </div>
                 <input
                   className="form-control"
@@ -82,11 +104,12 @@ const CourseDetails = forwardRef(
                   onBlur={formik.handleBlur}
                 />
                 {formik.touched.logo && formik.errors.logo && (
-                  <div className="error text-danger">
+                  <div className="error text-danger text-start">
                     <small>{formik.errors.logo}</small>
                   </div>
                 )}
               </div>
+
               <div className="col-md-6 col-12 mb-3">
                 <div className="text-start">
                   <label>Title</label>
@@ -101,7 +124,7 @@ const CourseDetails = forwardRef(
                   value={formik.values.title}
                 />
                 {formik.touched.title && formik.errors.title && (
-                  <div className="error text-danger">
+                  <div className="error text-danger text-start">
                     <small>{formik.errors.title}</small>
                   </div>
                 )}
@@ -110,20 +133,22 @@ const CourseDetails = forwardRef(
                 <div className="text-start">
                   <label>Category</label>
                 </div>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="category"
-                  name="category"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.category}
-                />
-                {formik.touched.category && formik.errors.category && (
-                  <div className="error text-danger">
-                    <small>{formik.errors.category}</small>
-                  </div>
-                )}
+                <select
+                  className={`form-select ${
+                    formik.touched.category_id && formik.errors.category_id
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  {...formik.getFieldProps("category_id")}
+                >
+                  <option value="">Select a category</option>
+                  {categoryData &&
+                    categoryData.map((data) => (
+                      <option key={data.id} value={data.id}>
+                        {data.title}
+                      </option>
+                    ))}
+                </select>
               </div>
               <div className="col-md-6 col-12 mb-3">
                 <div className="text-start">
@@ -139,70 +164,55 @@ const CourseDetails = forwardRef(
                   value={formik.values.description}
                 />
                 {formik.touched.description && formik.errors.description && (
-                  <div className="error text-danger">
+                  <div className="error text-danger text-start">
                     <small>{formik.errors.description}</small>
                   </div>
                 )}
               </div>
               <div className="col-md-6 col-12 mb-3">
                 <div className="text-start">
-                  <label>Total Amount</label>
+                  <label>Orginal Price</label>
                 </div>
                 <input
-                  type="text"
+                  type="number"
                   className="form-control"
-                  id="totalAmount"
-                  name="totalAmount"
+                  id="orginalPrice"
+                  name="orginalPrice"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  value={formik.values.totalAmount}
+                  value={formik.values.orginalPrice}
                 />
-                {formik.touched.totalAmount && formik.errors.totalAmount && (
-                  <div className="error text-danger">
-                    <small>{formik.errors.totalAmount}</small>
+                {formik.touched.orginalPrice && formik.errors.orginalPrice && (
+                  <div className="error text-danger text-start">
+                    <small>{formik.errors.orginalPrice}</small>
                   </div>
                 )}
               </div>
               <div className="col-md-6 col-12 mb-3">
                 <div className="text-start">
-                  <label>Discount Amount</label>
+                  <label>Offer Price</label>
                 </div>
                 <input
-                  type="text"
+                  type="number"
                   className="form-control"
-                  id="discountAmount"
-                  name="discountAmount"
+                  id="offerPrice"
+                  name="offerPrice"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  value={formik.values.discountAmount}
+                  value={formik.values.offerPrice}
                 />
-                {formik.touched.discountAmount &&
-                  formik.errors.discountAmount && (
-                    <div className="error text-danger">
-                      <small>{formik.errors.discountAmount}</small>
-                    </div>
-                  )}
+                {formik.touched.offerPrice && formik.errors.offerPrice && (
+                  <div className="error text-danger text-start">
+                    <small>{formik.errors.offerPrice}</small>
+                  </div>
+                )}
               </div>
-              <div className="col-md-6 col-12 mb-3">
-                <div className="text-start">
-                  <label>Amount Payable</label>
-                </div>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="amountPayable"
-                  name="amountPayable"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.amountPayable}
-                />
-                {formik.touched.amountPayable &&
-                  formik.errors.amountPayable && (
-                    <div className="error text-danger">
-                      <small>{formik.errors.amountPayable}</small>
-                    </div>
-                  )}
-              </div>
+
+              {/* <div className="d-flex justify-content-end">
+            <button type="submit" className="btn btn-sm btn-primary">
+              Submit
+            </button>
+          </div> */}
             </div>
           </div>
         </form>

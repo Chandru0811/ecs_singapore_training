@@ -8,10 +8,10 @@ import AdminAbout from "../Pages/admin/AdminAbout";
 import AdminLandingPage from "../Pages/admin/AdminLandingPage";
 import Course from "../Pages/admin/course/Course";
 import CourseStepAdd from "../Pages/admin/course/CourseStepAdd";
-import AdminTestimonials from "../Pages/admin/AdminTestimonials";
+import AdminTestimonial from "../Pages/admin/Testimonial/AdminTestimonial";
 import Category from "../Pages/admin/Categories/Category";
 import CourseTestimonial from "../Pages/admin/CourseTestimonial";
-import CourseVideoTestimonial from "../Pages/admin/CourseVideoTestimonial";
+import CourseVideoTestimonial from "../Pages/admin/Course Video Testimonial/CourseVideoTestimonial";
 import CourseStepEdit from "../Pages/admin/course/CourseStepEdit";
 import CourseView from "../Pages/admin/course/CourseView";
 import Courses from "../Pages/admin/Courses";
@@ -50,7 +50,7 @@ const Admin = ({ handleLogout }) => {
             <Route path="/course" element={<Course />} />
             <Route path="/courseadd" element={<CourseStepAdd />} />
             <Route path="/courseEdit" element={<CourseStepEdit />} />
-            <Route path="/testimonials" element={<AdminTestimonials />} />
+            <Route path="/testimonials" element={<AdminTestimonial/>} />            
             <Route path="/categories" element={<Category />} />
             <Route path="/CourseTestimonial" element={<CourseTestimonial />} />
             <Route path="/courseView" element={<CourseView />} />

@@ -53,6 +53,8 @@ function AdminHome() {
   const [isAdding, setIsAdding] = useState(false);
   const [newCard, setNewCard] = useState({ img: '', text: '', para: '' });
   const [newCompanyLogo, setNewCompanyLogo] = useState();
+  const [loading, setLoading] = useState(false);
+
   //Form Validation
   const validationSchema = Yup.object({
     firstName: Yup.string().required("*First Name is required"),
@@ -588,7 +590,21 @@ function AdminHome() {
     formik.handleSubmit();
   };
 
-  return (<> 
+  return (
+  <> 
+  
+   {loading ? (
+      <div className="loader-container">
+        <div class="loader">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+    ) : (
+      <div>
         <div className=" container-fluid d-flex justify-content-between p-2 bg-light">
         <h3 className="fw-bold">Home</h3>
           <button className="btn btn-sm btn-danger">Publish</button>
@@ -1300,6 +1316,10 @@ function AdminHome() {
         </div>
       </div>
     </div>
+    </div>
+    
+    )}
+    
     </>
   );
 }

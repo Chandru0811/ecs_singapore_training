@@ -6,9 +6,9 @@ import api from "../../../config/BaseUrl";
 import toast from "react-hot-toast";
 
 const validationSchema = Yup.object({
-  logo: Yup.mixed().required("Image is required"),
-  title: Yup.string().required("title is required"),
-  description: Yup.string(),
+  logo: Yup.string().required("*Image is required"),
+  title: Yup.string().required("*Title is required"),
+  description: Yup.string().required("*Description is required")
 });
 
 function CategoryAdd({ onSuccess }) {
@@ -61,7 +61,7 @@ function CategoryAdd({ onSuccess }) {
 
   return (
     <>
-      <button className="btn btn-sm btn-primary" onClick={handleShow}>
+      <button className="btn btn-primary" onClick={handleShow}>
         Add Category
       </button>
 
@@ -117,13 +117,19 @@ function CategoryAdd({ onSuccess }) {
               </div>
             </div>
             <div className="mb-2">
-              <label className="form-label">Description</label>
+              <label className="form-label">Description<span className="text-danger">*</span></label>
               <div className="mb-3">
                 <textarea
                   name="description"
-                  className="form-control"
+                  className={`form-control ${formik.touched.description && formik.errors.description
+                    ? "is-invalid"
+                    : ""
+                    }`}
                   {...formik.getFieldProps("description")}
                 />
+                {formik.touched.description && formik.errors.description && (
+                  <div className="invalid-feedback">{formik.errors.description}</div>
+                )}
               </div>
             </div>
             <Modal.Footer>

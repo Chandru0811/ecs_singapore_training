@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
 import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
@@ -8,6 +8,7 @@ import toast from "react-hot-toast";
 
 const Login = ({ handleLogin }) => {
   const [showPassword, setShowPassword] = React.useState(false);
+  const [loading, setLoadIndicator] = useState(false);
   const navigate = useNavigate();
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -30,6 +31,7 @@ const Login = ({ handleLogin }) => {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       console.log("login:", values);
+      setLoadIndicator(true);
       try {
         const response = await api.post(`login`, values);
         if (response.status === 200) {
@@ -59,6 +61,8 @@ const Login = ({ handleLogin }) => {
           toast.error(error);
           toast.error(error.response.data.message);
         }
+
+        setLoadIndicator(false);
       }
     },
   });
@@ -66,8 +70,8 @@ const Login = ({ handleLogin }) => {
   return (
     <div className="login-container w-100 mt-5">
       <div className="container d-flex justify-content-center align-items-center ">
-        <div className="login-box p-4 rounded shadow-sm bg-white">
-          <h2 className="text-center mb-4">Login</h2>
+        <div className="login-box p-4 rounded shadow-lg bg-white">
+          <h2 className="text-center">Login</h2>
           <p className="text-center mb-4">
             Don't have an account? <Link to={"/register"}>Register</Link>
           </p>
@@ -124,11 +128,24 @@ const Login = ({ handleLogin }) => {
             <div className="form-group mb-3 text-end">
               <Link to={"/forgotpassword"}>Forgot Password?</Link>
             </div>
-            <button type="submit" className="btn btn-primary w-100 mb-3">
-              Login
-            </button>
+            
+            <button
+                  type="submit"
+                  className="btn btn-primary w-100 mb-2"
+                  disabled={loading}
+                >
+                  {loading ? (
+                    <span
+                      className="spinner-border spinner-border-sm"
+                      aria-hidden="true"
+                    ></span>
+                  ) : (
+                    <span></span>
+                  )}
+                   Login
+                   </button>
           </form>
-          <div className="divider text-center mb-4">or</div>
+          <div className="divider text-center mb-2">or</div>
           <button className="btn btn-outline-primary w-100">
             <img
               src="https://img.icons8.com/color/16/000000/google-logo.png"

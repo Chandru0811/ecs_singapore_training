@@ -23,6 +23,8 @@ import ImageURL from "../../config/ImageURL";
 const HeaderFooter = () => {
   const [course, setCourse] = useState(false);
   const [headerData, setHeaderData] = useState();
+  const [loading, setLoadIndicator] = useState(false);
+
   const courseRef = useRef(null);
   const courseRef2 = useRef(null);
   const courses = [
@@ -102,7 +104,8 @@ const HeaderFooter = () => {
       HeadingText: ``,
     },
     onSubmit: async (values) => {
-      console.log("object", values.header);
+      console.log("object",values.header)
+      setLoadIndicator(true);
       const formData = new FormData();
       formData.append("top_bar", values.HeadingText);
       if (
@@ -119,6 +122,8 @@ const HeaderFooter = () => {
         }
       } catch (e) {
         console.log("object", e);
+      }finally{
+        setLoadIndicator(false);
       }
     },
   });
@@ -177,12 +182,23 @@ const HeaderFooter = () => {
         <div className="card-header d-flex align-items-center px-0 py-3 mb-2 bg-light">
           <h3 className="fw-bold">Header</h3>
           <div className="container-fluid d-flex justify-content-end">
+            {/* <button className="btn btn-sm btn-danger mx-2" onClick={publishData}>Publish</button> */}
             <button
-              className="btn btn-sm btn-danger mx-2"
-              onClick={publishData}
-            >
-              Publish
-            </button>
+                  type="submit"
+                  className="btn btn-sm btn-danger mx-2"
+                  disabled={loading}
+                  onClick={publishData}
+                >
+                  {loading ? (
+                    <span
+                      className="spinner-border spinner-border-sm"
+                      aria-hidden="true"
+                    ></span>
+                  ) : (
+                    <span></span>
+                  )}
+                   Publish
+                   </button>
           </div>
         </div>
         <div
