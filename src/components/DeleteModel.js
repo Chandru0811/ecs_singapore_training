@@ -4,7 +4,7 @@ import { FaTrash } from "react-icons/fa";
 import api from "../config/BaseUrl";
 import toast from "react-hot-toast";
 
-const DeleteModel = ({ onSuccess, path }) => {
+const DeleteModel = ({ onSuccess, path, className }) => {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -30,7 +30,7 @@ const DeleteModel = ({ onSuccess, path }) => {
 
   return (
     <>
-      <button className="btn btn-light border-2 btn-sm" onClick={handleShow}>
+      <button className={`btn ${className}`} onClick={handleShow}>
         <FaTrash />
       </button>
 
@@ -43,13 +43,13 @@ const DeleteModel = ({ onSuccess, path }) => {
         </Modal.Body>
         <Modal.Footer>
           <Button
-            className="btn btn-sm  p-3 btn-secondary text-danger-hover linkPadding"
+            className="btn btn-sm btn-secondary text-danger-hover linkPadding"
             onClick={handleClose}
           >
             Close
           </Button>
           <Button
-            className="btn btn-sm p-3 btn-danger text-danger-hover linkPadding"
+            className="btn btn-sm btn-danger text-danger-hover linkPadding"
             onClick={handelDelete}
           >
             Delete
