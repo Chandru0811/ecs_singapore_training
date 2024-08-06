@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
-import courseImg from "../../assets/client/landing_card_logo.jpg";
 import { IoIosStar } from "react-icons/io";
+import api from "../../config/BaseUrl";
+import ImgUrl from "../../config/ImageURL";
 
 const responsive = {
   superLargeDesktop: {
@@ -27,58 +28,37 @@ const responsive = {
   },
 };
 
-const cardData = [
-  {
-    id: 1,
-    title: "A Wonderful Experience",
-    name: "Alice",
-    position: "Senior Developer",
-    text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet, blanditiis rerum explicabo molestiae totam numquam praesentium consequatur cupiditate voluptate quas!",
-    img: courseImg,
-  },
-  {
-    id: 2,
-    title: "Learning Made Easy",
-    name: "Bob",
-    position: "Project Manager",
-    text: "Suspendisse potenti. Ut pharetra auctor felis, a faucibus nisi volutpat vel. Integer scelerisque, elit at pellentesque malesuada, eros justo egestas purus.",
-    img: courseImg,
-  },
-  {
-    id: 3,
-    title: "Highly Recommend",
-    name: "Charlie",
-    position: "UI/UX Designer",
-    text: "Vivamus fermentum sem ut aliquet vulputate. Morbi et dui nec neque consequat sagittis a at odio. Etiam facilisis odio nec eros congue.",
-    img: courseImg,
-  },
-  {
-    id: 4,
-    title: "Top-notch Training",
-    name: "Diana",
-    position: "Software Engineer",
-    text: "Donec non eros sit amet arcu interdum vulputate. Cras tincidunt bibendum arcu, et ultricies orci. Quisque vitae turpis quam.",
-    img: courseImg,
-  },
-  {
-    id: 5,
-    title: "Exceptional Quality",
-    name: "Edward",
-    position: "Backend Developer",
-    text: "Nullam tempor ligula ac erat sollicitudin, nec laoreet tortor egestas. Phasellus scelerisque leo in mi convallis, at fermentum libero sodales.",
-    img: courseImg,
-  },
-  {
-    id: 6,
-    title: "Great Support",
-    name: "Fiona",
-    position: "QA Specialist",
-    text: "Proin at nulla varius, vulputate justo a, tempus eros. Ut vel turpis ut enim vestibulum tincidunt ac ac erat.",
-    img: courseImg,
-  },
-];
-
 function Testimonial() {
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await api.get("testimonials");
+        console.log(response.data);
+        setData(Array.isArray(response.data.data) ? response.data.data : []);
+      } catch (error) {
+        console.error(`Error Fetching Data: ${error.message}`);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const renderStars = (rating) => {
+    const stars = [];
+    for (let i = 0; i < 5; i++) {
+      stars.push(
+        <IoIosStar
+          key={i}
+          size={24}
+          style={{ color: i < rating ? "#ffd700" : "#e4e5e9" }}
+        />
+      );
+    }
+    return stars;
+  };
+
   return (
     <div>
       <h1 className="fw-bolder py-3">Testimonial</h1>
@@ -88,27 +68,27 @@ function Testimonial() {
         autoPlay={false}
         showDots={false}
       >
-        {cardData.map((card, index) => (
+        {data.map((card, index) => (
           <div key={index} className="mx-4 my-5 p-1 h-75 shadow rounded card">
             <div className="d-flex align-items-center px-2">
-              <div>
-                <img src={card.img} alt={card.title} className="img-fluid" />
+              <div className="w-25 p-2">
+                <img
+                  src={`${ImgUrl}${card.image_path}`}
+                  alt={card.title}
+                  className="img-fluid"
+                />
               </div>
               <div className="text-start">
-                <h5>{card.name}</h5>
+                <h5>{card.client_name}</h5>
                 <p>
-                  {card.position}
-                  <span>
-                    {[...Array(5)].map((_, starIndex) => (
-                      <IoIosStar key={starIndex} style={{ color: "gold" }} />
-                    ))}
-                  </span>
+                  {card.designation}
+                  <span>{renderStars(card.rating)}</span>
                 </p>
               </div>
             </div>
             <div className="p-2 fit-content">
               <h5 className="text-start">{card.title}</h5>
-              <p className="text-start">{card.text}</p>
+              <p className="text-start">{card.description}</p>
             </div>
           </div>
         ))}
