@@ -19,6 +19,7 @@ import AdminContact from "../Pages/admin/AdminContact";
 import HeaderEdit from "../Pages/admin/HeaderEdit";
 import {FooterEdit} from "../Pages/admin/FooterEdit";
 import { PrivacyPolicy } from "../Pages/admin/PrivacyPolicy";
+import { TermsAndCondition } from "../Pages/admin/TermsAndCondition";
 import { Toaster } from "react-hot-toast";
 import CompaniesHiring from "../Pages/admin/Companies Hiring/CompaniesHiring";
 
@@ -60,6 +61,7 @@ const Admin = ({ handleLogout }) => {
             <Route path="/headeredit" element={<HeaderEdit />} />
             <Route path="/footeredit" element={<FooterEdit />} />
             <Route path="/privacypolicy" element={<PrivacyPolicy />} />
+            <Route path="/termsandcondition" element={<TermsAndCondition />} />
             <Route
               path="/CourseVideoTestimonial"
               element={<CourseVideoTestimonial />}
