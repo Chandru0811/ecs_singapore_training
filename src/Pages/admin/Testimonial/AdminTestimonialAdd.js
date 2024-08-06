@@ -4,11 +4,12 @@ import { Button, Modal } from "react-bootstrap";
 import * as Yup from "yup";
 import api from "../../../config/BaseUrl";
 import toast from "react-hot-toast";
-import courseImg from "../../../assets/client/landing_card_logo.jpg";
+import ReactStars from "react-rating-stars-component";
 
 const validationSchema = Yup.object({
   client_name: Yup.string().required("*Client Name is required"),
   designation: Yup.string().required("*Designation is required"),
+  rating: Yup.string().required("*Rating is required"),
   title: Yup.string().required("*Title is required"),
   description: Yup.string().required("*Description is required"),
   image: Yup.string().required("Image is required"),
@@ -29,6 +30,7 @@ function AdminTestimonialAdd({ onSuccess }) {
     initialValues: {
       client_name: "",
       designation: "",
+      rating: "",
       title: "",
       description: "",
       image: null,
@@ -38,11 +40,12 @@ function AdminTestimonialAdd({ onSuccess }) {
       setLoadIndicator(true);
       try {
         const formData = new FormData();
-        formData.append('client_name', values.client_name);
-        formData.append('designation', values.designation);
-        formData.append('title', values.title);
-        formData.append('description', values.description);
-        formData.append('image', values.image);
+        formData.append("client_name", values.client_name);
+        formData.append("designation", values.designation);
+        formData.append("rating", values.rating);
+        formData.append("title", values.title);
+        formData.append("description", values.description);
+        formData.append("image", values.image);
 
         const response = await api.post("testimonial", formData, {
           headers: {
@@ -65,6 +68,10 @@ function AdminTestimonialAdd({ onSuccess }) {
       }
     },
   });
+
+  const handleRatingChange = (newRating) => {
+    formik.setFieldValue("rating", newRating);
+  };
 
   const handleCardImageChange = (event) => {
     const file = event.target.files[0];
@@ -94,11 +101,17 @@ function AdminTestimonialAdd({ onSuccess }) {
               <input
                 type="text"
                 name="client_name"
-                className={`form-control ${formik.touched.client_name && formik.errors.client_name ? "is-invalid" : ""}`}
+                className={`form-control ${
+                  formik.touched.client_name && formik.errors.client_name
+                    ? "is-invalid"
+                    : ""
+                }`}
                 {...formik.getFieldProps("client_name")}
               />
               {formik.touched.client_name && formik.errors.client_name && (
-                <div className="invalid-feedback">{formik.errors.client_name}</div>
+                <div className="invalid-feedback">
+                  {formik.errors.client_name}
+                </div>
               )}
             </div>
             <div className="p-2">
@@ -107,11 +120,17 @@ function AdminTestimonialAdd({ onSuccess }) {
                 type="text"
                 name="designation"
                 onChange={formik.handleChange}
-                className={`form-control ${formik.touched.designation && formik.errors.designation ? "is-invalid" : ""}`}
+                className={`form-control ${
+                  formik.touched.designation && formik.errors.designation
+                    ? "is-invalid"
+                    : ""
+                }`}
                 {...formik.getFieldProps("designation")}
               />
               {formik.touched.designation && formik.errors.designation && (
-                <div className="invalid-feedback">{formik.errors.designation}</div>
+                <div className="invalid-feedback">
+                  {formik.errors.designation}
+                </div>
               )}
             </div>
             <div className="p-2">
@@ -120,7 +139,11 @@ function AdminTestimonialAdd({ onSuccess }) {
                 type="text"
                 name="title"
                 onChange={formik.handleChange}
-                className={`form-control ${formik.touched.title && formik.errors.title ? "is-invalid" : ""}`}
+                className={`form-control ${
+                  formik.touched.title && formik.errors.title
+                    ? "is-invalid"
+                    : ""
+                }`}
                 {...formik.getFieldProps("title")}
               />
               {formik.touched.title && formik.errors.title && (
@@ -132,13 +155,34 @@ function AdminTestimonialAdd({ onSuccess }) {
               <textarea
                 name="description"
                 onChange={formik.handleChange}
-                className={`form-control ${formik.touched.description && formik.errors.description ? "is-invalid" : ""}`}
-                style={{height:"100px"}}
+                className={`form-control ${
+                  formik.touched.description && formik.errors.description
+                    ? "is-invalid"
+                    : ""
+                }`}
+                style={{ height: "100px" }}
                 {...formik.getFieldProps("description")}
               />
               {formik.touched.description && formik.errors.description && (
-                <div className="invalid-feedback">{formik.errors.description}</div>
+                <div className="invalid-feedback">
+                  {formik.errors.description}
+                </div>
               )}
+            </div>
+            <div className="p-2">
+              <label htmlFor="description">Rating</label>
+              <ReactStars
+                count={5}
+                value={formik.values.rating}
+                onChange={handleRatingChange}
+                size={24}
+                isHalf={false}
+                emptyIcon={<i className="far fa-star"></i>}
+                halfIcon={<i className="fa fa-star-half-alt"></i>}
+                fullIcon={<i className="fa fa-star"></i>}
+                activeColor="#ffd700"
+                name="rating"
+              />
             </div>
             <div className="p-2">
               <label htmlFor="image">Image</label>
@@ -146,12 +190,13 @@ function AdminTestimonialAdd({ onSuccess }) {
                 type="file"
                 name="image"
                 onChange={(event) => {
-                    formik.setFieldValue(
-                      "image",
-                      event.currentTarget.files[0]
-                    );
-                  }}
-                className={`form-control ${formik.touched.image && formik.errors.image ? "is-invalid" : ""}`}
+                  formik.setFieldValue("image", event.currentTarget.files[0]);
+                }}
+                className={`form-control ${
+                  formik.touched.image && formik.errors.image
+                    ? "is-invalid"
+                    : ""
+                }`}
               />
               {formik.touched.image && formik.errors.image && (
                 <div className="invalid-feedback">{formik.errors.image}</div>
