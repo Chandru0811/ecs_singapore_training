@@ -11,7 +11,6 @@ import Zoho from "../../assets/client/zoho.png";
 import { FaArrowRightLong } from "react-icons/fa6";
 import { ImUserPlus } from "react-icons/im";
 import { Link } from "react-router-dom";
-import ReactPlayer from "react-player";
 import api from "../../config/BaseUrl";
 import ImageURL from "../../config/ImageURL";
 import CourseVideoTestimonial from "./CourseVideoTestimonial";
