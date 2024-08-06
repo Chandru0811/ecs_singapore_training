@@ -36,6 +36,9 @@ function AdminHeader({ handleLogout }) {
             <Nav.Link as={NavLink} to={"/contact"} className="me-1">
               Contact
             </Nav.Link>
+            <Nav.Link as={NavLink} to={"/landing"} className="me-1">
+              Landing
+            </Nav.Link>
             <Nav.Link as={NavLink} to="/about" className="me-1">
               About
             </Nav.Link>
@@ -75,6 +78,11 @@ function AdminHeader({ handleLogout }) {
                 </Nav.Link>
               </NavDropdown.Item>
               <NavDropdown.Item style={{ color: "#343a40" }}>
+                <Nav.Link as={NavLink} to="/companieshiring" className="me-1">
+                  Companies Hiring
+                </Nav.Link>
+              </NavDropdown.Item>
+              <NavDropdown.Item style={{ color: "#343a40" }}>
                 <Nav.Link as={NavLink} to="/headeredit" className="me-1">
                   Header
                 </Nav.Link>
@@ -87,6 +95,11 @@ function AdminHeader({ handleLogout }) {
               <NavDropdown.Item style={{ color: "#343a40" }}>
                 <Nav.Link as={NavLink} to="/privacypolicy" className="me-1">
                   PrivacyPolicy
+                </Nav.Link>
+              </NavDropdown.Item>
+              <NavDropdown.Item style={{ color: "#343a40" }}>
+                <Nav.Link as={NavLink} to="/termsofuse" className="me-1">
+                  Terms of Use
                 </Nav.Link>
               </NavDropdown.Item>
             </NavDropdown>
