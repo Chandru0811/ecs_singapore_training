@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import courseImg from "../../../assets/client/landing_card_logo.jpg";
+import { IoIosStar } from "react-icons/io";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import api from "../../../config/BaseUrl";
@@ -7,7 +7,6 @@ import toast from "react-hot-toast";
 import AdminTestimonialAdd from "./AdminTestimonialAdd";
 import AdminTestimonialEdit from "./AdminTestimonialEdit";
 import DeleteModel from "../../../components/DeleteModel";
-import $ from "jquery";
 import ImageURL from "../../../config/ImageURL";
 
 function AdminTestimonial({ onSuccess }) {
@@ -51,11 +50,11 @@ function AdminTestimonial({ onSuccess }) {
       setLoadIndicator(true);
       try {
         const formData = new FormData();
-        formData.append('client_name', values.client_name);
-        formData.append('designation', values.designation);
-        formData.append('title', values.title);
-        formData.append('description', values.description);
-        formData.append('image', values.image);
+        formData.append("client_name", values.client_name);
+        formData.append("designation", values.designation);
+        formData.append("title", values.title);
+        formData.append("description", values.description);
+        formData.append("image", values.image);
 
         const response = await api.post("testimonial", formData, {
           headers: {
@@ -100,20 +99,56 @@ function AdminTestimonial({ onSuccess }) {
     formik.resetForm();
   };
 
+  const PublishTestimonial = async () => {
+    try {
+      const response = await api.post("publish/testimonial", {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      if (response.status === 200) {
+        toast.success(response.data.message);
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      console.error("Error saving data:", error.message);
+    }
+  };
+
+  const renderStars = (rating) => {
+    const stars = [];
+    for (let i = 0; i < 5; i++) {
+      stars.push(
+        <IoIosStar
+          key={i}
+          size={24}
+          style={{ color: i < rating ? "#ffd700" : "#e4e5e9" }}
+        />
+      );
+    }
+    return stars;
+  };
+
   return (
     <div>
       <form onSubmit={formik.handleSubmit}>
         <div className="d-flex justify-content-between p-2 bg-light">
           <h3 className="fw-bold">Testimonials</h3>
           <div className="d-flex">
-            <AdminTestimonialAdd onSuccess={refreshData}/>
-            <button type="button" className="btn btn-sm btn-danger mx-2">
+            <AdminTestimonialAdd onSuccess={refreshData} />
+            <button
+              onClick={PublishTestimonial}
+              type="button"
+              className="btn btn-sm btn-danger mx-2"
+            >
               Publish
             </button>
           </div>
         </div>
         <div className="row m-0 p-3">
-        {datas.map((data) => (
+          {datas.map((data) => (
             <div key={data.id} className="col-md-4 col-12 p-2 ">
               <div className="card h-100">
                 <div className="d-flex justify-content-between align-items-start p-2">
@@ -125,7 +160,10 @@ function AdminTestimonial({ onSuccess }) {
                       height: "fit-content",
                     }}
                   >
-                   <AdminTestimonialEdit id={data.id} onSuccess={refreshData}/>
+                    <AdminTestimonialEdit
+                      id={data.id}
+                      onSuccess={refreshData}
+                    />
                   </button>
                   <button
                     type="button"
@@ -135,7 +173,10 @@ function AdminTestimonial({ onSuccess }) {
                       height: "fit-content",
                     }}
                   >
-                    <DeleteModel onSuccess={refreshData} path={`/testimonial/${data.id}`} />
+                    <DeleteModel
+                      onSuccess={refreshData}
+                      path={`/testimonial/${data.id}`}
+                    />
                   </button>
                 </div>
                 <div className="card-body text-start">
@@ -152,6 +193,7 @@ function AdminTestimonial({ onSuccess }) {
                       <h6 className="card-subtitle mb-2 text-muted">
                         {data.designation}
                       </h6>
+                      <div>{renderStars(data.rating)}</div>
                     </div>
                   </div>
                   <div className="p-2">

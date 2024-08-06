@@ -1,16 +1,17 @@
 import { useFormik } from "formik";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 import * as Yup from "yup";
 import { FaEdit } from "react-icons/fa";
+import api from "../../../config/BaseUrl";
+import toast from "react-hot-toast";
 
 const validationSchema = Yup.object({
     client_name: Yup.string().required("*Name is required"),
     description: Yup.string().required("*Description is required"),
-    video: Yup.string().required("*Video is required")
 });
 
-function EditCourseVideoTestimonial({ onSuccess }) {
+function EditCourseVideoTestimonial({ id, onSuccess }) {
     const [show, setShow] = useState(false);
     const [loadIndicator, setLoadIndicator] = useState(false);
 
@@ -29,14 +30,53 @@ function EditCourseVideoTestimonial({ onSuccess }) {
         },
         validationSchema: validationSchema,
         onSubmit: async (values) => {
-            console.log(values);
-        }
+            setLoadIndicator(true);
+            try {
+                const formData = new FormData();
+                formData.append("_method", "PUT");
+                formData.append("client_name", values.client_name);
+                formData.append("description", values.description);
+                if (values.video) {
+                    formData.append("video", values.video);
+                }
+                const response = await api.post(`videotestimonial/${id}`, formData, {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                });
+
+                if (response.status === 200) {
+                    onSuccess();
+                    handleClose();
+                    toast.success(response.data.message);
+                } else {
+                    toast.error(response.data.message);
+                }
+            } catch (error) {
+                const errorMessage = error.response?.data?.message || error.message;
+                toast.error(errorMessage);
+            } finally {
+                setLoadIndicator(false);
+            }
+        },
     });
+
+    useEffect(() => {
+        const getData = async () => {
+            try {
+                const response = await api.get(`videotestimonial/${id}`);
+                formik.setValues(response.data.data);
+            } catch (error) {
+                console.error("Error fetching data ", error);
+            }
+        };
+        getData();
+    }, [id]);
 
     return (
         <>
             <button className="btn text-secondary" onClick={handleShow}>
-              <FaEdit />
+                <FaEdit />
             </button>
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
@@ -82,16 +122,13 @@ function EditCourseVideoTestimonial({ onSuccess }) {
                         </div>
                         <div className="mb-2">
                             <label className="form-label">
-                                Video<span className="text-danger">*</span>
+                                Video
                             </label>
                             <div className="mb-3">
                                 <input
                                     type="file"
                                     name="video"
-                                    className={`form-control ${formik.touched.video && formik.errors.video
-                                        ? "is-invalid"
-                                        : ""
-                                        }`}
+                                    className={`form-control`}
                                     onChange={(event) => {
                                         formik.setFieldValue(
                                             "video",
@@ -99,11 +136,6 @@ function EditCourseVideoTestimonial({ onSuccess }) {
                                         );
                                     }}
                                 />
-                                {formik.touched.video && formik.errors.video && (
-                                    <div className="invalid-feedback">
-                                        {formik.errors.video}
-                                    </div>
-                                )}
                             </div>
                         </div>
                         <Modal.Footer>
