@@ -7,6 +7,7 @@ import Testimonial from "./Testimonial";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import EnrollModel from "../admin/EnrollModel";
+import EnrollForm from "./EnrollForm";
 
 const responsive = {
   superLargeDesktop: {
@@ -171,7 +172,8 @@ function LandingPage() {
             />
           </div>
           <div className="col-md-5 col-12 p-5">
-            <div className="card text-start p-4 py-3">
+          <EnrollForm />
+            {/* <div className="card text-start p-4 py-3">
               <h3 className="input-title fw-bold">Enroll Now</h3>
               <div className="py-3">
                 <label htmlFor="fullName">Full Name</label>
@@ -233,7 +235,7 @@ function LandingPage() {
               <div className="float-end">
                 <button type="submit" className="enrollbtn">Send</button>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

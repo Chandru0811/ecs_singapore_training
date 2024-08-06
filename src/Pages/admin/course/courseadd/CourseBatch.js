@@ -1,36 +1,36 @@
-import React, { forwardRef, useImperativeHandle } from "react";
+import React, { forwardRef, useEffect, useImperativeHandle } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import toast from "react-hot-toast";
+import api from "../../../../config/BaseUrl";
 
 const CourseBatch = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const validationSchema = Yup.object().shape({
-      courseBatch: Yup.array().of(
+      batches: Yup.array().of(
         Yup.object().shape({
           date: Yup.string().required("Date is required*"),
           day: Yup.string().required("Day is required*"),
-          courseStartDate: Yup.string().required(
-            "Course Start Date is required*"
-          ),
-          courseEndDate: Yup.string().required("Course End Date is required*"),
-          courseStartTime: Yup.string().required(
-            "Course Start Time is required*"
-          ),
-          courseEndTime: Yup.string().required("Course End Time is required*"),
+          // courseStartDate: Yup.string().required(
+          //   "Course Start Date is required*"
+          // ),
+          // courseEndDate: Yup.string().required("Course End Date is required*"),
+          start_time: Yup.string().required("Course Start Time is required*"),
+          end_time: Yup.string().required("Course End Time is required*"),
           duration: Yup.string().required("Duration is required*"),
         })
       ),
     });
     const formik = useFormik({
       initialValues: {
-        courseBatch: [
+        batches: [
           {
             date: "",
             day: "",
-            courseStartDate: "",
-            courseEndDate: "",
-            courseStartTime: "",
-            courseEndTime: "",
+            start_time: "",
+            end_time: "",
+            // courseStartTime: "",
+            // courseEndTime: "",
             duration: "",
           },
         ],
@@ -38,48 +38,28 @@ const CourseBatch = forwardRef(
       validationSchema: validationSchema,
       onSubmit: async (values) => {
         console.log("object", values);
-        handleNext();
         // setLoadIndicators(true);
-        // try {
-        //   const formData = new FormData();
+        try {
+          const response = await api.post(
+            `/courses/${formData.id}/batches`,
+            values
+          );
 
-        //   // Add each data field manually to the FormData object
-        //   formData.append("role", values.role);
-        //   formData.append("teacherName", values.teacherName);
-        //   formData.append("dateOfBirth", values.dateOfBirth);
-        //   formData.append("idType", values.idType);
-        //   formData.append("idNo", values.idNo);
-        //   formData.append("citizenship", values.citizenship);
-        //   formData.append("shortIntroduction", values.shortIntroduction);
-        //   formData.append("gender", values.gender);
-        //   formData.append("file", values.file);
-
-        //   const response = await api.post(
-        //     "/createUserWithProfileImage",
-        //     formData,
-        //     {
-        //       headers: {
-        //         "Content-Type": "multipart/form-data",
-        //       },
-        //     }
-        //   );
-
-        //   if (response.status === 201) {
-        //     const user_id = response.data.user_id;
-        //     toast.success(response.data.message);
-        //     setFormData((prv) => ({ ...prv, ...values, user_id }));
-        //     handleNext();
-        //   } else {
-        //     toast.error(response.data.message);
-        //   }
-        // } catch (error) {
-        //   toast.error(error);
-        // }finally {
-        //   setLoadIndicators(false);
-        // }
+          if (response.status === 200) {
+            toast.success(response.data.message);
+            setFormData((prv) => ({ ...prv, ...values,  }));
+            handleNext();
+          } else {
+            toast.error(response.data.message);
+          }
+        } catch (error) {
+          toast.error("error");
+        } finally {
+          setLoadIndicators(false);
+        }
       },
     });
-
+    console.log("form ", formData);
     const calculateDuration = (startTime, endTime) => {
       const [startHour, startMinute] = startTime.split(":").map(Number);
       const [endHour, endMinute] = endTime.split(":").map(Number);
@@ -95,45 +75,50 @@ const CourseBatch = forwardRef(
     };
 
     const handleTimeChange = (index, field, value) => {
-      formik.setFieldValue(`courseBatch.${index}.${field}`, value);
+      formik.setFieldValue(`batches.${index}.${field}`, value);
 
-      const startTime = formik.values.courseBatch[index].courseStartTime;
-      const endTime = formik.values.courseBatch[index].courseEndTime;
+      const startTime = formik.values.batches[index].start_time;
+      const endTime = formik.values.batches[index].end_time;
 
       if (startTime && endTime) {
         const duration = calculateDuration(startTime, endTime);
-        formik.setFieldValue(`courseBatch.${index}.duration`, duration);
+        formik.setFieldValue(`batches.${index}.duration`, duration);
       }
     };
 
     const addRow = () => {
-      formik.setFieldValue("courseBatch", [
-        ...formik.values.courseBatch,
+      formik.setFieldValue("batches", [
+        ...formik.values.batches,
         {
           date: "",
           day: "",
-          courseStartDate: "",
-          courseEndDate: "",
-          courseStartTime: "",
-          courseEndTime: "",
+          // courseStartDate: "",
+          // courseEndDate: "",
+          start_time: "",
+          end_time: "",
           duration: "",
         },
       ]);
     };
     const removeRow = () => {
-      const updatedRow = [...formik.values.courseBatch];
+      const updatedRow = [...formik.values.batches];
       updatedRow.pop();
-      formik.setFieldValue("courseBatch", updatedRow);
+      formik.setFieldValue("batches", updatedRow);
     };
     useImperativeHandle(ref, () => ({
       courseBatch: formik.handleSubmit,
     }));
+
+    useEffect(()=>{
+      if(formData.batches){
+        formik.setFieldValue("batches",formData.batches)}
+    },[])
     return (
       <div className="container my-4">
         <div className="container-fluid">
           <h4 className="mb-4 fw-bold text-start">Course Batch</h4>
           <form onSubmit={formik.handleSubmit}>
-            {formik.values.courseBatch.map((batch, index) => (
+            {(formik.values.batches).map((batch, index) => (
               <div className="row px-1" key={index}>
                 <div className="col-md-6 col-12 mb-3">
                   <div className="text-start">
@@ -143,17 +128,17 @@ const CourseBatch = forwardRef(
                     <input
                       type="date"
                       className={`form-control ${
-                        formik.touched.courseBatch?.[index]?.date &&
-                        formik.errors.courseBatch?.[index]?.date
+                        formik.touched.batches?.[index]?.date &&
+                        formik.errors.batches?.[index]?.date
                           ? "is-invalid"
                           : ""
                       }`}
-                      {...formik.getFieldProps(`courseBatch.${index}.date`)}
+                      {...formik.getFieldProps(`batches.${index}.date`)}
                     />
-                    {formik.touched.courseBatch?.[index]?.date &&
-                      formik.errors.courseBatch?.[index]?.date && (
+                    {formik.touched.batches?.[index]?.date &&
+                      formik.errors.batches?.[index]?.date && (
                         <div className="invalid-feedback text-start">
-                          {formik.errors.courseBatch[index].date}
+                          {formik.errors.batches[index].date}
                         </div>
                       )}
                   </div>
@@ -166,12 +151,12 @@ const CourseBatch = forwardRef(
                   <div className="input-group mb-3">
                     <select
                       className={`form-select ${
-                        formik.touched.courseBatch?.[index]?.day &&
-                        formik.errors.courseBatch?.[index]?.day
+                        formik.touched.batches?.[index]?.day &&
+                        formik.errors.batches?.[index]?.day
                           ? "is-invalid"
                           : ""
                       }`}
-                      {...formik.getFieldProps(`courseBatch.${index}.day`)}
+                      {...formik.getFieldProps(`batches.${index}.day`)}
                     >
                       <option value="" label="Select day" />
                       <option value="Monday" label="Monday" />
@@ -180,16 +165,16 @@ const CourseBatch = forwardRef(
                       <option value="Thursday" label="Thursday" />
                       <option value="Friday" label="Friday" />
                     </select>
-                    {formik.touched.courseBatch?.[index]?.day &&
-                      formik.errors.courseBatch?.[index]?.day && (
+                    {formik.touched.batches?.[index]?.day &&
+                      formik.errors.batches?.[index]?.day && (
                         <div className="invalid-feedback text-start">
-                          {formik.errors.courseBatch[index].day}
+                          {formik.errors.batches[index].day}
                         </div>
                       )}
                   </div>
                 </div>
 
-                <div className="col-md-6 col-12 mb-3">
+                {/* <div className="col-md-6 col-12 mb-3">
                   <div className="text-start">
                     <label>Course Start Date</label>
                   </div>
@@ -239,7 +224,7 @@ const CourseBatch = forwardRef(
                         </div>
                       )}
                   </div>
-                </div>
+                </div> */}
 
                 <div className="col-md-6 col-12 mb-3">
                   <div className="text-start">
@@ -249,26 +234,20 @@ const CourseBatch = forwardRef(
                     <input
                       type="time"
                       className={`form-control ${
-                        formik.touched.courseBatch?.[index]?.courseStartTime &&
-                        formik.errors.courseBatch?.[index]?.courseStartTime
+                        formik.touched.batches?.[index]?.start_time &&
+                        formik.errors.batches?.[index]?.start_time
                           ? "is-invalid"
                           : ""
                       }`}
-                      {...formik.getFieldProps(
-                        `courseBatch.${index}.courseStartTime`
-                      )}
+                      {...formik.getFieldProps(`batches.${index}.start_time`)}
                       onChange={(e) =>
-                        handleTimeChange(
-                          index,
-                          "courseStartTime",
-                          e.target.value
-                        )
+                        handleTimeChange(index, "start_time", e.target.value)
                       }
                     />
-                    {formik.touched.courseBatch?.[index]?.courseStartTime &&
-                      formik.errors.courseBatch?.[index]?.courseStartTime && (
+                    {formik.touched.batches?.[index]?.start_time &&
+                      formik.errors.batches?.[index]?.start_time && (
                         <div className="invalid-feedback text-start">
-                          {formik.errors.courseBatch[index].courseStartTime}
+                          {formik.errors.batches[index].start_time}
                         </div>
                       )}
                   </div>
@@ -282,22 +261,20 @@ const CourseBatch = forwardRef(
                     <input
                       type="time"
                       className={`form-control ${
-                        formik.touched.courseBatch?.[index]?.courseEndTime &&
-                        formik.errors.courseBatch?.[index]?.courseEndTime
+                        formik.touched.batches?.[index]?.end_time &&
+                        formik.errors.batches?.[index]?.end_time
                           ? "is-invalid"
                           : ""
                       }`}
-                      {...formik.getFieldProps(
-                        `courseBatch.${index}.courseEndTime`
-                      )}
+                      {...formik.getFieldProps(`batches.${index}.end_time`)}
                       onChange={(e) =>
-                        handleTimeChange(index, "courseEndTime", e.target.value)
+                        handleTimeChange(index, "end_time", e.target.value)
                       }
                     />
-                    {formik.touched.courseBatch?.[index]?.courseEndTime &&
-                      formik.errors.courseBatch?.[index]?.courseEndTime && (
+                    {formik.touched.batches?.[index]?.end_time &&
+                      formik.errors.batches?.[index]?.end_time && (
                         <div className="invalid-feedback text-start">
-                          {formik.errors.courseBatch[index].courseEndTime}
+                          {formik.errors.batches[index].end_time}
                         </div>
                       )}
                   </div>
@@ -311,24 +288,24 @@ const CourseBatch = forwardRef(
                     <input
                       type="text"
                       className={`form-control ${
-                        formik.touched.courseBatch?.[index]?.duration &&
-                        formik.errors.courseBatch?.[index]?.duration
+                        formik.touched.batches?.[index]?.duration &&
+                        formik.errors.batches?.[index]?.duration
                           ? "is-invalid"
                           : ""
                       }`}
-                      {...formik.getFieldProps(`courseBatch.${index}.duration`)}
+                      {...formik.getFieldProps(`batches.${index}.duration`)}
                       readOnly
                     />
-                    {formik.touched.courseBatch?.[index]?.duration &&
-                      formik.errors.courseBatch?.[index]?.duration && (
+                    {formik.touched.batches?.[index]?.duration &&
+                      formik.errors.batches?.[index]?.duration && (
                         <div className="invalid-feedback text-start">
-                          {formik.errors.courseBatch[index].duration}
+                          {formik.errors.batches[index].duration}
                         </div>
                       )}
                   </div>
                 </div>
 
-                <div className="col-md-6 col-12 mb-3">
+                {/* <div className="col-md-6 col-12 mb-3">
                   <div className="text-start">
                     <label>Amount Payable</label>
                   </div>
@@ -352,7 +329,7 @@ const CourseBatch = forwardRef(
                         </div>
                       )}
                   </div>
-                </div>
+                </div> */}
               </div>
             ))}
             <div className="container">
@@ -363,7 +340,7 @@ const CourseBatch = forwardRef(
               >
                 Add More
               </button>
-              {formik.values.courseBatch.length > 1 && (
+              {formik.values?.courseBatch?.length > 1 && (
                 <button
                   className="btn btn-sm btn-danger"
                   type="button"

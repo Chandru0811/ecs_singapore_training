@@ -1,6 +1,8 @@
 import React, { forwardRef, useImperativeHandle } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import api from "../../../../config/BaseUrl";
+import toast from "react-hot-toast";
 
 const CourseSyllabus = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
@@ -8,10 +10,10 @@ const CourseSyllabus = forwardRef(
       syllabus: Yup.array().of(
         Yup.object().shape({
           session: Yup.string().required("Session is required*"),
-          duration: Yup.string().required("Duration is required*"),
           lessons: Yup.array().of(
             Yup.object().shape({
               lesson: Yup.string().required("Lesson is required*"),
+              duration: Yup.string().required("Duration is required*"),
             })
           ),
         })
@@ -22,19 +24,47 @@ const CourseSyllabus = forwardRef(
         syllabus: [
           {
             session: "",
-            duration: "",
             lessons: [
               {
+                duration: "",
                 lesson: "",
               },
             ],
           },
         ],
       },
-      validationSchema: validationSchema,
+      // validationSchema: validationSchema,
       onSubmit: async (values) => {
         console.log("object", values);
-        // Your form submission logic here
+        // setLoadIndicators(true);
+
+        const payLoad = {
+          syllabus: values.syllabus.map((item) => ({
+            session: item.session,
+            lessons: item.lessons.map((lessonObj) => ({
+              lesson: lessonObj.lesson,
+              duration: lessonObj.duration,
+            })),
+          })),
+        };
+        try {
+          const response = await api.post(
+            `/courses/${formData.id}/syllabus`,
+            payLoad
+          );
+
+          if (response.status === 200) {
+            toast.success(response.data.message);
+            // setFormData((prv) => ({ ...prv, ...values, user_id }));
+            // handleNext();
+          } else {
+            toast.error(response.data.message);
+          }
+        } catch (error) {
+          toast.error("error");
+        } finally {
+          setLoadIndicators(false);
+        }
       },
     });
 
@@ -44,10 +74,10 @@ const CourseSyllabus = forwardRef(
         ...formik.values.syllabus,
         {
           session: "",
-          duration: "",
           lessons: [
             {
               lesson: "",
+              duration: "",
             },
           ],
         },
@@ -66,7 +96,7 @@ const CourseSyllabus = forwardRef(
     // Add a new lesson within a specific syllabus row
     const addLesson = (syllabusIndex) => {
       const updatedSyllabus = [...formik.values.syllabus];
-      updatedSyllabus[syllabusIndex].lessons.push({ lesson: "" });
+      updatedSyllabus[syllabusIndex].lessons.push({ lesson: "", duration: "" });
       formik.setFieldValue("syllabus", updatedSyllabus);
     };
 
@@ -128,21 +158,27 @@ const CourseSyllabus = forwardRef(
                     </div>
                   </div>
                   <div className="col-md-6 col-12 mb-3"></div>
-                  <div className="col-md-6 col-12 mb-3">
+                  
+                  {formik.values.syllabus[syllabusIndex].lessons.map(
+                    (lesson, lessonIndex) => (
+                      <div key={lessonIndex}>
+                        <div className="col-md-6 col-12 mb-3">
                     <div className="text-start">
                       <label>Duration</label>
                     </div>
                     <div className="input-group mb-3">
                       <select
                         className={`form-select ${
-                          formik.touched.syllabus?.[syllabusIndex]?.duration &&
-                          formik.errors.syllabus?.[syllabusIndex]?.duration
+                          formik.touched.syllabus?.[syllabusIndex]
+                                  ?.lessons?.[lessonIndex]?.duration &&
+                                  formik.errors.syllabus?.[syllabusIndex]
+                                  ?.lessons?.[lessonIndex]?.duration
                             ? "is-invalid"
                             : ""
                         }`}
                         aria-label={`duration-${syllabusIndex}`}
                         {...formik.getFieldProps(
-                          `syllabus.${syllabusIndex}.duration`
+                          `syllabus.${syllabusIndex}.lessons.${lessonIndex}.duration`
                         )}
                       >
                         <option value=""></option>
@@ -159,72 +195,71 @@ const CourseSyllabus = forwardRef(
                         <option value="2.45">2.45 Hrs</option>
                         <option value="3">3 Hrs</option>
                       </select>
-                      {formik.touched.syllabus?.[syllabusIndex]?.duration &&
-                        formik.errors.syllabus?.[syllabusIndex]?.duration && (
+                      {formik.touched.syllabus?.[syllabusIndex]
+                              ?.lessons?.[lessonIndex]?.duration &&
+                        formik.errors.syllabus?.[syllabusIndex]
+                        ?.lessons?.[lessonIndex]?.duration && (
                           <div className="invalid-feedback text-start">
-                            {formik.errors.syllabus[syllabusIndex].duration}
+                            {formik.errors.syllabus[syllabusIndex]
+                                      .lessons[lessonIndex].duration}
                           </div>
                         )}
                     </div>
                   </div>
-                  <div className="col-md-6 col-12 mb-3">
-                    <div className="text-start">
-                      <label>Lesson</label>
-                    </div>
-                    {formik.values.syllabus[syllabusIndex].lessons.map(
-                      (lesson, lessonIndex) => (
-                        <div key={lessonIndex} className="input-group mb-3">
-                          <input
-                            type="text"
-                            className={`form-control ${
-                              formik.touched.syllabus?.[syllabusIndex]
-                                ?.lessons?.[lessonIndex]?.lesson &&
+                        <div className="col-md-6 col-12 mb-3">
+                          <div className="text-start">
+                            <label>Lesson</label>
+                          </div>
+                          <div className="input-group mb-3">
+                            <input
+                              type="text"
+                              className={`form-control ${
+                                formik.touched.syllabus?.[syllabusIndex]
+                                  ?.lessons?.[lessonIndex]?.lesson &&
+                                formik.errors.syllabus?.[syllabusIndex]
+                                  ?.lessons?.[lessonIndex]?.lesson
+                                  ? "is-invalid"
+                                  : ""
+                              }`}
+                              aria-label={`lesson-${syllabusIndex}-${lessonIndex}`}
+                              {...formik.getFieldProps(
+                                `syllabus.${syllabusIndex}.lessons.${lessonIndex}.lesson`
+                              )}
+                            />
+                            {formik.touched.syllabus?.[syllabusIndex]
+                              ?.lessons?.[lessonIndex]?.lesson &&
                               formik.errors.syllabus?.[syllabusIndex]
-                                ?.lessons?.[lessonIndex]?.lesson
-                                ? "is-invalid"
-                                : ""
-                            }`}
-                            aria-label={`lesson-${syllabusIndex}-${lessonIndex}`}
-                            {...formik.getFieldProps(
-                              `syllabus.${syllabusIndex}.lessons.${lessonIndex}.lesson`
-                            )}
-                          />
-                          {formik.touched.syllabus?.[syllabusIndex]?.lessons?.[
-                            lessonIndex
-                          ]?.lesson &&
-                            formik.errors.syllabus?.[syllabusIndex]?.lessons?.[
-                              lessonIndex
-                            ]?.lesson && (
-                              <div className="invalid-feedback text-start">
-                                {
-                                  formik.errors.syllabus[syllabusIndex].lessons[
-                                    lessonIndex
-                                  ].lesson
-                                }
-                              </div>
-                            )}
+                                ?.lessons?.[lessonIndex]?.lesson && (
+                                <div className="invalid-feedback text-start">
+                                  {
+                                    formik.errors.syllabus[syllabusIndex]
+                                      .lessons[lessonIndex].lesson
+                                  }
+                                </div>
+                              )}
+                          </div>
                         </div>
-                      )
-                    )}
-                    <div className="d-flex justify-content-end">
+                      </div>
+                    )
+                  )}
+                  <div className="d-flex justify-content-end">
+                    <button
+                      type="button"
+                      className="btn btn-sm btn-primary mx-1"
+                      onClick={() => addLesson(syllabusIndex)}
+                    >
+                      Add
+                    </button>
+                    {formik.values.syllabus[syllabusIndex].lessons.length >
+                      1 && (
                       <button
                         type="button"
-                        className="btn btn-sm btn-primary mx-1"
-                        onClick={() => addLesson(syllabusIndex)}
+                        className="btn btn-danger btn-sm"
+                        onClick={() => removeLesson(syllabusIndex)}
                       >
-                        Add
+                        X
                       </button>
-                      {formik.values.syllabus[syllabusIndex].lessons.length >
-                        1 && (
-                        <button
-                          type="button"
-                          className="btn btn-danger btn-sm"
-                          onClick={() => removeLesson(syllabusIndex)}
-                        >
-                          X
-                        </button>
-                      )}
-                    </div>
+                    )}
                   </div>
                 </div>
               </div>

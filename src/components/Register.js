@@ -3,38 +3,54 @@ import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
 import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-// import './Login.css';
+import api from "../config/BaseUrl";
+import toast from "react-hot-toast";
 
 const Register = ({ handleLogin }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [showCPassword, setShowCPassword] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
+  const [loading, setLoadIndicator] = useState(false);
   const navigate = useNavigate();
 
   const validationSchema = Yup.object({
-    fullName: Yup.string().required("*Full Name is required"),
+    name: Yup.string().required("*Full Name is required"),
     email: Yup.string()
       .email("*Invalid email address")
       .required("*Email is required"),
     password: Yup.string()
       .min(8, "*Password must be at least 8 characters")
       .required("*Password is required"),
-    confirmPassword: Yup.string()
+      password_confirmation: Yup.string()
       .min(8, "*Password must be at least 8 characters")
       .required("*Confirm Password is required"),
   });
 
   const formik = useFormik({
     initialValues: {
-      fullName: "",
+      name: "",
       email: "",
       password: "",
-      confirmPassword: "",
+      password_confirmation: "",
     },
     validationSchema: validationSchema,
     onSubmit: async (values, { resetForm }) => {
       console.log("fisrt", values);
-      resetForm();
+      setLoadIndicator(true);
+      try {
+        const response = await api.post(`/register`, values);
+
+        if (response.status === 200) {
+          toast.success(response.data.message);
+          resetForm();
+        } else {
+          toast.error(response.data.message);
+        }
+      } catch (error) {
+        toast.error("error");
+      } finally {
+        setLoadIndicator(false);
+      }
     },
   });
 
@@ -45,13 +61,6 @@ const Register = ({ handleLogin }) => {
     setShowCPassword(!showCPassword);
   };
 
-  const handleLoginClikLogin = () => {
-    navigate("/home");
-    handleLogin();
-  };
-
-  
-
   const handleCheckboxChange = () => {
     setIsChecked(!isChecked);
   };
@@ -61,28 +70,28 @@ const Register = ({ handleLogin }) => {
       <div className="container d-flex justify-content-center align-items-center ">
         <div className="login-box p-4 rounded shadow-lg bg-white">
           <h2 className="text-center mb-0">Create an Account</h2>
-          <p className="text-center mb-3">
+          <p className="text-center mb-3" style={{ fontSize: ".9vw" }}>
             Already have an account? <Link to={"/login"}>Login</Link>
           </p>
           <form onSubmit={formik.handleSubmit}>
             <div className="form-group mb-3 text-start">
               <label htmlFor="name" className="form-label mb-0">
-                Full Name
+                Name
               </label>
               <input
-                type="fullName"
+                type="text"
                 className={`form-control ${
-                  formik.touched.fullName && formik.errors.fullName
+                  formik.touched.name && formik.errors.name
                     ? "is-invalid"
                     : ""
                 }`}
                 style={{ borderRadius: "3px" }}
-                placeholder="Enter fullName"
-                {...formik.getFieldProps("fullName")}
+                placeholder="Enter name"
+                {...formik.getFieldProps("name")}
               />
-              {formik.touched.fullName && formik.errors.fullName && (
+              {formik.touched.name && formik.errors.name && (
                 <div className="invalid-feedback mt-0">
-                  {formik.errors.fullName}
+                  {formik.errors.name}
                 </div>
               )}
             </div>
@@ -153,8 +162,8 @@ const Register = ({ handleLogin }) => {
                   type={showCPassword ? "text" : "password"}
                   placeholder="Enter confirmPassword"
                   className={`form-control ${
-                    formik.touched.confirmPassword &&
-                    formik.errors.confirmPassword
+                    formik.touched.password_confirmation &&
+                    formik.errors.password_confirmation
                       ? "is-invalid"
                       : ""
                   }`}
@@ -164,8 +173,8 @@ const Register = ({ handleLogin }) => {
                     borderTopRightRadius: "0px",
                     borderBottomRightRadius: "0px",
                   }}
-                  name="confirmPassword"
-                  {...formik.getFieldProps("confirmPassword")}
+                  name="password_confirmation"
+                  {...formik.getFieldProps("password_confirmation")}
                 />
                 <span
                   className={`input-group-text iconInputBackground`}
@@ -175,10 +184,10 @@ const Register = ({ handleLogin }) => {
                 >
                   {showCPassword ? <IoEyeOffOutline /> : <IoEyeOutline />}
                 </span>
-                {formik.touched.confirmPassword &&
-                  formik.errors.confirmPassword && (
+                {formik.touched.password_confirmation &&
+                  formik.errors.password_confirmation && (
                     <div className="invalid-feedback mt-0">
-                      {formik.errors.confirmPassword}
+                      {formik.errors.password_confirmation}
                     </div>
                   )}
               </div>
@@ -190,27 +199,37 @@ const Register = ({ handleLogin }) => {
                   checked={isChecked}
                   onChange={handleCheckboxChange}
                 />{" "}
-                <span className="" style={{fontSize:".8vw"}}>I’ve read and agree with your{" "}
-                <a
-                  href="/terms-and-conditions"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Terms and Conditions
-                </a>{" "}
-                and{" "}
-                <a
-                  href="/privacy-policy"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Privacy Policy
-                </a>
-                .
+                <span className="" style={{ fontSize: ".8vw" }}>
+                  I’ve read and agree with your{" "}
+                  <a
+                    href="/terms-and-conditions"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Terms and Conditions
+                  </a>{" "}
+                  and{" "}
+                  <a
+                    href="/privacy-policy"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Privacy Policy
+                  </a>
+                  .
                 </span>
               </label>
             </div>
-            <button type="submit" className="btn btn-primary w-100  my-3">
+            <button type="submit" className="btn btn-primary w-100  my-3" disabled={loading}
+                >
+                  {loading ? (
+                    <span
+                      className="spinner-border spinner-border-sm"
+                      aria-hidden="true"
+                    ></span>
+                  ) : (
+                    <span></span>
+                  )}
               Register Now
             </button>
           </form>
