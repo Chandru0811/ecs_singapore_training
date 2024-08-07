@@ -279,7 +279,7 @@ function UserCourseView() {
       </div>
       <div className="mb-5">
         <div className="row">
-          <div className="col-md-7 col-12 px-5 mb-4">
+          <div className="col-md-8 col-12 px-5 mb-4">
             <div className="row mb-5">
               <h5 className="text-start mb-3">AWS Certification Course FAQs</h5>
               <div className="accordion accordion-flush" id="accordionExample">
@@ -371,9 +371,9 @@ function UserCourseView() {
             </div>
           </div>
           <div
-            className="col-md-5 col-12"
+            className="col-md-4 col-12" 
           >
-            <EnrollForm />
+            <EnrollForm  />
           </div>
         </div>
       </div>

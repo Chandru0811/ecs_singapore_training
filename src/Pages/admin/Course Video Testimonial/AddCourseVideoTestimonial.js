@@ -2,7 +2,7 @@ import { useFormik } from "formik";
 import React, { useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 import * as Yup from "yup";
-import axios from 'axios'; // Make sure to install axios
+import api from "../../../config/BaseUrl";
 import toast from "react-hot-toast";
 
 const validationSchema = Yup.object({
@@ -36,29 +36,25 @@ function AddCourseVideoTestimonial({ onSuccess }) {
                 formData.append('client_name', values.client_name);
                 formData.append('description', values.description);
                 formData.append('video', values.video);
-
-                const response = await axios.post('/api/videoTestimonial', formData, {
+                const response = await api.post('videotestimonial', formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                     },
                 });
-
-                toast.success(response.data.message);
-                if (onSuccess) onSuccess(); // Call the onSuccess callback if provided
-                handleClose();
-            } catch (error) {
-                if (error.response && error.response.data.errors) {
-                    const errors = error.response.data.errors;
-                    for (const [key, value] of Object.entries(errors)) {
-                        toast.error(value[0]);
-                    }
+                if (response.status === 200) {
+                    onSuccess();
+                    handleClose();
+                    toast.success(response.data.message);
                 } else {
-                    toast.error("An unexpected error occurred.");
+                    toast.error(response.data.message);
                 }
+            } catch (error) {
+                const errorMessage = error.response?.data?.message || error.message;
+                toast.error(errorMessage);
             } finally {
                 setLoadIndicator(false);
             }
-        }
+        },
     });
 
     return (

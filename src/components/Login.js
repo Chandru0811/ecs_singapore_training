@@ -58,10 +58,9 @@ const Login = ({ handleLogin }) => {
             toast.error(error.response.data.message);
           }
         } else {
-          toast.error(error);
           toast.error(error.response.data.message);
         }
-
+      }finally{
         setLoadIndicator(false);
       }
     },
@@ -71,10 +70,7 @@ const Login = ({ handleLogin }) => {
     <div className="login-container w-100 mt-5">
       <div className="container d-flex justify-content-center align-items-center ">
         <div className="login-box p-4 rounded shadow-lg bg-white">
-          <h2 className="text-center">Login</h2>
-          <p className="text-center mb-4">
-            Don't have an account? <Link to={"/register"}>Register</Link>
-          </p>
+          <h2 className="text-center mb-5">Login</h2>
           <form onSubmit={formik.handleSubmit}>
             <div className="form-group mb-3 text-start">
               <label htmlFor="email" className="form-label">
@@ -146,14 +142,9 @@ const Login = ({ handleLogin }) => {
                    </button>
           </form>
           <div className="divider text-center mb-2">or</div>
-          <button className="btn btn-outline-primary w-100">
-            <img
-              src="https://img.icons8.com/color/16/000000/google-logo.png"
-              alt="Google logo"
-              className="me-2"
-            />
-            Sign in with Google
-          </button>
+          <p className="text-center mb-4">
+            Don't have an account? <Link to={"/register"}>Register</Link>
+          </p>
         </div>
       </div>
     </div>

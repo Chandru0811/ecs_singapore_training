@@ -1,11 +1,13 @@
 import React, { forwardRef, useImperativeHandle } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import toast from "react-hot-toast";
+import api from "../../../../config/BaseUrl";
 
 const CourseBenefit = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const validationSchema = Yup.object().shape({
-      benefitsTitle: Yup.string().required("Title is required"),
+      benefit: Yup.string().required("Title is required"),
       keyFeature: Yup.array().of(
         Yup.object().shape({
           keyFeatures: Yup.string().required("Key feature is required"),
@@ -15,7 +17,7 @@ const CourseBenefit = forwardRef(
 
     const formik = useFormik({
       initialValues: {
-        benefitsTitle: "",
+        benefit: "",
         keyFeature: [
           {
             keyFeatures: "",
@@ -25,45 +27,31 @@ const CourseBenefit = forwardRef(
       validationSchema: validationSchema,
       onSubmit: async (values) => {
         console.log("object", values);
-        handleNext();
+        
         // setLoadIndicators(true);
-        // try {
-        //   const formData = new FormData();
+        const payLoad = {
+          benefit: values.benefit,
+          features: values.keyFeature.map((key, i) => key.keyFeatures),
+        };
 
-        //   // Add each data field manually to the FormData object
-        //   formData.append("role", values.role);
-        //   formData.append("teacherName", values.teacherName);
-        //   formData.append("dateOfBirth", values.dateOfBirth);
-        //   formData.append("idType", values.idType);
-        //   formData.append("idNo", values.idNo);
-        //   formData.append("citizenship", values.citizenship);
-        //   formData.append("shortIntroduction", values.shortIntroduction);
-        //   formData.append("gender", values.gender);
-        //   formData.append("file", values.file);
+        try {
+          const response = await api.post(
+            `/courses/${formData.id}/benefits`,
+            payLoad
+          );
 
-        //   const response = await api.post(
-        //     "/createUserWithProfileImage",
-        //     formData,
-        //     {
-        //       headers: {
-        //         "Content-Type": "multipart/form-data",
-        //       },
-        //     }
-        //   );
-
-        //   if (response.status === 201) {
-        //     const user_id = response.data.user_id;
-        //     toast.success(response.data.message);
-        //     setFormData((prv) => ({ ...prv, ...values, user_id }));
-        //     handleNext();
-        //   } else {
-        //     toast.error(response.data.message);
-        //   }
-        // } catch (error) {
-        //   toast.error(error);
-        // }finally {
-        //   setLoadIndicators(false);
-        // }
+          if (response.status === 200) {
+            toast.success(response.data.message);
+            setFormData((prv) => ({ ...prv, ...values }));
+            handleNext();
+          } else {
+            toast.error(response.data.message);
+          }
+        } catch (error) {
+          toast.error("error");
+        } finally {
+          setLoadIndicators(false);
+        }
       },
     });
     const addRow = () => {
@@ -97,21 +85,19 @@ const CourseBenefit = forwardRef(
                   <input
                     type="text"
                     className={`form-control   ${
-                      formik.touched.benefitsTitle &&
-                      formik.errors.benefitsTitle
+                      formik.touched.benefit && formik.errors.benefit
                         ? "is-invalid"
                         : ""
                     }`}
-                    aria-label="benefitsTitle"
+                    aria-label="benefit"
                     aria-describedby="basic-addon1"
-                    {...formik.getFieldProps("benefitsTitle")}
+                    {...formik.getFieldProps("benefit")}
                   />
-                  {formik.touched.benefitsTitle &&
-                    formik.errors.benefitsTitle && (
-                      <div className="invalid-feedback text-start">
-                        {formik.errors.benefitsTitle}
-                      </div>
-                    )}
+                  {formik.touched.benefit && formik.errors.benefit && (
+                    <div className="invalid-feedback text-start">
+                      {formik.errors.benefit}
+                    </div>
+                  )}
                 </div>
               </div>
               <div className="col-md-6 col-12 mb-3">

@@ -6,12 +6,13 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import api from "../../config/BaseUrl";
 import toast from "react-hot-toast";
-import ReactStars from 'react-rating-stars-component';
+import ReactStars from "react-rating-stars-component";
 import ImageURL from "../../config/ImageURL";
+import EditCourseTestimonial from "./EditCourseTestimonial";
 
 const validationSchema = Yup.object({
   profile: Yup.mixed().required("*Image is required"),
-  clientName: Yup.string().required("*Client Name is required"),
+  client_name: Yup.string().required("*Client Name is required"),
   rating: Yup.string().required("*Rating is required"),
   description: Yup.string().required("*Description is required"),
 });
@@ -19,6 +20,7 @@ const validationSchema = Yup.object({
 function CourseTestimonial() {
   const [show, setShow] = useState(false);
   const [datas, setDatas] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const fetchDatas = async () => {
     try {
@@ -36,7 +38,7 @@ function CourseTestimonial() {
   const formik = useFormik({
     initialValues: {
       profile: null,
-      clientName: "",
+      client_name: "",
       rating: "",
       description: "",
     },
@@ -44,10 +46,10 @@ function CourseTestimonial() {
     onSubmit: async (values) => {
       try {
         const formData = new FormData();
-        formData.append('profile', values.profile);
-        formData.append('clientName', values.clientName);
-        formData.append('rating', values.rating);
-        formData.append('description', values.description);
+        formData.append("profile", values.profile);
+        formData.append("client_name", values.client_name);
+        formData.append("rating", values.rating);
+        formData.append("description", values.description);
 
         const response = await api.post("coursetestimonial", formData, {
           headers: {
@@ -58,7 +60,7 @@ function CourseTestimonial() {
         if (response.status === 200) {
           toast.success(response.data.message);
           handleClose();
-          fetchDatas(); // Fetch updated data
+          fetchDatas();
         } else {
           toast.error(response.data.message);
         }
@@ -91,13 +93,49 @@ function CourseTestimonial() {
       const response = await api.delete(`coursetestimonial/${id}`);
       if (response.status === 200) {
         toast.success(response.data.message);
-        fetchDatas(); // Fetch updated data after deletion
+        fetchDatas();
       } else {
         toast.error(response.data.message);
       }
     } catch (error) {
       const errorMessage = error.response?.data?.message || error.message;
       toast.error(errorMessage);
+    }
+  };
+
+  const refreshData = async () => {
+    setLoading(true);
+    try {
+      const response = await api.get("coursetestimonial");
+      setDatas(response.data.data);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error refreshing data:", error);
+      setLoading(false);
+    }
+  };
+
+  const PublishCourseTestimonal = async () => {
+    setLoading(true);
+    try {
+      const response = await api.post("/publish/coursetestimonial", null, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      if (response.status === 201) {
+        fetchDatas();
+        toast.success(response.data.message);
+      } else {
+        console.error("Publishing Course Testimonial failed");
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      console.error("Error publishing data:", error.message);
+      const errorMessage = error.response?.data?.message || error.message;
+      toast.error(errorMessage);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -110,10 +148,15 @@ function CourseTestimonial() {
             type="button"
             className="btn btn-sm btn-primary mx-2"
             onClick={handleShow}
+            onSuccess={refreshData}
           >
             Add
           </button>
-          <button type="button" className="btn btn-sm btn-danger">
+          <button
+            type="button"
+            className="btn btn-sm btn-danger"
+            onClick={PublishCourseTestimonal}
+          >
             Publish
           </button>
         </div>
@@ -136,6 +179,7 @@ function CourseTestimonial() {
                   >
                     <FaTrash className="text-light" />
                   </button>
+                  <EditCourseTestimonial id={data.id} onSuccess={refreshData} />
                 </div>
                 <div className="text-start">
                   <div className="d-flex justify-content-between align-items-center px-2">
@@ -150,7 +194,7 @@ function CourseTestimonial() {
                       />
                       <span>
                         <h5 className="text-light fw-bold ps-1">
-                          {data.clientName}
+                          {data.client_name}
                         </h5>
                       </span>
                     </div>
@@ -186,22 +230,26 @@ function CourseTestimonial() {
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={formik.handleSubmit}>
-            <Form.Group controlId="formClientName">
-              <Form.Label>Name</Form.Label><span className="text-danger">*</span>
+            <Form.Group controlId="formclient_name">
+              <Form.Label>Name</Form.Label>
+              <span className="text-danger">*</span>
               <Form.Control
                 type="text"
-                name="clientName"
-                value={formik.values.clientName}
+                name="client_name"
+                value={formik.values.client_name}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                isInvalid={formik.touched.clientName && formik.errors.clientName}
+                isInvalid={
+                  formik.touched.client_name && formik.errors.client_name
+                }
               />
               <Form.Control.Feedback type="invalid">
-                {formik.errors.clientName}
+                {formik.errors.client_name}
               </Form.Control.Feedback>
             </Form.Group>
             <Form.Group controlId="formRating">
-              <Form.Label>Rating</Form.Label><span className="text-danger">*</span>
+              <Form.Label>Rating</Form.Label>
+              <span className="text-danger">*</span>
               <ReactStars
                 count={5}
                 value={formik.values.rating}
@@ -219,7 +267,8 @@ function CourseTestimonial() {
               </Form.Control.Feedback>
             </Form.Group>
             <Form.Group controlId="formDescription">
-              <Form.Label>Description</Form.Label><span className="text-danger">*</span>
+              <Form.Label>Description</Form.Label>
+              <span className="text-danger">*</span>
               <Form.Control
                 as="textarea"
                 name="description"
@@ -227,14 +276,17 @@ function CourseTestimonial() {
                 value={formik.values.description}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                isInvalid={formik.touched.description && formik.errors.description}
+                isInvalid={
+                  formik.touched.description && formik.errors.description
+                }
               />
               <Form.Control.Feedback type="invalid">
                 {formik.errors.description}
               </Form.Control.Feedback>
             </Form.Group>
             <Form.Group controlId="formImage">
-              <Form.Label>Image</Form.Label><span className="text-danger">*</span>
+              <Form.Label>Image</Form.Label>
+              <span className="text-danger">*</span>
               <Form.Control
                 type="file"
                 name="profile"

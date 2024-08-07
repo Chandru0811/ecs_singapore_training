@@ -58,11 +58,11 @@ const Footer = () => {
       <div className=" row px-3 pt-5">
         <div className="col-md-3 col-12  mb-0 text-start">
           <div className="">
-          <img src={`${ImageURL}${apiData.logo_path}`} alt="Logo" className="img-fluid mb-3" style={{ height: '15%', width: "15%" }} />
-          <span className="mx-1">{apiData.footer_title}</span>
+          <img src={`${ImageURL}${apiData?.logo_path}`} alt="Logo" className="img-fluid mb-3" style={{ height: '15%', width: "15%" }} />
+          <span className="mx-1">{apiData?.footer_title}</span>
           </div>
           <p className="fw-light text-start">
-          {apiData.footer_content}
+          {apiData?.footer_content}
           </p>
         </div>
         <div className="col-md-3 col-12  mb-0 text-start">
@@ -105,22 +105,22 @@ const Footer = () => {
           <h5 className="mb-4 ">Let's do it!</h5>
           <ul className="footer-social list-inline ps-0">
           <div className="d-flex flex-wrap gap-2 ">
-          <Nav.Link href={apiData.fb_link}>
+          <Nav.Link href={apiData?.fb_link}>
                       <FaFacebook />
                     </Nav.Link>
-                    <Nav.Link href={apiData.insta_link}>
+                    <Nav.Link href={apiData?.insta_link}>
                       <GrInstagram />
                     </Nav.Link>
-                    <Nav.Link href={apiData.youtube_link}>
+                    <Nav.Link href={apiData?.youtube_link}>
                       <FaYoutube />
                     </Nav.Link>
-                    <Nav.Link href={apiData.twitter_link}>
+                    <Nav.Link href={apiData?.twitter_link}>
                       <FaTwitter />
                     </Nav.Link>
-                    <Nav.Link href={apiData.linkedin_link}>
+                    <Nav.Link href={apiData?.linkedin_link}>
                       <FaLinkedin />
                     </Nav.Link>
-                    <Nav.Link href={apiData.whatsapp_link}>
+                    <Nav.Link href={apiData?.whatsapp_link}>
                       <IoLogoWhatsapp />
                     </Nav.Link>
           </div>
@@ -139,7 +139,7 @@ const Footer = () => {
         </div>
         <div className="col-md-6 col-12 text-md-end text-start">
           <p className="mb-0" style={{ color: "#a0a0a0" }}>
-          {apiData.copyrights}
+          {apiData?.copyrights}
           </p>
         </div>
       </div>

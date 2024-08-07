@@ -1,10 +1,14 @@
 import { useFormik } from 'formik';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import StarIcon from "../../assets/client/CoursePointImg.png";
 import ClientCourseImg from "../../assets/client/ClientCourseImg.png";
 import { FaEdit, FaSave, FaTimes, FaPlus, FaTrash } from 'react-icons/fa';
+import api from '../../config/BaseUrl';
+import ImageURL from "../../config/ImageURL";
+
 
 function Courses() {
+    const [headerData, setHeaderData] = useState();
     const formik = useFormik({
         initialValues: {
             courseImg: ClientCourseImg,
@@ -19,13 +23,48 @@ function Courses() {
                 { id: 6, point: '100% Certification Pass Guarantee' }
             ]
         },
-        onSubmit: (values) => {
+        onSubmit: async(values) => {
             console.log("ClientCourse Datas", values);
             setIsEditing(null);
             setIsAddingPoint(false);
             setNewPoint('');
+            const formData = new FormData();
+      formData.append("heading_section", values.courseTitle);
+      formData.append("description",values.courseDescription);
+      formData.append("features",values.coursesPoints.map((point) => point.point));
+      if (
+        values.header instanceof ArrayBuffer ||
+        values.header instanceof Blob
+      ) {
+        formData.append("image", values.courseImg);
+      }
+      try {
+        const response = await api.post("update/course/content", formData);
+        if (response.status === 200) {
+          getData();
+          console.log("updated", response.data);
         }
+      } catch (e) {
+        console.log("object", e);
+      }
+        
+      
+        },
     });
+
+    const getData = async () => {
+        try {
+          const response = await api.get("edit/course/content");
+          if (response.status === 200) {
+              formik.setFieldValue("courseTitle", response.data.data.heading_section);
+              formik.setFieldValue("courseDescription", response.data.data.description);
+              
+              setHeaderData(response.data.data);
+          }
+        } catch (e) {
+          console.log("object", e);
+        }
+      };
 
     const [isEditing, setIsEditing] = useState(null);
     const [isAddingPoint, setIsAddingPoint] = useState(false);
@@ -87,11 +126,26 @@ function Courses() {
         formik.setFieldValue('coursesPoints', updatedPoints);
     };
 
+    const publishData = async () => {
+        try {
+          const response = await api.post("publish/course/content");
+          if (response.status === 200) {
+            console.log("published successfully!");
+          }
+        } catch (e) {
+          console.log("object", e);
+        }
+      };
+    
+      useEffect(() => {
+        getData();
+      }, []);
+
     return (
         <div className='container-fluid' style={{ backgroundColor: "#FAFCFF" }}>
                 <div className='d-flex align-items-center justify-content-between p-2'>
                 <h4>Courses</h4>
-                <button className="btn btn-primary">Publish</button>
+                <button className="btn btn-primary" onClick={publishData}>Publish</button>
             </div>
             <div className='container'>
                 <form onSubmit={formik.handleSubmit}>
@@ -216,7 +270,11 @@ function Courses() {
                                 </div>
                             ) : (
                                 <div className='d-flex flex-column align-items-center'>
-                                    <img src={formik.values.courseImg} className='img-fluid' alt="CourseImage" />
+                                    {headerData?.image ? (
+                                        <img  src={`${ImageURL}${headerData.image}`} className='img-fluid' alt="CourseImage" />
+                                    ) : (
+                                        <img  src={formik.values.courseImg} className='img-fluid' alt="CourseImage" />
+                                    )}
                                     <FaEdit onClick={() => handleEditClick('courseImg')} className="text-secondary mt-2" />
                                 </div>
                             )}

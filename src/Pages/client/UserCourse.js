@@ -11,7 +11,11 @@ import Zoho from "../../assets/client/zoho.png";
 import { FaArrowRightLong } from "react-icons/fa6";
 import { ImUserPlus } from "react-icons/im";
 import { Link } from "react-router-dom";
-import ReactPlayer from "react-player";
+import api from "../../config/BaseUrl";
+import ImageURL from "../../config/ImageURL";
+import CourseVideoTestimonial from "./CourseVideoTestimonial";
+import CourseTestimonial from "./CourseTestimonial";
+
 
 const responsive = {
   superLargeDesktop: {
@@ -146,6 +150,16 @@ const cardData = [
 function UserCourse() {
   const [hoveredIndex, setHoveredIndex] = useState(null);
   const [activeTab, setActiveTab] = useState("home");
+  const [apiData, setApiData] = useState({});
+
+  const features = [
+    "130 + Hours in-depth Online courses",
+    "5k + Online Batches Completed",
+    "10k + Placed Students",
+    "130 + Hours in-depth Online courses",
+    "20000 + Learners around the world",
+    "100% Certification Pass Guarantee",
+  ];
 
   const renderContent = () => {
     switch (activeTab) {
@@ -369,6 +383,18 @@ function UserCourse() {
         return null;
     }
   };
+  const getData = async () => {
+    try {
+      const response = await api.get("course/content");
+      setApiData(response.data.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+  useEffect(() => {
+    console.log("sadd");
+    getData();
+  }, []);
 
   return (
     <div>
@@ -376,65 +402,25 @@ function UserCourse() {
         <div className="row">
           <div className="col-md-7 col-12 text-start">
             <h1 className="fw-bold py-3 display-5">
-              Your Course to Success Trusted Training Platform
+              {apiData?.heading_section}
             </h1>
-            <p className="py-3">
-              Best Live instructor-Let Online Training Course with 100%
-              placement Support
-            </p>
+            <p className="py-3">{apiData?.description}</p>
             <div className="row">
-              <div className="col-md-6 col-12">
-                <div className="py-2">
-                  <span>
-                    <IoIosStar style={{ color: "gold" }} />
-                  </span>
-                  <span>130 + Hours in-depth Online courses</span>
+              {features.map((feature, index) => (
+                <div key={index} className="col-md-6 col-12">
+                  <div className="py-2">
+                    <span>
+                      <IoIosStar style={{ color: "gold" }} />
+                    </span>
+                    <span>{feature}</span>
+                  </div>
                 </div>
-              </div>
-              <div className="col-md-6 col-12">
-                <div className="py-2">
-                  <span>
-                    <IoIosStar style={{ color: "gold" }} />
-                  </span>
-                  <span>5k + Online Batches Completed</span>
-                </div>
-              </div>
-              <div className="col-md-6 col-12">
-                <div className="py-2">
-                  <span>
-                    <IoIosStar style={{ color: "gold" }} />
-                  </span>
-                  <span>10k + Placed Students</span>
-                </div>
-              </div>
-              <div className="col-md-6 col-12">
-                <div className="py-2">
-                  <span>
-                    <IoIosStar style={{ color: "gold" }} />
-                  </span>
-                  <span>130 + Hours in-depth Online courses</span>
-                </div>
-              </div>
-              <div className="col-md-6 col-12">
-                <div className="py-2">
-                  <span>
-                    <IoIosStar style={{ color: "gold" }} />
-                  </span>
-                  <span>20000 + Learners around the world</span>
-                </div>
-              </div>
-              <div className="col-md-6 col-12">
-                <div className="py-2">
-                  <span>
-                    <IoIosStar style={{ color: "gold" }} />
-                  </span>
-                  <span>100% Certification Pass Guarantee</span>
-                </div>
-              </div>
+              ))}
             </div>
           </div>
           <div className="col-md-5 col-12 p-2">
-            <img src={courseImg} alt="courseImg" className="img-fluid " />
+            <img   src={`${ImageURL}${apiData?.image_path}`}
+  alt="courseImg" className="img-fluid " />
           </div>
         </div>
       </div>
@@ -616,121 +602,14 @@ function UserCourse() {
         </div>
       </div>
 
-      {/* Review cards  */}
-      <div className="container-fluid">
-        <div className="d-flex justify-content-between align-items center py-2">
-          <h4 className="text-start">Review for Master Program</h4>
-          <button className="btn btn-sm btn-primary">View All</button>
-        </div>
-        <div className="card">
-          <div className="d-flex align-items-center justify-content-center">
-            <h5 className="fw-bold py-2">Big Date Master Program</h5>
-            &nbsp;&nbsp;
-            <div>
-              <span>$3942</span>&nbsp;
-              <span>
-                <del className="text-muted">$232</del>
-              </span>
-            </div>
-          </div>
-          <div className="row">
-            <div className="col-md-9 col-12"></div>
-            <div className="col-md-3 col-12">
-              <div className="row">
-                <div className="col-6">
-                  <div className="text-start fw-bold ps-1">
-                    <p>Training Mode :</p>
-                    <p>Skill Levels :</p>
-                    <p>Total Learners :</p>
-                  </div>
-                </div>
-                <div className="col-6">
-                  <div className="text-start fw-light">
-                    <p>Online | classroom</p>
-                    <p>Expert</p>
-                    <p>2352 Learners</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <hr />
-          <div className="row">
-            {cardData.map((card, index) => (
-              <div key={index} className="col-lg-3 col-md-6 col-sm-12 p-4">
-                <div className="review-cards">
-                  <div className="d-flex justify-content-between align-items-center header bg-primary text-light p-2">
-                    <div className="d-flex justify-content-start align-items-center">
-                      <div className="w-25 p-1">
-                        <img
-                          src={card.CardImg}
-                          alt="avatar"
-                          className="img-fluid rounded-circle"
-                        />
-                      </div>
-                      &nbsp;
-                      <div className="name ml-2">
-                        <h6 className="mb-0">{card.name}</h6>
-                      </div>
-                    </div>
-                    <div className="rating d-flex">
-                      <p className="mb-0">Rating </p>&nbsp;
-                      <p>
-                        <span className="rating-review">
-                          {card.rating}
-                          <span>
-                            <IoIosStar style={{ color: "gold" }} />
-                          </span>
-                        </span>
-                      </p>
-                    </div>
-                  </div>
-                  <div className="card-body p-3 text-start text-muted">
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                    Obcaecati dolor, natus quae iusto beatae libero dolore
-                    incidunt laborum, pariatur recusandae impedit hic. Nostrum,
-                    possimus optio. Iusto nostrum itaque esse! Deleniti.
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-      {/* Online Training Review  */}
-      <div className="container-fluid py-5">
-        <div className="d-flex justify-content-between align-items center py-2">
-          <h4 className="text-start">Online Training Review</h4>
-          <button className="btn btn-sm btn-primary">View All</button>
-        </div>
-        <div className="row">
-          {cardData.map((card, index) => (
-            <div key={index} className="col-md-3 col-12 my-2">
-              <div className="video-card">
-                <div className="p-1">
-                  <ReactPlayer
-                    url={card.iframe}
-                    controls
-                    className="rounded"
-                    width="100%"
-                    height="200px"
-                    title="YouTube Video"
-                  />
-                </div>
-                <div className="text-primary p-1">
-                  <h5 className="fw-bold text-start">{card.name}</h5>
-                </div>
-                <hr className="text-primary" />
-                <div className="p-2 text-start text-muted">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Voluptates sunt dignissimos, fuga rerum saepe aspernatur
-                  pariatur sequi? Quae, ut laudantium.
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
+      
+     
+      {/* {/ Review cards  /} */}
+      <CourseTestimonial />
+      
+      {/* {/ Online Training Review  /} */}
+      <CourseVideoTestimonial />
+     
     </div>
   );
 }

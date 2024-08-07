@@ -17,10 +17,10 @@ const CourseDetails = forwardRef(
       title: Yup.string().required("Title is required*"),
       description: Yup.string().required("Description is required*"),
       category_id: Yup.string().required("Category is required*"),
-      offerPrice: Yup.number()
+      offer_price: Yup.number()
         .required("Offer Price is required*")
         .positive("Offer Price must be a positive number"),
-      orginalPrice: Yup.number()
+        price: Yup.number()
         .required("Original Price is required*")
         .positive("Original Price must be a positive number"),
     });
@@ -45,8 +45,8 @@ const CourseDetails = forwardRef(
         title: "",
         description: "",
         category_id: "",
-        offerPrice: "",
-        orginalPrice: "",
+        offer_price: "",
+        price: "",
       },
       validationSchema: validationSchema,
       onSubmit: async (values) => {
@@ -59,8 +59,8 @@ const CourseDetails = forwardRef(
           formData.append("title", values.title);
           formData.append("description", values.description);
           formData.append("category_id", values.category_id);
-          formData.append("price", values.orginalPrice);
-          formData.append("offer_price", values.offerPrice);
+          formData.append("price", values.price);
+          formData.append("offer_price", values.offer_price);
           // Perform the API call to create a new user with profile image
 
           const response = await api.post("courses", formData, {
@@ -71,18 +71,30 @@ const CourseDetails = forwardRef(
 
           if (response.status === 200) {
             toast.success(response.data.message);
+            setFormData(response.data.data)
             handleNext();
           } else {
             toast.error(response.data.message);
           }
         } catch (error) {
-          toast.error(error);
+          toast.error(error.message);
         }
       },
     });
     useImperativeHandle(ref, () => ({
       courseDetails: formik.handleSubmit,
     }));
+
+    const handleImageChange = (event) => {
+      const file = event.target.files[0];
+      if (file) {
+        formik.setFieldValue("logo", file);
+      }
+    };
+    useEffect(()=>{
+      formik.setValues(formData)
+    },[])
+    
     return (
       <div className="container my-5">
         <h4 className="mb-4 fw-bold text-start">Course Batch</h4>
@@ -99,9 +111,7 @@ const CourseDetails = forwardRef(
                   className="form-control"
                   type="file"
                   id="logo"
-                  name="logo"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
+                  onChange={handleImageChange}
                 />
                 {formik.touched.logo && formik.errors.logo && (
                   <div className="error text-danger text-start">
@@ -176,15 +186,15 @@ const CourseDetails = forwardRef(
                 <input
                   type="number"
                   className="form-control"
-                  id="orginalPrice"
-                  name="orginalPrice"
+                  id="price"
+                  name="price"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  value={formik.values.orginalPrice}
+                  value={formik.values.price}
                 />
-                {formik.touched.orginalPrice && formik.errors.orginalPrice && (
+                {formik.touched.price && formik.errors.price && (
                   <div className="error text-danger text-start">
-                    <small>{formik.errors.orginalPrice}</small>
+                    <small>{formik.errors.price}</small>
                   </div>
                 )}
               </div>
@@ -195,15 +205,15 @@ const CourseDetails = forwardRef(
                 <input
                   type="number"
                   className="form-control"
-                  id="offerPrice"
-                  name="offerPrice"
+                  id="offer_price"
+                  name="offer_price"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  value={formik.values.offerPrice}
+                  value={formik.values.offer_price}
                 />
-                {formik.touched.offerPrice && formik.errors.offerPrice && (
+                {formik.touched.offer_price && formik.errors.offer_price && (
                   <div className="error text-danger text-start">
-                    <small>{formik.errors.offerPrice}</small>
+                    <small>{formik.errors.offer_price}</small>
                   </div>
                 )}
               </div>
