@@ -98,7 +98,7 @@ function AdminHeader({ handleLogout }) {
                 </Nav.Link>
               </NavDropdown.Item>
               <NavDropdown.Item style={{ color: "#343a40" }}>
-                <Nav.Link as={NavLink} to="/termsofuse" className="me-1">
+                <Nav.Link as={NavLink} to="/TermsAndCondition" className="me-1">
                   Terms of Use
                 </Nav.Link>
               </NavDropdown.Item>
