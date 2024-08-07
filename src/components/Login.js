@@ -6,7 +6,7 @@ import * as Yup from "yup";
 import api from "../config/BaseUrl";
 import toast from "react-hot-toast";
 
-const Login = ({ handleLogin }) => {
+const Login = ({ handleLogin,handleClientLogin }) => {
   const [showPassword, setShowPassword] = React.useState(false);
   const [loading, setLoadIndicator] = useState(false);
   const navigate = useNavigate();
@@ -47,6 +47,8 @@ const Login = ({ handleLogin }) => {
           sessionStorage.setItem("email", email);
           if (role === "0") {
             handleLogin();
+          }else if(role ==="1"){
+            handleClientLogin();
           }
           navigate("/");
         } else {

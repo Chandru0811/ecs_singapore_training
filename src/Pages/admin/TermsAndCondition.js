@@ -10,19 +10,17 @@ export const TermsAndCondition = () => {
 
   const formik = useFormik({
     initialValues: {
-      title: "Terms And Condition",
-      content:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+      title: "",
+      content: "",
     },
     onSubmit: async (values) => {
         console.log("object",values.header)
-        
-        
         try {
-          const response = await api.post("update/terms");
+          const response = await api.post("update/terms",values);
           if (response.status === 200) {
             getData();
             console.log("updated", response.data);
+            handleCancel()
           }
         } catch (e) {
           console.log("object", e);
@@ -45,14 +43,11 @@ export const TermsAndCondition = () => {
     formik.resetForm();
   };
 
- 
-
-
   const getData = async () => {
     try {
       const response = await api.get("edit/terms");
       if (response.status === 200) {
-        
+        formik.setValues(response.data.data)
         setHeaderData(response.data.data);
       }
     } catch (e) {
@@ -64,12 +59,22 @@ export const TermsAndCondition = () => {
     getData();
   }, []);
 
+  const publishData =async()=>{
+    try {
+      const response = await api.post("publish/terms");
+      if (response.status === 200) {
+      console.log()
+      }
+    } catch (e) {
+      console.log("object", e);
+    }
+  }
   return (
     <>
       <div className="container-fluid d-flex align-items-center justify-content-between p-2">
         <h4>
             Terms And Condition</h4>
-        <button className="btn btn-primary">Publish</button>
+        <button className="btn btn-primary" onClick={publishData}>Publish</button>
       </div>
       <div className="container">
         <form onSubmit={formik.handleSubmit}>
