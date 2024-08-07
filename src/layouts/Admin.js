@@ -20,6 +20,7 @@ import HeaderEdit from "../Pages/admin/HeaderEdit";
 import {FooterEdit} from "../Pages/admin/FooterEdit";
 import { PrivacyPolicy } from "../Pages/admin/PrivacyPolicy";
 import { Toaster } from "react-hot-toast";
+import CompaniesHiring from "../Pages/admin/Companies Hiring/CompaniesHiring";
 
 const Admin = ({ handleLogout }) => {
   return (
@@ -44,7 +45,7 @@ const Admin = ({ handleLogout }) => {
         >
           <Routes>
             <Route path="/dashborad" element={<Dashboard />} />
-            <Route path="/" element={<AdminLandingPage />} />
+            <Route path="/landing" element={<AdminLandingPage />} />
             <Route path="/home" element={<AdminHome />} />
             <Route path="/about" element={<AdminAbout />} />
             <Route path="/course" element={<Course />} />
@@ -63,6 +64,7 @@ const Admin = ({ handleLogout }) => {
               path="/CourseVideoTestimonial"
               element={<CourseVideoTestimonial />}
             />
+            <Route path="/companieshiring" element={<CompaniesHiring />} />
           </Routes>
         </div>
         <AdminFooter />

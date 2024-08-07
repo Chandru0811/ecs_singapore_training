@@ -120,7 +120,7 @@ function Category() {
                         <button className="btn mx-2">
                           <CategoryEdit id={data.id} onSuccess={refreshData} />
                         </button>
-                        <DeleteModel onSuccess={refreshData} path={`/category/${data.id}`} />
+                        <DeleteModel onSuccess={refreshData} path={`category/${data.id}`} />
                       </div>
                     </td>
                   </tr>

@@ -96,69 +96,6 @@ function AdminHome() {
       herocardText3: 'Next Course Starts at October 12, 2024',
       trainingOverviewPara: 'Welcome to our comprehensive Cloud ECS (Elastic Container Service) Training Program! This course is designed to equip you with the essential knowledge and skills needed to effectively manage and deploy containerized applications using ECS, one of the most powerful container orchestration services available today.',
       contactNumber: '1800-212-7688',
-      //   {
-      //     id: 1,
-      //     icon: SunIcon,
-      //     courseTitle: "Programming Languages",
-      //     description: [
-      //       "Python",
-      //       "Java",
-      //       "Java Script",
-      //       "C++",
-      //       "Ruby"
-      //     ],
-      //   },
-      //   {
-      //     id: 2,
-      //     icon: SunIcon,
-      //     courseTitle: "Web Development",
-      //     description: [
-      //       "Full-Stack Web Development",
-      //       "Front-End Development",
-      //       "Back-End Development"
-      //     ],
-      //   },
-      //   {
-      //     id: 3,
-      //     icon: SunIcon,
-      //     courseTitle: "Mobile App Development",
-      //     description: [
-      //       "Android Development",
-      //       "iOS Development",
-      //       "Cross-Platform Development"
-      //     ],
-      //   },
-      //   {
-      //     id: 4,
-      //     icon: SunIcon,          
-      //     courseTitle: "Data Science and ML",
-      //     description: [
-      //       "Data Science with Python",
-      //       "Machine Learning",
-      //       "Data Engineering"
-      //     ],
-      //   },
-      //   {
-      //     id: 5,
-      //     icon: SunIcon,
-      //     courseTitle: "Cloud Computing and DevOps",
-      //     description: [
-      //       "Cloud Fundamentals",
-      //       "DevOps Essentials",
-      //       "AWS Certification"
-      //     ],
-      //   },
-      //   {
-      //     id: 6,
-
-      //     courseTitle: "Cybersecurity",
-      //     description: [
-      //       "Cybersecurity Fundamentals",
-      //       "Ethical Hacking and Penetration Testing",
-      //       "Secure Coding Practices"
-      //     ],
-      //   },
-      // ],
       aboutAccordion: [
         {
           id: 1,
@@ -234,48 +171,6 @@ function AdminHome() {
           featurecardPara: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s,',
           description: []
         }
-      ],
-      companiesLogo: [
-        {
-          id: 1,
-          companyLogoImg: Amazon
-        },
-        {
-          id: 2,
-          companyLogoImg: Microsoft
-        },
-        {
-          id: 3,
-          companyLogoImg: Google
-        },
-        {
-          id: 4,
-          companyLogoImg: Ibm
-        },
-        {
-          id: 5,
-          companyLogoImg: Delloite
-        },
-        {
-          id: 6,
-          companyLogoImg: Hp
-        },
-        {
-          id: 7,
-          companyLogoImg: WellsFargo
-        },
-        {
-          id: 8,
-          companyLogoImg: Tcs
-        },
-        {
-          id: 9,
-          companyLogoImg: Zoho
-        },
-        {
-          id: 10,
-          companyLogoImg: Hsbc
-        },
       ],
       coursesData: [
         {
@@ -420,46 +315,6 @@ function AdminHome() {
     console.log("Updated Formik values:", formik.values);
   };
 
-  //Companies Logo
-  const [isModalImage, setIsModalImage] = useState(false);
-  const handleCompanyLogoUpload = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        // Update the corresponding featurecardImg field
-        const updatedCards = formik.values.companiesLogo.map((logo) =>
-          logo.id === isEditing ? { ...logo, companyLogoImg: reader.result } : logo
-        );
-        formik.setFieldValue("companiesLogo", updatedCards);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleCompanyLogoSubmit = () => {
-    formik.setFieldValue('companiesLogo', [
-      ...formik.values.companiesLogo,
-      { ...newCompanyLogo, id: formik.values.companiesLogo.length + 1 },
-    ]);
-    setIsModalImage(false);
-    setNewCompanyLogo({ companyLogoImg: '' });
-    console.log("Updated Formik values:", formik.values);
-    formik.handleSubmit();
-  };
-
-  const handleImageUpload = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        formik.setFieldValue('heroImg', reader.result);
-        console.log("Updated Formik values:", formik.values);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
   // Accordation edit
   const [editingIndex, setEditingIndex] = useState(null);
   const handleDescriptionChange = (e, accordionIndex, descIndex) => {
@@ -588,6 +443,18 @@ function AdminHome() {
       ]);
     }
     formik.handleSubmit();
+  };
+
+  const handleImageUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        formik.setFieldValue('heroImg', reader.result);
+        console.log("Updated Formik values:", formik.values);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   return (
@@ -888,78 +755,6 @@ function AdminHome() {
               Cancel
             </Button>
             <Button variant='primary' onClick={handleModalSubmit}>
-              Save
-            </Button>
-          </Modal.Footer>
-        </Modal>
-        {/* {/ Top Companies Hiring /} */}
-        <div className='topcompanies mb-5'>
-          <div className='d-flex justify-content-between'>
-            <h1 className='secondheading text-start'>Top Companies Hiring</h1>
-            <FaPlus className='mt-3 mb-3' onClick={() => setIsModalImage(true)} />
-          </div>
-          <div className='row g-2 d-flex justify-content-start mb-3'>
-            {formik.values.companiesLogo.map((logo, index) => (
-              <div key={logo.id} className='col-md-2 col-6 mb-3'>
-                <div className='card'>
-                  <div className='card-body d-flex align-items-center justify-content-center'>
-                    {isEditing === logo.id ? (
-                      <>
-                        <div className="d-flex justify-content-center mb-2">
-                          <FaSave onClick={handleSaveClick} className="text-secondary" />
-                          <FaTimes onClick={handleCancel} style={{ marginLeft: '10px' }} className="text-secondary" />
-                        </div>
-                        <div>
-                          <input
-                            type="file"
-                            name={`companyLogoImg${index + 1}`}
-                            accept="image/*"
-                            onChange={handleCompanyLogoUpload}
-                            style={{ width: "100px", height: "100px" }}
-                          />
-                        </div>
-                      </>
-                    ) : (
-                      <>
-                        <FaEdit onClick={() => handleEditClick(logo.id)} className='text-secondary mx-2' />
-                        <div className='d-flex'>
-                          <img src={logo.companyLogoImg} alt='LogoImg' style={{ width: "100px", height: "100px" }} />
-                        </div>
-                      </>
-                    )}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-        {/* Add Companies Logo */}
-        <Modal show={isModalImage} onHide={() => setIsModalImage(false)}>
-          <Modal.Header closeButton>
-            <Modal.Title>Add New Card</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <input
-              type='file'
-              accept='image/*'
-              onChange={(e) => {
-                const file = e.target.files[0];
-                if (file) {
-                  const reader = new FileReader();
-                  reader.onloadend = () => {
-                    setNewCard({ ...newCard, companyLogoImg: reader.result });
-                  };
-                  reader.readAsDataURL(file);
-                }
-              }}
-              className='form-control mb-2'
-            />
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant='secondary' onClick={() => setIsModalImage(false)}>
-              Cancel
-            </Button>
-            <Button variant='primary' onClick={handleCompanyLogoSubmit}>
               Save
             </Button>
           </Modal.Footer>
