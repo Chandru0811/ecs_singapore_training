@@ -14,6 +14,7 @@ import api from '../../../config/BaseUrl';
 import { useFormik } from "formik";
 import ImageURL from "../../../config/ImageURL";
 import { FaSearch, FaEdit, FaSave, FaTimes, FaYoutube, FaTwitter, FaLinkedin, FaFacebook } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   const [apiData, setApiData] = useState({});
@@ -132,9 +133,9 @@ const Footer = () => {
       <div className="container-fluid">
       <div className=" row pb-3">
         <div className="col-md-6 col-12 text-start">
-          <div className="" style={{ color: "#a0a0a0" }}>
-            <span className="me-3">Privacy Policy</span>
-            <span>Terms of Use</span>
+          <div className="" >
+          <Link to={"/privacypolicy"} style={{textDecoration:"none",color:"#a0a0a0" }}><span className="me-3">Privacy Policy</span></Link>
+            <Link to={"/termsandcondition"} style={{textDecoration:"none",color:"#a0a0a0" }}><span>Terms of Use</span></Link>
           </div>
         </div>
         <div className="col-md-6 col-12 text-md-end text-start">

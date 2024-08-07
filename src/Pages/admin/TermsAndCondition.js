@@ -1,30 +1,34 @@
+
 import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import { FaEdit, FaSave, FaTimes, FaPlus, FaTrash } from "react-icons/fa";
 import api from "../../config/BaseUrl";
 
-export const PrivacyPolicy = () => {
+export const TermsAndCondition = () => {
   const [isEditing, setIsEditing] = useState(null);
-  const [PrivacyData, setPrivacyData] = useState();
+  const [headerData, setHeaderData] = useState();
+
   const formik = useFormik({
     initialValues: {
       title: "",
-      content:
-        "",
+      content: "",
     },
     onSubmit: async (values) => {
-      try {
-        const response = await api.post("update/privacypolicy",values);
-        if (response.status === 200) {
-          getData();
-          console.log("updated", response.data);
-          handleCancel()
+        console.log("object",values.header)
+        try {
+          const response = await api.post("update/terms",values);
+          if (response.status === 200) {
+            getData();
+            console.log("updated", response.data);
+            handleCancel()
+          }
+        } catch (e) {
+          console.log("object", e);
         }
-      } catch (e) {
-        console.log("object", e);
       }
-    }
   });
+
+
 
   const handleEditClick = (field) => {
     setIsEditing(field);
@@ -41,10 +45,10 @@ export const PrivacyPolicy = () => {
 
   const getData = async () => {
     try {
-      const response = await api.get("edit/privacypolicy");
+      const response = await api.get("edit/terms");
       if (response.status === 200) {
         formik.setValues(response.data.data)
-        setPrivacyData(response.data.data);
+        setHeaderData(response.data.data);
       }
     } catch (e) {
       console.log("object", e);
@@ -54,10 +58,10 @@ export const PrivacyPolicy = () => {
   useEffect(() => {
     getData();
   }, []);
-  
+
   const publishData =async()=>{
     try {
-      const response = await api.post("publish/privacypolicy");
+      const response = await api.post("publish/terms");
       if (response.status === 200) {
       console.log()
       }
@@ -65,11 +69,11 @@ export const PrivacyPolicy = () => {
       console.log("object", e);
     }
   }
-  
   return (
     <>
       <div className="container-fluid d-flex align-items-center justify-content-between p-2">
-        <h4>Privacy Policy</h4>
+        <h4>
+            Terms And Condition</h4>
         <button className="btn btn-primary" onClick={publishData}>Publish</button>
       </div>
       <div className="container">

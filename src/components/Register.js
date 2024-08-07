@@ -6,7 +6,7 @@ import * as Yup from "yup";
 import api from "../config/BaseUrl";
 import toast from "react-hot-toast";
 
-const Register = ({ handleLogin }) => {
+const Register = ({ handleLogin,handleClientLogin }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [showCPassword, setShowCPassword] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
@@ -43,6 +43,7 @@ const Register = ({ handleLogin }) => {
         if (response.status === 200) {
           toast.success(response.data.message);
           resetForm();
+          handleClientLogin();
         } else {
           toast.error(response.data.message);
         }

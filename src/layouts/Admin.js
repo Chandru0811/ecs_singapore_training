@@ -19,8 +19,14 @@ import AdminContact from "../Pages/admin/AdminContact";
 import HeaderEdit from "../Pages/admin/HeaderEdit";
 import {FooterEdit} from "../Pages/admin/FooterEdit";
 import { PrivacyPolicy } from "../Pages/admin/PrivacyPolicy";
+import { TermsAndCondition } from "../Pages/admin/TermsAndCondition";
 import { Toaster } from "react-hot-toast";
 import CompaniesHiring from "../Pages/admin/Companies Hiring/CompaniesHiring";
+import HeroSection from "../Pages/admin/Admin Home/HeroSection";
+import WhyJoinWithUs from "../Pages/admin/Admin Home/WhyJoinWithUs";
+import TopCourses from "../Pages/admin/Admin Home/TopCourses";
+import TrainingOverview from "../Pages/admin/Admin Home/TrainingOverview";
+import TrainingPlacements from "../Pages/admin/Admin Home/TrainingPlacements";
 
 const Admin = ({ handleLogout }) => {
   return (
@@ -45,6 +51,7 @@ const Admin = ({ handleLogout }) => {
         >
           <Routes>
             <Route path="/dashborad" element={<Dashboard />} />
+            <Route path="/" element={<Dashboard />} />
             <Route path="/landing" element={<AdminLandingPage />} />
             <Route path="/home" element={<AdminHome />} />
             <Route path="/about" element={<AdminAbout />} />
@@ -60,11 +67,17 @@ const Admin = ({ handleLogout }) => {
             <Route path="/headeredit" element={<HeaderEdit />} />
             <Route path="/footeredit" element={<FooterEdit />} />
             <Route path="/privacypolicy" element={<PrivacyPolicy />} />
+            <Route path="/termsandcondition" element={<TermsAndCondition />} />
             <Route
               path="/CourseVideoTestimonial"
               element={<CourseVideoTestimonial />}
             />
             <Route path="/companieshiring" element={<CompaniesHiring />} />
+            <Route path="/home/hero" element={<HeroSection />} />
+            <Route path="/home/whyjoinwithus" element={<WhyJoinWithUs />} />
+            <Route path="/home/courses" element={<TopCourses />} />
+            <Route path="/home/training/overview" element={<TrainingOverview />} />
+            <Route path="/home/training/placement" element={<TrainingPlacements />} />
           </Routes>
         </div>
         <AdminFooter />

@@ -18,10 +18,14 @@ import { FaSearch } from "react-icons/fa";
 import ImageURL from "../../../config/ImageURL";
 import api from "../../../config/BaseUrl";
 
-const Header = ({ handleLogin }) => {
+const Header = ({ handleLogout }) => {
   const [course, setCourse] = useState(false);
+  // const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const isLoginFromStorage = sessionStorage.getItem("isClientAuthenticated");
+  const expand="lg"
   const [apiData, setApiData] = useState({});
   const navigate = useNavigate();
+  const token = sessionStorage.getItem("token");
   const courseRef = useRef(null);
   const courseRef2 = useRef(null);
   const courses = [
@@ -106,13 +110,39 @@ const Header = ({ handleLogin }) => {
     getData();
   }, []);
 
+  // useEffect(() => {
+  //   const handleStorageChange = (event) => {  
+  //     if (event.key === "isClientAuthenticated") {
+  //       if (event.newValue === "false") {0
+  //         setIsClientAuthenticated(false);
+  //       }else if(event.newValue === "true"){
+  //         setIsClientAuthenticated(true);
+  //       }
+  //     }
+  //   };
+  
+  //   window.addEventListener("storage", handleStorageChange);
+  
+  //   // Clean up the event listener on component unmount
+  //   return () => {
+  //     window.removeEventListener("storage", handleStorageChange);
+  //   };
+  // }, []);
+  
+  // useEffect(() => {
+  //   const isLoginFromStorage = sessionStorage.getItem("isClientAuthenticated");
+    
+  //   const isLoginBoolean = isLoginFromStorage === "true";
+  //   if (isLoggedIn !== isLoginBoolean) {
+  //     setIsLoggedIn(isLoginBoolean);
+  //   }
+
+  // }, []);
   return (
     <>
       <div className="" style={{ position: "sticky", top: "0", zIndex: "999" }}>
-        <p className="mb-0 text-light fw-light topHeader">
-         {apiData?.top_bar}
-        </p>
-        <Navbar bg="light" expand="lg" className="clientNav shadow">
+        <p className="mb-0 text-light fw-light topHeader">{apiData?.top_bar}</p>
+        <Navbar bg="light" isLoggedIn={expand} expand={expand} className="clientNav shadow">
           <Navbar.Brand as={NavLink} to="/" className="ms-3">
             <img
               src={`${ImageURL}${apiData?.logo_path}`}
@@ -120,9 +150,7 @@ const Header = ({ handleLogin }) => {
               className="d-inline-block align-top"
               alt="ECS Training"
             />
-           <div>
-           {/* <span>{apiData?.title}</span> */}
-           </div>
+            <div>{/* <span>{apiData?.title}</span> */}</div>
           </Navbar.Brand>
 
           <Navbar.Toggle aria-controls="basic-navbar-nav " />
@@ -164,10 +192,15 @@ const Header = ({ handleLogin }) => {
               <Nav.Link as={NavLink} to="/contact">
                 Contact
               </Nav.Link>
-
-              <Link to="/login">
-                <Button className="loginBtn">Login</Button>
-              </Link>
+              {isLoginFromStorage ? (
+                <Link  onClick={handleLogout}>
+                  <Button className="loginBtn">logout</Button>
+                </Link>
+              ) : (
+                <Link to="/login">
+                  <Button className="loginBtn">Login</Button>
+                </Link>
+              )}
             </Nav>
           </Navbar.Collapse>
         </Navbar>
@@ -188,21 +221,33 @@ const Header = ({ handleLogin }) => {
           <div className="row">
             {courses.map((course, index) => (
               <div key={index} className="col-sm-4 col-md-2 col-6 d-flex">
-                <Link to={"/course"} style={{textDecoration:"none"}} onClick={()=>(setCourse(false))}>
-                <div className="col-3" >
-                  <img src={course.icon} alt={`icon`} className="course-icon" />
-                </div>
-                <div
-                  className="col-9 text-start text-dark fw-light"
-                  style={{textDecoration:"none"}}
+                <Link
+                  to={"/course"}
+                  style={{ textDecoration: "none" }}
+                  onClick={() => setCourse(false)}
                 >
-                  <h5 className="mb-0">{course.name}</h5>
-                  <p>{course.description}</p>
-                </div>
-            </Link>
+                  <div className="col-3">
+                    <img
+                      src={course.icon}
+                      alt={`icon`}
+                      className="course-icon"
+                    />
+                  </div>
+                  <div
+                    className="col-9 text-start text-dark fw-light"
+                    style={{ textDecoration: "none" }}
+                  >
+                    <h5 className="mb-0">{course.name}</h5>
+                    <p>{course.description}</p>
+                  </div>
+                </Link>
               </div>
             ))}
-            <Link to={"/course"} style={{textDecoration:"none"}} onClick={()=>(setCourse(false))}>
+            <Link
+              to={"/course"}
+              style={{ textDecoration: "none" }}
+              onClick={() => setCourse(false)}
+            >
               <p className="text-info text-end mb-0">see more..</p>
             </Link>
           </div>

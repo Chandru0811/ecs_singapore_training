@@ -30,18 +30,69 @@ function AdminHeader({ handleLogout }) {
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav ">
           <Nav className="me-auto ">
-            <Nav.Link as={NavLink} to="/home" className="me-1 ">
-              Home
-            </Nav.Link>
+          <NavDropdown
+              title="Home"
+              id="basic-nav-dropdownDot"
+              className="me-1"
+            >
+              <NavDropdown.Item style={{ color: "#343a40" }}>
+                <Nav.Link as={NavLink} to="/home/hero" className="me-1">
+                Hero Section
+                </Nav.Link>
+              </NavDropdown.Item>
+              <NavDropdown.Item style={{ color: "#343a40" }}>
+                <Nav.Link
+                  as={NavLink}
+                  to="/home/whyjoinwithus"
+                  className="me-1"
+                >
+                 Why Join With Us
+                </Nav.Link>
+              </NavDropdown.Item>
+              <NavDropdown.Item style={{ color: "#343a40" }}>
+                <Nav.Link as={NavLink} to="/home/courses" className="me-1">
+                10+ Courses
+                </Nav.Link>
+              </NavDropdown.Item>
+              <NavDropdown.Item style={{ color: "#343a40" }}>
+                <Nav.Link as={NavLink} to="/companieshiring" className="me-1">
+                  Companies Hiring
+                </Nav.Link>
+              </NavDropdown.Item>
+              <NavDropdown.Item style={{ color: "#343a40" }}>
+                <Nav.Link as={NavLink} to="/home/training/overview" className="me-1">
+                Cloud ECS Training Overview
+                </Nav.Link>
+              </NavDropdown.Item>
+              <NavDropdown.Item style={{ color: "#343a40" }}>
+                <Nav.Link as={NavLink} to="/home/training/placement" className="me-1">
+                Cloud ECS Software Training Placements in India
+                </Nav.Link>
+              </NavDropdown.Item>
+            </NavDropdown>
             <Nav.Link as={NavLink} to={"/contact"} className="me-1">
               Contact
             </Nav.Link>
             <Nav.Link as={NavLink} to={"/landing"} className="me-1">
               Landing
             </Nav.Link>
-            <Nav.Link as={NavLink} to="/about" className="me-1">
-              About
-            </Nav.Link>
+            <NavDropdown
+              title={"About"}
+              id="basic-nav-dropdownDot"
+              className=""
+            >
+              <NavDropdown.Item style={{ color: "#343a40" }}>
+                <Nav.Link as={NavLink} to="/about" className="me-1">
+                  About
+                </Nav.Link>
+              </NavDropdown.Item>
+              <NavDropdown.Item style={{ color: "#343a40" }}>
+                <Nav.Link as={NavLink} to="" className="me-1">
+                  About Faq
+                </Nav.Link>
+              </NavDropdown.Item>
+            </NavDropdown>
+
             <Nav.Link as={NavLink} to="/categories" className="me-1">
               Categories
             </Nav.Link>
@@ -98,7 +149,7 @@ function AdminHeader({ handleLogout }) {
                 </Nav.Link>
               </NavDropdown.Item>
               <NavDropdown.Item style={{ color: "#343a40" }}>
-                <Nav.Link as={NavLink} to="/termsofuse" className="me-1">
+                <Nav.Link as={NavLink} to="/TermsAndCondition" className="me-1">
                   Terms of Use
                 </Nav.Link>
               </NavDropdown.Item>
