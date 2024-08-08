@@ -39,8 +39,8 @@ export const TermsAndCondition = () => {
   };
 
   const handleCancel = () => {
+    getData();
     setIsEditing(null);
-    formik.resetForm();
   };
 
   const getData = async () => {
@@ -56,6 +56,7 @@ export const TermsAndCondition = () => {
   };
 
   useEffect(() => {
+    formik.setValues(headerData)
     getData();
   }, []);
 
@@ -69,6 +70,7 @@ export const TermsAndCondition = () => {
       console.log("object", e);
     }
   }
+  
   return (
     <>
       <div className="container-fluid d-flex align-items-center justify-content-between p-2">
@@ -104,7 +106,7 @@ export const TermsAndCondition = () => {
               ) : (
                 <div className="d-flex align-items-center">
                   <h3 className="display-5 text-start fw-bold">
-                    {formik.values.title}
+                    {headerData?.title}
                   </h3>
                   <FaEdit
                     onClick={() => handleEditClick("title")}
@@ -135,7 +137,7 @@ export const TermsAndCondition = () => {
                 </div>
               ) : (
                 <div className="d-flex align-items-center">
-                  <p className="text-start">{formik.values.content}</p>
+                  <p className="text-start">{headerData?.content}</p>
                   <FaEdit
                     onClick={() => handleEditClick("content")}
                     className="text-secondary ms-3"

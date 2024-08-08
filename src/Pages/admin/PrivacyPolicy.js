@@ -35,8 +35,8 @@ export const PrivacyPolicy = () => {
   };
 
   const handleCancel = () => {
+    getData()
     setIsEditing(null);
-    formik.resetForm();
   };
 
   const getData = async () => {
@@ -100,7 +100,7 @@ export const PrivacyPolicy = () => {
               ) : (
                 <div className="d-flex align-items-center">
                   <h3 className="display-5 text-start fw-bold">
-                    {formik.values.title}
+                    {PrivacyData?.title}
                   </h3>
                   <FaEdit
                     onClick={() => handleEditClick("title")}
@@ -131,7 +131,7 @@ export const PrivacyPolicy = () => {
                 </div>
               ) : (
                 <div className="d-flex align-items-center">
-                  <p className="text-start">{formik.values.content}</p>
+                  <p className="text-start">{PrivacyData?.content}</p>
                   <FaEdit
                     onClick={() => handleEditClick("content")}
                     className="text-secondary ms-3"

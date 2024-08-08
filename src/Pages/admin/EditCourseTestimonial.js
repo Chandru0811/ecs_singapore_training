@@ -8,7 +8,7 @@ import { FaEdit } from "react-icons/fa";
 import api from "../../config/BaseUrl";
 
 const validationSchema = Yup.object({
-    profile: Yup.mixed().required("*Image is required"),
+    // profile: Yup.mixed().required("*Image is required"),
     client_name: Yup.string().required("*Client Name is required"),
     rating: Yup.string().required("*Rating is required"),
     description: Yup.string().required("*Description is required"),

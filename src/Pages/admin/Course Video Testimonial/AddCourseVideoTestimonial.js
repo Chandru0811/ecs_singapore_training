@@ -4,11 +4,17 @@ import { Button, Modal } from "react-bootstrap";
 import * as Yup from "yup";
 import api from "../../../config/BaseUrl";
 import toast from "react-hot-toast";
-
+const SUPPORTED_VIDEO_FORMATS = ['video/mp4', 'video/avi', 'video/mkv', 'video/webm'];
 const validationSchema = Yup.object({
     client_name: Yup.string().required("*Name is required"),
     description: Yup.string().required("*Description is required"),
-    video: Yup.mixed().required("*Video is required")
+    video: Yup.mixed()
+    .required("*Video is required")
+    .test(
+      "fileFormat",
+      "*Unsupported file format",
+      value => value && SUPPORTED_VIDEO_FORMATS.includes(value.type)
+    )
 });
 
 function AddCourseVideoTestimonial({ onSuccess }) {

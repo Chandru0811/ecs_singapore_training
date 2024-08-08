@@ -12,31 +12,21 @@ function CompaniesHiring() {
     const [iconState, setIconState] = useState({});
     const videoRefs = useRef({});
 
-    useEffect(() => {
-        const getData = async () => {
-            try {
-                const response = await api.get("companyhiring");
-                setDatas(response.data.data);
-            } catch (error) {
-                console.error("Error fetching data:", error);
-            } finally {
-                setLoading(false);
-            }
-        };
-        getData();
-    }, []);
-
-    const refreshData = async () => {
+    const getData = async () => {
         setLoading(true);
         try {
             const response = await api.get("companyhiring");
             setDatas(response.data.data);
         } catch (error) {
-            console.error("Error refreshing data:", error);
+            console.error("Error fetching data:", error);
         } finally {
             setLoading(false);
         }
     };
+    useEffect(() => {
+        getData();
+    }, []);
+
 
     const handlePublish = async () => {
         try {
@@ -46,7 +36,7 @@ function CompaniesHiring() {
             } else {
                 toast.error(response.data.message);
             }
-            refreshData();
+            getData();
         } catch (error) {
             const errorMessage = error.response?.data?.message || error.message;
             toast.error(errorMessage);
@@ -71,7 +61,7 @@ function CompaniesHiring() {
             <div className="card-header d-flex align-items-center justify-content-between p-2 bg-light mb-5">
                 <h3 className="fw-bold">Top Companies Hiring</h3>
                 <div>
-                    <AddCompanyHiring onSuccess={refreshData} />
+                    <AddCompanyHiring onSuccess={getData} />
                     <button className="btn btn-danger mx-2" onClick={handlePublish}>Publish</button>
                 </div>
             </div>
@@ -86,8 +76,8 @@ function CompaniesHiring() {
                             <div className='card'>
                                 <div className='card-body'>
                                     <div className="d-flex justify-content-between">
-                                        <EditCompanyHiring id={card.id} onSuccess={refreshData} />
-                                        <DeleteModel className="text-danger" onSuccess={refreshData} path={`companyhiring/${card.id}`} />
+                                        <EditCompanyHiring id={card.id} onSuccess={getData} />
+                                        <DeleteModel className="text-danger" onSuccess={getData} path={`companyhiring/${card.id}`} />
                                     </div>
                                     <img src={`${ImageURL}${card.company_logo_path}`}
                                         alt={card.company_name}
