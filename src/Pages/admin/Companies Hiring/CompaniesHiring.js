@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import AddCompanyHiring from "./AddCompanyHiring";
 import EditCompanyHiring from "./EditCompanyHiring";
 import DeleteModel from "../../../components/DeleteModel";
@@ -9,8 +9,6 @@ import toast from "react-hot-toast";
 function CompaniesHiring() {
     const [datas, setDatas] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [iconState, setIconState] = useState({});
-    const videoRefs = useRef({});
 
     const getData = async () => {
         setLoading(true);
@@ -40,19 +38,6 @@ function CompaniesHiring() {
         } catch (error) {
             const errorMessage = error.response?.data?.message || error.message;
             toast.error(errorMessage);
-        }
-    };
-
-    const handlePlayPause = (id) => {
-        const video = videoRefs.current[id];
-        if (video) {
-            if (video.paused) {
-                video.play();
-                setIconState((prevState) => ({ ...prevState, [id]: false }));
-            } else {
-                video.pause();
-                setIconState((prevState) => ({ ...prevState, [id]: true }));
-            }
         }
     };
 
