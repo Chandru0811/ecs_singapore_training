@@ -552,7 +552,7 @@ hr {
 /* / / About / / */
 .about-banner {
   position: relative;
-  background-image: url(../assets/client/about_bg-image.png);
+  /* background-image: url(../assets/client/about_bg-image.png); */
   background-repeat: no-repeat;
   background-size: cover;
   overflow-x: hidden;
@@ -646,7 +646,7 @@ hr {
 
 .about-banner1 {
   position: relative;
-  background-image: url(../assets/client/about_bg-image-1.jpg);
+  /* background-image: url(../assets/client/about_bg-image-1.jpg); */
   background-repeat: no-repeat;
   background-size: cover;
   overflow-x: hidden;

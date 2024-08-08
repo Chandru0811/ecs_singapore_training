@@ -7,35 +7,45 @@ import { FaEdit, FaSave, FaTimes } from "react-icons/fa";
 import { BiSolidQuoteRight } from "react-icons/bi";
 import { useFormik } from "formik";
 import api from "../../config/BaseUrl";
+import toast from "react-hot-toast";
 
 function AdminContact() {
   const [isEditing, setIsEditing] = useState(null);
   const [editingContactMap, setEditingContactMap] = useState("");
   const [data, setData] = useState();
+  const [loading, setLoading] = useState(false);
 
   const formik = useFormik({
     initialValues: {
       phone: "",
       email: "",
       location: "",
-      contact_description: "",
       title: "",
-      contactMap: "",
-      contactCardLink1: "",
-      contactCardLink2: "",
-      contactCardLink3: "",
+      subTitle: "",
+      detail: "",
+      map_url: "",
     },
     onSubmit: async (values) => {
-      console.log("values", values);
+      const contactDescription = {
+        title: values.title,
+        subTitle: values.subTitle,
+        detail: values.detail,
+      };
+
+      const payload = {
+        ...values,
+        contact_description: contactDescription,
+      };
 
       try {
-        const response = await api.post("contactus", values);
+        const response = await api.post("contactus", payload);
         if (response.status === 200) {
           getData();
+          toast.success(response.data.message);
           console.log("updated", response.data);
         }
       } catch (e) {
-        console.log("object", e);
+        console.log("Error updating contact data:", e);
       }
     },
   });
@@ -43,7 +53,7 @@ function AdminContact() {
   // API Get Data
   const getData = async () => {
     try {
-      const response = await api.get("contactus");
+      const response = await api.post("contactus");
       if (response.status === 200) {
         const { phone, email, location, map_url, contact_description } =
           response.data.data;
@@ -52,15 +62,15 @@ function AdminContact() {
           phone,
           email,
           location,
-          contact_description: contact_description
-            .map((desc) => `${desc.title}: ${desc.detail}`)
-            .join(", "),
-          contactMap: map_url,
+          title: contact_description.title,
+          subTitle: contact_description.subTitle,
+          detail: contact_description.detail,
+          map_url: map_url,
         });
         setData(response.data.data);
       }
     } catch (e) {
-      console.log("object", e);
+      console.log("Error fetching contact data:", e);
     }
   };
 
@@ -70,23 +80,38 @@ function AdminContact() {
 
   const handleEditClick = (field) => {
     setIsEditing(field);
-    if (field === "contactMap") {
-      setEditingContactMap(formik.values.contactMap);
+    if (field === "map_url") {
+      setEditingContactMap(formik.values.map_url);
     }
   };
 
   const handleSaveClick = () => {
-    if (isEditing === "contactMap") {
-      formik.setFieldValue("contactMap", editingContactMap);
+    if (isEditing === "map_url") {
+      formik.setFieldValue("map_url", editingContactMap);
     }
-    formik.handleSubmit();
     setIsEditing(null);
+    formik.handleSubmit();
   };
 
   const handleCancel = () => {
     setIsEditing(null);
-    formik.resetForm();
   };
+
+  const publishData = async () => {
+    try {
+      setLoading(true);
+      const response = await api.post("publish/contactus");
+      if (response.status === 200) {
+        console.log("Published successfully!");
+        toast.success(response.data.message);
+      }
+    } catch (error) {
+      console.error("Error publishing contact data", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <section>
       <div className="container-fluid py-2 bg-white">
@@ -94,18 +119,31 @@ function AdminContact() {
           <div className="d-flex justify-content-between align-items-center">
             <h3 className="fw-bold">Contact</h3>
             <div>
-              <button type="button" className="btn btn-primary">
+              <button
+                type="submit"
+                className="btn btn-sm btn-danger mx-2"
+                disabled={loading}
+                onClick={publishData}
+              >
+                {loading ? (
+                  <span
+                    className="spinner-border spinner-border-sm"
+                    aria-hidden="true"
+                  ></span>
+                ) : (
+                  <span></span>
+                )}
                 Publish
               </button>
             </div>
           </div>
         </div>
       </div>
-      <form onSubmit={formik.handleSubmit}>
+      <form>
         <div className="container py-5" style={{ overflowX: "hidden" }}>
           <div className="row">
             <div className="col-lg-6 col-xl-4 col-12">
-              <div className="card contactDetails p-4">
+              <div className="card contactDetails p-4 h-100">
                 <div className="row">
                   <div className="col-lg-3 col-12 d-flex justify-content-center align-items-center">
                     <FiPhoneCall color="#e41111" size={60} />
@@ -119,11 +157,11 @@ function AdminContact() {
                           type="text"
                           className="form-control me-2"
                           name="phone"
-                          value={formik.values.phone}
+                          {...formik.getFieldProps("phone")}
                           onChange={formik.handleChange}
                         />
                         <FaSave
-                          onClick={handleSaveClick}
+                          onClick={() => handleSaveClick("phone")}
                           className="text-primary mt-2"
                         />
                         <FaTimes
@@ -135,12 +173,13 @@ function AdminContact() {
                       <div className="d-flex">
                         <p className="text-start fw-medium paraText">
                           {formik.values.phone}
-                          <FaEdit
-                            size={20}
-                            className="text-secondary ms-3"
-                            style={{ cursor: "pointer" }}
+                          <button
                             onClick={() => handleEditClick("phone")}
-                          />
+                            className="btn btn-sm link-secondary ms-2"
+                            style={{ width: "fit-content" }}
+                          >
+                            <FaEdit size={20} />
+                          </button>
                         </p>
                       </div>
                     )}
@@ -158,7 +197,7 @@ function AdminContact() {
               </div>
             </div>
             <div className="col-lg-6 col-xl-4 col-12">
-              <div className="card contactDetails p-4">
+              <div className="card contactDetails p-4 h-100">
                 <div className="row">
                   <div className="col-lg-3 col-12 d-flex justify-content-center align-items-center">
                     <IoMailOpenOutline color="#e41111" size={60} />
@@ -172,11 +211,11 @@ function AdminContact() {
                           type="text"
                           className="form-control me-2"
                           name="email"
-                          value={formik.values.email}
+                          {...formik.getFieldProps("email")}
                           onChange={formik.handleChange}
                         />
                         <FaSave
-                          onClick={handleSaveClick}
+                          onClick={() => handleSaveClick("email")}
                           className="text-primary mt-2"
                         />
                         <FaTimes
@@ -186,17 +225,15 @@ function AdminContact() {
                       </div>
                     ) : (
                       <div className="d-flex">
-                        <p
-                          className="text-start fw-medium paraText"
-                          style={{ wordBreak: "break-word" }}
-                        >
+                        <p className="text-start fw-medium paraText">
                           {formik.values.email}
-                          <FaEdit
-                            size={20}
-                            className="text-secondary ms-3"
-                            style={{ cursor: "pointer" }}
+                          <button
                             onClick={() => handleEditClick("email")}
-                          />
+                            className="btn btn-sm link-secondary ms-2"
+                            style={{ width: "fit-content" }}
+                          >
+                            <FaEdit size={20} />
+                          </button>
                         </p>
                       </div>
                     )}
@@ -214,7 +251,7 @@ function AdminContact() {
               </div>
             </div>
             <div className="col-lg-6 col-xl-4 col-12">
-              <div className="card contactDetails p-4">
+              <div className="card contactDetails p-4 h-100">
                 <div className="row">
                   <div className="col-lg-3 col-12 d-flex justify-content-center align-items-center">
                     <LuMapPin color="#e41111" size={60} />
@@ -224,14 +261,15 @@ function AdminContact() {
                     <hr className="my-4" />
                     {isEditing === "location" ? (
                       <div className="d-flex">
-                        <textarea
+                        <input
+                          type="text"
                           className="form-control me-2"
                           name="location"
-                          value={formik.values.location}
+                          {...formik.getFieldProps("location")}
                           onChange={formik.handleChange}
                         />
                         <FaSave
-                          onClick={handleSaveClick}
+                          onClick={() => handleSaveClick("location")}
                           className="text-primary mt-2"
                         />
                         <FaTimes
@@ -243,12 +281,13 @@ function AdminContact() {
                       <div className="d-flex">
                         <p className="text-start fw-medium paraText">
                           {formik.values.location}
-                          <FaEdit
-                            size={20}
-                            className="text-secondary ms-3"
-                            style={{ cursor: "pointer" }}
+                          <button
                             onClick={() => handleEditClick("location")}
-                          />
+                            className="btn btn-sm link-secondary ms-2"
+                            style={{ width: "fit-content" }}
+                          >
+                            <FaEdit size={20} />
+                          </button>
                         </p>
                       </div>
                     )}
@@ -306,7 +345,7 @@ function AdminContact() {
                   </div>
                   <div className="mb-3">
                     <button
-                      type="submit"
+                      type="button"
                       className="btn btn-danger py-2"
                       style={{ width: "100%" }}
                     >
@@ -316,13 +355,13 @@ function AdminContact() {
                 </div>
               </div>
               <div className="col-lg-6 col-12 text-start mt-3 px-5">
-                {isEditing === "contact_description" ? (
+                {isEditing === "title" ? (
                   <div className="d-flex">
                     <textarea
                       type="text"
                       className="form-control me-2"
-                      name="contact_description"
-                      value={formik.values.contact_description}
+                      name="title"
+                      {...formik.getFieldProps("title")}
                       onChange={formik.handleChange}
                     />
                     <FaSave
@@ -337,23 +376,23 @@ function AdminContact() {
                 ) : (
                   <div className="d-flex">
                     <p className="text-start fw-medium paraText">
-                      {formik.values.contact_description}
+                      {formik.values.title}
                       <FaEdit
                         size={20}
                         className="text-secondary ms-3"
                         style={{ cursor: "pointer" }}
-                        onClick={() => handleEditClick("contact_description")}
+                        onClick={() => handleEditClick("title")}
                       />
                     </p>
                   </div>
                 )}
-                {isEditing === "title" ? (
+                {isEditing === "subTitle" ? (
                   <div className="d-flex">
                     <textarea
                       type="text"
                       className="form-control me-2"
-                      name="title"
-                      value={formik.values.title}
+                      name="subTitle"
+                      {...formik.getFieldProps("subTitle")}
                       onChange={formik.handleChange}
                     />
                     <FaSave
@@ -367,12 +406,12 @@ function AdminContact() {
                   </div>
                 ) : (
                   <p className="fw-medium paraText mb-4">
-                    {formik.values.title}
+                    {formik.values.subTitle}
                     <FaEdit
                       size={20}
                       className="text-dark ms-3"
                       style={{ cursor: "pointer" }}
-                      onClick={() => handleEditClick("title")}
+                      onClick={() => handleEditClick("subTitle")}
                     />
                   </p>
                 )}
@@ -384,14 +423,14 @@ function AdminContact() {
                     {" "}
                     <BiSolidQuoteRight size={70} color="#e41111" />
                   </span>
-                  {isEditing === "contactSubheading" ? (
+                  {isEditing === "detail" ? (
                     <div className="d-flex">
                       <textarea
                         type="text"
                         className="form-control me-2"
-                        name="contactSubheading"
+                        name="detail"
                         style={{ width: "450px" }}
-                        value={formik.values.contactSubheading}
+                        {...formik.getFieldProps("detail")}
                         onChange={formik.handleChange}
                       />
                       <FaSave
@@ -405,22 +444,22 @@ function AdminContact() {
                     </div>
                   ) : (
                     <h5 className="fw-bold" style={{ marginLeft: "0.5rem" }}>
-                      {formik.values.contactSubheading}
+                      {formik.values.detail}
                       <FaEdit
                         size={20}
                         className="text-secondary ms-3"
                         style={{ cursor: "pointer" }}
-                        onClick={() => handleEditClick("contactSubheading")}
+                        onClick={() => handleEditClick("detail")}
                       />
                     </h5>
                   )}
                 </div>
-                {isEditing === "contactMap" ? (
-                  <div className="d-flex mb-2">
-                    <textarea
+                {isEditing === "map_url" ? (
+                  <div className="d-flex">
+                    <input
                       type="text"
                       className="form-control me-2"
-                      name="contactMap"
+                      name="map_url"
                       value={editingContactMap}
                       onChange={(e) => setEditingContactMap(e.target.value)}
                     />
@@ -433,26 +472,27 @@ function AdminContact() {
                       className="ms-2 text-danger mt-2"
                     />
                   </div>
-                ) : null}
-                {isEditing !== "contactMap" && (
-                  <FaEdit
-                    size={20}
-                    onClick={() => handleEditClick("contactMap")}
-                    className="text-secondary"
-                    style={{ cursor: "pointer" }}
-                  />
+                ) : (
+                  <>
+                    <FaEdit
+                      size={20}
+                      className="text-secondary ms-3"
+                      style={{ cursor: "pointer" }}
+                      onClick={() => handleEditClick("map_url")}
+                    />
+                    <div className="card" style={{ borderRadius: "30px" }}>
+                      <iframe
+                        src={formik.values.map_url}
+                        width="100%"
+                        height="400"
+                        style={{ borderRadius: "30px" }}
+                        allowFullScreen=""
+                        loading="lazy"
+                        referrerPolicy="no-referrer-when-downgrade"
+                      ></iframe>
+                    </div>
+                  </>
                 )}
-                <div className="card" style={{ borderRadius: "30px" }}>
-                  <iframe
-                    src={formik.values.contactMap}
-                    width="100%"
-                    height="400"
-                    style={{ borderRadius: "30px" }}
-                    allowFullScreen=""
-                    loading="lazy"
-                    referrerPolicy="no-referrer-when-downgrade"
-                  ></iframe>
-                </div>
               </div>
             </div>
           </div>

@@ -23,10 +23,11 @@ import { TermsAndCondition } from "../Pages/admin/TermsAndCondition";
 import { Toaster } from "react-hot-toast";
 import CompaniesHiring from "../Pages/admin/Companies Hiring/CompaniesHiring";
 import HeroSection from "../Pages/admin/Admin Home/HeroSection";
-import WhyJoinWithUs from "../Pages/admin/Admin Home/WhyJoinWithUs";
 import TopCourses from "../Pages/admin/Admin Home/TopCourses";
 import TrainingOverview from "../Pages/admin/Admin Home/TrainingOverview";
 import TrainingPlacements from "../Pages/admin/Admin Home/TrainingPlacements";
+import WhyJoinWithUs from "../Pages/admin/Admin Home/WhyJoinWithUS/WhyJoinWithUs";
+import AdminAboutFaq from "../Pages/admin/AdminAboutFaq";
 
 const Admin = ({ handleLogout }) => {
   return (
@@ -78,6 +79,7 @@ const Admin = ({ handleLogout }) => {
             <Route path="/home/courses" element={<TopCourses />} />
             <Route path="/home/training/overview" element={<TrainingOverview />} />
             <Route path="/home/training/placement" element={<TrainingPlacements />} />
+            <Route path="/aboutFaq" element={<AdminAboutFaq />} />
           </Routes>
         </div>
         <AdminFooter />

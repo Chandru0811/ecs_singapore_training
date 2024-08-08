@@ -183,7 +183,7 @@ function TrainingPlacements() {
             ) : (
                 <div>
                     <div className="container-fluid d-flex justify-content-between p-2 bg-light">
-                        <h3 className="fw-bold">Training Placements</h3>
+                        <h3 className="fw-bold"> Home FAQ</h3>
                         <button className="btn btn-sm btn-danger">Publish</button>
                     </div>
                     <div>
