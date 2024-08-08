@@ -1,22 +1,42 @@
-import React from "react";
-import AboutHero from "../../../assets/client/about_hero_image.png";
-import AboutImage from "../../../assets/client/about-imgae 1.jpg";
+import React, { useEffect, useState } from "react";
 import { LuDiamond } from "react-icons/lu";
 import { Tabs, Tab } from "react-bootstrap";
-import selfLevel from "../../../assets/client/self level.png";
-import Assignment from "../../../assets/client/assignment.png";
-import Support from "../../../assets/client/suppoet 24-7.png";
 import { BsBoxSeam } from "react-icons/bs";
 import EnrollModel from "../../admin/EnrollModel";
 import { Link } from "react-router-dom";
+import api from "../../../config/BaseUrl";
+import ImageURL from "../../../config/ImageURL";
 
 function Section1() {
+  const [datas, setDatas] = useState([]);
+
+  const fetchDatas = async () => {
+    try {
+      const response = await api.get("about");
+      setDatas(response.data.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchDatas();
+  }, []);
+
   return (
     <section>
       {/* About Banner */}
       <div className="container-fluid mb-4">
         <div className="row about-banner">
-          <div className="content-wrapper">
+          <div
+            className="content-wrapper"
+            style={{
+              position: "relative",
+              backgroundImage: `url(${ImageURL}${datas.background_image})`,
+              backgroundSize: "cover",
+              backgroundRepeat: "no-repeat",
+            }}
+          >
             <div className="container">
               <div className="row">
                 <div className="col-md-7 col-12">
@@ -25,15 +45,9 @@ function Section1() {
                       className="display-5 fw-bold"
                       style={{ paddingLeft: "10px" }}
                     >
-                      What is Courses and how valid is it?
+                      {datas.title}
                     </h1>
-                    <p>
-                      The meaning of production in Carlio is the creation,
-                      development, and the path to progress, and the starting
-                      point to achieve the goals that we all have the Petroforce
-                      bran with over 20 years of experience in the oil and
-                      petrochemical industry.
-                    </p>
+                    <p>{datas.description}</p>
                   </div>
                   <div className="d-flex mb-4">
                     {/* <button className="btn enroll-btn">Enroll Now</button> */}
@@ -48,7 +62,7 @@ function Section1() {
                 <div className="col-md-5 col-12">
                   <div>
                     <img
-                      src={AboutHero}
+                      src={`${ImageURL}${datas.banner_image}`}
                       alt="About Hero"
                       className="img-fluid"
                     ></img>
@@ -64,7 +78,11 @@ function Section1() {
         <div className="row">
           <div className="col-md-6 col-12 mb-3 d-flex align-items-center justify-content-center">
             <div className="">
-              <img src={AboutImage} alt="img" className="img-fluid"></img>
+              <img
+                src={`${ImageURL}${datas.about_image}`}
+                alt="img"
+                className="img-fluid"
+              ></img>
             </div>
           </div>
           <div className="col-md-6 col-12">
@@ -80,17 +98,10 @@ function Section1() {
               </div>
             </div>
             <div className="text-start">
-              <h3 className="fw-bold">Our Company Overview</h3>
-              <p>
-                Carlio brand is one of the most reliable motor oil
-                manufacturers, which is engaged in the production of high
-                quality products with a history of more than decades in the
-                industry. In order to get more information about other aspects
-                and products of the Carlio brand, you can use the following
-                buttons:
-              </p>
+              {/* <h3 className="fw-bold">Our Company Overview</h3> */}
+              <p>{datas.aboutus_content}</p>
               <div>
-                <Tabs
+                {/* <Tabs
                   defaultActiveKey="company"
                   id="fill-tab-example"
                   className="mb-3 tab"
@@ -140,7 +151,7 @@ function Section1() {
                       </p>
                     </div>
                   </Tab>
-                </Tabs>
+                </Tabs> */}
                 <a href="https://ecscloudinfotech.com/ecs/" target="_blank">
                   <button className="learn-btn">Learn More</button>
                 </a>
@@ -152,7 +163,15 @@ function Section1() {
       {/* Courses Features */}
       <div className="container-fluid mb-4">
         <div className="row about-banner1">
-          <div className="content-wrapper1">
+          <div
+            className="content-wrapper1"
+            style={{
+              position: "relative",
+              backgroundImage: `url(${ImageURL}${datas.background_image})`,
+              backgroundSize: "cover",
+              backgroundRepeat: "no-repeat",
+            }}
+          >
             <div className="container">
               <div className="row mb-4">
                 <div className="col-md-6 col-12 mb-3 d-flex flex-column align-items-start justify-content-center">
@@ -167,10 +186,10 @@ function Section1() {
                       >
                         <BsBoxSeam color="#AA205E" size={30} />
                       </div>
-                      <p className="fw-medium">Courses Features</p>
+                      <p className="fw-medium">{datas.feature_title}</p>
                     </div>
                     <h1 className="display-5 fw-bold">
-                      The feature of Courses that you will benefit from
+                      {datas.feature_description}
                     </h1>
                   </div>
                   <Link to="/course">
@@ -182,36 +201,36 @@ function Section1() {
                     <div className="col-md-4 col-6 mb-2">
                       <div className="card about-card h-100 d-flex flex-column align-items-center justify-content-center">
                         <img
-                          src={selfLevel}
+                          src={`${ImageURL}${datas.image_1}`}
                           alt="About Hero"
                           className="img-fluid mb-4"
                         ></img>
                         <p className="about-textWhite text-center mb-4">
-                          Self-level Beginner
+                          {datas.image1_description}
                         </p>
                       </div>
                     </div>
                     <div className="col-md-4 col-6 mb-2">
                       <div className="card about-card h-100 d-flex flex-column align-items-center justify-content-center">
                         <img
-                          src={Assignment}
+                          src={`${ImageURL}${datas.image_2}`}
                           alt="About Hero"
                           className="img-fluid mb-4"
                         ></img>
                         <p className="about-textWhite text-center mb-4">
-                          Assignment Provide
+                          {datas.image2_description}
                         </p>
                       </div>
                     </div>
                     <div className="col-md-4 col-6 mb-2">
                       <div className="card about-card h-100 d-flex flex-column align-items-center justify-content-center">
                         <img
-                          src={Support}
+                          src={`${ImageURL}${datas.image_3}`}
                           alt="About Hero"
                           className="img-fluid mb-4"
                         ></img>
                         <p className="about-textWhite text-center mb-4">
-                          Support 24/7
+                          {datas.image3_description}
                         </p>
                       </div>
                     </div>
