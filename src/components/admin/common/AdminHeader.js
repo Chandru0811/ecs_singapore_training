@@ -37,7 +37,7 @@ function AdminHeader({ handleLogout }) {
             >
               <NavDropdown.Item style={{ color: "#343a40" }}>
                 <Nav.Link as={NavLink} to="/home/hero" className="me-1">
-                Hero Section
+                Home Section
                 </Nav.Link>
               </NavDropdown.Item>
               <NavDropdown.Item style={{ color: "#343a40" }}>
@@ -47,11 +47,6 @@ function AdminHeader({ handleLogout }) {
                   className="me-1"
                 >
                  Why Join With Us
-                </Nav.Link>
-              </NavDropdown.Item>
-              <NavDropdown.Item style={{ color: "#343a40" }}>
-                <Nav.Link as={NavLink} to="/home/courses" className="me-1">
-                10+ Courses
                 </Nav.Link>
               </NavDropdown.Item>
               <NavDropdown.Item style={{ color: "#343a40" }}>
@@ -66,7 +61,7 @@ function AdminHeader({ handleLogout }) {
               </NavDropdown.Item>
               <NavDropdown.Item style={{ color: "#343a40" }}>
                 <Nav.Link as={NavLink} to="/home/training/placement" className="me-1">
-                Cloud ECS Software Training Placements in India
+                Home FAQ
                 </Nav.Link>
               </NavDropdown.Item>
             </NavDropdown>
@@ -87,7 +82,7 @@ function AdminHeader({ handleLogout }) {
                 </Nav.Link>
               </NavDropdown.Item>
               <NavDropdown.Item style={{ color: "#343a40" }}>
-                <Nav.Link as={NavLink} to="" className="me-1">
+              <Nav.Link as={NavLink} to="/aboutFaq" className="me-1">
                   About Faq
                 </Nav.Link>
               </NavDropdown.Item>
@@ -126,11 +121,6 @@ function AdminHeader({ handleLogout }) {
               <NavDropdown.Item style={{ color: "#343a40" }}>
                 <Nav.Link as={NavLink} to="/courses" className="me-1">
                   ClientCourse
-                </Nav.Link>
-              </NavDropdown.Item>
-              <NavDropdown.Item style={{ color: "#343a40" }}>
-                <Nav.Link as={NavLink} to="/companieshiring" className="me-1">
-                  Companies Hiring
                 </Nav.Link>
               </NavDropdown.Item>
               <NavDropdown.Item style={{ color: "#343a40" }}>
