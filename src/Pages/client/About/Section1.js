@@ -9,11 +9,12 @@ import ImageURL from "../../../config/ImageURL";
 
 function Section1() {
   const [datas, setDatas] = useState([]);
-
+  const [dataImg, setDataImg] = useState('');
   const fetchDatas = async () => {
     try {
       const response = await api.get("about");
       setDatas(response.data.data);
+      setDataImg(`${ImageURL}${response.data.data.background_image}`.replace(/\\/g, '/'))
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -32,7 +33,7 @@ function Section1() {
             className="content-wrapper"
             style={{
               position: "relative",
-              backgroundImage: `url(${ImageURL}${datas.background_image})`,
+              backgroundImage: `url(${dataImg})`,
               backgroundSize: "cover",
               backgroundRepeat: "no-repeat",
             }}
@@ -62,6 +63,7 @@ function Section1() {
                 <div className="col-md-5 col-12">
                   <div>
                     <img
+                    // src={Image}
                       src={`${ImageURL}${datas.banner_image}`}
                       alt="About Hero"
                       className="img-fluid"

@@ -122,7 +122,6 @@ a#basic-nav-dropdownDot::after {
 /* / Admin About / */
 .adminAbout-banner {
   position: relative;
-  background-image: url(../assets/client/about_bg-image.png);
   background-repeat: no-repeat;
   background-size: cover;
   overflow-x: hidden;
@@ -137,7 +136,7 @@ a#basic-nav-dropdownDot::after {
   right: 0;
   bottom: 0;
   background-color: var(--client-primary-color);
-  opacity: 0.9;
+  opacity: 0.4;
   z-index: 1;
 }
 
@@ -159,7 +158,6 @@ a#basic-nav-dropdownDot::after {
 
 .adminAbout-banner1 {
   position: relative;
-  background-image: url(../assets/client/about_bg-image-1.jpg);
   background-repeat: no-repeat;
   background-size: cover;
   overflow-x: hidden;

@@ -28,9 +28,27 @@ function AdminAboutFaq() {
       aboutFAQTitle: "Frequently Asked Questions",
       faq: [],
     },
-    onSubmit: (values) => {
-      console.log("About FAQ Datas:", values);
-      setIsEditing(null);
+    onSubmit: async (values) => {
+      const payload = {
+        question: formik.values.faq[editingIndex].question,
+        answer: formik.values.faq[editingIndex].answer,
+        about_id: 1,
+      };
+      try {
+        const faqId = values.faq[editingIndex]?.id;
+        if (faqId) {
+          const response = await api.put(`aboutfaq/${faqId}`, payload);
+          if (response.status === 200) {
+            getData();
+            toast.success("FAQ updated successfully");
+          }
+        }
+      } catch (e) {
+        toast.error("Error updating FAQ");
+      } finally {
+        setIsEditing(null);
+        setEditingIndex(null);
+      }
     },
   });
 
@@ -42,7 +60,6 @@ function AdminAboutFaq() {
   const handleSaveClick = () => {
     formik.handleSubmit();
     setIsEditing(null);
-    setEditingIndex(null);
   };
 
   const handleFileChange = (e, fieldName) => {
@@ -66,8 +83,9 @@ function AdminAboutFaq() {
   const getData = async () => {
     try {
       const response = await api.get("aboutfaq");
-      formik.setValues(response.data.data);
-      setDatas(response.data.data);
+      const fetchedData = response.data.data;
+      formik.setValues({ ...fetchedData, faq: fetchedData });
+      setDatas(fetchedData);
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -79,6 +97,10 @@ function AdminAboutFaq() {
     getData();
   }, []);
 
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+
   const handlePublish = async () => {
     try {
       const response = await api.post("publish/about/faq");
@@ -88,8 +110,7 @@ function AdminAboutFaq() {
         toast.error(response.data.message);
       }
     } catch (error) {
-      const errorMessage = error.response?.data?.message || error.message;
-      toast.error(errorMessage);
+      toast.error("Error publishing FAQ");
     }
   };
 
@@ -97,14 +118,19 @@ function AdminAboutFaq() {
     handleShow();
   };
 
-  const handleSaveNewAccordion = () => {
-    const newAccordionItem = {
-      id: formik.values.faq.length + 1,
-      ...newAccordion,
-      description: [],
-    };
-    formik.setFieldValue("faq", [...formik.values.faq, newAccordionItem]);
-    handleClose();
+  const handleSaveNewAccordion = async () => {
+    const payload = { ...newAccordion, about_id: 1 };
+    try {
+      const response = await api.post("aboutfaq", payload);
+      if (response.status === 200) {
+        toast.success("FAQ added successfully");
+        formik.setFieldValue("faq", [...formik.values.faq, response.data]);
+        handleClose();
+        setNewAccordion({ question: "", answer: "" });
+      }
+    } catch (error) {
+      toast.error("Error adding FAQ");
+    }
   };
 
   const handleChangeNewAccordion = (e) => {
@@ -115,16 +141,30 @@ function AdminAboutFaq() {
     }));
   };
 
-  const handleRemoveAccordion = (index) => {
-    const newFaq = formik.values.faq.filter((_, i) => i !== index);
-    formik.setFieldValue("faq", newFaq);
+  const handleRemoveAccordion = async (index) => {
+    const payload = { ...newAccordion, about_id: 1 };
+    try {
+      const faqId = formik.values.faq[index]?.id;
+      if (faqId) {
+        const response = await api.delete(`aboutfaq/${faqId}`, payload);
+        if (response.status === 200) {
+          toast.success("FAQ Deleted successfully");
+          const updatedFaq = formik.values.faq.filter((_, i) => i !== index);
+          formik.setFieldValue("faq", updatedFaq);
+        }
+      }
+    } catch (error) {
+      toast.error("Error deleting FAQ");
+    }
   };
 
   return (
     <section>
       <div className="d-flex align-items-center justify-content-between p-2">
         <h4>About Faq</h4>
-        <button className="btn btn-primary" onClick={handlePublish}>Publish</button>
+        <button className="btn btn-primary" onClick={handlePublish}>
+          Publish
+        </button>
       </div>
       <div className="container mb-4">
         <div className="row">
@@ -154,14 +194,17 @@ function AdminAboutFaq() {
               ) : null}
               <>
                 {isEditing !== "aboutAsianStudent" && (
-                  <FaEdit
+                  <>
+                    {/* <FaEdit
                     onClick={() => handleEditClick("aboutAsianStudent")}
                     className="text-secondary "
-                  />
+                  /> */}
+                  </>
                 )}
                 <div className="imgDesign">
                   <img
-                    src={formik.values.aboutAsianStudent}
+                    src={AsianStudent}
+                    // src={formik.values.aboutAsianStudent}
                     alt="img"
                     className="img-fluid"
                   />
@@ -206,12 +249,13 @@ function AdminAboutFaq() {
               ) : (
                 <>
                   <div>
-                    <FaEdit
+                    {/* <FaEdit
                       onClick={() => handleEditClick("aboutFAQTitle")}
                       className="text-secondary"
-                    />
+                    /> */}
                     <h3 className="fw-bold mb-3">
-                      {formik.values.aboutFAQTitle}
+                      {/* {formik.values.aboutFAQTitle} */}
+                      Frequently Asked Questions
                     </h3>
                   </div>
                 </>
@@ -222,7 +266,7 @@ function AdminAboutFaq() {
                 <div className="d-flex align-items-center justify-content-end">
                   <button
                     onClick={handleAddAccordion}
-                    className=" btn mt-3 mb-3"
+                    className="btn mt-3 mb-3"
                   >
                     <FaPlus /> Add New
                   </button>
@@ -230,8 +274,10 @@ function AdminAboutFaq() {
                 {formik.values.faq?.map((faq, accordionIndex) => (
                   <div className="accordion-item mb-2" key={faq.id}>
                     <div className="d-flex align-items-end justify-content-end p-3">
+                      <FaSave onClick={() => handleSaveClick(accordionIndex)} />
                       <FaEdit
                         onClick={() => handleEditClick("faq", accordionIndex)}
+                        className="ms-3"
                       />
                       <FaTrash
                         onClick={() => handleRemoveAccordion(accordionIndex)}
@@ -243,23 +289,31 @@ function AdminAboutFaq() {
                         <input
                           type="text"
                           name={`faq.${accordionIndex}.question`}
-                          value={faq.question}
-                          onChange={formik.handleChange}
-                          className="form-control mb-3 "
-                        />
-                        <textarea
-                          type="text"
-                          name={`faq.${accordionIndex}.answer`}
-                          value={faq.answer}
+                          value={
+                            formik.values.faq[accordionIndex]?.question || ""
+                          }
                           onChange={formik.handleChange}
                           className="form-control mb-3"
+                        />
+                        <textarea
+                          name={`faq.${accordionIndex}.answer`}
+                          value={
+                            formik.values.faq[accordionIndex]?.answer || ""
+                          }
+                          onChange={formik.handleChange}
+                          className="form-control mb-3"
+                        />
+                        <FaTimes
+                          onClick={handleCancel}
+                          style={{ marginLeft: "10px" }}
+                          className="text-secondary"
                         />
                       </div>
                     ) : (
                       <div className="accordion-item">
                         <h2 className="accordion-header">
                           <button
-                            className="accordion-button collapsed accordion-header"
+                            className="accordion-button collapsed accordion-header text-start"
                             type="button"
                             data-bs-toggle="collapse"
                             data-bs-target={`#collapse${faq.id}`}
@@ -275,7 +329,7 @@ function AdminAboutFaq() {
                           data-bs-parent="#accordionExample"
                         >
                           <div className="accordion-body text-start">
-                            <p>{faq.answer}</p>
+                            {faq.answer}
                           </div>
                         </div>
                       </div>
@@ -284,29 +338,19 @@ function AdminAboutFaq() {
                 ))}
               </div>
             </>
-            {isEditing === "faq" && (
-              <div className="d-flex justify-content-center mb-2">
-                <FaSave onClick={handleSaveClick} className="text-secondary" />
-                <FaTimes
-                  onClick={handleCancel}
-                  style={{ marginLeft: "10px" }}
-                  className="text-secondary"
-                />
-              </div>
-            )}
           </div>
         </div>
       </div>
-      <Modal show={show} onHide={handleClose}>
+
+      {/* Modal */}
+      <Modal show={show} onHide={handleClose} centered>
         <Modal.Header closeButton>
-          <Modal.Title>Add New FAQ</Modal.Title>
+          <Modal.Title>Add FAQ</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <form>
-            <div className="mb-3">
-              <label htmlFor="question" className="form-label">
-                Question
-              </label>
+            <div className="form-group mb-3">
+              <label htmlFor="question">Question</label>
               <input
                 type="text"
                 className="form-control"
@@ -316,34 +360,24 @@ function AdminAboutFaq() {
                 onChange={handleChangeNewAccordion}
               />
             </div>
-            <div className="mb-3">
-              <label htmlFor="answer" className="form-label">
-                Answer
-              </label>
+            <div className="form-group mb-3">
+              <label htmlFor="answer">Answer</label>
               <textarea
                 className="form-control"
                 id="answer"
                 name="answer"
                 value={newAccordion.answer}
                 onChange={handleChangeNewAccordion}
-              ></textarea>
+              />
             </div>
-            <button
-              type="button"
-              className="btn btn-primary"
-              onClick={handleSaveNewAccordion}
-            >
-              Save
-            </button>
           </form>
         </Modal.Body>
         <Modal.Footer>
-          <button
-            type="button"
-            className="btn btn-secondary"
-            onClick={handleClose}
-          >
+          <button className="btn btn-secondary" onClick={handleClose}>
             Close
+          </button>
+          <button className="btn btn-primary" onClick={handleSaveNewAccordion}>
+            Save
           </button>
         </Modal.Footer>
       </Modal>

@@ -14,6 +14,7 @@ function AdminAbout() {
   const [editingIndex, setEditingIndex] = useState(null);
   const [datas, setDatas] = useState([]);
   const [loading, setLoadIndicator] = useState(false);
+  const [dataImg, setDataImg] = useState('');
 
   const formik = useFormik({
     initialValues: {
@@ -83,13 +84,6 @@ function AdminAbout() {
     const file = e.target.files[0];
     if (file) {
         formik.setFieldValue(fieldName, file);
-    //   const reader = new FileReader();
-    //   reader.onloadend = () => {
-    //     if (fieldName === "background_image") {
-    //       setPreviewImage(reader.result);
-    //     }
-    //   };
-    //   reader.readAsDataURL(file);
     }
   };
 
@@ -105,6 +99,7 @@ function AdminAbout() {
       const response = await api.get("edit/about");
       formik.setValues(response.data.data);
       setDatas(response.data.data);
+      setDataImg(`${ImageURL}${response.data.data.background_image}`.replace(/\\/g, '/'))
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -177,9 +172,8 @@ function AdminAbout() {
                   position: "relative",
                   width: "100%",
                   height: "100vh",
-                  backgroundImage: `url(${ImageURL}${formik.values.background_image})`,
+                  backgroundImage: `url(${dataImg})`,
                   backgroundSize: "cover",
-                  backgroundPosition: "center",
                   backgroundRepeat: "no-repeat",
                 }}
               >

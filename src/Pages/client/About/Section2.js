@@ -1,11 +1,29 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import AsianStudent from "../../../assets/client/About-Aisian-student-scaled.jpeg";
 import { TbMessage2Exclamation } from "react-icons/tb";
+import api from "../../../config/BaseUrl";
 
 function Section2() {
+  const [datas, setDatas] = useState([]);
+  const [loading, setLoading] = useState(true); // Initial state to true
+
+  const fetchDatas = async () => {
+    try {
+      const response = await api.get("about");
+      setDatas(response.data.data);
+      setLoading(false); // Set loading to false after data is fetched
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setLoading(false); // Set loading to false even if there's an error
+    }
+  };
+
+  useEffect(() => {
+    fetchDatas();
+  }, []);
+
   return (
     <section>
-        {/* Accordion */}
       <div className="container mb-4">
         <div className="row">
           <div className="col-md-6 col-12 mb-3 d-flex align-items-center justify-content-center">
@@ -29,146 +47,40 @@ function Section2() {
               <h3 className="fw-bold mb-3">Frequently Asked Questions</h3>
             </div>
             <div className="accordion" id="accordionExample">
-              <div
-                className="accordion-item mb-3"
-                style={{ paddingLeft: "10px" }}
-              >
-                <h2 className="accordion-header">
-                  <button
-                    className="accordion-button"
-                    type="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#collapseOne"
-                    aria-expanded="false"
-                    aria-controls="collapseOne"
+              {loading ? (
+                <div>Loading...</div>
+              ) : (
+                datas.faq &&
+                datas.faq.map((faq, index) => (
+                  <div
+                    className="accordion-item mb-3"
+                    style={{ paddingLeft: "10px" }}
+                    key={index}
                   >
-                    Lorem Ipsum is simply dummy text of the prin....?
-                  </button>
-                </h2>
-                <div
-                  id="collapseOne"
-                  className="accordion-collapse collapse show"
-                  data-bs-parent="#accordionExample"
-                >
-                  <div className="accordion-body text-start">
-                    Lorem Ipsum is simply dummy text of the printing and
-                    typesetting industry. Lorem Ipsum has been the industry's
-                    standard dummy text ever since the 1500s,
+                    <h2 className="accordion-header">
+                      <button
+                        className="accordion-button"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target={`#collapse${index}`}
+                        aria-expanded="false"
+                        aria-controls={`collapse${index}`}
+                      >
+                        {faq.question}
+                      </button>
+                    </h2>
+                    <div
+                      id={`collapse${index}`}
+                      className="accordion-collapse collapse show"
+                      data-bs-parent="#accordionExample"
+                    >
+                      <div className="accordion-body text-start">
+                        {faq.answer}
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
-              <div
-                className="accordion-item mb-3"
-                style={{ paddingLeft: "10px" }}
-              >
-                <h2 className="accordion-header">
-                  <button
-                    className="accordion-button collapsed"
-                    type="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#collapseTwo"
-                    aria-expanded="false"
-                    aria-controls="collapseTwo"
-                  >
-                    Lorem Ipsum is simply dummy text of the prin....?
-                  </button>
-                </h2>
-                <div
-                  id="collapseTwo"
-                  className="accordion-collapse collapse"
-                  data-bs-parent="#accordionExample"
-                >
-                  <div className="accordion-body text-start">
-                    Lorem Ipsum is simply dummy text of the printing and
-                    typesetting industry. Lorem Ipsum has been the industry's
-                    standard dummy text ever since the 1500s,
-                  </div>
-                </div>
-              </div>
-              <div
-                className="accordion-item mb-3"
-                style={{ paddingLeft: "10px" }}
-              >
-                <h2 className="accordion-header">
-                  <button
-                    className="accordion-button collapsed"
-                    type="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#collapseThree"
-                    aria-expanded="false"
-                    aria-controls="collapseThree"
-                  >
-                    Lorem Ipsum is simply dummy text of the prin....?
-                  </button>
-                </h2>
-                <div
-                  id="collapseThree"
-                  className="accordion-collapse collapse"
-                  data-bs-parent="#accordionExample"
-                >
-                  <div className="accordion-body text-start">
-                    Lorem Ipsum is simply dummy text of the printing and
-                    typesetting industry. Lorem Ipsum has been the industry's
-                    standard dummy text ever since the 1500s,{" "}
-                  </div>
-                </div>
-              </div>
-              <div
-                className="accordion-item mb-3"
-                style={{ paddingLeft: "10px" }}
-              >
-                <h2 className="accordion-header">
-                  <button
-                    className="accordion-button collapsed"
-                    type="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#collapseFour"
-                    aria-expanded="false"
-                    aria-controls="collapseFour"
-                  >
-                    Lorem Ipsum is simply dummy text of the prin....?
-                  </button>
-                </h2>
-                <div
-                  id="collapseFour"
-                  className="accordion-collapse collapse"
-                  data-bs-parent="#accordionExample"
-                >
-                  <div className="accordion-body text-start">
-                    Lorem Ipsum is simply dummy text of the printing and
-                    typesetting industry. Lorem Ipsum has been the industry's
-                    standard dummy text ever since the 1500s,{" "}
-                  </div>
-                </div>
-              </div>
-              <div
-                className="accordion-item mb-3"
-                style={{ paddingLeft: "10px" }}
-              >
-                <h2 className="accordion-header">
-                  <button
-                    className="accordion-button collapsed"
-                    type="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#collapseFive"
-                    aria-expanded="false"
-                    aria-controls="collapseFive"
-                  >
-                    Lorem Ipsum is simply dummy text of the prin....?
-                  </button>
-                </h2>
-                <div
-                  id="collapseFive"
-                  className="accordion-collapse collapse"
-                  data-bs-parent="#accordionExample"
-                >
-                  <div className="accordion-body text-start">
-                    Lorem Ipsum is simply dummy text of the printing and
-                    typesetting industry. Lorem Ipsum has been the industry's
-                    standard dummy text ever since the 1500s,{" "}
-                  </div>
-                </div>
-              </div>
+                ))
+              )}
             </div>
           </div>
         </div>
