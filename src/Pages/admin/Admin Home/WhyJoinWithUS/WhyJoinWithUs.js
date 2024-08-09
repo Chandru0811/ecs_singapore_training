@@ -12,31 +12,20 @@ function WhyJoinWithUs() {
     const [datas, setDatas] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        const getData = async () => {
-            try {
-                const response = await api.get("homesection2");
-                setDatas(response.data.data);
-            } catch (error) {
-                console.error("Error fetching data:", error);
-            } finally {
-                setLoading(false);
-            }
-        };
-        getData();
-    }, []);
-
-    const refreshData = async () => {
-        setLoading(true);
+    const getData = async () => {
         try {
             const response = await api.get("homesection2");
             setDatas(response.data.data);
         } catch (error) {
-            console.error("Error refreshing data:", error);
+            console.error("Error fetching data:", error);
         } finally {
             setLoading(false);
         }
     };
+
+    useEffect(() => {
+        getData();
+    }, []);
 
     const handlePublish = async () => {
         try {
@@ -46,7 +35,7 @@ function WhyJoinWithUs() {
             } else {
                 toast.error(response.data.message);
             }
-            refreshData();
+            getData();
         } catch (error) {
             const errorMessage = error.response?.data?.message || error.message;
             toast.error(errorMessage);
@@ -58,7 +47,7 @@ function WhyJoinWithUs() {
             <div className="card-header d-flex align-items-center justify-content-between p-2 bg-light">
                 <h3 className="fw-bold">Why Join With Us</h3>
                 <div>
-                    <AddWhyJoinWithUs onSuccess={refreshData} />
+                    <AddWhyJoinWithUs onSuccess={getData} />
                     <button className="btn btn-danger mx-2" onClick={handlePublish}>Publish</button>
                 </div>
             </div>
@@ -76,8 +65,8 @@ function WhyJoinWithUs() {
                                     <div className='card'>
                                         <div className='card-body text-start'>
                                             <div className="d-flex justify-content-between">
-                                                <EditWhyJoinWithUs id={data.id} onSuccess={refreshData} />
-                                                <DeleteModel className="text-danger" onSuccess={refreshData} path={`homesection2/${data.id}`} />
+                                                <EditWhyJoinWithUs id={data.id} onSuccess={getData} />
+                                                <DeleteModel className="text-danger" onSuccess={getData} path={`homesection2/${data.id}`} />
                                             </div>
                                             <div className='d-flex'>
                                                 <img src={`${ImageURL}${data.image_path}`}

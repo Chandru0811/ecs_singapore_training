@@ -21,6 +21,7 @@ function CompaniesHiring() {
             setLoading(false);
         }
     };
+    
     useEffect(() => {
         getData();
     }, []);
