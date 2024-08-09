@@ -30,14 +30,14 @@ function AdminHeader({ handleLogout }) {
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav ">
           <Nav className="me-auto ">
-          <NavDropdown
+            <NavDropdown
               title="Home"
               id="basic-nav-dropdownDot"
               className="me-1"
             >
               <NavDropdown.Item style={{ color: "#343a40" }}>
                 <Nav.Link as={NavLink} to="/home/hero" className="me-1">
-                Home Section
+                  Home Section
                 </Nav.Link>
               </NavDropdown.Item>
               <NavDropdown.Item style={{ color: "#343a40" }}>
@@ -46,7 +46,7 @@ function AdminHeader({ handleLogout }) {
                   to="/home/whyjoinwithus"
                   className="me-1"
                 >
-                 Why Join With Us
+                  Why Join With Us
                 </Nav.Link>
               </NavDropdown.Item>
               <NavDropdown.Item style={{ color: "#343a40" }}>
@@ -55,22 +55,43 @@ function AdminHeader({ handleLogout }) {
                 </Nav.Link>
               </NavDropdown.Item>
               <NavDropdown.Item style={{ color: "#343a40" }}>
-                <Nav.Link as={NavLink} to="/home/training/overview" className="me-1">
-                Cloud ECS Training Overview
+                <Nav.Link
+                  as={NavLink}
+                  to="/home/training/overview"
+                  className="me-1"
+                >
+                  Cloud ECS Training Overview
                 </Nav.Link>
               </NavDropdown.Item>
               <NavDropdown.Item style={{ color: "#343a40" }}>
-                <Nav.Link as={NavLink} to="/home/training/placement" className="me-1">
-                Home FAQ
+                <Nav.Link
+                  as={NavLink}
+                  to="/home/training/placement"
+                  className="me-1"
+                >
+                  Home FAQ
                 </Nav.Link>
               </NavDropdown.Item>
             </NavDropdown>
             <Nav.Link as={NavLink} to={"/contact"} className="me-1">
               Contact
             </Nav.Link>
-            <Nav.Link as={NavLink} to={"/landing"} className="me-1">
-              Landing
-            </Nav.Link>
+            <NavDropdown
+              title="LandingPage"
+              id="basic-nav-dropdownDot"
+              className="me-1"
+            >
+              <NavDropdown.Item style={{ color: "#343a40" }}>
+                <Nav.Link as={NavLink} to={"/landingpage1"} className="me-1">
+                  LandingPage1
+                </Nav.Link>
+              </NavDropdown.Item>
+              <NavDropdown.Item style={{ color: "#343a40" }}>
+                <Nav.Link as={NavLink} to={"/landingpage2"} className="me-1">
+                  Landingpage2
+                </Nav.Link>
+              </NavDropdown.Item>
+            </NavDropdown>
             <NavDropdown
               title={"About"}
               id="basic-nav-dropdownDot"
@@ -82,7 +103,7 @@ function AdminHeader({ handleLogout }) {
                 </Nav.Link>
               </NavDropdown.Item>
               <NavDropdown.Item style={{ color: "#343a40" }}>
-              <Nav.Link as={NavLink} to="/aboutFaq" className="me-1">
+                <Nav.Link as={NavLink} to="/aboutFaq" className="me-1">
                   About Faq
                 </Nav.Link>
               </NavDropdown.Item>

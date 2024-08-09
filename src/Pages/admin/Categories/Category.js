@@ -7,6 +7,7 @@ import CategoryEdit from "./CategoryEdit";
 import CategoryView from "./CategoryView";
 import DeleteModel from "../../../components/DeleteModel";
 import api from "../../../config/BaseUrl";
+import toast from "react-hot-toast";
 import ImageURL from "../../../config/ImageURL";
 
 function Category() {
@@ -67,13 +68,28 @@ function Category() {
     initializeDataTable();
   };
 
+  const handlePublish = async () => {
+    try {
+      const response = await api.post('publish/categories');
+      if (response.status === 200) {
+        toast.success(response.data.message);
+      } else {
+        toast.error(response.data.message);
+      }
+      refreshData();
+    } catch (error) {
+      const errorMessage = error.response?.data?.message || error.message;
+      toast.error(errorMessage);
+    }
+  };
+
   return (
     <div>
       <div className="card-header d-flex align-items-center p-2 bg-light">
         <h3 className="fw-bold">Categories</h3>
         <div className="container-fluid d-flex justify-content-end">
           <CategoryAdd onSuccess={refreshData} />
-          <button className="btn btn-danger mx-2">Publish</button>
+          <button className="btn btn-danger mx-2" onClick={handlePublish}>Publish</button>
         </div>
       </div>
       <div>
