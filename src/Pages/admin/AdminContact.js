@@ -50,10 +50,9 @@ function AdminContact() {
     },
   });
 
-  // API Get Data
   const getData = async () => {
     try {
-      const response = await api.post("contactus");
+      const response = await api.get("edit/contactus");
       if (response.status === 200) {
         const { phone, email, location, map_url, contact_description } =
           response.data.data;
