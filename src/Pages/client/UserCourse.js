@@ -16,7 +16,6 @@ import ImageURL from "../../config/ImageURL";
 import CourseVideoTestimonial from "./CourseVideoTestimonial";
 import CourseTestimonial from "./CourseTestimonial";
 
-
 const responsive = {
   superLargeDesktop: {
     breakpoint: { max: 4000, min: 3000 },
@@ -406,7 +405,7 @@ function UserCourse() {
             </h1>
             <p className="py-3">{apiData?.description}</p>
             <div className="row">
-              {features.map((feature, index) => (
+              {apiData?.features?.map((feature, index) => (
                 <div key={index} className="col-md-6 col-12">
                   <div className="py-2">
                     <span>
@@ -419,8 +418,11 @@ function UserCourse() {
             </div>
           </div>
           <div className="col-md-5 col-12 p-2">
-            <img   src={`${ImageURL}${apiData?.image_path}`}
-  alt="courseImg" className="img-fluid " />
+            <img
+              src={`${ImageURL}${apiData?.image_path}`}
+              alt="courseImg"
+              className="img-fluid "
+            />
           </div>
         </div>
       </div>
@@ -602,14 +604,11 @@ function UserCourse() {
         </div>
       </div>
 
-      
-     
       {/* {/ Review cards  /} */}
       <CourseTestimonial />
-      
+
       {/* {/ Online Training Review  /} */}
       <CourseVideoTestimonial />
-     
     </div>
   );
 }
