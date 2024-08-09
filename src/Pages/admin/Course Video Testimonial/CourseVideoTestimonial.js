@@ -13,31 +13,20 @@ function CourseVideoTestimonial() {
     const [iconState, setIconState] = useState({});
     const videoRefs = useRef({});
 
-    useEffect(() => {
-        const getData = async () => {
-            try {
-                const response = await api.get("videotestimonial");
-                setDatas(response.data.data);
-            } catch (error) {
-                console.error("Error fetching data:", error);
-            } finally {
-                setLoading(false);
-            }
-        };
-        getData();
-    }, []);
-
-    const refreshData = async () => {
-        setLoading(true);
+    const getData = async () => {
         try {
             const response = await api.get("videotestimonial");
             setDatas(response.data.data);
         } catch (error) {
-            console.error("Error refreshing data:", error);
+            console.error("Error fetching data:", error);
         } finally {
             setLoading(false);
         }
     };
+
+    useEffect(() => {
+        getData();
+    }, []);
 
     const handlePublish = async () => {
         try {
@@ -47,7 +36,7 @@ function CourseVideoTestimonial() {
             } else {
                 toast.error(response.data.message);
             }
-            refreshData();
+            getData();
         } catch (error) {
             const errorMessage = error.response?.data?.message || error.message;
             toast.error(errorMessage);
@@ -72,7 +61,7 @@ function CourseVideoTestimonial() {
             <div className="card-header d-flex align-items-center justify-content-between p-2 bg-light">
                 <h3 className="fw-bold">Online Training Review</h3>
                 <div>
-                    <AddCourseVideoTestimonial onSuccess={refreshData} />
+                    <AddCourseVideoTestimonial onSuccess={getData} />
                     <button className="btn btn-danger mx-2" onClick={handlePublish}>Publish</button>
                 </div>
             </div>
@@ -86,8 +75,8 @@ function CourseVideoTestimonial() {
                         <div key={card.id} className="col-md-3 col-12 p-2">
                             <div className="h-100 rounded video-card p-2 position-relative">
                                 <div className="d-flex justify-content-between">
-                                    <EditCourseVideoTestimonial id={card.id} onSuccess={refreshData} />
-                                    <DeleteModel className="text-danger" onSuccess={refreshData} path={`videotestimonial/${card.id}`} />
+                                    <EditCourseVideoTestimonial id={card.id} onSuccess={getData} />
+                                    <DeleteModel className="text-danger" onSuccess={getData} path={`videotestimonial/${card.id}`} />
                                 </div>
                                 <div className="video-container" style={{ position: 'relative', height: '200px' }}>
                                     <div

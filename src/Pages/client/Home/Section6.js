@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import api from '../../../config/BaseUrl';
 
 const validationSchema = Yup.object({
   firstName: Yup.string().required("*First Name is required"),
@@ -22,7 +23,7 @@ function Section6() {
     setActiveIndex(activeIndex === index ? null : index);
   };
 
-  const formik = useFormik({
+  const formik2 = useFormik({
     initialValues: {
       firstName: "",
       lastName: "",
@@ -36,131 +37,83 @@ function Section6() {
     },
   });
 
+  const [datas, setDatas] = useState([]);
+  console.log("data is ", datas);
+  const formik = useFormik({
+    initialValues: {
+      question: "",
+      answer: ""
+    },
+    validationSchema: validationSchema,
+    onSubmit: async (values) => {
+      console.log("Home Faq Datas ;", values);
+    },
+  })
+  const getData = async () => {
+    try {
+      const response = await api.get("home/faq");
+      setDatas(response.data.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+  useEffect(() => {
+    getData();
+  }, []);
+
+
   return (
     <section>
       <div className="trainingplacements mt-3 mb-5">
         <h1 className="secondheading text-start mb-3">
           Cloud Ecs , Software Training and Placements in India
         </h1>
-        <div className="row d-flex">
-          <div className="col-md-6 col-12">
-            <div className="accordion" id="accordionExample">
-              <div
-                className="accordion-item mb-3"
-                style={{ paddingLeft: "10px" }}
-              >
-                <h2 className="accordion-header">
-                  <button
-                    className="accordion-button"
-                    type="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#collapseOne"
-                    aria-expanded="true"
-                    aria-controls="collapseOne"
-                  >
-                    Introduction about ClousEcs
-                  </button>
-                </h2>
-                <div
-                  id="collapseOne"
-                  className="accordion-collapse collapse show"
-                  data-bs-parent="#accordionExample"
-                >
-                  <div className="accordion-body text-start paraContent">
-                    Lorem Ipsum is simply dummy text of the printing and
-                    typesetting industry. Lorem Ipsum has been the industry's
-                    standard dummy text ever since the 1500s,
-                  </div>
-                </div>
-              </div>
-              <div
-                className="accordion-item mb-3"
-                style={{ paddingLeft: "10px" }}
-              >
-                <h2 className="accordion-header">
-                  <button
-                    className="accordion-button collapsed"
-                    type="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#collapseTwo"
-                    aria-expanded="false"
-                    aria-controls="collapseTwo"
-                  >
-                    Our Features
-                  </button>
-                </h2>
-                <div
-                  id="collapseTwo"
-                  className="accordion-collapse collapse"
-                  data-bs-parent="#accordionExample"
-                >
-                  <div className="accordion-body text-start paraContent">
-                    Lorem Ipsum is simply dummy text of the printing and
-                    typesetting industry. Lorem Ipsum has been the industry's
-                    standard dummy text ever since the 1500s,
-                  </div>
-                </div>
-              </div>
-              <div
-                className="accordion-item mb-3"
-                style={{ paddingLeft: "10px" }}
-              >
-                <h2 className="accordion-header">
-                  <button
-                    className="accordion-button collapsed"
-                    type="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#collapseThree"
-                    aria-expanded="false"
-                    aria-controls="collapseThree"
-                  >
-                    Best Technologies Online training and Certificate Courses
-                  </button>
-                </h2>
-                <div
-                  id="collapseThree"
-                  className="accordion-collapse collapse"
-                  data-bs-parent="#accordionExample"
-                >
-                  <div className="accordion-body text-start paraContent">
-                    Lorem Ipsum is simply dummy text of the printing and
-                    typesetting industry. Lorem Ipsum has been the industry's
-                    standard dummy text ever since the 1500s,{" "}
-                  </div>
-                </div>
-              </div>
-              <div
-                className="accordion-item mb-3"
-                style={{ paddingLeft: "10px" }}
-              >
-                <h2 className="accordion-header">
-                  <button
-                    className="accordion-button collapsed"
-                    type="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#collapseFour"
-                    aria-expanded="false"
-                    aria-controls="collapseFour"
-                  >
-                    Lorem Ipsum is simply dummy text of the prin....?
-                  </button>
-                </h2>
-                <div
-                  id="collapseFour"
-                  className="accordion-collapse collapse"
-                  data-bs-parent="#accordionExample"
-                >
-                  <div className="accordion-body text-start paraContent">
-                    Lorem Ipsum is simply dummy text of the printing and
-                    typesetting industry. Lorem Ipsum has been the industry's
-                    standard dummy text ever since the 1500s,{" "}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+        <div className="row">
+
           <div className="col-md-6">
-            <form onSubmit={formik.handleSubmit}>
+            {datas.map((data, index) => {
+              const questionsAndAnswers = typeof data.ques_and_ans === 'string'
+                ? JSON.parse(data.ques_and_ans)
+                : data.ques_and_ans;
+
+              return (
+                <div className="accordion" id="accordionExample" key={index}>
+                  {questionsAndAnswers.map((qa, qaIndex) => (
+                    <div
+                      className="accordion-item mb-3"
+                      style={{ paddingLeft: "10px" }}
+                      key={qaIndex}
+                    >
+                      <h2 className="accordion-header">
+                        <button
+                          className="accordion-button"
+                          type="button"
+                          data-bs-toggle="collapse"
+                          data-bs-target={`#collapse-${index}-${qaIndex}`}
+                          aria-expanded={qaIndex === 0 ? "true" : "false"}
+                          aria-controls={`collapse-${index}-${qaIndex}`}
+                        >
+                          {qa.question}
+                        </button>
+                      </h2>
+                      <div
+                        id={`collapse-${index}-${qaIndex}`}
+                        className={`accordion-collapse collapse ${qaIndex === 0 ? "show" : ""}`}
+                        data-bs-parent={`#accordionExample-${index}`}
+                      >
+                        <div className="accordion-body text-start paraContent">
+                          {qa.answer}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              );
+            })}
+          </div>
+
+          <div className="col-md-6">
+            <form onSubmit={formik2.handleSubmit}>
               <div className="card p-4 enquiryform">
                 <div className="row mb-3">
                   <div className="col-md-6 text-start">
@@ -169,16 +122,15 @@ function Section6() {
                     </label>
                     <input
                       type="text"
-                      className={`form-control homeInput ${
-                        formik.touched.firstName && formik.errors.firstName
-                          ? "is-invalid"
-                          : ""
-                      }`}
-                      {...formik.getFieldProps("firstName")}
+                      className={`form-control homeInput ${formik2.touched.firstName && formik2.errors.firstName
+                        ? "is-invalid"
+                        : ""
+                        }`}
+                      {...formik2.getFieldProps("firstName")}
                     />
-                    {formik.touched.firstName && formik.errors.firstName && (
+                    {formik2.touched.firstName && formik2.errors.firstName && (
                       <div className="invalid-feedback">
-                        {formik.errors.firstName}
+                        {formik2.errors.firstName}
                       </div>
                     )}
                   </div>
@@ -188,16 +140,15 @@ function Section6() {
                     </label>
                     <input
                       type="text"
-                      className={`form-control homeInput ${
-                        formik.touched.lastName && formik.errors.lastName
-                          ? "is-invalid"
-                          : ""
-                      }`}
-                      {...formik.getFieldProps("lastName")}
+                      className={`form-control homeInput ${formik2.touched.lastName && formik2.errors.lastName
+                        ? "is-invalid"
+                        : ""
+                        }`}
+                      {...formik2.getFieldProps("lastName")}
                     />
-                    {formik.touched.lastName && formik.errors.lastName && (
+                    {formik2.touched.lastName && formik2.errors.lastName && (
                       <div className="invalid-feedback">
-                        {formik.errors.lastName}
+                        {formik2.errors.lastName}
                       </div>
                     )}
                   </div>
@@ -209,16 +160,15 @@ function Section6() {
                     </label>
                     <input
                       type="email"
-                      className={`form-control homeInput ${
-                        formik.touched.email && formik.errors.email
-                          ? "is-invalid"
-                          : ""
-                      }`}
-                      {...formik.getFieldProps("email")}
+                      className={`form-control homeInput ${formik2.touched.email && formik2.errors.email
+                        ? "is-invalid"
+                        : ""
+                        }`}
+                      {...formik2.getFieldProps("email")}
                     />
-                    {formik.touched.email && formik.errors.email && (
+                    {formik2.touched.email && formik2.errors.email && (
                       <div className="invalid-feedback">
-                        {formik.errors.email}
+                        {formik2.errors.email}
                       </div>
                     )}
                   </div>
@@ -228,17 +178,16 @@ function Section6() {
                     </label>
                     <input
                       type="number"
-                      className={`form-control homeInput ${
-                        formik.touched.phoneNumber && formik.errors.phoneNumber
-                          ? "is-invalid"
-                          : ""
-                      }`}
-                      {...formik.getFieldProps("phoneNumber")}
+                      className={`form-control homeInput ${formik2.touched.phoneNumber && formik2.errors.phoneNumber
+                        ? "is-invalid"
+                        : ""
+                        }`}
+                      {...formik2.getFieldProps("phoneNumber")}
                     />
-                    {formik.touched.phoneNumber &&
-                      formik.errors.phoneNumber && (
+                    {formik2.touched.phoneNumber &&
+                      formik2.errors.phoneNumber && (
                         <div className="invalid-feedback">
-                          {formik.errors.phoneNumber}
+                          {formik2.errors.phoneNumber}
                         </div>
                       )}
                   </div>
@@ -248,7 +197,7 @@ function Section6() {
                     <label className="form-label">Message</label>
                     <textarea
                       className="form-control homeInput"
-                      {...formik.getFieldProps("message")}
+                      {...formik2.getFieldProps("message")}
                     ></textarea>
                   </div>
                 </div>
@@ -266,4 +215,4 @@ function Section6() {
   );
 }
 
-export default Section6;
+export default Section6;    
