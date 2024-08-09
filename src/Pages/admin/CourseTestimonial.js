@@ -103,18 +103,6 @@ function CourseTestimonial() {
     }
   };
 
-  const refreshData = async () => {
-    setLoading(true);
-    try {
-      const response = await api.get("coursetestimonial");
-      setDatas(response.data.data);
-      setLoading(false);
-    } catch (error) {
-      console.error("Error refreshing data:", error);
-      setLoading(false);
-    }
-  };
-
   const PublishCourseTestimonal = async () => {
     setLoading(true);
     try {
@@ -148,7 +136,7 @@ function CourseTestimonial() {
             type="button"
             className="btn btn-sm btn-primary mx-2"
             onClick={handleShow}
-            onSuccess={refreshData}
+            onSuccess={fetchDatas}
           >
             Add
           </button>
@@ -179,7 +167,7 @@ function CourseTestimonial() {
                   >
                     <FaTrash className="text-light" />
                   </button>
-                  <EditCourseTestimonial id={data.id} onSuccess={refreshData} />
+                  <EditCourseTestimonial id={data.id} onSuccess={fetchDatas} />
                 </div>
                 <div className="text-start">
                   <div className="d-flex justify-content-between align-items-center px-2">
