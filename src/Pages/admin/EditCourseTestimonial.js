@@ -22,7 +22,7 @@ function EditCourseTestimonial({ id, onSuccess }) {
         initialValues: {
             profile: "",
             client_name: "",
-            rating: 0,
+            rating: "",
             description: "",
         },
         validationSchema: validationSchema,
