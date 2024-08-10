@@ -2,14 +2,13 @@ import React, { useEffect, useState } from "react";
 import ReactPlayer from "react-player";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
-import courseImg from "../../assets/client/landing_card_logo.jpg";
-import Testimonial from "./Testimonial";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import EnrollModel from "../admin/EnrollModel";
 import EnrollForm from "./EnrollForm";
 import api from "../../config/BaseUrl";
 import ImgUrl from "../../config/ImageURL";
+import Testimonial from "./Testimonial";
 
 const responsive = {
   superLargeDesktop: {
@@ -33,45 +32,6 @@ const responsive = {
     items: 1,
   },
 };
-
-const cardData = [
-  {
-    id: 1,
-    title: "Card title 1",
-    text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet, blanditiis rerum explicabo molestiae totam numquam praesentium consequatur cupiditate voluptate quas!",
-    img: courseImg,
-  },
-  {
-    id: 2,
-    title: "Card title 2",
-    text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet, blanditiis rerum explicabo molestiae totam numquam praesentium consequatur cupiditate voluptate quas!",
-    img: courseImg,
-  },
-  {
-    id: 3,
-    title: "Card title 3",
-    text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet, blanditiis rerum explicabo molestiae totam numquam praesentium consequatur cupiditate voluptate quas!",
-    img: courseImg,
-  },
-  {
-    id: 4,
-    title: "Card title 4",
-    text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet, blanditiis rerum explicabo molestiae totam numquam praesentium consequatur cupiditate voluptate quas!",
-    img: courseImg,
-  },
-  {
-    id: 5,
-    title: "Card title 5",
-    text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet, blanditiis rerum explicabo molestiae totam numquam praesentium consequatur cupiditate voluptate quas!",
-    img: courseImg,
-  },
-  {
-    id: 6,
-    title: "Card title 6",
-    text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet, blanditiis rerum explicabo molestiae totam numquam praesentium consequatur cupiditate voluptate quas!",
-    img: courseImg,
-  },
-];
 
 function LandingPage() {
   const [apiData, setApiData] = useState([]);
@@ -110,6 +70,24 @@ function LandingPage() {
     fetchData();
   }, []);
 
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const cardResponse = await api.get("user/landingsection2");
+        console.log(cardResponse.data);
+        setData(
+          Array.isArray(cardResponse.data.data) ? cardResponse.data.data : []
+        );
+      } catch (error) {
+        console.error(`Error Fetching Data: ${error.message}`);
+      }
+    };
+
+    getData();
+  }, []);
+
   return (
     <div>
       <form>
@@ -127,7 +105,7 @@ function LandingPage() {
             </div>
             <div className="col-md-5 col-12">
               <img
-                src={`${ImgUrl}${apiData.image_path}`}
+                src={`${ImgUrl}${apiData?.image_path}`}
                 alt="heroImg"
                 className="img-fluid"
               />
@@ -152,19 +130,22 @@ function LandingPage() {
                 infinite={true}
                 autoPlay={false}
               >
-                {cardData.map((card) => (
-                  <div key={card.id}>
-                    <div className="mx-4 my-5 p-2 bg-primary text-light h-75 text-start shadow rounded card">
-                      <div>
+                {data?.map((card, index) => (
+                  <div
+                    key={index}
+                    className="h-75 card mx-4 my-5 p-2 bg-primary text-light  text-start shadow"
+                  >
+                    <div className="my-2">
+                      <div className="text-start w-25 py-1">
                         <img
-                          src={card.img}
-                          alt="courseImg"
+                          src={`${ImgUrl}${card.image_path}`}
+                          alt="cardImg"
                           className="img-fluid rounded-circle"
                         />
                       </div>
                       <div>
-                        <h5>{card.title}</h5>
-                        <p>{card.text}</p>
+                        <h5 className="py-1">{card.name}</h5>
+                        <p>{card.description}</p>
                       </div>
                     </div>
                   </div>
@@ -190,78 +171,12 @@ function LandingPage() {
             </div>
             <div className="col-md-5 col-12 p-5">
               <EnrollForm />
-              {/* <div className="card text-start p-4 py-3">
-              <h3 className="input-title fw-bold">Enroll Now</h3>
-              <div className="py-3">
-                <label htmlFor="fullName">Full Name</label>
-                <input
-                        type="fullName"
-                        className={`form-control ${
-                          formik.touched.fullName && formik.errors.fullName
-                            ? "is-invalid"
-                            : ""
-                        }`}
-                        style={{ borderRadius: "3px" }}
-                        placeholder="Enter fullName"
-                        {...formik.getFieldProps("fullName")}
-                      />
-                      {formik.touched.fullName && formik.errors.fullName && (
-                        <div className="invalid-feedback">
-                          {formik.errors.fullName}
-                        </div>
-                      )}
-              </div>
-              <div className="py-3">
-                <label htmlFor="mobileNumber">Mobile Number</label>
-                <input
-                        type="mobileNumber"
-                        className={`form-control ${
-                          formik.touched.mobileNumber && formik.errors.mobileNumber
-                            ? "is-invalid"
-                            : ""
-                        }`}
-                        style={{ borderRadius: "3px" }}
-                        placeholder="Enter mobileNumber"
-                        {...formik.getFieldProps("mobileNumber")}
-                      />
-                      {formik.touched.mobileNumber && formik.errors.mobileNumber && (
-                        <div className="invalid-feedback">
-                          {formik.errors.mobileNumber}
-                        </div>
-                      )}
-              </div>
-              <div className="py-3">
-                <label htmlFor="email">Email</label>
-                <input
-                        type="email"
-                        className={`form-control ${
-                          formik.touched.email && formik.errors.email
-                            ? "is-invalid"
-                            : ""
-                        }`}
-                        style={{ borderRadius: "3px" }}
-                        placeholder="Enter email"
-                        {...formik.getFieldProps("email")}
-                      />
-                      {formik.touched.email && formik.errors.email && (
-                        <div className="invalid-feedback">
-                          {formik.errors.email}
-                        </div>
-                      )}
-              </div>
-              <div className="float-end">
-                <button type="submit" className="enrollbtn">Send</button>
-              </div>
-            </div> */}
             </div>
           </div>
         </div>
-        {/* input section  */}
-        {/* landing testimonial */}
         <div className="container">
           <Testimonial />
         </div>
-        {/* landing testimonial */}
       </form>
     </div>
   );

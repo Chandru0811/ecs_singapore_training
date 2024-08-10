@@ -1,8 +1,8 @@
-
 import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
-import { FaEdit, FaSave, FaTimes, FaPlus, FaTrash } from "react-icons/fa";
+import { FaEdit, FaSave, FaTimes } from "react-icons/fa";
 import api from "../../config/BaseUrl";
+import toast from "react-hot-toast";
 
 export const TermsAndCondition = () => {
   const [isEditing, setIsEditing] = useState(null);
@@ -14,18 +14,19 @@ export const TermsAndCondition = () => {
       content: "",
     },
     onSubmit: async (values) => {
-        console.log("object",values.header)
-        try {
-          const response = await api.post("update/terms",values);
-          if (response.status === 200) {
-            getData();
-            console.log("updated", response.data);
-            handleCancel()
-          }
-        } catch (e) {
-          console.log("object", e);
+      console.log("object", values.header)
+      try {
+        const response = await api.post("update/terms", values);
+        if (response.status === 200) {
+          getData();
+          toast.success(response.data.message);
+          console.log("updated", response.data);
+          handleCancel();
         }
+      } catch (e) {
+        console.log("object", e);
       }
+    }
   });
 
 
@@ -60,22 +61,23 @@ export const TermsAndCondition = () => {
     getData();
   }, []);
 
-  const publishData =async()=>{
+  const publishData = async () => {
     try {
       const response = await api.post("publish/terms");
       if (response.status === 200) {
-      console.log()
+        toast.success(response.data.message);
+        console.log()
       }
     } catch (e) {
       console.log("object", e);
     }
   }
-  
+
   return (
     <>
       <div className="container-fluid d-flex align-items-center justify-content-between p-2">
         <h4>
-            Terms And Condition</h4>
+          Terms And Condition</h4>
         <button className="btn btn-primary" onClick={publishData}>Publish</button>
       </div>
       <div className="container">
