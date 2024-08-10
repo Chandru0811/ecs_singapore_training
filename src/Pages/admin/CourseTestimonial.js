@@ -111,16 +111,16 @@ function CourseTestimonial() {
           "Content-Type": "multipart/form-data",
         },
       });
-      if (response.status === 201) {
-        fetchDatas();
-        toast.success(response.data.message);
+      if (response.status === 200) {
+        toast.success(response.data.message || "Course Testimonials Changes Published Successfully!");
       } else {
         console.error("Publishing Course Testimonial failed");
-        toast.error(response.data.message);
+        toast.error(response.data.message || "Failed to publish.");
       }
+      fetchDatas();
     } catch (error) {
       console.error("Error publishing data:", error.message);
-      const errorMessage = error.response?.data?.message || error.message;
+      const errorMessage = error.response?.data?.message || error.message || "An error occurred during publishing.";
       toast.error(errorMessage);
     } finally {
       setLoading(false);
@@ -134,15 +134,15 @@ function CourseTestimonial() {
         <div className="d-flex">
           <button
             type="button"
-            className="btn btn-sm btn-primary mx-2"
+            className="btn btn-primary"
             onClick={handleShow}
             onSuccess={fetchDatas}
           >
-            Add
+            Add +
           </button>
           <button
             type="button"
-            className="btn btn-sm btn-danger"
+            className="btn btn-danger mx-2"
             onClick={PublishCourseTestimonal}
           >
             Publish

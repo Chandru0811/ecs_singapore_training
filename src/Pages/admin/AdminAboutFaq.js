@@ -109,6 +109,7 @@ function AdminAboutFaq() {
       } else {
         toast.error(response.data.message);
       }
+      getData();
     } catch (error) {
       toast.error("Error publishing FAQ");
     }
@@ -128,6 +129,7 @@ function AdminAboutFaq() {
         handleClose();
         setNewAccordion({ question: "", answer: "" });
       }
+      getData();
     } catch (error) {
       toast.error("Error adding FAQ");
     }

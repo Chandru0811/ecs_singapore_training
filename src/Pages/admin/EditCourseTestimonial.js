@@ -92,11 +92,7 @@ function EditCourseTestimonial({ id, onSuccess }) {
         const file = event.target.files[0];
         if (file) {
             formik.setFieldValue("profile", file);
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                console.log('Image preview data:', reader.result);
-            };
-            reader.readAsDataURL(file);
+           
         }
     };
 

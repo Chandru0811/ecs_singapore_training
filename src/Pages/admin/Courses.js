@@ -288,6 +288,14 @@ function Courses() {
               </div>
             </div>
             <div className="col-md-4 pt-5">
+            <div className="d-flex flex-column align-items-center mb-3">
+                  {headerData?.image_path && (
+                    <img
+                      src={`${ImageURL}${headerData?.image_path}`}
+                      className="img-fluid"
+                      alt="CourseImage"
+                    />
+                  ) }</div>
               {isEditing === "image_path" ? (
                 <div>
                   <input
@@ -310,13 +318,13 @@ function Courses() {
                 </div>
               ) : (
                 <div className="d-flex flex-column align-items-center">
-                  {headerData?.image_path && (
+                  {/* {headerData?.image_path && (
                     <img
                       src={`${ImageURL}${headerData?.image_path}`}
                       className="img-fluid"
                       alt="CourseImage"
                     />
-                  ) }
+                  ) } */}
                   <FaEdit
                     onClick={() => handleEditClick("image_path")}
                     className="text-secondary mt-2"

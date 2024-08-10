@@ -12,17 +12,18 @@ import api from "../../../../config/BaseUrl";
 const CourseDetails = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const [categoryData, setCategoryData] = useState([]);
+
     const validationSchema = Yup.object({
-      logo: Yup.string().required("Logo is required*"),
-      title: Yup.string().required("Title is required*"),
-      description: Yup.string().required("Description is required*"),
-      category_id: Yup.string().required("Category is required*"),
+      logo: Yup.string().required("*Logo is required"),
+      title: Yup.string().required("*Title is required"),
+      description: Yup.string().required("*Description is required"),
+      category_id: Yup.string().required("*Category is required"),
       offer_price: Yup.number()
-        .required("Offer Price is required*")
-        .positive("Offer Price must be a positive number"),
-        price: Yup.number()
-        .required("Original Price is required*")
-        .positive("Original Price must be a positive number"),
+        .required("*Offer Price is required")
+        .positive("*Offer Price must be a positive number"),
+      price: Yup.number()
+        .required("*Original Price is required")
+        .positive("*Original Price must be a positive number"),
     });
 
     const getCategoryData = async () => {
@@ -71,7 +72,7 @@ const CourseDetails = forwardRef(
 
           if (response.status === 200) {
             toast.success(response.data.message);
-            setFormData(response.data.data)
+            setFormData(response.data.data);
             handleNext();
           } else {
             toast.error(response.data.message);
@@ -91,10 +92,10 @@ const CourseDetails = forwardRef(
         formik.setFieldValue("logo", file);
       }
     };
-    useEffect(()=>{
-      formik.setValues(formData)
-    },[])
-    
+    useEffect(() => {
+      formik.setValues(formData);
+    }, []);
+
     return (
       <div className="container my-5">
         <h4 className="mb-4 fw-bold text-start">Course Batch</h4>

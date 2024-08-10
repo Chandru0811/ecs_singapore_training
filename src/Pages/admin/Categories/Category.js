@@ -20,9 +20,9 @@ function Category() {
       try {
         const response = await api.get("category");
         setDatas(response.data.data);
-        setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
+      }finally{
         setLoading(false);
       }
     };

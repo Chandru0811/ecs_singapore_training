@@ -6,41 +6,28 @@ import { FaEdit, FaEye, FaTimes, FaTrash } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import api from "../../../config/BaseUrl";
 
-const tableData = [
-  {
-    id: 1,
-    course: "test",
-    title: "Java",
-    description: "Full Stack Master Programme",
-  },
-  {
-    id: 2,
-    course: "test",
-    title: "Python",
-    description: "Data Science Programme",
-  },
-  {
-    id: 3,
-    course: "test",
-    title: "JavaScript",
-    description: "Web Development Programme",
-  },
-];
-
 const Course = () => {
   const tableRef = useRef(null);
   const [loading, setLoading] = useState(false);
   const [datas, setDatas] = useState([]);
 
-  useEffect(() => {
+  // useEffect(() => {
+  //   $(tableRef.current).DataTable({
+  //     responsive: true,
+  //   });
+  //   return () => {
+  //     destroyDataTable();
+  //   };
+  // }, [loading]);
+  
+  const initializeDataTable = () => {
+    if ($.fn.DataTable.isDataTable(tableRef.current)) {
+      return;
+    }
     $(tableRef.current).DataTable({
       responsive: true,
     });
-    return () => {
-      destroyDataTable();
-    };
-  }, [loading]);
-
+  };
   const destroyDataTable = () => {
     const table = $(tableRef.current).DataTable();
     if (table && $.fn.DataTable.isDataTable(tableRef.current)) {
@@ -49,7 +36,7 @@ const Course = () => {
   };
 
   const getData = async () => {
-    // setLoading(true)
+    setLoading(true)
     try {
       const response = await api.get("courses");
       if (response.data.status === 200) {
@@ -58,13 +45,23 @@ const Course = () => {
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
-      // setLoading(false);
+      setLoading(false);
     }
   };
 
   useEffect(() => {
+    if (!loading) {
+      initializeDataTable();
+    }
+    return () => {
+      destroyDataTable();
+    };
+  }, [loading]);
+
+  useEffect(() => {
     getData();
   }, []);
+
   return (
     <div className="container-fluid shadow px-0 ">
       <div className="card-header d-flex align-items-center p-2 bg-light">

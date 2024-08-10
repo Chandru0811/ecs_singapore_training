@@ -289,12 +289,12 @@ hr {
 }
 
 .arrow-icon a {
-  color: var(--client-cardHover-color);
+  color: var(--client-cardHover-color) !important;
   font-size: 3.2rem;
 }
 
 .arrow-icon a:hover {
-  color: var(--client-background-color);
+  color: var(--client-background-color) !important;
   font-size: 3.2rem;
 }
 
