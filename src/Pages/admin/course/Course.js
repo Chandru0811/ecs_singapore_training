@@ -68,9 +68,9 @@ const Course = () => {
         <h3 className="fw-bold">Course</h3>
         <div className="container-fluid d-flex justify-content-end">
           <Link to={"/courseadd"}>
-            <button className="btn btn-primary">Add</button>
+            <button className="btn btn-primary">Add +</button>
           </Link>
-          <button className="btn btn-sm btn-danger mx-2">Publish</button>
+          <button className="btn btn-danger mx-2">Publish</button>
         </div>
       </div>
       <div>

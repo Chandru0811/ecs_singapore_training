@@ -43,6 +43,7 @@ function Courses() {
       try {
         const response = await api.post("update/course/content", formData);
         if (response.status === 200) {
+          toast.success(response?.data?.message);
           getData();
           console.log("updated", response.data);
         }
