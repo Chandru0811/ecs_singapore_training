@@ -61,7 +61,7 @@ function WhyJoinWithUs() {
                             </div>
                         ) : (
                             datas.map((data) => (
-                                <div key={data.id} className='col-md-4 mb-3'>
+                                <div key={data.id} className='col-md-4 mt-5 mb-3'>
                                     <div className='card'>
                                         <div className='card-body text-start'>
                                             <div className="d-flex justify-content-between">

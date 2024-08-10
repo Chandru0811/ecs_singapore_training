@@ -10,8 +10,8 @@ import toast from "react-hot-toast";
 function CourseVideoTestimonial() {
     const [datas, setDatas] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [iconState, setIconState] = useState({});
-    const videoRefs = useRef({});
+    const [iconState, setIconState] = useState({}); // State to manage play/pause icons
+    const videoRefs = useRef({}); // Ref object to store video references
 
     const getData = async () => {
         try {
@@ -45,13 +45,25 @@ function CourseVideoTestimonial() {
 
     const handlePlayPause = (id) => {
         const video = videoRefs.current[id];
+        
+        // Check if the video exists
         if (video) {
             if (video.paused) {
+                // Pause all other videos
+                Object.keys(videoRefs.current).forEach((key) => {
+                    if (key !== id) {
+                        videoRefs.current[key].pause();
+                        setIconState((prevState) => ({ ...prevState, [key]: true }));
+                    }
+                });
+
+                // Play the selected video
                 video.play();
-                setIconState((prevState) => ({ ...prevState, [id]: false }));
+                setIconState({ [id]: false });
             } else {
+                // Pause the selected video
                 video.pause();
-                setIconState((prevState) => ({ ...prevState, [id]: true }));
+                setIconState({ [id]: true });
             }
         }
     };

@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { FaSearch, FaEdit, FaSave, FaTimes, FaYoutube, FaTwitter, FaLinkedin, FaFacebook } from "react-icons/fa";
+import { FaEdit, FaSave, FaTimes, FaYoutube, FaTwitter, FaLinkedin, FaFacebook } from "react-icons/fa";
 import { IoLocationOutline, IoLogoWhatsapp } from "react-icons/io5";
 import { TbMail } from "react-icons/tb";
-import { Navbar, Nav, Button } from "react-bootstrap";
-import logo from "../../assets/client/CRMLogo.png";
+import { Nav } from "react-bootstrap";
 import { GrInstagram } from "react-icons/gr";
 import { useFormik } from "formik";
 import api from '../../config/BaseUrl';
@@ -12,7 +11,6 @@ import toast from "react-hot-toast";
 
 export const FooterEdit = () => {
   const [isEditing, setIsEditing] = useState(null);
-  const [editMode, setEditMode] = useState({});
   const [apiData, setApiData] = useState({});
   const [loading, setLoadIndicator] = useState(false);
 
@@ -38,6 +36,7 @@ export const FooterEdit = () => {
         console.log("Response data:", response.data);
         setApiData(response.data.data);
         setIsEditing(null);
+        toast.success(response.data.message)
       } catch (error) {
         console.error("Error saving data:", error);
       }finally{
@@ -135,8 +134,7 @@ export const FooterEdit = () => {
                     <FaTimes />
                   </button>
                 </div>
-                <input
-                  type="text"
+                <textarea
                   name="footer_content"
                   {...formik.getFieldProps("footer_content")}
                   onChange={formik.handleChange}
@@ -213,7 +211,7 @@ export const FooterEdit = () => {
               <ul className="footer-social list-inline ps-0">
                 <div className="d-flex flex-wrap gap-2 ">
                   <div>
-                    <Nav.Link href={apiData.fb_link}>
+                    <Nav.Link href={apiData.fb_link} target="_blank">
                       <FaFacebook />
                     </Nav.Link>
                     {!isEditing && (
@@ -249,7 +247,7 @@ export const FooterEdit = () => {
                     </div>
                   )}
                   <div>
-                    <Nav.Link href={apiData.insta_link}>
+                    <Nav.Link href={apiData.insta_link} target="_blank">
                       <GrInstagram />
                     </Nav.Link>
                     {!isEditing && (
@@ -285,7 +283,7 @@ export const FooterEdit = () => {
                     </div>
                   )}
                   <div>
-                    <Nav.Link href={apiData.youtube_link}>
+                    <Nav.Link href={apiData.youtube_link} target="_blank">
                       <FaYoutube />
                     </Nav.Link>
                     {!isEditing && (
@@ -321,7 +319,7 @@ export const FooterEdit = () => {
                     </div>
                   )}
                   <div>
-                    <Nav.Link href={apiData.twitter_link}>
+                    <Nav.Link href={apiData.twitter_link} target="_blank">
                       <FaTwitter />
                     </Nav.Link>
                     {!isEditing && (
@@ -357,7 +355,7 @@ export const FooterEdit = () => {
                     </div>
                   )}
                   <div>
-                    <Nav.Link href={apiData.linkedin_link}>
+                    <Nav.Link href={apiData.linkedin_link} target="_blank">
                       <FaLinkedin />
                     </Nav.Link>
                     {!isEditing && (
@@ -393,7 +391,7 @@ export const FooterEdit = () => {
                     </div>
                   )}
                   <div>
-                    <Nav.Link href={apiData.whatsapp_link}>
+                    <Nav.Link href={apiData.whatsapp_link} target="_blank">
                       <IoLogoWhatsapp />
                     </Nav.Link>
                     {!isEditing && (

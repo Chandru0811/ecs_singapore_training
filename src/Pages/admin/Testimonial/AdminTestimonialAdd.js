@@ -86,8 +86,8 @@ function AdminTestimonialAdd({ onSuccess }) {
 
   return (
     <>
-      <button className="btn btn-sm btn-primary" onClick={handleShow}>
-        Add Cards
+      <button className="btn btn-primary" onClick={handleShow}>
+        Add +
       </button>
 
       <Modal show={show} onHide={handleClose}>

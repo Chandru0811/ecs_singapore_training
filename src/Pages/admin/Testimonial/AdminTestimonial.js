@@ -141,7 +141,7 @@ function AdminTestimonial({ onSuccess }) {
             <button
               onClick={PublishTestimonial}
               type="button"
-              className="btn btn-sm btn-danger mx-2"
+              className="btn btn-danger mx-2"
             >
               Publish
             </button>

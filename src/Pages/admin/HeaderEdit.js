@@ -19,6 +19,7 @@ import { FaEdit, FaSave, FaTimes } from "react-icons/fa";
 import { useFormik } from "formik";
 import api from "../../config/BaseUrl";
 import ImageURL from "../../config/ImageURL";
+import toast from "react-hot-toast";
 
 const HeaderFooter = () => {
   const [course, setCourse] = useState(false);
@@ -118,6 +119,7 @@ const HeaderFooter = () => {
         const response = await api.post("update/header", formData);
         if (response.status === 200) {
           getData();
+          toast.success(response.data.message)
           console.log("updated", response.data);
         }
       } catch (e) {
@@ -165,6 +167,7 @@ const HeaderFooter = () => {
     try {
       const response = await api.post("publish/header");
       if (response.status === 200) {
+        toast.success(response.data.message)
         console.log("published successfully!");
       }
     } catch (e) {

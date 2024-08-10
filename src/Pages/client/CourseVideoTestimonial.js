@@ -5,9 +5,9 @@ import { IoIosPause, IoMdPlay } from "react-icons/io";
 
 function CourseVideoTestimonial() {
     const [datas, setDatas] = useState([]);
-    const [iconState, setIconState] = useState({});
+    const [playingVideoId, setPlayingVideoId] = useState(null);
     const [showAll, setShowAll] = useState(false);
-    const videoRefs = useRef({});
+    const videoRefs = useRef([]);
 
     useEffect(() => {
         const getData = async () => {
@@ -21,15 +21,25 @@ function CourseVideoTestimonial() {
         getData();
     }, []);
 
-    const handlePlayPause = (id) => {
-        const video = videoRefs.current[id];
+    const handlePlayPause = (index) => {
+        const video = videoRefs.current[index];
+
         if (video) {
             if (video.paused) {
+                // Pause any other playing videos
+                videoRefs.current.forEach((v, i) => {
+                    if (v && i !== index) {
+                        v.pause();
+                    }
+                });
+
+                // Play the clicked video
                 video.play();
-                setIconState((prevState) => ({ ...prevState, [id]: false }));
+                setPlayingVideoId(index);
             } else {
+                // Pause the clicked video
                 video.pause();
-                setIconState((prevState) => ({ ...prevState, [id]: true }));
+                setPlayingVideoId(null);
             }
         }
     };
@@ -53,13 +63,13 @@ function CourseVideoTestimonial() {
                 </button>
             </div>
             <div className="row">
-                {displayedCards.map((card) => (
+                {displayedCards.map((card, index) => (
                     <div key={card.id} className="col-md-3 col-12 p-2">
                         <div className="h-100 rounded video-card p-2 position-relative">
                             <div className="video-container" style={{ position: 'relative', height: '200px' }}>
                                 <div
                                     className="play-pause-overlay"
-                                    onClick={() => handlePlayPause(card.id)}
+                                    onClick={() => handlePlayPause(index)}
                                     style={{
                                         position: 'absolute',
                                         top: '50%',
@@ -71,10 +81,10 @@ function CourseVideoTestimonial() {
                                         color: 'white',
                                     }}
                                 >
-                                    {iconState[card.id] !== false ? <IoMdPlay /> : <IoIosPause />}
+                                    {playingVideoId === index ? <IoIosPause /> : <IoMdPlay />}
                                 </div>
                                 <video
-                                    ref={el => videoRefs.current[card.id] = el}
+                                    ref={el => videoRefs.current[index] = el} // Assign each video its respective ref
                                     src={`${ImageURL}${card.video_path}`}
                                     style={{ width: "100%", height: "200px" }}
                                     controls={false}
