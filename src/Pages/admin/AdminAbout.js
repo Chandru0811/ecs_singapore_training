@@ -58,6 +58,7 @@ function AdminAbout() {
       try {
         const response = await api.post("update/about", formData);
         if (response.status === 200) {
+          toast.success(response.data.message);
           getData();
           console.log("About updated", response.data);
         }
@@ -116,6 +117,7 @@ function AdminAbout() {
     try {
       const response = await api.post("publish/about");
       if (response.status === 200) {
+        toast.success(response.data.message || "About Changes Published Successfully!");
         console.log("published successfully!");
       }
     } catch (e) {
@@ -507,7 +509,7 @@ function AdminAbout() {
                                 value={formik.values.feature_description}
                                 onChange={formik.handleChange}
                                 className="form-control mb-2"
-                                {...formik.getFieldProps("aboutus_content")}
+                                {...formik.getFieldProps("feature_description")}
                               />
                             </div>
                           ) : (
