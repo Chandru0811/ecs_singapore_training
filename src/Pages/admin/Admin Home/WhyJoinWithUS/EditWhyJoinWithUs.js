@@ -1,7 +1,7 @@
-import { useFormik } from "formik";
 import React, { useEffect, useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 import * as Yup from "yup";
+import { useFormik } from "formik";
 import api from "../../../../config/BaseUrl";
 import toast from "react-hot-toast";
 import { FaEdit } from "react-icons/fa";
@@ -10,24 +10,18 @@ const validationSchema = Yup.object({
     title: Yup.string().required("*Title is required"),
     description: Yup.string().required("*Description is required"),
 });
+
 function EditWhyJoinWithUs({ id, onSuccess }) {
     const [show, setShow] = useState(false);
     const [loadIndicator, setLoadIndicator] = useState(false);
-
-    const handleClose = () => {
-        setShow(false);
-        formik.resetForm();
-    };
-
-    const handleShow = () => setShow(true);
 
     const formik = useFormik({
         initialValues: {
             title: "",
             description: "",
-            image_path: null
+            image_path: null,
         },
-        validationSchema: validationSchema,
+        validationSchema,
         onSubmit: async (values) => {
             setLoadIndicator(true);
             try {
@@ -59,18 +53,34 @@ function EditWhyJoinWithUs({ id, onSuccess }) {
         },
     });
 
-    useEffect(() => {
-        const getData = async () => {
-            try {
-                const response = await api.get(`homesection2/${id}`);
-                formik.setValues(response.data.data);
-            } catch (error) {
-                console.error("Error fetching data ", error);
-            }
-        };
-        getData();
-    }, [id]);
+    const getData = async () => {
+        try {
+            const response = await api.get(`homesection2/${id}`);
+            formik.setValues({
+                title: response.data.data.title,
+                description: response.data.data.description,
+                image_path: null,
+            }, false); // prevent formik from running validation
+        } catch (error) {
+            console.error("Error fetching data: ", error);
+            toast.error("Failed to load data.");
+        }
+    };
 
+    useEffect(() => {
+        if (show) {
+            getData();
+        }
+    }, [id, show]);
+
+    const handleClose = () => {
+        setShow(false);
+        formik.resetForm();
+    };
+
+    const handleShow = () => {
+        setShow(true);
+    };
 
     return (
         <>
@@ -124,7 +134,7 @@ function EditWhyJoinWithUs({ id, onSuccess }) {
                                 Image<span className="text-danger">*</span>
                             </label>
                             <div className="mb-3">
-                            <input
+                                <input
                                     type="file"
                                     name="image_path"
                                     className={`form-control`}
@@ -161,4 +171,4 @@ function EditWhyJoinWithUs({ id, onSuccess }) {
     );
 }
 
-export default EditWhyJoinWithUs
+export default EditWhyJoinWithUs;

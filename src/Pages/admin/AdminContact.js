@@ -142,7 +142,7 @@ function AdminContact() {
         <div className="container py-5" style={{ overflowX: "hidden" }}>
           <div className="row">
             <div className="col-lg-6 col-xl-4 col-12">
-              <div className="card contactDetails p-4 h-100">
+              <div className="card contactDetails p-4">
                 <div className="row">
                   <div className="col-lg-3 col-12 d-flex justify-content-center align-items-center">
                     <FiPhoneCall color="#e41111" size={60} />
@@ -196,7 +196,7 @@ function AdminContact() {
               </div>
             </div>
             <div className="col-lg-6 col-xl-4 col-12">
-              <div className="card contactDetails p-4 h-100">
+              <div className="card contactDetails p-4">
                 <div className="row">
                   <div className="col-lg-3 col-12 d-flex justify-content-center align-items-center">
                     <IoMailOpenOutline color="#e41111" size={60} />
@@ -250,7 +250,7 @@ function AdminContact() {
               </div>
             </div>
             <div className="col-lg-6 col-xl-4 col-12">
-              <div className="card contactDetails p-4 h-100">
+              <div className="card contactDetails p-4">
                 <div className="row">
                   <div className="col-lg-3 col-12 d-flex justify-content-center align-items-center">
                     <LuMapPin color="#e41111" size={60} />

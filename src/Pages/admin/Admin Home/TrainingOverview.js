@@ -9,25 +9,16 @@ import toast from "react-hot-toast";
 function TrainingOverview() {
     const [loading, setLoading] = useState(false);
     const [isEditing, setIsEditing] = useState(null);
-    const [data, setDatas] = useState();
     const [isAddingPoint, setIsAddingPoint] = useState(false);
     const [newPoint, setNewPoint] = useState('');
+    const [datas, setDatas] = useState();
 
     const formik = useFormik({
         initialValues: {
-            title: "Cloud Ecs Training Overview",
-            description: 'Welcome to our comprehensive Cloud ECS (Elastic Container Service) Training Program! This course is designed to equip you with the essential knowledge and skills needed to effectively manage and deploy containerized applications using ECS, one of the most powerful container orchestration services available today.',
-            contact_no: '1800-212-7688',
-            key_points: [
-                "Comprehensive ECS Solutions",
-                "Certified Professional",
-                "Advanced Security and Compliance",
-                "Expert Team",
-                "Performance Optimization",
-                "Certified Professional",
-                "Seamless Integration and Automation",
-                "24/7 Support"
-            ]
+            title: "",
+            description: "",
+            contact_no: "",
+            key_points: []
         },
         onSubmit: async (values) => {
             console.log("Home Section 3 Datas", values);
@@ -38,20 +29,14 @@ function TrainingOverview() {
             formData.append("contact_no", values.contact_no);
 
             values.key_points.forEach((point, index) => {
-                formData.append(`key_points[${index}]`, point);
+                formData.append(`key_points[]`, point);
             });
 
-            // / Debugging
-            // console.log("FormData entries:");
-            // for (let pair of formData.entries()) {
-            //     console.log(`${pair[0]}: ${pair[1]}`);
-            // }
-
-
             try {
-                const response = await api.post("update/homesection3", formData);
+                const response = await api.post("update/homesection3", values);
                 if (response.status === 200) {
-                    setDatas(response.data.data);
+                    getData();
+                    toast.success("Data updated successfully!");
                     console.log("Updated Data", response.data);
                 }
             } catch (e) {
@@ -61,18 +46,17 @@ function TrainingOverview() {
     });
 
     const getData = async () => {
+        setLoading(true);
         try {
             const response = await api.get("edit/homesection3");
             if (response.status === 200) {
-                formik.setFieldValue("title", response.data.data.title);
-                formik.setFieldValue("description", response.data.data.description);
-                formik.setFieldValue("contact_no", response.data.data.contact_no);
-                formik.setFieldValue("key_points", JSON.parse(response.data.data.key_points));
-
                 setDatas(response.data.data);
+                 // Ensure it's always an array
             }
         } catch (e) {
             console.log("Error fetching data:", e);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -91,6 +75,15 @@ function TrainingOverview() {
     useEffect(() => {
         getData();
     }, []);
+    useEffect(() => {
+        if (datas) {
+            formik.setFieldValue("title", datas.title);
+            formik.setFieldValue("description", datas.description);
+            formik.setFieldValue("contact_no", datas.contact_no);
+            formik.setFieldValue("key_points", datas.key_points || []);
+        }
+    }, [datas]);
+    
 
     const handleEditClick = (field) => {
         setIsEditing(field);
@@ -103,7 +96,8 @@ function TrainingOverview() {
     const handleCancel = () => {
         setIsEditing(null);
         setIsAddingPoint(false);
-        formik.resetForm();
+        setNewPoint('');
+        getData();
     };
 
     const handlePointChange = (event, index) => {
@@ -148,31 +142,31 @@ function TrainingOverview() {
                     <div>
                         <div className='container-fluid trainingOverview mt-3'>
                             <div className='row d-flex'>
+                                {/* Title Section */}
                                 {isEditing === 'title' ? (
                                     <>
                                         <div className="d-flex justify-content-center mb-2">
                                             <FaSave onClick={handleSaveClick} className="text-secondary" />
                                             <FaTimes onClick={handleCancel} style={{ marginLeft: '10px' }} className="text-secondary" />
                                         </div>
-                                        <div>
-                                            <input
-                                                type='input'
-                                                name="title"
-                                                value={formik.values.title}
-                                                onChange={formik.handleChange}
-                                                className="form-control"
-                                            />
-                                        </div>
+                                        <input
+                                            type='input'
+                                            name="title"
+                                            value={formik.values.title}
+                                            onChange={formik.handleChange}
+                                            className="form-control"
+                                        />
                                     </>
                                 ) : (
                                     <>
                                         <div className='d-flex flex-column'>
-                                            <h1 className='secondheading text-start mb-3'>{formik.values.title}</h1>
+                                            <h1 className='secondheading text-start mb-3'>{datas?.title}</h1>
                                             <FaEdit onClick={() => handleEditClick("title")} className="text-secondary mx-2" style={{ width: "30px", height: "30px" }} />
                                         </div>
                                     </>
                                 )}
 
+                                {/* Description Section */}
                                 <div className='col-md-8'>
                                     {isEditing === 'description' ? (
                                         <>
@@ -192,12 +186,14 @@ function TrainingOverview() {
                                     ) : (
                                         <>
                                             <div className='d-flex flex-column'>
-                                                <p className='text-start paraContent'>{formik.values.description}</p>
+                                                <p className='text-start paraContent'>{datas?.description}</p>
                                                 <FaEdit onClick={() => handleEditClick("description")} className="text-secondary mx-2" style={{ width: "30px", height: "30px" }} />
                                             </div>
                                         </>
                                     )}
                                 </div>
+
+                                {/* Contact Section */}
                                 <div className='col-md-4 card p-4'>
                                     <div className='row d-flex'>
                                         <div className='col-md-8'>
@@ -222,7 +218,7 @@ function TrainingOverview() {
                                                 <>
                                                     <div className='d-flex align-items-center'>
                                                         <FaEdit onClick={() => handleEditClick("contact_no")} className="text-secondary mx-2" />
-                                                        <h3>{formik.values.contact_no}</h3>
+                                                        <h3>{datas?.contact_no}</h3>
                                                     </div>
                                                 </>
                                             )}
@@ -238,59 +234,67 @@ function TrainingOverview() {
 
                         {/* Points Section */}
                         <div className="PointsSection py-4">
-                            {isEditing === 'key_points' ? (
-                                <>
-                                    <div className="points-container row">
-                                        {formik.values.key_points.map((point, index) => (
-                                            <div className="point-item col-md-3 mb-3 d-flex align-items-center" key={index}>
-                                                <img src={CirclePoints} alt='circleImg' style={{ width: "30px", height: "30px" }} />
-                                                <input
-                                                    type="text"
-                                                    value={point}
-                                                    onChange={(e) => handlePointChange(e, index)}
-                                                    className="form-control"
-                                                />
-                                                <FaTrash onClick={() => handleDeletePoint(index)} className="text-secondary ms-2" />
-                                            </div>
-                                        ))}
-                                    </div>
-                                    <div className="col-md-4 mt-2 d-flex justify-content-center">
-                                        {isAddingPoint ? (
-                                            <>
-                                                <input
-                                                    type="text"
-                                                    value={newPoint}
-                                                    onChange={(e) => setNewPoint(e.target.value)}
-                                                    className="form-control"
-                                                />
-                                                <FaSave onClick={handleAddPoint} className="text-secondary ms-2" />
-                                                <FaTimes onClick={() => setIsAddingPoint(false)} className="text-secondary ms-2" />
-                                            </>
+                            <div className="points-container row">
+                                {formik.values.key_points.map((point, index) => (
+                                    <div className="point-item col-md-3 mb-3 d-flex align-items-center" key={index}>
+                                        <img src={CirclePoints} alt='circleImg' style={{ width: "30px", height: "30px" }} />
+                                        {isEditing === 'key_points' ? (
+                                            <input
+                                                type="text"
+                                                value={point}
+                                                onChange={(e) => handlePointChange(e, index)}
+                                                className="form-control"
+                                            />
                                         ) : (
-                                            <button className="btn btn-secondary" onClick={() => setIsAddingPoint(true)}>
-                                                <FaPlus /> Add Point
-                                            </button>
+                                            <span className="ms-2">{point}</span>
+                                        )}
+                                        {isEditing === 'key_points' && (
+                                            <FaTrash onClick={() => handleDeletePoint(index)} className="text-secondary ms-2" />
                                         )}
                                     </div>
-                                    <div className="mt-4 d-flex justify-content-center">
-                                        <FaSave onClick={handleSaveClick} className="text-secondary mx-2" />
-                                        <FaTimes onClick={handleCancel} className="text-secondary mx-2" />
+                                ))}
+                            </div>
+                            {isEditing === 'key_points' ? (
+                                <>
+                                    {isAddingPoint ? (
+                                        <div className="text-start col-md-4 mt-2 d-flex justify-content-center">
+                                            <input
+                                                type="text"
+                                                value={newPoint}
+                                                onChange={(e) => setNewPoint(e.target.value)}
+                                                className="form-control"
+                                                placeholder="Enter new point"
+                                            />
+                                            {/* <FaSave onClick={handleAddPoint} className="text-secondary ms-2" /> */}
+                                            <FaTimes onClick={() => setIsAddingPoint(false)} className="text-secondary ms-2" />
+                                        </div>
+                                    ) : (
+                                        <div className="mt-2 d-flex justify-content-center">
+                                            <button className="btn btn-secondary" onClick={() => setIsAddingPoint(true)}>
+                                                <FaPlus />
+                                            </button>
+                                        </div>
+                                    )}
+                                    <div className="d-flex justify-content-center mt-3">
+                                        <FaSave
+                                            onClick={() => {
+                                                if (newPoint.trim()) {
+                                                    handleAddPoint();
+                                                }
+                                                handleSaveClick();
+                                            }}
+                                            className="text-secondary ms-2"
+                                        />
+                                        <FaTimes
+                                            onClick={handleCancel}
+                                            className="text-secondary ms-2"
+                                        />
                                     </div>
                                 </>
                             ) : (
-                                <>
-                                    <div className="points-container row">
-                                        {formik.values.key_points.map((point, index) => (
-                                            <div className="point-item col-md-3 mb-3 d-flex align-items-center" key={index}>
-                                                <img src={CirclePoints} alt='circleImg' style={{ width: "30px", height: "30px" }} />
-                                                <span>{point}</span>
-                                            </div>
-                                        ))}
-                                    </div>
-                                    <div className="mt-2 d-flex justify-content-center">
-                                        <FaEdit onClick={() => handleEditClick("key_points")} className="text-secondary mx-2" />
-                                    </div>
-                                </>
+                                <div className="mt-2 d-flex justify-content-center">
+                                    <FaEdit onClick={() => handleEditClick("key_points")} className="text-secondary mx-2" />
+                                </div>
                             )}
                         </div>
                     </div>
