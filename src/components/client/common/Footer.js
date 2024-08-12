@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { IoLocationOutline, IoLogoWhatsapp } from "react-icons/io5";
+import { LuMapPin } from "react-icons/lu";
 import { TbMail } from "react-icons/tb";
 import { Nav } from "react-bootstrap";
-import { GrInstagram } from "react-icons/gr";
+import { AiFillInstagram } from "react-icons/ai";
+import { IoLogoWhatsapp } from "react-icons/io";
 import EnrollModel from "../../../Pages/admin/EnrollModel";
 import api from '../../../config/BaseUrl';
 import { useFormik } from "formik";
@@ -64,7 +65,7 @@ const Footer = () => {
           <h5 className="mb-4 ms-1 text-start">Contact Us</h5>
           <div className="row ">
             <div className="col-auto pe-0">
-              <IoLocationOutline size={20} />
+              <LuMapPin size={20} />
             </div>
             <div className="col ps-0">
               <p className="fw-light text-start mb-3 ms-1">
@@ -104,7 +105,7 @@ const Footer = () => {
                 <FaFacebook />
               </Nav.Link>
               <Nav.Link href={apiData?.insta_link} target="_blank">
-                <GrInstagram />
+                <AiFillInstagram />
               </Nav.Link>
               <Nav.Link href={apiData?.youtube_link} target="_blank">
                 <FaYoutube />

@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { FaEdit, FaSave, FaTimes, FaYoutube, FaTwitter, FaLinkedin, FaFacebook } from "react-icons/fa";
-import { IoLocationOutline, IoLogoWhatsapp } from "react-icons/io5";
+import { LuMapPin } from "react-icons/lu";
+import { IoLogoWhatsapp } from "react-icons/io";
 import { TbMail } from "react-icons/tb";
 import { Nav } from "react-bootstrap";
-import { GrInstagram } from "react-icons/gr";
+import { AiFillInstagram } from "react-icons/ai";
 import { useFormik } from "formik";
 import api from '../../config/BaseUrl';
 import ImageURL from "../../config/ImageURL";
@@ -12,12 +13,12 @@ import toast from "react-hot-toast";
 export const FooterEdit = () => {
   const [isEditing, setIsEditing] = useState(null);
   const [apiData, setApiData] = useState({});
-  const [loading, setLoadIndicator] = useState(false);
+  const [loadIndicator, setLoadIndicator] = useState(false);
 
   const formik = useFormik({
     initialValues: {
       footer_title: "",
-      logo_path: "",
+      logo_image: null,
       footer_content: "",
       fb_link: "",
       insta_link: "",
@@ -28,24 +29,26 @@ export const FooterEdit = () => {
       copyrights: ""
     },
     onSubmit: async (values) => {
-      setLoadIndicator(true);
+      console.log("Form data", values);
       try {
         const formData = new FormData();
         for (const key in values) {
-          formData.append(key, values[key]);
+          if (values[key] !== null) {
+            formData.append(key, values[key]);
+          }
         }
         const response = await api.post("update/footer", formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
           }
         });
+        console.log("Response data:", response.data);
         setApiData(response.data.data);
         setIsEditing(null);
         toast.success(response.data.message);
       } catch (error) {
         console.error("Error saving data:", error);
-      } finally {
-        setLoadIndicator(false);
+        toast.error("Error saving data.");
       }
     },
   });
@@ -63,8 +66,11 @@ export const FooterEdit = () => {
     setIsEditing(null);
   };
 
-  const handleFileChange = (event) => {
-    formik.setFieldValue("logo_path", event.currentTarget.files[0]);
+  const handleImageUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      formik.setFieldValue('logo_image', file);
+    }
   };
 
   const getData = async () => {
@@ -81,7 +87,8 @@ export const FooterEdit = () => {
     getData();
   }, []);
 
-  const handelFooterPublish = async () => {
+  const handleFooterPublish = async () => {
+    setLoadIndicator(true);
     try {
       const response = await api.post(`publish/footer`);
       if (response.status === 200) {
@@ -89,27 +96,26 @@ export const FooterEdit = () => {
       }
     } catch (e) {
       toast.error("Error Publishing Data", e?.response?.data?.message);
+    } finally {
+      setLoadIndicator(false);
     }
   }
-
   return (
     <div>
-      <div className="card-header d-flex align-items-center px-0 py-3 mb-2 bg-light">
+      <div className="card-header d-flex align-items-center justify-content-between p-2 bg-light">
         <h3 className="fw-bold">Footer</h3>
-        <div className="container-fluid d-flex justify-content-end">
+        <div>
           <button
             type="submit"
             className="btn btn-danger mx-2"
-            disabled={loading}
-            onClick={handelFooterPublish}
+            disabled={loadIndicator}
+            onClick={handleFooterPublish}
           >
-            {loading ? (
+            {loadIndicator && (
               <span
-                className="spinner-border spinner-border-sm"
+                className="spinner-border spinner-border-sm me-2"
                 aria-hidden="true"
               ></span>
-            ) : (
-              <span></span>
             )}
             Publish
           </button>
@@ -119,49 +125,10 @@ export const FooterEdit = () => {
         className="container-fluid text-light"
         style={{ backgroundColor: "#31135E" }}
       >
-        <div className="row px-3 pt-5">
-          <div className="col-md-3 col-12 text-start mb-0">
-            <div className="d-flex align-items-center">
-              {isEditing === "logo_path" ? (
-                <div className="d-flex">
-                  <input
-                    type="file"
-                    name="logo_path"
-                    onChange={handleFileChange}
-                    className="form-control mb-3"
-                  />
-                  <button
-                    onClick={() => handleSaveClick("logo_path")}
-                    className="btn link-primary"
-                    style={{ width: "fit-content" }}
-                  >
-                    <FaSave />
-                  </button>
-                  <button
-                    onClick={handleCancel}
-                    className="btn link-danger"
-                    style={{ width: "fit-content" }}
-                  >
-                    <FaTimes />
-                  </button>
-                </div>
-              ) : (
-                <>
-                  <img
-                    src={`${ImageURL}${apiData.logo_path}`}
-                    alt="Logo"
-                    className="img-fluid mb-3"
-                    style={{ height: "15%", width: "15%" }}
-                  />
-                  <button
-                    onClick={() => handleEditClick("logo_path")}
-                    className="btn link-secondary ms-1 mb-1"
-                    style={{ width: "fit-content", padding: 0 }}
-                  >
-                    <FaEdit />
-                  </button>
-                </>
-              )}
+        <div className=" row px-3 pt-5">
+          <div className="col-md-3 col-12 text-start  mb-0 ">
+            <div className="d-flex">
+              <img src={`${ImageURL}${apiData.logo_path}`} alt="Logo" className="img-fluid mb-3" style={{ height: '15%', width: "15%" }} />
               {isEditing === "footer_title" ? (
                 <div className="d-flex">
                   <input
@@ -187,7 +154,7 @@ export const FooterEdit = () => {
                   </button>
                 </div>
               ) : (
-                <h4 className="mx-2 mb-3 fw-bold">{apiData.footer_title}
+                <h4 className="mx-2 mt-2 fw-bold">{apiData.footer_title}
                   <button
                     onClick={() => handleEditClick("footer_title")}
                     className="btn link-secondary ms-1 mb-1"
@@ -226,7 +193,7 @@ export const FooterEdit = () => {
                 <p className="text-light text-start">{apiData.footer_content}
                   <button
                     onClick={() => handleEditClick("footer_content")}
-                    className="btn link-secondary ms-1 mb-1"
+                    className="btn link-secondary ms-1 mb-2"
                     style={{ width: "fit-content", padding: 0 }}
                   >
                     <FaEdit />
@@ -235,30 +202,30 @@ export const FooterEdit = () => {
               </div>
             )}
           </div>
-          <div className="col-md-3 col-12 mb-0 text-start">
-            <h5 className="mb-4 text-start">Contact Us</h5>
-            <div className="row">
+          <div className="col-md-3 col-12  mb-0 text-start">
+            <h5 className="mb-4 ms-1 text-start">Contact Us</h5>
+            <div className="row ">
               <div className="col-auto pe-0">
-                <IoLocationOutline size={20} />
+                <LuMapPin size={20} />
               </div>
               <div className="col ps-0">
-                <p className="fw-light text-start mb-3">
+                <p className="fw-light text-start mb-3 ms-1">
                   Wisconsin Ave, Suite 700 Chevy Chase, Maryland 20815
                 </p>
               </div>
             </div>
-            <div className="row">
+            <div className="row ">
               <div className="col-auto pe-0">
                 <TbMail size={20} />
               </div>
               <div className="col ps-0">
-                <p className="fw-light text-start mailto:">support@figma.com</p>
+                <p className="fw-light text-start ms-1">support@figma.com</p>
               </div>
             </div>
           </div>
           <div className="col-md-2 col-6 mb-md-0 text-start">
-            <h5 className="mb-4">For Businesses</h5>
-            <ul className="list-unstyled">
+            <h5 className="mb-4 ">For Businesses</h5>
+            <ul className="list-unstyled ">
               <Nav.Link href="#job-post" className="mb-2">
                 Job Post
               </Nav.Link>
@@ -271,81 +238,291 @@ export const FooterEdit = () => {
             </ul>
           </div>
           <div className="col-md-2 col-6 mb-md-0 text-start">
-            <h5 className="mb-4">For Students</h5>
+            <h5 className="mb-4 ">Company</h5>
             <ul className="list-unstyled">
-              <Nav.Link href="#remote-jobs" className="mb-2">
-                Remote Jobs
-              </Nav.Link>
-              <Nav.Link href="#freelancer" className="mb-2">
-                Freelancer
-              </Nav.Link>
-              <Nav.Link href="#part-time" className="mb-2">
-                Part-Time Jobs
-              </Nav.Link>
+              <div className="d-flex flex-column">
+                <Nav.Link href="#about" className="mb-2">
+                  About
+                </Nav.Link>
+                <Nav.Link href="#blogs" className="mb-2">
+                  Blogs
+                </Nav.Link>
+                <Nav.Link href="#contact-us" className="mb-2">
+                  Contact Us
+                </Nav.Link>
+              </div>
             </ul>
           </div>
-          <div className="col-md-2 col-12 text-start">
-            <h5 className="mb-4 text-md-end">Socials</h5>
-            <div className="d-flex justify-content-md-end justify-content-start">
-              <Nav.Link href={apiData.fb_link} className="p-1">
-                <FaFacebook />
-              </Nav.Link>
-              <Nav.Link href={apiData.insta_link} className="p-1">
-                <GrInstagram />
-              </Nav.Link>
-              <Nav.Link href={apiData.youtube_link} className="p-1">
-                <FaYoutube />
-              </Nav.Link>
-              <Nav.Link href={apiData.twitter_link} className="p-1">
-                <FaTwitter />
-              </Nav.Link>
-              <Nav.Link href={apiData.linkedin_link} className="p-1">
-                <FaLinkedin />
-              </Nav.Link>
-              <Nav.Link href={apiData.whatsapp_link} className="p-1">
-                <IoLogoWhatsapp />
-              </Nav.Link>
+          <div className="col-md-2 col-12 text-start mb-3">
+            <h5 className="mb-4 ">Let's do it!</h5>
+            <div>
+              <ul className="footer-social list-inline ps-0">
+                <div className="d-flex flex-wrap gap-2 ">
+                  <div>
+                    <Nav.Link href={apiData.fb_link}>
+                      <FaFacebook />
+                    </Nav.Link>
+                    {!isEditing && (
+                      <span className="text-secondary" onClick={() => handleEditClick("fb_link")}>
+                        <FaEdit />
+                      </span>
+                    )}
+                  </div>
+                  {isEditing === "fb_link" && (
+                    <div className="d-flex">
+                      <input
+                        type="text"
+                        name="fb_link"
+                        {...formik.getFieldProps("fb_link")}
+                        onChange={formik.handleChange}
+                        className="form-control"
+                      />
+                      <button
+                        onClick={() => handleSaveClick("fb_link")}
+                        className="btn link-primary ms-2"
+                        style={{ width: "fit-content", padding: 0 }}
+                      >
+                        <FaSave />
+                      </button>
+                      <button
+                        onClick={handleCancel}
+                        className="btn link-danger ms-2"
+                        style={{ width: "fit-content", padding: 0 }}
+                      >
+                        <FaTimes />
+                      </button>
+                    </div>
+                  )}
+                  <div>
+                    <Nav.Link href={apiData.insta_link}>
+                      <AiFillInstagram />
+                    </Nav.Link>
+                    {!isEditing && (
+                      <span className="text-secondary" onClick={() => handleEditClick("insta_link")}>
+                        <FaEdit />
+                      </span>
+                    )}
+                  </div>
+                  {isEditing === "insta_link" && (
+                    <div className="d-flex">
+                      <input
+                        type="text"
+                        name="insta_link"
+                        {...formik.getFieldProps("insta_link")}
+                        onChange={formik.handleChange}
+                        className="form-control"
+                      />
+                      <button
+                        onClick={() => handleSaveClick("insta_link")}
+                        className="btn link-primary ms-2"
+                        style={{ width: "fit-content", padding: 0 }}
+                      >
+                        <FaSave />
+                      </button>
+                      <button
+                        onClick={handleCancel}
+                        className="btn link-danger ms-2"
+                        style={{ width: "fit-content", padding: 0 }}
+                      >
+                        <FaTimes />
+                      </button>
+                    </div>
+                  )}
+                  <div>
+                    <Nav.Link href={apiData.youtube_link}>
+                      <FaYoutube />
+                    </Nav.Link>
+                    {!isEditing && (
+                      <span className="text-secondary" onClick={() => handleEditClick("youtube_link")}>
+                        <FaEdit />
+                      </span>
+                    )}
+                  </div>
+                  {isEditing === "youtube_link" && (
+                    <div className="d-flex">
+                      <input
+                        type="text"
+                        name="youtube_link"
+                        {...formik.getFieldProps("youtube_link")}
+                        onChange={formik.handleChange}
+                        className="form-control"
+                      />
+                      <button
+                        onClick={() => handleSaveClick("youtube_link")}
+                        className="btn link-primary ms-2"
+                        style={{ width: "fit-content", padding: 0 }}
+                      >
+                        <FaSave />
+                      </button>
+                      <button
+                        onClick={handleCancel}
+                        className="btn link-danger ms-2"
+                        style={{ width: "fit-content", padding: 0 }}
+                      >
+                        <FaTimes />
+                      </button>
+                    </div>
+                  )}
+                  <div>
+                    <Nav.Link href={apiData.twitter_link}>
+                      <FaTwitter />
+                    </Nav.Link>
+                    {!isEditing && (
+                      <span className="text-secondary" onClick={() => handleEditClick("twitter_link")}>
+                        <FaEdit />
+                      </span>
+                    )}
+                  </div>
+                  {isEditing === "twitter_link" && (
+                    <div className="d-flex">
+                      <input
+                        type="text"
+                        name="twitter_link"
+                        {...formik.getFieldProps("twitter_link")}
+                        onChange={formik.handleChange}
+                        className="form-control"
+                      />
+                      <button
+                        onClick={() => handleSaveClick("twitter_link")}
+                        className="btn link-primary ms-2"
+                        style={{ width: "fit-content", padding: 0 }}
+                      >
+                        <FaSave />
+                      </button>
+                      <button
+                        onClick={handleCancel}
+                        className="btn link-danger ms-2"
+                        style={{ width: "fit-content", padding: 0 }}
+                      >
+                        <FaTimes />
+                      </button>
+                    </div>
+                  )}
+                  <div>
+                    <Nav.Link href={apiData.linkedin_link}>
+                      <FaLinkedin />
+                    </Nav.Link>
+                    {!isEditing && (
+                      <span className="text-secondary" onClick={() => handleEditClick("linkedin_link")}>
+                        <FaEdit />
+                      </span>
+                    )}
+                  </div>
+                  {isEditing === "linkedin_link" && (
+                    <div className="d-flex">
+                      <input
+                        type="text"
+                        name="linkedin_link"
+                        {...formik.getFieldProps("linkedin_link")}
+                        onChange={formik.handleChange}
+                        className="form-control"
+                      />
+                      <button
+                        onClick={() => handleSaveClick("linkedin_link")}
+                        className="btn link-primary ms-2"
+                        style={{ width: "fit-content", padding: 0 }}
+                      >
+                        <FaSave />
+                      </button>
+                      <button
+                        onClick={handleCancel}
+                        className="btn link-danger ms-2"
+                        style={{ width: "fit-content", padding: 0 }}
+                      >
+                        <FaTimes />
+                      </button>
+                    </div>
+                  )}
+                  <div>
+                    <Nav.Link href={apiData.whatsapp_link}>
+                      <IoLogoWhatsapp />
+                    </Nav.Link>
+                    {!isEditing && (
+                      <span className="text-secondary" onClick={() => handleEditClick("whatsapp_link")}>
+                        <FaEdit />
+                      </span>
+                    )}
+                  </div>
+                  {isEditing === "whatsapp_link" && (
+                    <div className="d-flex">
+                      <input
+                        type="text"
+                        name="whatsapp_link"
+                        {...formik.getFieldProps("whatsapp_link")}
+                        onChange={formik.handleChange}
+                        className="form-control"
+                      />
+                      <button
+                        onClick={() => handleSaveClick("whatsapp_link")}
+                        className="btn link-primary ms-2"
+                        style={{ width: "fit-content", padding: 0 }}
+                      >
+                        <FaSave />
+                      </button>
+                      <button
+                        onClick={handleCancel}
+                        className="btn btn-sm link-danger ms-2"
+                        style={{ width: "fit-content", padding: 0 }}
+                      >
+                        <FaTimes />
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </ul>
             </div>
+            <button className="footer-btn border-0 rounded-pill mt-3 px-3 py-2">
+              Enroll Now
+            </button>
           </div>
         </div>
-        <div className="row px-3 pt-3 pb-5">
-          <div className="col-md-8 col-12 text-start">
-            {isEditing === "copyrights" ? (
-              <div className="d-flex">
-                <input
-                  type="text"
-                  name="copyrights"
-                  {...formik.getFieldProps("copyrights")}
-                  onChange={formik.handleChange}
-                  className="form-control mb-3"
-                />
-                <button
-                  onClick={() => handleSaveClick("copyrights")}
-                  className="btn link-primary"
-                  style={{ width: "fit-content" }}
-                >
-                  <FaSave />
-                </button>
-                <button
-                  onClick={handleCancel}
-                  className="btn link-danger"
-                  style={{ width: "fit-content" }}
-                >
-                  <FaTimes />
-                </button>
+        <hr className="mt-0 mb-3" />
+        <div className="container-fluid">
+          <div className=" row pb-3">
+            <div className="col-md-6 col-12">
+              <div className="text-start">
+                <span className="me-3">Privacy Policy</span>
+                <span>Terms of Use</span>
               </div>
-            ) : (
-              <p>
-                &copy; {new Date().getFullYear()} {apiData.copyrights}
-                <button
-                  onClick={() => handleEditClick("copyrights")}
-                  className="btn link-secondary ms-1 mb-1"
-                  style={{ width: "fit-content", padding: 0 }}
-                >
-                  <FaEdit />
-                </button>
-              </p>
-            )}
+            </div>
+            <div className="col-md-6 col-12 text-md-end text-start">
+              {isEditing === "copyrights" ? (
+                <div className="d-flex">
+                  <input
+                    type="text"
+                    name="copyrights"
+                    {...formik.getFieldProps("copyrights")}
+                    onChange={formik.handleChange}
+                    className="form-control"
+                  />
+                  <button
+                    onClick={() => handleSaveClick("copyrights")}
+                    className="btn link-primary ms-2"
+                    style={{ width: "fit-content", padding: 0 }}
+                  >
+                    <FaSave />
+                  </button>
+                  <button
+                    onClick={handleCancel}
+                    className="btn link-danger ms-2"
+                    style={{ width: "fit-content", padding: 0 }}
+                  >
+                    <FaTimes />
+                  </button>
+                </div>
+              ) : (
+                <p className="mb-0" style={{ color: "#a0a0a0" }}>
+                  {apiData.copyrights}
+                  <button
+                    onClick={() => handleEditClick("copyrights")}
+                    className="btn link-secondary ms-2 mb-2"
+                    style={{ width: "fit-content", padding: 0 }}
+                  >
+                    <FaEdit />
+                  </button>
+                </p>
+              )}
+            </div>
           </div>
         </div>
       </div>
