@@ -1,4 +1,4 @@
-import React, { forwardRef, useImperativeHandle } from "react";
+import React, { forwardRef, useEffect, useImperativeHandle } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import toast from "react-hot-toast";
@@ -8,7 +8,7 @@ const CourseBenefit = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const validationSchema = Yup.object().shape({
       benefit: Yup.string().required("Title is required"),
-      keyFeature: Yup.array().of(
+      features: Yup.array().of(
         Yup.object().shape({
           keyFeatures: Yup.string().required("Key feature is required"),
         })
@@ -18,7 +18,7 @@ const CourseBenefit = forwardRef(
     const formik = useFormik({
       initialValues: {
         benefit: "",
-        keyFeature: [
+        features: [
           {
             keyFeatures: "",
           },
@@ -26,12 +26,12 @@ const CourseBenefit = forwardRef(
       },
       validationSchema: validationSchema,
       onSubmit: async (values) => {
-        console.log("object", values);
-        
-        // setLoadIndicators(true);
+        // console.log("object", values);
+        console.log("form ", formData);
+        setLoadIndicators(true);
         const payLoad = {
           benefit: values.benefit,
-          features: values.keyFeature.map((key, i) => key.keyFeatures),
+          features: values.features.map((key, i) => key.keyFeatures),
         };
 
         try {
@@ -55,22 +55,28 @@ const CourseBenefit = forwardRef(
       },
     });
     const addRow = () => {
-      formik.setFieldValue("keyFeature", [
-        ...formik.values.keyFeature,
+      formik.setFieldValue("features", [
+        ...formik.values.features,
         {
           keyFeatures: "",
         },
       ]);
     };
     const removeRow = () => {
-      const updatedRow = [...formik.values.keyFeature];
+      const updatedRow = [...formik.values.features];
       updatedRow.pop();
-      formik.setFieldValue("keyFeature", updatedRow);
+      formik.setFieldValue("features", updatedRow);
     };
 
     useImperativeHandle(ref, () => ({
       courseBenefit: formik.handleSubmit,
     }));
+
+    useEffect(()=>{
+      if(formData){
+        formik.setValues(formData)
+        formik.setFieldValue("features",formData.features)}
+    },[])
     return (
       <div className="container my-4">
         <div className="container-fluid">
@@ -101,7 +107,7 @@ const CourseBenefit = forwardRef(
                 </div>
               </div>
               <div className="col-md-6 col-12 mb-3">
-                {formik.values.keyFeature.map((feature, index) => (
+                {formik.values.features?.map((feature, index) => (
                   <div key={index}>
                     <div className="text-start">
                       <label>Key Features</label>
@@ -110,21 +116,21 @@ const CourseBenefit = forwardRef(
                       <input
                         type="text"
                         className={`form-control ${
-                          formik.touched.keyFeature?.[index]?.keyFeatures &&
-                          formik.errors.keyFeature?.[index]?.keyFeatures
+                          formik.touched.features?.[index]?.keyFeatures &&
+                          formik.errors.features?.[index]?.keyFeatures
                             ? "is-invalid"
                             : ""
                         }`}
                         aria-label="keyFeatures"
                         aria-describedby="basic-addon1"
                         {...formik.getFieldProps(
-                          `keyFeature.${index}.keyFeatures`
+                          `features.${index}.keyFeatures`
                         )}
                       />
-                      {formik.touched.keyFeature?.[index]?.keyFeatures &&
-                        formik.errors.keyFeature?.[index]?.keyFeatures && (
+                      {formik.touched.features?.[index]?.keyFeatures &&
+                        formik.errors.features?.[index]?.keyFeatures && (
                           <div className="invalid-feedback text-start">
-                            {formik.errors.keyFeature[index].keyFeatures}
+                            {formik.errors.features[index].keyFeatures}
                           </div>
                         )}
                     </div>
@@ -137,7 +143,7 @@ const CourseBenefit = forwardRef(
             <button className="btn btn-sm btn-primary mx-2" onClick={addRow}>
               Add More
             </button>
-            {formik.values.keyFeature.length > 1 && (
+            {formik.values.features?.length > 1 && (
               <button
                 className="btn btn-sm btn-danger mx-2"
                 onClick={removeRow}

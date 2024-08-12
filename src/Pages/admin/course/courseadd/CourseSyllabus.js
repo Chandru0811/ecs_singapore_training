@@ -3,9 +3,11 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import api from "../../../../config/BaseUrl";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const CourseSyllabus = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
+    const navigate =useNavigate()
     const validationSchema = Yup.object().shape({
       syllabus: Yup.array().of(
         Yup.object().shape({
@@ -33,10 +35,11 @@ const CourseSyllabus = forwardRef(
           },
         ],
       },
-      // validationSchema: validationSchema,
+      validationSchema: validationSchema,
       onSubmit: async (values) => {
-        console.log("object", values);
-        // setLoadIndicators(true);
+        // console.log("object", values);
+        console.log("form ", formData);
+        setLoadIndicators(true);
 
         const payLoad = {
           syllabus: values.syllabus.map((item) => ({
@@ -55,8 +58,9 @@ const CourseSyllabus = forwardRef(
 
           if (response.status === 200) {
             toast.success(response.data.message);
-            // setFormData((prv) => ({ ...prv, ...values, user_id }));
+            setFormData((prv) => ({ ...prv, ...values }));
             // handleNext();
+            navigate("/course")
           } else {
             toast.error(response.data.message);
           }
