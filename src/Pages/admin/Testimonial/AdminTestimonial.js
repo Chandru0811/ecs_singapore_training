@@ -186,6 +186,7 @@ function AdminTestimonial({ onSuccess }) {
                         className="img-fluid rounded-circle p-2"
                         src={`${ImageURL}${data.image_path}`}
                         alt="Admin Testimonial"
+                        style={{ width: "70%", height: "70%" }}
                       />
                     </div>
                     <div>
