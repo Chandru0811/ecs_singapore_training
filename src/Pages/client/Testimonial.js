@@ -71,11 +71,12 @@ function Testimonial() {
         {data.map((card, index) => (
           <div key={index} className="mx-4 my-5 p-1 h-75 shadow rounded card">
             <div className="d-flex align-items-center px-2">
-              <div className="w-25 p-2">
+              <div className="w-25 p-1">
                 <img
                   src={`${ImgUrl}${card.image_path}`}
                   alt={card.title}
                   className="img-fluid"
+                  style={{ width: "80%", height: "80%" }}
                 />
               </div>
               <div className="text-start">

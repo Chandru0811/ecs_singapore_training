@@ -37,8 +37,9 @@ const CourseBatch = forwardRef(
       },
       validationSchema: validationSchema,
       onSubmit: async (values) => {
-        console.log("object", values);
-        // setLoadIndicators(true);
+        // console.log("object", values);
+        console.log("form ", formData);
+        setLoadIndicators(true);
         try {
           const response = await api.post(
             `/courses/${formData.id}/batches`,
@@ -59,7 +60,8 @@ const CourseBatch = forwardRef(
         }
       },
     });
-    console.log("form ", formData);
+   
+
     const calculateDuration = (startTime, endTime) => {
       const [startHour, startMinute] = startTime.split(":").map(Number);
       const [endHour, endMinute] = endTime.split(":").map(Number);

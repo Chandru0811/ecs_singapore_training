@@ -1,4 +1,4 @@
-import React, { forwardRef, useImperativeHandle } from "react";
+import React, { forwardRef, useEffect, useImperativeHandle } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import toast from "react-hot-toast";
@@ -25,8 +25,9 @@ const CourseFAQ = forwardRef(
       },
       validationSchema: validationSchema,
       onSubmit: async (values) => {
-        console.log("object", values);
-        // setLoadIndicators(true);
+        // console.log("object", values);
+        console.log("form ", formData);
+        setLoadIndicators(true);
 
         try {
           const response = await api.post(
@@ -36,7 +37,7 @@ const CourseFAQ = forwardRef(
 
           if (response.status === 200) {
             toast.success(response.data.message);
-            // setFormData((prv) => ({ ...prv, ...values, user_id }));
+            setFormData((prv) => ({ ...prv, ...values }));
             handleNext();
           } else {
             toast.error(response.data.message);
@@ -57,14 +58,22 @@ const CourseFAQ = forwardRef(
         },
       ]);
     };
+
     const removeRow = () => {
       const updatedRow = [...formik.values.faq];
       updatedRow.pop();
       formik.setFieldValue("faq", updatedRow);
     };
+
     useImperativeHandle(ref, () => ({
       courseFaq: formik.handleSubmit,
     }));
+
+    useEffect(()=>{
+      if(formData.faq){
+        formik.setFieldValue("faq",formData.faq)}
+    },[])
+
     return (
       <div className="container my-4">
         <div className="container-fluid">

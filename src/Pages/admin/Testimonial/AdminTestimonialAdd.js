@@ -6,13 +6,27 @@ import api from "../../../config/BaseUrl";
 import toast from "react-hot-toast";
 import ReactStars from "react-rating-stars-component";
 
+const FILE_SIZE = 2048 * 1024; // 2048 KB in bytes
+const SUPPORTED_FORMATS = ["image/jpg", "image/jpeg", "image/png"];
+
 const validationSchema = Yup.object({
   client_name: Yup.string().required("*Client Name is required"),
   designation: Yup.string().required("*Designation is required"),
   rating: Yup.string().required("*Rating is required"),
   title: Yup.string().required("*Title is required"),
   description: Yup.string().required("*Description is required"),
-  image: Yup.string().required("Image is required"),
+  image: Yup.mixed()
+    .required("*Image is required")
+    .test(
+      "fileSize",
+      "File too large. Maximum size is 2 MB.",
+      (value) => value && value.size <= FILE_SIZE
+    )
+    .test(
+      "fileFormat",
+      "Unsupported Format. Please use jpg, jpeg, or png.",
+      (value) => value && SUPPORTED_FORMATS.includes(value.type)
+    ),
 });
 
 function AdminTestimonialAdd({ onSuccess }) {
@@ -183,6 +197,9 @@ function AdminTestimonialAdd({ onSuccess }) {
                 activeColor="#ffd700"
                 name="rating"
               />
+              {formik.touched.rating && formik.errors.rating && (
+                <div className="error text-danger">{formik.errors.rating}</div>
+              )}
             </div>
             <div className="p-2">
               <label htmlFor="image">Image</label>
@@ -197,6 +214,7 @@ function AdminTestimonialAdd({ onSuccess }) {
                     ? "is-invalid"
                     : ""
                 }`}
+                accept=".jpg, .jpeg, .png"
               />
               {formik.touched.image && formik.errors.image && (
                 <div className="invalid-feedback">{formik.errors.image}</div>

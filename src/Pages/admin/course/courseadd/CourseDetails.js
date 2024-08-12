@@ -52,17 +52,12 @@ const CourseDetails = forwardRef(
       validationSchema: validationSchema,
       onSubmit: async (values) => {
         console.log("object", values);
+        setLoadIndicators(true)
         try {
           const formData = new FormData();
-
-          // Add each data field manually to the FormData object
-          formData.append("logo", values.logo);
-          formData.append("title", values.title);
-          formData.append("description", values.description);
-          formData.append("category_id", values.category_id);
-          formData.append("price", values.price);
-          formData.append("offer_price", values.offer_price);
-          // Perform the API call to create a new user with profile image
+          Object.entries(values).forEach(([key,value])=>(
+            formData.append(key,value)
+          ))
 
           const response = await api.post("courses", formData, {
             headers: {
@@ -79,8 +74,11 @@ const CourseDetails = forwardRef(
           }
         } catch (error) {
           toast.error(error.message);
+        }finally{
+          setLoadIndicators(false)
         }
       },
+
     });
     useImperativeHandle(ref, () => ({
       courseDetails: formik.handleSubmit,

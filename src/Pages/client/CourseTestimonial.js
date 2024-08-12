@@ -23,13 +23,15 @@ function CourseTestimonial() {
   const toggleView = () => {
     setShowALL((prve) => !prve);
   };
-  const displayCards = showAll ? datas : datas.slice(0,8);
+  const displayCards = showAll ? datas : datas.slice(0, 8);
 
   return (
     <div className="container-fluid">
       <div className="d-flex justify-content-between align-items center py-2">
         <h4 className="text-start">Review for Master Program</h4>
-        <button className="btn btn-sm btn-primary" onClick={toggleView}>{showAll ? 'Show Less' : 'Show More'}</button>
+        <button className="btn btn-sm btn-primary" onClick={toggleView}>
+          {showAll ? "Show Less" : "Show More"}
+        </button>
       </div>
       <div className="card">
         <div className="d-flex align-items-center justify-content-center">
@@ -67,32 +69,40 @@ function CourseTestimonial() {
         <div className="row">
           {displayCards.map((data) => (
             <div key={data.id} className="col-lg-3 col-md-6 col-sm-12 p-4">
-              <div className="review-cards h-100">
-                <div className="d-flex justify-content-between align-items-center header bg-primary text-light p-2">
-                  <div className="d-flex justify-content-start align-items-center">
-                    <div className=" p-1">
-                      <img
-                        src={`${ImageURL}${data.profile_path}`}
-                        alt="avatar"
-                        className="img-fluid rounded-circle"
-                      />
+              <div className="h-100 course-cards">
+                <div className="head-content">
+                  <div className="text-start">
+                    <div className="d-flex justify-content-between align-items-center px-2">
+                      <div className="row" style={{ minHeight: "10vh" }}>
+                        <div className="col-md-9 col-12 p-2">
+                          <div className="d-flex align-items-center">
+                            <img
+                              className="img-fluid rounded-circle"
+                              src={`${ImageURL}${data.profile_path}`}
+                              alt="image"
+                              style={{ width: "30%", height: "30%" }}
+                            />
+                            <p className="text-light fw-bold ps-1">
+                              {data.client_name}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="col-md-3 col-12 p-2">
+                          <div className="d-flex align-items-center">
+                            <span
+                              className="ms-2 rounded text-light fw-light px-1 text-center"
+                              style={{ border: "2px solid #fff" }}
+                            >
+                              {data.rating}<IoIosStar size={18} style={{ color: "white" }} />
+                            </span>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                    &nbsp;
-                    <div className="name ml-2">
-                      <h6 className="mb-0">{data.client_name}</h6>
-                    </div>
-                  </div>
-                  <div className="rating d-flex">
-                    <p className="mb-0">Rating </p>&nbsp;
-                    <p>
-                      <span className="rating-review">
-                        {data.rating} <IoIosStar style={{ color: "gold" }} />
-                      </span>
-                    </p>
                   </div>
                 </div>
-                <div className="card-body p-3 text-start text-muted">
-                  {data.description}
+                <div className="p-3 text-secondary text-start">
+                  <p className="card-text">{data.description}</p>
                 </div>
               </div>
             </div>
