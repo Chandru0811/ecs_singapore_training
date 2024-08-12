@@ -20,7 +20,8 @@ const validationSchema = Yup.object({
 function CourseTestimonial() {
   const [show, setShow] = useState(false);
   const [datas, setDatas] = useState([]);
-  const [loadIndicator, setLoadIndicator] = useState(false);
+  const [loadSave, setLoadSave] = useState(false);
+  const [loadPublish, setLoadPublish] = useState(false);
 
   const fetchDatas = async () => {
     try {
@@ -44,7 +45,7 @@ function CourseTestimonial() {
     },
     validationSchema,
     onSubmit: async (values) => {
-      setLoadIndicator(true);
+      setLoadSave(true);
       try {
         const formData = new FormData();
         formData.append("profile", values.profile);
@@ -68,6 +69,8 @@ function CourseTestimonial() {
       } catch (error) {
         const errorMessage = error.response?.data?.message || error.message;
         toast.error(errorMessage);
+      } finally {
+        setLoadSave(false);
       }
     },
   });
@@ -104,8 +107,8 @@ function CourseTestimonial() {
     }
   };
 
-  const PublishCourseTestimonal = async () => {
-    setLoadIndicator(true);
+  const PublishCourseTestimonial = async () => {
+    setLoadPublish(true);
     try {
       const response = await api.post("/publish/coursetestimonial", null, {
         headers: {
@@ -130,7 +133,7 @@ function CourseTestimonial() {
         "An error occurred during publishing.";
       toast.error(errorMessage);
     } finally {
-      setLoadIndicator(false);
+      setLoadPublish(false);
     }
   };
 
@@ -150,8 +153,17 @@ function CourseTestimonial() {
           <button
             type="button"
             className="btn btn-danger mx-2"
-            onClick={PublishCourseTestimonal}
+            onClick={PublishCourseTestimonial}
+            disabled={loadPublish}
           >
+            {loadPublish ? (
+              <span
+                className="spinner-border spinner-border-sm"
+                aria-hidden="true"
+              ></span>
+            ) : (
+              <span></span>
+            )}
             Publish
           </button>
         </div>
@@ -161,7 +173,7 @@ function CourseTestimonial() {
         {datas.map((data) => (
           <div key={data.id} className="col-md-3 col-12 p-2">
             <div className="h-100 course-cards">
-              <div className="card-header head-content" >
+              <div className="card-header head-content">
                 <div className="d-flex justify-content-between align-items-start p-2">
                   <button
                     type="button"
@@ -177,7 +189,10 @@ function CourseTestimonial() {
                   <EditCourseTestimonial id={data.id} onSuccess={fetchDatas} />
                 </div>
                 <div className="row">
-                  <div className="col-md-9 col-12">
+                  <div
+                    className="col-md-9 col-12"
+                    style={{ minHeight: "70px" }}
+                  >
                     <div className="d-flex align-items-center">
                       <img
                         className="img-fluid rounded-circle"
@@ -185,7 +200,7 @@ function CourseTestimonial() {
                         alt="image"
                         style={{ width: "30%", height: "30%" }}
                       />
-                      <p className="text-light fw-bold ps-1">
+                      <p className="text-light fw-bold ps-1 text-start">
                         {data.client_name}
                       </p>
                     </div>
@@ -216,7 +231,7 @@ function CourseTestimonial() {
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>
-            {formik.values.id ? "Edit Card" : "Add Course Testimonal"}
+            {formik.values.id ? "Edit Card" : "Add Course Testimonial"}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -297,8 +312,8 @@ function CourseTestimonial() {
               <Button variant="secondary" onClick={handleClose}>
                 Close
               </Button>
-              <Button variant="primary" type="submit" disabled={loadIndicator}>
-                {loadIndicator && (
+              <Button variant="primary" type="submit" disabled={loadSave}>
+                {loadSave && (
                   <span
                     className="spinner-border spinner-border-sm me-2"
                     aria-hidden="true"
