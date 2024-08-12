@@ -92,7 +92,7 @@ function EditCourseTestimonial({ id, onSuccess }) {
         const file = event.target.files[0];
         if (file) {
             formik.setFieldValue("profile", file);
-           
+
         }
     };
 
@@ -142,10 +142,14 @@ function EditCourseTestimonial({ id, onSuccess }) {
                                 fullIcon={<i className="fa fa-star"></i>}
                                 activeColor="#ffd700"
                                 name="rating"
+                                className={`form-control ${formik.touched.rating && formik.errors.rating
+                                    ? "is-invalid"
+                                    : ""
+                                    }`}
                             />
-                            <Form.Control.Feedback type="invalid">
-                                {formik.errors.rating}
-                            </Form.Control.Feedback>
+                            {formik.touched.rating && formik.errors.rating && (
+                                <div className="error text-danger">{formik.errors.rating}</div>
+                            )}
                         </Form.Group>
 
                         <Form.Group controlId="formDescription">
@@ -184,6 +188,12 @@ function EditCourseTestimonial({ id, onSuccess }) {
                         Close
                     </Button>
                     <Button variant="primary" onClick={formik.handleSubmit} disabled={loadIndicator}>
+                        {loadIndicator && (
+                            <span
+                                className="spinner-border spinner-border-sm me-2"
+                                aria-hidden="true"
+                            ></span>
+                        )}
                         Save
                     </Button>
                 </Modal.Footer>

@@ -144,9 +144,13 @@ function AdminTestimonialEdit({ id, onSuccess }) {
                 fullIcon={<i className="fa fa-star"></i>}
                 activeColor="#ffd700"
                 name="rating"
+                className={`form-control ${formik.touched.rating && formik.errors.rating
+                  ? "is-invalid"
+                  : ""
+                }`}
               />
               {formik.touched.rating && formik.errors.rating && (
-                <div className="invalid-feedback">{formik.errors.rating}</div>
+                <div className="error text-danger">{formik.errors.rating}</div>
               )}
             </div>
             <div className="p-2">
