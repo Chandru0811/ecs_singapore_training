@@ -20,7 +20,7 @@ const validationSchema = Yup.object({
 function CourseTestimonial() {
   const [show, setShow] = useState(false);
   const [datas, setDatas] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loadIndicator, setLoadIndicator] = useState(false);
 
   const fetchDatas = async () => {
     try {
@@ -44,6 +44,7 @@ function CourseTestimonial() {
     },
     validationSchema,
     onSubmit: async (values) => {
+      setLoadIndicator(true);
       try {
         const formData = new FormData();
         formData.append("profile", values.profile);
@@ -104,7 +105,7 @@ function CourseTestimonial() {
   };
 
   const PublishCourseTestimonal = async () => {
-    setLoading(true);
+    setLoadIndicator(true);
     try {
       const response = await api.post("/publish/coursetestimonial", null, {
         headers: {
@@ -112,7 +113,10 @@ function CourseTestimonial() {
         },
       });
       if (response.status === 200) {
-        toast.success(response.data.message || "Course Testimonials Changes Published Successfully!");
+        toast.success(
+          response.data.message ||
+            "Course Testimonials Changes Published Successfully!"
+        );
       } else {
         console.error("Publishing Course Testimonial failed");
         toast.error(response.data.message || "Failed to publish.");
@@ -120,10 +124,13 @@ function CourseTestimonial() {
       fetchDatas();
     } catch (error) {
       console.error("Error publishing data:", error.message);
-      const errorMessage = error.response?.data?.message || error.message || "An error occurred during publishing.";
+      const errorMessage =
+        error.response?.data?.message ||
+        error.message ||
+        "An error occurred during publishing.";
       toast.error(errorMessage);
     } finally {
-      setLoading(false);
+      setLoadIndicator(false);
     }
   };
 
@@ -154,7 +161,7 @@ function CourseTestimonial() {
         {datas.map((data) => (
           <div key={data.id} className="col-md-3 col-12 p-2">
             <div className="h-100 course-cards">
-              <div className="head-content">
+              <div className="card-header head-content" >
                 <div className="d-flex justify-content-between align-items-start p-2">
                   <button
                     type="button"
@@ -169,41 +176,37 @@ function CourseTestimonial() {
                   </button>
                   <EditCourseTestimonial id={data.id} onSuccess={fetchDatas} />
                 </div>
-                <div className="text-start">
-                  <div className="d-flex justify-content-between align-items-center px-2">
-                    <div
-                      className="d-flex align-items-center"
-                      style={{ width: "20%" }}
-                    >
+                <div className="row">
+                  <div className="col-md-9 col-12">
+                    <div className="d-flex align-items-center">
                       <img
                         className="img-fluid rounded-circle"
                         src={`${ImageURL}${data.profile_path}`}
                         alt="image"
+                        style={{ width: "30%", height: "30%" }}
                       />
-                      <span>
-                        <h5 className="text-light fw-bold ps-1">
-                          {data.client_name}
-                        </h5>
-                      </span>
-                    </div>
-
-                    <div className="rating">
-                      <p className="text-light">
-                        Rating
-                        <span
-                          className="ms-2 rounded fw-light px-1"
-                          style={{ border: "2px solid #fff" }}
-                        >
-                          {data.rating}
-                          <IoIosStar size={12} style={{ color: "white" }} />
-                        </span>
+                      <p className="text-light fw-bold ps-1">
+                        {data.client_name}
                       </p>
+                    </div>
+                  </div>
+                  <div className="col-md-3 col-12">
+                    <div className="d-flex align-items-center">
+                      <span
+                        className="ms-2 rounded text-light fw-light px-1"
+                        style={{ border: "2px solid #fff" }}
+                      >
+                        {data.rating}
+                        <IoIosStar size={18} style={{ color: "white" }} />
+                      </span>
                     </div>
                   </div>
                 </div>
               </div>
-              <div className="p-3 text-secondary text-start">
-                <p className="card-text">{data.description}</p>
+              <div className="card-body">
+                <div className="p-3 text-secondary text-start">
+                  <p className="card-text">{data.description}</p>
+                </div>
               </div>
             </div>
           </div>
@@ -249,10 +252,15 @@ function CourseTestimonial() {
                 fullIcon={<i className="fa fa-star"></i>}
                 activeColor="#ffd700"
                 name="rating"
+                className={`form-control ${
+                  formik.touched.rating && formik.errors.rating
+                    ? "is-invalid"
+                    : ""
+                }`}
               />
-              <Form.Control.Feedback type="invalid">
-                {formik.errors.rating}
-              </Form.Control.Feedback>
+              {formik.touched.rating && formik.errors.rating && (
+                <div className="error text-danger">{formik.errors.rating}</div>
+              )}
             </Form.Group>
             <Form.Group controlId="formDescription">
               <Form.Label>Description</Form.Label>
@@ -286,11 +294,17 @@ function CourseTestimonial() {
               </Form.Control.Feedback>
             </Form.Group>
             <Modal.Footer>
-              <Button variant="primary" type="submit">
-                Save
-              </Button>
               <Button variant="secondary" onClick={handleClose}>
                 Close
+              </Button>
+              <Button variant="primary" type="submit" disabled={loadIndicator}>
+                {loadIndicator && (
+                  <span
+                    className="spinner-border spinner-border-sm me-2"
+                    aria-hidden="true"
+                  ></span>
+                )}
+                Save
               </Button>
             </Modal.Footer>
           </Form>
