@@ -68,7 +68,6 @@ function AddCourseVideoTestimonial({ onSuccess }) {
             <button className="btn btn-primary" onClick={handleShow}>
                 Add +
             </button>
-
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
                     <Modal.Title>Add Online Training Review</Modal.Title>
