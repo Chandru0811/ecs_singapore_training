@@ -53,9 +53,9 @@ const Footer = () => {
     >
       <div className=" row px-3 pt-5">
         <div className="col-md-3 col-12  mb-0 text-start">
-          <div className="">
+          <div className="d-flex">
             <img src={`${ImageURL}${apiData?.logo_path}`} alt="Logo" className="img-fluid mb-3" style={{ height: '15%', width: "15%" }} />
-            <span className="mx-1">{apiData?.footer_title}</span>
+            <h4 className="mx-2 mt-2 fw-bold">{apiData.footer_title}</h4>
           </div>
           <p className="fw-light text-start">
             {apiData?.footer_content}
@@ -105,10 +105,10 @@ const Footer = () => {
                 <FaFacebook />
               </Nav.Link>
               <Nav.Link href={apiData?.insta_link} target="_blank">
-                <AiFillInstagram />
+                <AiFillInstagram size={18} />
               </Nav.Link>
               <Nav.Link href={apiData?.youtube_link} target="_blank">
-                <FaYoutube />
+                <FaYoutube size={18} />
               </Nav.Link>
               <Nav.Link href={apiData?.twitter_link} target="_blank">
                 <FaTwitter />

@@ -126,29 +126,59 @@ export const FooterEdit = () => {
         style={{ backgroundColor: "#31135E" }}
       >
         <div className=" row px-3 pt-5">
-          <div className="col-md-3 col-12 text-start  mb-0 ">
-            <div className="d-flex">
-              <img src={`${ImageURL}${apiData.logo_path}`} alt="Logo" className="img-fluid mb-3" style={{ height: '15%', width: "15%" }} />
-              {isEditing === "footer_title" ? (
+          <div className="col-md-3 col-12 text-start mb-0">
+            <div className="d-flex align-items-center">
+              {isEditing === 'logo_image' && (
                 <div className="d-flex">
+                  <input
+                    type="file"
+                    name="logo_image"
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                    className="form-control"
+                  />
+                  <FaSave
+                    onClick={handleSaveClick}
+                    className="text-primary mx-2 mt-2" />
+                  <FaTimes
+                    onClick={handleCancel}
+                    className="text-danger mt-2" />
+                </div>
+              )}
+              {isEditing !== 'logo_image' && (
+                <FaEdit
+                  className="text-secondary"
+                  onClick={() => handleEditClick("logo_image")}
+                />
+              )}
+            </div>
+            <div className="d-flex">
+              <img src={`${ImageURL}${apiData.logo_path}`}
+                alt={apiData.footer_title}
+                className="img-fluid mb-3"
+                style={{ height: "15%", width: "15%" }}
+              />
+              {isEditing === "footer_title" ? (
+                <div className="d-flex mx-2 mt-2">
                   <input
                     type="text"
                     name="footer_title"
+                    style={{ height: "65%" }}
                     {...formik.getFieldProps("footer_title")}
                     onChange={formik.handleChange}
-                    className="form-control mb-3"
+                    className="form-control"
                   />
                   <button
                     onClick={() => handleSaveClick("footer_title")}
-                    className="btn link-primary"
-                    style={{ width: "fit-content" }}
+                    className="btn link-primary mx-2 mb-3"
+                    style={{ width: "fit-content", padding: 0 }}
                   >
                     <FaSave />
                   </button>
                   <button
                     onClick={handleCancel}
-                    className="btn link-danger"
-                    style={{ width: "fit-content" }}
+                    className="btn link-danger mb-3"
+                    style={{ width: "fit-content", padding: 0 }}
                   >
                     <FaTimes />
                   </button>
@@ -259,7 +289,7 @@ export const FooterEdit = () => {
               <ul className="footer-social list-inline ps-0">
                 <div className="d-flex flex-wrap gap-2 ">
                   <div>
-                    <Nav.Link href={apiData.fb_link}>
+                    <Nav.Link href={apiData.fb_link} target="_blank">
                       <FaFacebook />
                     </Nav.Link>
                     {!isEditing && (
@@ -294,8 +324,8 @@ export const FooterEdit = () => {
                     </div>
                   )}
                   <div>
-                    <Nav.Link href={apiData.insta_link}>
-                      <AiFillInstagram />
+                    <Nav.Link href={apiData.insta_link} target="_blank">
+                      <AiFillInstagram size={18} />
                     </Nav.Link>
                     {!isEditing && (
                       <span className="text-secondary" onClick={() => handleEditClick("insta_link")}>
@@ -329,8 +359,8 @@ export const FooterEdit = () => {
                     </div>
                   )}
                   <div>
-                    <Nav.Link href={apiData.youtube_link}>
-                      <FaYoutube />
+                    <Nav.Link href={apiData.youtube_link} target="_blank">
+                      <FaYoutube size={18} />
                     </Nav.Link>
                     {!isEditing && (
                       <span className="text-secondary" onClick={() => handleEditClick("youtube_link")}>
@@ -364,7 +394,7 @@ export const FooterEdit = () => {
                     </div>
                   )}
                   <div>
-                    <Nav.Link href={apiData.twitter_link}>
+                    <Nav.Link href={apiData.twitter_link} target="_blank">
                       <FaTwitter />
                     </Nav.Link>
                     {!isEditing && (
@@ -399,7 +429,7 @@ export const FooterEdit = () => {
                     </div>
                   )}
                   <div>
-                    <Nav.Link href={apiData.linkedin_link}>
+                    <Nav.Link href={apiData.linkedin_link} target="_blank">
                       <FaLinkedin />
                     </Nav.Link>
                     {!isEditing && (
@@ -434,7 +464,7 @@ export const FooterEdit = () => {
                     </div>
                   )}
                   <div>
-                    <Nav.Link href={apiData.whatsapp_link}>
+                    <Nav.Link href={apiData.whatsapp_link} target="_blank">
                       <IoLogoWhatsapp />
                     </Nav.Link>
                     {!isEditing && (
