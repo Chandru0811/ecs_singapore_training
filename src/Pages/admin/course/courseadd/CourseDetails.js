@@ -217,11 +217,6 @@ const CourseDetails = forwardRef(
                 )}
               </div>
 
-              {/* <div className="d-flex justify-content-end">
-            <button type="submit" className="btn btn-sm btn-primary">
-              Submit
-            </button>
-          </div> */}
             </div>
           </div>
         </form>

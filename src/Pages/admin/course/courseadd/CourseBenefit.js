@@ -9,29 +9,21 @@ const CourseBenefit = forwardRef(
     const validationSchema = Yup.object().shape({
       benefit: Yup.string().required("Title is required"),
       features: Yup.array().of(
-        Yup.object().shape({
-          keyFeatures: Yup.string().required("Key feature is required"),
-        })
+        Yup.string().required("Key feature is required")
       ),
     });
 
     const formik = useFormik({
       initialValues: {
         benefit: "",
-        features: [
-          {
-            keyFeatures: "",
-          },
-        ],
+        features: [""],
       },
       validationSchema: validationSchema,
       onSubmit: async (values) => {
-        // console.log("object", values);
-        console.log("form ", formData);
         setLoadIndicators(true);
         const payLoad = {
           benefit: values.benefit,
-          features: values.features.map((key, i) => key.keyFeatures),
+          features: values.features,
         };
 
         try {
@@ -48,35 +40,35 @@ const CourseBenefit = forwardRef(
             toast.error(response.data.message);
           }
         } catch (error) {
-          toast.error("error");
+          toast.error("Error submitting form");
         } finally {
           setLoadIndicators(false);
         }
       },
     });
+
     const addRow = () => {
-      formik.setFieldValue("features", [
-        ...formik.values.features,
-        {
-          keyFeatures: "",
-        },
-      ]);
+      formik.setFieldValue("features", [...formik.values.features, ""]);
     };
+
     const removeRow = () => {
-      const updatedRow = [...formik.values.features];
-      updatedRow.pop();
-      formik.setFieldValue("features", updatedRow);
+      const updatedFeatures = formik.values.features.slice(0, -1);
+      formik.setFieldValue("features", updatedFeatures);
     };
 
     useImperativeHandle(ref, () => ({
       courseBenefit: formik.handleSubmit,
     }));
 
-    useEffect(()=>{
-      if(formData){
-        formik.setValues(formData)
-        formik.setFieldValue("features",formData.features)}
-    },[])
+    useEffect(() => {
+      if (formData) {
+        formik.setValues({
+          benefit: formData.benefits,
+          features: formData.features || [""],
+        });
+      }
+    }, [formData]);
+
     return (
       <div className="container my-4">
         <div className="container-fluid">
@@ -90,13 +82,12 @@ const CourseBenefit = forwardRef(
                 <div className="input-group mb-3">
                   <input
                     type="text"
-                    className={`form-control   ${
+                    className={`form-control ${
                       formik.touched.benefit && formik.errors.benefit
                         ? "is-invalid"
                         : ""
                     }`}
                     aria-label="benefit"
-                    aria-describedby="basic-addon1"
                     {...formik.getFieldProps("benefit")}
                   />
                   {formik.touched.benefit && formik.errors.benefit && (
@@ -107,30 +98,27 @@ const CourseBenefit = forwardRef(
                 </div>
               </div>
               <div className="col-md-6 col-12 mb-3">
-                {formik.values.features?.map((feature, index) => (
+                {formik.values.features.map((feature, index) => (
                   <div key={index}>
                     <div className="text-start">
-                      <label>Key Features</label>
+                      <label>Key Feature {index + 1}</label>
                     </div>
                     <div className="input-group mb-3">
                       <input
                         type="text"
                         className={`form-control ${
-                          formik.touched.features?.[index]?.keyFeatures &&
-                          formik.errors.features?.[index]?.keyFeatures
+                          formik.touched.features?.[index] &&
+                          formik.errors.features?.[index]
                             ? "is-invalid"
                             : ""
                         }`}
-                        aria-label="keyFeatures"
-                        aria-describedby="basic-addon1"
-                        {...formik.getFieldProps(
-                          `features.${index}.keyFeatures`
-                        )}
+                        aria-label={`keyFeature-${index}`}
+                        {...formik.getFieldProps(`features.${index}`)}
                       />
-                      {formik.touched.features?.[index]?.keyFeatures &&
-                        formik.errors.features?.[index]?.keyFeatures && (
+                      {formik.touched.features?.[index] &&
+                        formik.errors.features?.[index] && (
                           <div className="invalid-feedback text-start">
-                            {formik.errors.features[index].keyFeatures}
+                            {formik.errors.features[index]}
                           </div>
                         )}
                     </div>
@@ -138,20 +126,17 @@ const CourseBenefit = forwardRef(
                 ))}
               </div>
             </div>
-          </form>
-          <div className="container d-flex justify-content-end">
-            <button className="btn btn-sm btn-primary mx-2" onClick={addRow}>
-              Add More
-            </button>
-            {formik.values.features?.length > 1 && (
-              <button
-                className="btn btn-sm btn-danger mx-2"
-                onClick={removeRow}
-              >
-                X
+            <div className="container d-flex justify-content-end">
+              <button className="btn btn-sm btn-primary mx-2" type="button" onClick={addRow}>
+                Add More
               </button>
-            )}
-          </div>
+              {formik.values.features.length > 1 && (
+                <button className="btn btn-sm btn-danger mx-2" type="button" onClick={removeRow}>
+                  Remove
+                </button>
+              )}
+            </div>
+          </form>
         </div>
       </div>
     );

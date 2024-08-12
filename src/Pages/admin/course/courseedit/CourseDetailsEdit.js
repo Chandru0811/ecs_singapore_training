@@ -1,92 +1,108 @@
-import React, { forwardRef, useEffect, useImperativeHandle } from "react";
+import React, {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useState,
+} from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-
-const data = {
-  logo: "",
-  title: "Test Course",
-  description:
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vel lacus vel turpis consectetur luctus.",
-  category: "Technology",
-  offerPrice: 10,
-  orginalPrice: 100,
-};
+import toast from "react-hot-toast";
+import api from "../../../../config/BaseUrl";
 
 const CourseDetailsEdit = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
+    const [categoryData, setCategoryData] = useState([]);
+
     const validationSchema = Yup.object({
-      logo: Yup.string().required("Logo is required*"),
-      title: Yup.string().required("Title is required*"),
-      description: Yup.string().required("Description is required*"),
-      category: Yup.string().required("Category is required*"),
-      offerPrice: Yup.number()
-        .required("Offer Price is required*")
-        .positive("Offer Price must be a positive number"),
-      orginalPrice: Yup.number()
-        .required("Original Price is required*")
-        .positive("Original Price must be a positive number"),
+      title: Yup.string().required("*Title is required"),
+      description: Yup.string().required("*Description is required"),
+      category_id: Yup.string().required("*Category is required"),
+      offer_price: Yup.number()
+        .required("*Offer Price is required")
+        .positive("*Offer Price must be a positive number"),
+      price: Yup.number()
+        .required("*Original Price is required")
+        .positive("*Original Price must be a positive number"),
+      logo: Yup.mixed().required("*Logo is required"), 
     });
+
+    const getCategoryData = async () => {
+      try {
+        const categoryResponse = await api.get("category");
+        setCategoryData(categoryResponse.data.data);
+      } catch (error) {
+        toast.error(
+          "Error Fetching Data: " + (error?.response?.data?.message || error.message)
+        );
+      }
+    };
+
+    useEffect(() => {
+      getCategoryData();
+    }, []);
 
     const formik = useFormik({
       initialValues: {
         logo: "",
         title: "",
         description: "",
-        category: "",
-        offerPrice: "",
-        orginalPrice: "",
+        category_id: "",
+        offer_price: "",
+        price: "",
       },
       validationSchema: validationSchema,
       onSubmit: async (values) => {
-        console.log("object", values);
-        handleNext();
-        // setLoadIndicators(true);
-        // try {
-        //   const formData = new FormData();
+        setLoadIndicators(true);
+        try {
+          const formData = new FormData();
+          Object.entries(values).forEach(([key, value]) => {
+            if (key === "logo" && value) {
+              formData.append(key, value); 
+            } else if (key !== "logo") {
+              formData.append(key, value);
+            }
+          });
 
-        //   // Add each data field manually to the FormData object
-        //   formData.append("role", values.role);
-        //   formData.append("teacherName", values.teacherName);
-        //   formData.append("dateOfBirth", values.dateOfBirth);
-        //   formData.append("idType", values.idType);
-        //   formData.append("idNo", values.idNo);
-        //   formData.append("citizenship", values.citizenship);
-        //   formData.append("shortIntroduction", values.shortIntroduction);
-        //   formData.append("gender", values.gender);
-        //   formData.append("file", values.file);
+          const response = await api.post("courses", formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          });
 
-        //   const response = await api.post(
-        //     "/createUserWithProfileImage",
-        //     formData,
-        //     {
-        //       headers: {
-        //         "Content-Type": "multipart/form-data",
-        //       },
-        //     }
-        //   );
-
-        //   if (response.status === 201) {
-        //     const user_id = response.data.user_id;
-        //     toast.success(response.data.message);
-        //     setFormData((prv) => ({ ...prv, ...values, user_id }));
-        //     handleNext();
-        //   } else {
-        //     toast.error(response.data.message);
-        //   }
-        // } catch (error) {
-        //   toast.error(error);
-        // }finally {
-        //   setLoadIndicators(false);
-        // }
+          if (response.status === 200) {
+            toast.success(response.data.message);
+            setFormData(response.data.data);
+            handleNext();
+          } else {
+            toast.error(response.data.message);
+          }
+        } catch (error) {
+          toast.error(error.message);
+        } finally {
+          setLoadIndicators(false);
+        }
       },
     });
+
     useImperativeHandle(ref, () => ({
-      courseDetailsEdit: formik.handleSubmit,
+      courseDetailEdit: formik.handleSubmit,
     }));
 
+    const handleImageChange = (event) => {
+      const file = event.target.files[0];
+      if (file) {
+        formik.setFieldValue("logo", file);
+      }
+    };
+
     useEffect(() => {
-      formik.setValues({ ...data });
-    }, []);
+      if (formData) {
+        formik.setValues({
+          ...formik.values,
+          ...formData,
+        });
+      }
+    }, [formData]);
 
     return (
       <div className="container my-5">
@@ -104,9 +120,7 @@ const CourseDetailsEdit = forwardRef(
                   className="form-control"
                   type="file"
                   id="logo"
-                  name="logo"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
+                  onChange={handleImageChange}
                 />
                 {formik.touched.logo && formik.errors.logo && (
                   <div className="error text-danger text-start">
@@ -138,18 +152,29 @@ const CourseDetailsEdit = forwardRef(
                 <div className="text-start">
                   <label>Category</label>
                 </div>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="category"
-                  name="category"
+                <select
+                  className={`form-select ${
+                    formik.touched.category_id && formik.errors.category_id
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  id="category_id"
+                  name="category_id"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  value={formik.values.category}
-                />
-                {formik.touched.category && formik.errors.category && (
+                  value={formik.values.category_id}
+                >
+                  <option value="">Select a category</option>
+                  {categoryData &&
+                    categoryData.map((data) => (
+                      <option key={data.id} value={data.id}>
+                        {data.title}
+                      </option>
+                    ))}
+                </select>
+                {formik.touched.category_id && formik.errors.category_id && (
                   <div className="error text-danger text-start">
-                    <small>{formik.errors.category}</small>
+                    <small>{formik.errors.category_id}</small>
                   </div>
                 )}
               </div>
@@ -174,20 +199,20 @@ const CourseDetailsEdit = forwardRef(
               </div>
               <div className="col-md-6 col-12 mb-3">
                 <div className="text-start">
-                  <label>Orginal Price</label>
+                  <label>Original Price</label>
                 </div>
                 <input
-                  type="text"
+                  type="number"
                   className="form-control"
-                  id="orginalPrice"
-                  name="orginalPrice"
+                  id="price"
+                  name="price"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  value={formik.values.orginalPrice}
+                  value={formik.values.price}
                 />
-                {formik.touched.orginalPrice && formik.errors.orginalPrice && (
+                {formik.touched.price && formik.errors.price && (
                   <div className="error text-danger text-start">
-                    <small>{formik.errors.orginalPrice}</small>
+                    <small>{formik.errors.price}</small>
                   </div>
                 )}
               </div>
@@ -196,26 +221,20 @@ const CourseDetailsEdit = forwardRef(
                   <label>Offer Price</label>
                 </div>
                 <input
-                  type="text"
+                  type="number"
                   className="form-control"
-                  id="offerPrice"
-                  name="offerPrice"
+                  id="offer_price"
+                  name="offer_price"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  value={formik.values.offerPrice}
+                  value={formik.values.offer_price}
                 />
-                {formik.touched.offerPrice && formik.errors.offerPrice && (
+                {formik.touched.offer_price && formik.errors.offer_price && (
                   <div className="error text-danger text-start">
-                    <small>{formik.errors.offerPrice}</small>
+                    <small>{formik.errors.offer_price}</small>
                   </div>
                 )}
               </div>
-
-              {/* <div className="d-flex justify-content-end">
-            <button type="submit" className="btn btn-sm btn-primary">
-              Submit
-            </button>
-          </div> */}
             </div>
           </div>
         </form>

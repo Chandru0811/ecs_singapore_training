@@ -1,111 +1,82 @@
-import React, { forwardRef, useEffect, useImperativeHandle } from "react";
+import React, { forwardRef, useImperativeHandle,useEffect } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-
-const data = {
-  faq: [
-    {
-      faQTitle: "Expert teachers",
-      faqSubDescription:
-        "Our experienced teachers are well-versed in their subject matter and have a deep understanding of the subject's history and cultural significance. They provide personalized instruction, encouraging active learning and problem-solving skills.",
-    },
-    {
-      faQTitle: "Interactive lessons",
-      faqSubDescription:
-        "Our interactive lessons are designed to make learning fun and engaging. They offer opportunities for students to ask questions, participate in discussions, and explore different perspectives. We also provide resources and support to help students develop their critical thinking skills.",
-    },
-    {
-      faQTitle: "Flexible schedules",
-      faqSubDescription:
-        "We offer a variety of flexible schedules to accommodate students' schedules and preferences. Our teachers are available during weekdays and weekends, and we can tailor our lessons to fit the individual needs of each student.",
-    },
-  ],
-};
+import api from "../../../../config/BaseUrl";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const CourseFAQEdit = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const validationSchema = Yup.object().shape({
       faq: Yup.array().of(
         Yup.object().shape({
-          faQTitle: Yup.string().required("Title is required*"),
-          faqSubDescription: Yup.string().required("Description is required*"),
+          question: Yup.string().required("Title is required*"),
+          answer: Yup.string().required("Description is required*"),
         })
       ),
     });
+
     const formik = useFormik({
       initialValues: {
         faq: [
           {
-            faQTitle: "",
-            faqSubDescription: "",
+            question: "",
+            answer: "",
           },
         ],
       },
       validationSchema: validationSchema,
       onSubmit: async (values) => {
-        console.log("object", values);
-        handleNext();
-        // setLoadIndicators(true);
-        // try {
-        //   const formData = new FormData();
+        setLoadIndicators(true);
 
-        //   // Add each data field manually to the FormData object
-        //   formData.append("role", values.role);
-        //   formData.append("teacherName", values.teacherName);
-        //   formData.append("dateOfBirth", values.dateOfBirth);
-        //   formData.append("idType", values.idType);
-        //   formData.append("idNo", values.idNo);
-        //   formData.append("citizenship", values.citizenship);
-        //   formData.append("shortIntroduction", values.shortIntroduction);
-        //   formData.append("gender", values.gender);
-        //   formData.append("file", values.file);
+        try {
+          const response = await api.post(
+            `/courses/${formData.id}/faqs`,
+            values
+          );
 
-        //   const response = await api.post(
-        //     "/createUserWithProfileImage",
-        //     formData,
-        //     {
-        //       headers: {
-        //         "Content-Type": "multipart/form-data",
-        //       },
-        //     }
-        //   );
-
-        //   if (response.status === 201) {
-        //     const user_id = response.data.user_id;
-        //     toast.success(response.data.message);
-        //     setFormData((prv) => ({ ...prv, ...values, user_id }));
-        //     handleNext();
-        //   } else {
-        //     toast.error(response.data.message);
-        //   }
-        // } catch (error) {
-        //   toast.error(error);
-        // }finally {
-        //   setLoadIndicators(false);
-        // }
+          if (response.status === 200) {
+            toast.success(response.data.message);
+            setFormData((prev) => ({ ...prev, ...values }));
+            handleNext();
+          } else {
+            toast.error(response.data.message);
+          }
+        } catch (error) {
+          toast.error("Error submitting form");
+        } finally {
+          setLoadIndicators(false);
+        }
       },
     });
+
     const addRow = () => {
       formik.setFieldValue("faq", [
         ...formik.values.faq,
         {
-          faQTitle: "",
-          faqSubDescription: "",
+          question: "",
+          answer: "",
         },
       ]);
     };
+
     const removeRow = () => {
-      const updatedRow = [...formik.values.faq];
-      updatedRow.pop();
-      formik.setFieldValue("faq", updatedRow);
+      if (formik.values.faq.length > 1) {
+        formik.setFieldValue("faq", formik.values.faq.slice(0, -1));
+      }
     };
+
     useImperativeHandle(ref, () => ({
       courseFAQEdit: formik.handleSubmit,
     }));
 
     useEffect(() => {
-      formik.setValues({ ...data });
-    }, []);
+      if (formData?.faqs) {
+        formik.setValues({
+          faq: formData.faqs,
+        });
+      }
+    }, [formData, formik]);
 
     return (
       <div className="container my-4">
@@ -114,72 +85,72 @@ const CourseFAQEdit = forwardRef(
           <form onSubmit={formik.handleSubmit}>
             {formik.values.faq.map((faqItem, index) => (
               <div className="row px-1" key={index}>
-                <div className="col-md-6 col-12 mb-3">
-                  <div className="text-start">
-                    <label>Title</label>
-                  </div>
+                <div className="col-md-6 col-12 mb-3 text-start">
+                  <label className="form-label ">Title</label>
                   <div className="input-group mb-3">
                     <input
                       type="text"
                       className={`form-control ${
-                        formik.touched.faq?.[index]?.faQTitle &&
-                        formik.errors.faq?.[index]?.faQTitle
+                        formik.touched.faq?.[index]?.question &&
+                        formik.errors.faq?.[index]?.question
                           ? "is-invalid"
                           : ""
                       }`}
-                      aria-label="faQTitle"
-                      aria-describedby="basic-addon1"
-                      {...formik.getFieldProps(`faq.${index}.faQTitle`)}
+                      aria-label={`question-${index}`}
+                      {...formik.getFieldProps(`faq.${index}.question`)}
                     />
-                    {formik.touched.faq?.[index]?.faQTitle &&
-                      formik.errors.faq?.[index]?.faQTitle && (
-                        <div className="invalid-feedback text-start">
-                          {formik.errors.faq[index].faQTitle}
+                    {formik.touched.faq?.[index]?.question &&
+                      formik.errors.faq?.[index]?.question && (
+                        <div className="invalid-feedback">
+                          {formik.errors.faq[index].question}
                         </div>
                       )}
                   </div>
                 </div>
 
-                <div className="col-md-6 col-12 mb-3">
-                  <div className="text-start">
-                    <label>Description</label>
-                  </div>
+                <div className="col-md-6 col-12 mb-3 text-start">
+                  <label className="form-label">Description</label>
                   <div className="input-group mb-3">
                     <input
                       type="text"
                       className={`form-control ${
-                        formik.touched.faq?.[index]?.faqSubDescription &&
-                        formik.errors.faq?.[index]?.faqSubDescription
+                        formik.touched.faq?.[index]?.answer &&
+                        formik.errors.faq?.[index]?.answer
                           ? "is-invalid"
                           : ""
                       }`}
-                      aria-label="faqSubDescription"
-                      aria-describedby="basic-addon1"
-                      {...formik.getFieldProps(
-                        `faq.${index}.faqSubDescription`
-                      )}
+                      aria-label={`answer-${index}`}
+                      {...formik.getFieldProps(`faq.${index}.answer`)}
                     />
-                    {formik.touched.faq?.[index]?.faqSubDescription &&
-                      formik.errors.faq?.[index]?.faqSubDescription && (
-                        <div className="invalid-feedback text-start">
-                          {formik.errors.faq[index].faqSubDescription}
+                    {formik.touched.faq?.[index]?.answer &&
+                      formik.errors.faq?.[index]?.answer && (
+                        <div className="invalid-feedback">
+                          {formik.errors.faq[index].answer}
                         </div>
                       )}
                   </div>
                 </div>
               </div>
             ))}
-          </form>
-          <div className="container">
-            <button className="btn btn-sm btn-primary mx-2" onClick={addRow}>
-              Add more
-            </button>
-            {formik.values.faq.length > 1 && (
-              <button className="btn btn-sm btn-danger" onClick={removeRow}>
-                X
+            <div className="container">
+              <button
+                type="button"
+                className="btn btn-sm btn-primary mx-2"
+                onClick={addRow}
+              >
+                Add More
               </button>
-            )}
-          </div>
+              {formik.values.faq.length > 1 && (
+                <button
+                  type="button"
+                  className="btn btn-sm btn-danger"
+                  onClick={removeRow}
+                >
+                  Remove Last
+                </button>
+              )}
+            </div>
+          </form>
         </div>
       </div>
     );

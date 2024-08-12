@@ -14,6 +14,7 @@ const CourseFAQ = forwardRef(
         })
       ),
     });
+
     const formik = useFormik({
       initialValues: {
         faq: [
@@ -25,8 +26,6 @@ const CourseFAQ = forwardRef(
       },
       validationSchema: validationSchema,
       onSubmit: async (values) => {
-        // console.log("object", values);
-        console.log("form ", formData);
         setLoadIndicators(true);
 
         try {
@@ -37,18 +36,19 @@ const CourseFAQ = forwardRef(
 
           if (response.status === 200) {
             toast.success(response.data.message);
-            setFormData((prv) => ({ ...prv, ...values }));
+            setFormData((prev) => ({ ...prev, ...values }));
             handleNext();
           } else {
             toast.error(response.data.message);
           }
         } catch (error) {
-          toast.error("error");
+          toast.error("Error submitting form");
         } finally {
           setLoadIndicators(false);
         }
       },
     });
+
     const addRow = () => {
       formik.setFieldValue("faq", [
         ...formik.values.faq,
@@ -60,19 +60,22 @@ const CourseFAQ = forwardRef(
     };
 
     const removeRow = () => {
-      const updatedRow = [...formik.values.faq];
-      updatedRow.pop();
-      formik.setFieldValue("faq", updatedRow);
+      if (formik.values.faq.length > 1) {
+        formik.setFieldValue("faq", formik.values.faq.slice(0, -1));
+      }
     };
 
     useImperativeHandle(ref, () => ({
       courseFaq: formik.handleSubmit,
     }));
 
-    useEffect(()=>{
-      if(formData.faq){
-        formik.setFieldValue("faq",formData.faq)}
-    },[])
+    useEffect(() => {
+      if (formData?.faq) {
+        formik.setValues({
+          faq: formData.faq,
+        });
+      }
+    }, [formData, formik]);
 
     return (
       <div className="container my-4">
@@ -81,36 +84,8 @@ const CourseFAQ = forwardRef(
           <form onSubmit={formik.handleSubmit}>
             {formik.values.faq.map((faqItem, index) => (
               <div className="row px-1" key={index}>
-                <div className="col-md-6 col-12 mb-3">
-                  <div className="text-start">
-                    <label>Title</label>
-                  </div>
-                  <div className="input-group mb-3">
-                    <input
-                      type="text"
-                      className={`form-control ${
-                        formik.touched.faq?.[index]?.answer &&
-                        formik.errors.faq?.[index]?.answer
-                          ? "is-invalid"
-                          : ""
-                      }`}
-                      aria-label="answer"
-                      aria-describedby="basic-addon1"
-                      {...formik.getFieldProps(`faq.${index}.answer`)}
-                    />
-                    {formik.touched.faq?.[index]?.answer &&
-                      formik.errors.faq?.[index]?.answer && (
-                        <div className="invalid-feedback text-start">
-                          {formik.errors.faq[index].answer}
-                        </div>
-                      )}
-                  </div>
-                </div>
-
-                <div className="col-md-6 col-12 mb-3">
-                  <div className="text-start">
-                    <label>Description</label>
-                  </div>
+                <div className="col-md-6 col-12 mb-3 text-start">
+                  <label className="form-label ">Title</label>
                   <div className="input-group mb-3">
                     <input
                       type="text"
@@ -120,31 +95,61 @@ const CourseFAQ = forwardRef(
                           ? "is-invalid"
                           : ""
                       }`}
-                      aria-label="question"
-                      aria-describedby="basic-addon1"
+                      aria-label={`question-${index}`}
                       {...formik.getFieldProps(`faq.${index}.question`)}
                     />
                     {formik.touched.faq?.[index]?.question &&
                       formik.errors.faq?.[index]?.question && (
-                        <div className="invalid-feedback text-start">
+                        <div className="invalid-feedback">
                           {formik.errors.faq[index].question}
+                        </div>
+                      )}
+                  </div>
+                </div>
+
+                <div className="col-md-6 col-12 mb-3 text-start">
+                  <label className="form-label">Description</label>
+                  <div className="input-group mb-3">
+                    <input
+                      type="text"
+                      className={`form-control ${
+                        formik.touched.faq?.[index]?.answer &&
+                        formik.errors.faq?.[index]?.answer
+                          ? "is-invalid"
+                          : ""
+                      }`}
+                      aria-label={`answer-${index}`}
+                      {...formik.getFieldProps(`faq.${index}.answer`)}
+                    />
+                    {formik.touched.faq?.[index]?.answer &&
+                      formik.errors.faq?.[index]?.answer && (
+                        <div className="invalid-feedback">
+                          {formik.errors.faq[index].answer}
                         </div>
                       )}
                   </div>
                 </div>
               </div>
             ))}
-          </form>
-          <div className="container">
-            <button className="btn btn-sm btn-primary mx-2" onClick={addRow}>
-              Add more
-            </button>
-            {formik.values.faq.length > 1 && (
-              <button className="btn btn-sm btn-danger" onClick={removeRow}>
-                X
+            <div className="container">
+              <button
+                type="button"
+                className="btn btn-sm btn-primary mx-2"
+                onClick={addRow}
+              >
+                Add More
               </button>
-            )}
-          </div>
+              {formik.values.faq.length > 1 && (
+                <button
+                  type="button"
+                  className="btn btn-sm btn-danger"
+                  onClick={removeRow}
+                >
+                  Remove Last
+                </button>
+              )}
+            </div>
+          </form>
         </div>
       </div>
     );

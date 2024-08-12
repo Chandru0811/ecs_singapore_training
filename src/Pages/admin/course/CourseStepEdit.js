@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Step, StepLabel, Stepper } from "@mui/material";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import CourseDetailsEdit from "./courseedit/CourseDetailsEdit";
@@ -6,6 +6,9 @@ import CourseBatchEdit from "./courseedit/CourseBatchEdit";
 import CourseBenefitEdit from "./courseedit/CourseBenefitEdit";
 import CourseFAQEdit from "./courseedit/CourseFAQEdit";
 import CourseSyllabusEdit from "./courseedit/CourseSyllabusEdit";
+import { useParams } from "react-router-dom";
+import api from "../../../config/BaseUrl";
+import toast from "react-hot-toast";  // Ensure toast is imported for error handling
 
 const steps = [
   { label: "Course Details", component: CourseDetailsEdit },
@@ -19,16 +22,34 @@ function CourseStepEdit() {
   const [activeStep, setActiveStep] = useState(0);
   const [skipped, setSkipped] = useState(new Set());
   const [loadIndicator, setLoadIndicator] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const { id } = useParams();
   const [formData, setFormData] = useState({});
-  const childRef = useRef();
+  const childRef = useRef(null);
 
   const isStepSkipped = (step) => skipped.has(step);
+
+  const getData = async () => {
+    setLoading(true);
+    try {
+      const response = await api.get(`course/${id}`);
+      if (response.data.status === 200) {
+        setFormData(response.data.data);
+      } else {
+        toast.error(response.data.message || "Error fetching data");
+      }
+    } catch (error) {
+      toast.error("Error fetching data: " + (error.response?.data?.message || error.message));
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleBack = () => setActiveStep((prev) => prev - 1);
 
   const handleNext = () => {
     setSkipped((prevSkipped) => {
-      const newSkipped = new Set(prevSkipped.values());
+      const newSkipped = new Set(prevSkipped);
       if (isStepSkipped(activeStep)) {
         newSkipped.delete(activeStep);
       }
@@ -37,37 +58,48 @@ function CourseStepEdit() {
     setActiveStep((prev) => prev + 1);
   };
 
+  const handleStepClick = (stepIndex) => {
+    if (stepIndex < activeStep) {
+      setActiveStep(stepIndex);
+    } else {
+      handleButtonClick(); // Handle validation or saving before navigating forward
+    }
+  };
+
   const handleButtonClick = () => {
     if (childRef.current) {
-      switch (activeStep) {
-        case 0:
-          childRef.current.courseDetailsEdit();
-          break;
-        case 1:
-          childRef.current.courseBatchEdit();
-          break;
-        case 2:
-          childRef.current.courseBenefitEdit();
-          break;
-        case 3:
-          childRef.current.courseFAQEdit();
-          break;
-        case 4:
-          childRef.current.courseSyllabusEdit();
-          break;
-        default:
-          break;
+      const methodName = [
+        "courseDetailEdit",
+        "courseBatchEdit",
+        "courseBenefitEdit",
+        "courseFAQEdit",
+        "courseSyllabusEdit",
+      ][activeStep];
+      
+      if (typeof childRef.current[methodName] === 'function') {
+        childRef.current[methodName]();
+      } else {
+        console.warn(`Method ${methodName} not found on childRef.current`);
       }
     }
   };
 
   const CurrentStepComponent = steps[activeStep].component;
 
+  useEffect(() => {
+    getData();
+  }, [id]);
+
   return (
     <div className="container my-5">
       <Stepper className="my-5" activeStep={activeStep} alternativeLabel>
         {steps.map((step, index) => (
-          <Step key={index}>
+          <Step
+            key={index}
+            onClick={() => handleStepClick(index)}
+            completed={activeStep > index}
+            style={{ cursor: 'pointer' }}
+          >
             <OverlayTrigger
               placement="top"
               overlay={<Tooltip id={`tooltip-${index}`}>{step.label}</Tooltip>}
@@ -85,7 +117,7 @@ function CourseStepEdit() {
             ref={childRef}
             setFormData={setFormData}
             handleNext={handleNext}
-            setLoadIndicator={setLoadIndicator}
+            setLoadIndicators={setLoadIndicator}
           />
           <div className="container-fluid p-1 d-flex align-items-center justify-content-center">
             {activeStep > 0 && (
@@ -99,7 +131,7 @@ function CourseStepEdit() {
             )}
             <div style={{ flex: "1 1 auto" }}></div>
             <button
-              type="submit"
+              type="button"
               onClick={handleButtonClick}
               style={{ padding: "7px" }}
               className="btn btn-primary"

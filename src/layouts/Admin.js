@@ -56,35 +56,28 @@ const Admin = ({ handleLogout }) => {
             <Route path="/landingpage2" element={<AdminLandingPage2 />} />
             <Route path="/home" element={<AdminHome />} />
             <Route path="/about" element={<AdminAbout />} />
-            <Route path="/course" element={<Course />} />
-            <Route path="/courseadd" element={<CourseStepAdd />} />
-            <Route path="/courseEdit" element={<CourseStepEdit />} />
             <Route path="/testimonials" element={<AdminTestimonial />} />
             <Route path="/categories" element={<Category />} />
             <Route path="/CourseTestimonial" element={<CourseTestimonial />} />
+            {/* course */}
+            <Route path="/course" element={<Course />} />
+            <Route path="/courseadd" element={<CourseStepAdd />} />
+            <Route path="/courseEdit/:id" element={<CourseStepEdit />} />
             <Route path="/courseView" element={<CourseView />} />
+
             <Route path="/courses" element={<Courses />} />
             <Route path="/contact" element={<AdminContact />} />
             <Route path="/headeredit" element={<HeaderEdit />} />
             <Route path="/footeredit" element={<FooterEdit />} />
             <Route path="/privacypolicy" element={<PrivacyPolicy />} />
             <Route path="/termsandcondition" element={<TermsAndCondition />} />
-            <Route
-              path="/CourseVideoTestimonial"
-              element={<CourseVideoTestimonial />}
-            />
+            <Route path="/CourseVideoTestimonial" element={<CourseVideoTestimonial />} />
             <Route path="/companieshiring" element={<CompaniesHiring />} />
             <Route path="/home/hero" element={<HeroSection />} />
             <Route path="/home/whyjoinwithus" element={<WhyJoinWithUs />} />
             <Route path="/home/courses" element={<TopCourses />} />
-            <Route
-              path="/home/training/overview"
-              element={<TrainingOverview />}
-            />
-            <Route
-              path="/home/training/placement"
-              element={<TrainingPlacements />}
-            />
+            <Route path="/home/training/overview" element={<TrainingOverview />} />
+            <Route path="/home/training/placement" element={<TrainingPlacements />} />
             <Route path="/aboutFaq" element={<AdminAboutFaq />} />
           </Routes>
         </div>

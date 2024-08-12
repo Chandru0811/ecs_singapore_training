@@ -18,10 +18,19 @@ const validationSchema = Yup.object({
 
 function Section6() {
   const [activeIndex, setActiveIndex] = useState(null);
+  const [datas, setDatas] = useState([]);
 
-  const toggleAccordion = (index) => {
-    setActiveIndex(activeIndex === index ? null : index);
-  };
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const response = await api.get("home/faq");
+        setDatas(response.data.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    getData();
+  }, []);
 
   const formik2 = useFormik({
     initialValues: {
@@ -37,81 +46,46 @@ function Section6() {
     },
   });
 
-  const [datas, setDatas] = useState([]);
-  console.log("data is ", datas);
-  const formik = useFormik({
-    initialValues: {
-      question: "",
-      answer: ""
-    },
-    validationSchema: validationSchema,
-    onSubmit: async (values) => {
-      console.log("Home Faq Datas ;", values);
-    },
-  })
-  const getData = async () => {
-    try {
-      const response = await api.get("home/faq");
-      setDatas(response.data.data);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
-  useEffect(() => {
-    getData();
-  }, []);
-
-
   return (
     <section>
       <div className="trainingplacements mt-3 mb-5">
         <h1 className="secondheading text-start mb-3">
-          Cloud Ecs , Software Training and Placements in India
+          Cloud Ecs, Software Training and Placements in India
         </h1>
         <div className="row">
-
+          {/* Accordion Section */}
           <div className="col-md-6">
-            {datas.map((data, index) => {
-              const questionsAndAnswers = typeof data.ques_and_ans === 'string'
-                ? JSON.parse(data.ques_and_ans)
-                : data.ques_and_ans;
-
-              return (
-                <div className="accordion" id="accordionExample" key={index}>
-                  {questionsAndAnswers.map((qa, qaIndex) => (
-                    <div
-                      className="accordion-item mb-3"
-                      style={{ paddingLeft: "10px" }}
-                      key={qaIndex}
-                    >
-                      <h2 className="accordion-header">
-                        <button
-                          className="accordion-button"
-                          type="button"
-                          data-bs-toggle="collapse"
-                          data-bs-target={`#collapse-${index}-${qaIndex}`}
-                          aria-expanded={qaIndex === 0 ? "true" : "false"}
-                          aria-controls={`collapse-${index}-${qaIndex}`}
-                        >
-                          {qa.question}
-                        </button>
-                      </h2>
-                      <div
-                        id={`collapse-${index}-${qaIndex}`}
-                        className={`accordion-collapse collapse ${qaIndex === 0 ? "show" : ""}`}
-                        data-bs-parent={`#accordionExample-${index}`}
+            {datas.map((data, index) => (
+              <div className="accordion" id={`accordion-${index}`} key={index}>
+                {data.ques_and_ans.map((qa, qaIndex) => (
+                  <div className="accordion-item mb-3" key={qaIndex}>
+                    <h2 className="accordion-header">
+                      <button
+                        className={`accordion-button ${activeIndex === `${index}-${qaIndex}` ? "" : "collapsed"}`}
+                        type="button"
+                        onClick={() => setActiveIndex(activeIndex === `${index}-${qaIndex}` ? null : `${index}-${qaIndex}`)}
+                        aria-expanded={activeIndex === `${index}-${qaIndex}`}
+                        aria-controls={`collapse-${index}-${qaIndex}`}
                       >
-                        <div className="accordion-body text-start paraContent">
-                          {qa.answer}
-                        </div>
+                        {qa.question}
+                      </button>
+                    </h2>
+                    <div
+                      id={`collapse-${index}-${qaIndex}`}
+                      className={`accordion-collapse collapse ${activeIndex === `${index}-${qaIndex}` ? "show" : ""}`}
+                      data-bs-parent={`#accordion-${index}`}
+                    >
+                      <div className="accordion-body text-start paraContent">
+                        {qa.answer}
                       </div>
                     </div>
-                  ))}
-                </div>
-              );
-            })}
+                  </div>
+                ))}
+              </div>
+            ))}
           </div>
 
+          {/* Contact Form Section */}
           <div className="col-md-6">
             <form onSubmit={formik2.handleSubmit}>
               <div className="card p-4 enquiryform">
@@ -122,10 +96,7 @@ function Section6() {
                     </label>
                     <input
                       type="text"
-                      className={`form-control homeInput ${formik2.touched.firstName && formik2.errors.firstName
-                        ? "is-invalid"
-                        : ""
-                        }`}
+                      className={`form-control homeInput ${formik2.touched.firstName && formik2.errors.firstName ? "is-invalid" : ""}`}
                       {...formik2.getFieldProps("firstName")}
                     />
                     {formik2.touched.firstName && formik2.errors.firstName && (
@@ -140,10 +111,7 @@ function Section6() {
                     </label>
                     <input
                       type="text"
-                      className={`form-control homeInput ${formik2.touched.lastName && formik2.errors.lastName
-                        ? "is-invalid"
-                        : ""
-                        }`}
+                      className={`form-control homeInput ${formik2.touched.lastName && formik2.errors.lastName ? "is-invalid" : ""}`}
                       {...formik2.getFieldProps("lastName")}
                     />
                     {formik2.touched.lastName && formik2.errors.lastName && (
@@ -160,10 +128,7 @@ function Section6() {
                     </label>
                     <input
                       type="email"
-                      className={`form-control homeInput ${formik2.touched.email && formik2.errors.email
-                        ? "is-invalid"
-                        : ""
-                        }`}
+                      className={`form-control homeInput ${formik2.touched.email && formik2.errors.email ? "is-invalid" : ""}`}
                       {...formik2.getFieldProps("email")}
                     />
                     {formik2.touched.email && formik2.errors.email && (
@@ -177,19 +142,15 @@ function Section6() {
                       Phone Number
                     </label>
                     <input
-                      type="number"
-                      className={`form-control homeInput ${formik2.touched.phoneNumber && formik2.errors.phoneNumber
-                        ? "is-invalid"
-                        : ""
-                        }`}
+                      type="text"
+                      className={`form-control homeInput ${formik2.touched.phoneNumber && formik2.errors.phoneNumber ? "is-invalid" : ""}`}
                       {...formik2.getFieldProps("phoneNumber")}
                     />
-                    {formik2.touched.phoneNumber &&
-                      formik2.errors.phoneNumber && (
-                        <div className="invalid-feedback">
-                          {formik2.errors.phoneNumber}
-                        </div>
-                      )}
+                    {formik2.touched.phoneNumber && formik2.errors.phoneNumber && (
+                      <div className="invalid-feedback">
+                        {formik2.errors.phoneNumber}
+                      </div>
+                    )}
                   </div>
                 </div>
                 <div className="row mb-3">
@@ -215,4 +176,4 @@ function Section6() {
   );
 }
 
-export default Section6;    
+export default Section6;

@@ -5,6 +5,7 @@ import $ from "jquery";
 import { FaEdit, FaEye, FaTimes, FaTrash } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import api from "../../../config/BaseUrl";
+import DeleteModel from "../../../components/DeleteModel";
 
 const Course = () => {
   const tableRef = useRef(null);
@@ -63,6 +64,18 @@ const Course = () => {
   }, []);
 
   return (
+    <div>
+    {loading ? (
+      <div className="loader-container">
+        <div className="loader">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+    ) : (
     <div className="container-fluid shadow px-0 ">
       <div className="card-header d-flex align-items-center p-2 bg-light">
         <h3 className="fw-bold">Course</h3>
@@ -105,15 +118,15 @@ const Course = () => {
                           <FaEye />
                         </button>
                       </Link>
-                      <Link to={"/courseEdit"}>
-                        {" "}
+                      <Link to={`/courseEdit/${data.id}`}>
                         <button className="btn btn-light border-2 btn-sm mx-1">
                           <FaEdit />
                         </button>
                       </Link>
-                      <button className="btn btn-light border-2 btn-sm mx-1">
-                        <FaTrash />
-                      </button>
+                      <DeleteModel path={`course/${data.id}`} onSuccess={getData} className={"btn btn-light border-2 btn-sm mx-1"}/>
+                      {/* <button className="btn btn-light border-2 btn-sm mx-1">
+                        <FaTrash /> 
+                      </button> */}
                     </div>
                   </td>
                 </tr>
@@ -122,6 +135,7 @@ const Course = () => {
           </table>
         </div>
       </div>
+    </div>)}
     </div>
   );
 };

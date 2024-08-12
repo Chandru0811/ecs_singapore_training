@@ -29,8 +29,6 @@ const CourseBatch = forwardRef(
             day: "",
             start_time: "",
             end_time: "",
-            // courseStartTime: "",
-            // courseEndTime: "",
             duration: "",
           },
         ],
@@ -175,59 +173,6 @@ const CourseBatch = forwardRef(
                       )}
                   </div>
                 </div>
-
-                {/* <div className="col-md-6 col-12 mb-3">
-                  <div className="text-start">
-                    <label>Course Start Date</label>
-                  </div>
-                  <div className="input-group mb-3">
-                    <input
-                      type="date"
-                      className={`form-control ${
-                        formik.touched.courseBatch?.[index]?.courseStartDate &&
-                        formik.errors.courseBatch?.[index]?.courseStartDate
-                          ? "is-invalid"
-                          : ""
-                      }`}
-                      {...formik.getFieldProps(
-                        `courseBatch.${index}.courseStartDate`
-                      )}
-                    />
-                    {formik.touched.courseBatch?.[index]?.courseStartDate &&
-                      formik.errors.courseBatch?.[index]?.courseStartDate && (
-                        <div className="invalid-feedback text-start">
-                          {formik.errors.courseBatch[index].courseStartDate}
-                        </div>
-                      )}
-                  </div>
-                </div>
-
-                <div className="col-md-6 col-12 mb-3">
-                  <div className="text-start">
-                    <label>Course End Date</label>
-                  </div>
-                  <div className="input-group mb-3">
-                    <input
-                      type="date"
-                      className={`form-control ${
-                        formik.touched.courseBatch?.[index]?.courseEndDate &&
-                        formik.errors.courseBatch?.[index]?.courseEndDate
-                          ? "is-invalid"
-                          : ""
-                      }`}
-                      {...formik.getFieldProps(
-                        `courseBatch.${index}.courseEndDate`
-                      )}
-                    />
-                    {formik.touched.courseBatch?.[index]?.courseEndDate &&
-                      formik.errors.courseBatch?.[index]?.courseEndDate && (
-                        <div className="invalid-feedback text-start">
-                          {formik.errors.courseBatch[index].courseEndDate}
-                        </div>
-                      )}
-                  </div>
-                </div> */}
-
                 <div className="col-md-6 col-12 mb-3">
                   <div className="text-start">
                     <label>Course Start Time</label>
@@ -306,32 +251,6 @@ const CourseBatch = forwardRef(
                       )}
                   </div>
                 </div>
-
-                {/* <div className="col-md-6 col-12 mb-3">
-                  <div className="text-start">
-                    <label>Amount Payable</label>
-                  </div>
-                  <div className="input-group mb-3">
-                    <input
-                      type="number"
-                      className={`form-control ${
-                        formik.touched.courseBatch?.[index]?.amountPayable &&
-                        formik.errors.courseBatch?.[index]?.amountPayable
-                          ? "is-invalid"
-                          : ""
-                      }`}
-                      {...formik.getFieldProps(
-                        `courseBatch.${index}.amountPayable`
-                      )}
-                    />
-                    {formik.touched.courseBatch?.[index]?.amountPayable &&
-                      formik.errors.courseBatch?.[index]?.amountPayable && (
-                        <div className="invalid-feedback text-start">
-                          {formik.errors.courseBatch[index].amountPayable}
-                        </div>
-                      )}
-                  </div>
-                </div> */}
               </div>
             ))}
             <div className="container">
