@@ -99,8 +99,9 @@
     font-size: 3.8vw;
   }
 }
-.courseBtn{
-min-width: 9.5vw;}
+.courseBtn {
+  min-width: 9.5vw;
+}
 @media (max-width: 1265px) and (min-width: 1115px) {
   .courseBtn {
     width: 11vw;
@@ -566,7 +567,7 @@ hr {
   right: 0;
   bottom: 0;
   background-color: var(--client-primary-color);
-  opacity: 0.9;
+  opacity: 0.4;
   z-index: 1;
 }
 
@@ -832,15 +833,22 @@ hr {
   box-shadow: 0 0 60px 15px #25b09b;
   transform: translate(-80px);
   clip-path: inset(0);
-  animation:
-    l4-1 0.5s ease-in-out infinite alternate,
-    l4-2 1s   ease-in-out infinite;
+  animation: l4-1 0.5s ease-in-out infinite alternate,
+    l4-2 1s ease-in-out infinite;
 }
 @keyframes l4-1 {
-  100% {transform: translateX(80px)}
+  100% {
+    transform: translateX(80px);
+  }
 }
 @keyframes l4-2 {
-   33% {clip-path: inset(0 0 0 -100px)}
-   50% {clip-path: inset(0 0 0 0)     }
-   83% {clip-path: inset(0 -100px 0 0)}
+  33% {
+    clip-path: inset(0 0 0 -100px);
+  }
+  50% {
+    clip-path: inset(0 0 0 0);
+  }
+  83% {
+    clip-path: inset(0 -100px 0 0);
+  }
 }

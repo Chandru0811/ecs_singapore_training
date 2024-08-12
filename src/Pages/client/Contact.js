@@ -633,21 +633,24 @@ function ContactUs() {
                 style={{ marginLeft: "1.25rem" }}
               >
                 <span>
-                  {" "}
                   <BiSolidQuoteRight size={70} color="#e41111" />
                 </span>
                 <h5 className="fw-bold" style={{ marginLeft: "0.5rem" }}>
                   {apiData?.contact_description?.detail}
                 </h5>
               </div>
-              <div className="card" style={{ borderRadius: "30px" }}>
+              <div
+                className="card"
+                style={{ borderRadius: "30px", overflow: "hidden" }}
+              >
                 <iframe
                   src={apiData?.map_url}
                   width="100%"
                   height="400"
-                  style={{ borderRadius: "30px" }}
+                  style={{ border: "none", borderRadius: "30px" }}
                   allowFullScreen=""
                   loading="lazy"
+                  title="Map"
                   referrerPolicy="no-referrer-when-downgrade"
                 ></iframe>
               </div>
