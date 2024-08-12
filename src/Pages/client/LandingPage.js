@@ -7,7 +7,7 @@ import * as Yup from "yup";
 import EnrollModel from "../admin/EnrollModel";
 import EnrollForm from "./EnrollForm";
 import api from "../../config/BaseUrl";
-import ImgUrl from "../../config/ImageURL";
+import ImageURL from "../../config/ImageURL";
 import Testimonial from "./Testimonial";
 
 const responsive = {
@@ -105,7 +105,7 @@ function LandingPage() {
             </div>
             <div className="col-md-5 col-12">
               <img
-                src={`${ImgUrl}${apiData?.image_path}`}
+                src={`${ImageURL}${apiData?.image_path}`}
                 alt="heroImg"
                 className="img-fluid"
               />
@@ -138,7 +138,7 @@ function LandingPage() {
                     <div className="my-2">
                       <div className="text-start w-25 py-1">
                         <img
-                          src={`${ImgUrl}${card.image_path}`}
+                          src={`${ImageURL}${card?.image_path}`}
                           alt="cardImg"
                           className="img-fluid rounded-circle"
                         />
