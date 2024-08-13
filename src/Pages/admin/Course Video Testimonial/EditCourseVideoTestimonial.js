@@ -17,7 +17,7 @@ function EditCourseVideoTestimonial({ id, onSuccess }) {
 
     const handleClose = () => {
         setShow(false);
-        formik.resetForm();
+        getData();
     };
 
     const handleShow = () => setShow(true);
@@ -61,7 +61,6 @@ function EditCourseVideoTestimonial({ id, onSuccess }) {
         },
     });
 
-    useEffect(() => {
         const getData = async () => {
             try {
                 const response = await api.get(`videotestimonial/${id}`);
@@ -70,6 +69,8 @@ function EditCourseVideoTestimonial({ id, onSuccess }) {
                 console.error("Error fetching data ", error);
             }
         };
+
+        useEffect(() => {
         getData();
     }, [id]);
 

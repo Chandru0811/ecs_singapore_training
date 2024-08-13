@@ -21,6 +21,7 @@ function AdminTestimonialEdit({ id, onSuccess }) {
 
   const handleClose = () => {
     setShow(false);
+    getData();
   };
 
   const handleShow = () => setShow(true);
@@ -71,7 +72,7 @@ function AdminTestimonialEdit({ id, onSuccess }) {
     },
   });
 
-  useEffect(() => {
+  
     const getData = async () => {
       try {
         const response = await api.get(`testimonial/${id}`);
@@ -80,12 +81,14 @@ function AdminTestimonialEdit({ id, onSuccess }) {
         console.error("Error fetching data ", error);
       }
     };
+
+    useEffect(() => {
     getData();
   }, [id]);
 
   return (
     <>
-      <FaEdit className="text-primary" onClick={handleShow} />
+      <FaEdit className="text-secondary" onClick={handleShow} />
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Edit Testimonial</Modal.Title>

@@ -34,7 +34,6 @@ function AdminLandingCardAdd({ onSuccess }) {
             "Content-Type": "multipart/form-data",
           },
         });
-
         if (response.status === 200) {
           onSuccess();
           handleClose();
@@ -53,7 +52,7 @@ function AdminLandingCardAdd({ onSuccess }) {
 
   return (
     <>
-      <button className="btn btn-sm btn-primary" onClick={handleShow}>
+      <button className="btn btn-primary" onClick={handleShow}>
         Add Cards
       </button>
 
