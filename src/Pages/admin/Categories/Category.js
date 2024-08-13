@@ -15,17 +15,17 @@ function Category() {
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const getData = async () => {
+    try {
+      const response = await api.get("category");
+      setDatas(response.data.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
   useEffect(() => {
-    const getData = async () => {
-      try {
-        const response = await api.get("category");
-        setDatas(response.data.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }finally{
-        setLoading(false);
-      }
-    };
     getData();
   }, []);
 
@@ -54,17 +54,17 @@ function Category() {
     }
   };
 
-  const refreshData = async () => {
-    setLoading(true);
-    try {
-      const response = await api.get("category");
-      setDatas(response.data.data);
-      setLoading(false);
-    } catch (error) {
-      console.error("Error refreshing data:", error);
-      setLoading(false);
-    }
-  };
+  // const refreshData = async () => {
+  //   setLoading(true);
+  //   try {
+  //     const response = await api.get("category");
+  //     setDatas(response.data.data);
+  //     setLoading(false);
+  //   } catch (error) {
+  //     console.error("Error refreshing data:", error);
+  //     setLoading(false);
+  //   }
+  // };
 
   useEffect(() => {
     if (!loading) {
@@ -75,19 +75,15 @@ function Category() {
     };
   }, [loading]);
 
-  useEffect(() => {
-    refreshData();
-  }, []);
-
   const handlePublish = async () => {
     try {
-      const response = await api.post('publish/categories');
+      const response = await api.post("publish/categories");
       if (response.status === 200) {
         toast.success(response.data.message);
       } else {
         toast.error(response.data.message);
       }
-      refreshData();
+      getData();
     } catch (error) {
       const errorMessage = error.response?.data?.message || error.message;
       toast.error(errorMessage);
@@ -99,8 +95,10 @@ function Category() {
       <div className="card-header d-flex align-items-center p-2 bg-light">
         <h3 className="fw-bold">Categories</h3>
         <div className="container-fluid d-flex justify-content-end">
-          <CategoryAdd onSuccess={refreshData} />
-          <button className="btn btn-danger mx-2" onClick={handlePublish}>Publish</button>
+          <CategoryAdd onSuccess={getData} />
+          <button className="btn btn-danger mx-2" onClick={handlePublish}>
+            Publish
+          </button>
         </div>
       </div>
       <div>
@@ -113,13 +111,19 @@ function Category() {
             <table ref={tableRef} className="display">
               <thead className="thead-light">
                 <tr className="text-start">
-                  <th scope="col" className="text-center" style={{ whiteSpace: "nowrap" }}>
+                  <th
+                    scope="col"
+                    className="text-center"
+                    style={{ whiteSpace: "nowrap" }}
+                  >
                     S.NO
                   </th>
                   <th scope="col">Image</th>
                   <th scope="col">Title</th>
                   <th scope="col">Description</th>
-                  <th scope="col" className="text-center">ACTION</th>
+                  <th scope="col" className="text-center">
+                    ACTION
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -145,9 +149,12 @@ function Category() {
                           <CategoryView id={data.id} />
                         </button>
                         <button className="btn mx-2">
-                          <CategoryEdit id={data.id} onSuccess={refreshData} />
+                          <CategoryEdit id={data.id} onSuccess={getData} />
                         </button>
-                        <DeleteModel onSuccess={refreshData} path={`category/${data.id}`} />
+                        <DeleteModel
+                          onSuccess={getData}
+                          path={`category/${data.id}`}
+                        />
                       </div>
                     </td>
                   </tr>
