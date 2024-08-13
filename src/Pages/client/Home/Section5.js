@@ -35,7 +35,7 @@ function Section5() {
             <div className="row d-flex">
               <div className="col-md-8">
                 <p>CONTACT US</p>
-                <h3>{apiData.contact_no}</h3>
+                <h3>{apiData?.contact_no}</h3>
                 <p>Toll Free No</p>
               </div>
               <div className="col-md-4 pt-4">

@@ -8,12 +8,21 @@ import { BiSolidQuoteRight } from "react-icons/bi";
 import { useFormik } from "formik";
 import api from "../../config/BaseUrl";
 import toast from "react-hot-toast";
+import * as Yup from "yup";
+
+const contactValidationSchema = Yup.object({
+  firstName: Yup.string().required("*First Name is required"),
+  lastName: Yup.string().required("*Last Name is required"),
+  email: Yup.string().required("*Email is required"),
+  phoneNumber: Yup.string().required("*Phone Number is required"),
+});
 
 function AdminContact() {
   const [isEditing, setIsEditing] = useState(null);
   const [editingContactMap, setEditingContactMap] = useState("");
   const [data, setData] = useState();
   const [loading, setLoading] = useState(false);
+  const [loadIndicator, setLoadIndicator] = useState(false);
 
   const formik = useFormik({
     initialValues: {
@@ -47,6 +56,20 @@ function AdminContact() {
       } catch (e) {
         console.log("Error updating contact data:", e);
       }
+    },
+  });
+
+  const contactFormik = useFormik({
+    initialValues: {
+      firstName: "",
+      lastName: "",
+      email: "",
+      phoneNumber: "",
+      message: "",
+    },
+    validationSchema: contactValidationSchema,
+    onSubmit: (values) => {
+      console.log("Contact Form Submitted", values);
     },
   });
 
@@ -138,176 +161,178 @@ function AdminContact() {
           </div>
         </div>
       </div>
-      <form>
-        <div className="container py-5" style={{ overflowX: "hidden" }}>
-          <div className="row">
-            <div className="col-lg-6 col-xl-4 col-12">
-              <div className="card contactDetails p-4">
-                <div className="row">
-                  <div className="col-lg-3 col-12 d-flex justify-content-center align-items-center">
-                    <FiPhoneCall color="#e41111" size={60} />
-                  </div>
-                  <div className="col-lg-9 col-12">
-                    <h3 className="text-start fw-bold">Phone</h3>
-                    <hr className="my-4" />
-                    {isEditing === "phone" ? (
-                      <div className="d-flex">
-                        <input
-                          type="text"
-                          className="form-control me-2"
-                          name="phone"
-                          {...formik.getFieldProps("phone")}
-                          onChange={formik.handleChange}
-                        />
-                        <FaSave
-                          onClick={() => handleSaveClick("phone")}
-                          className="text-primary mt-2"
-                        />
-                        <FaTimes
-                          onClick={handleCancel}
-                          className="ms-2 text-danger mt-2"
-                        />
-                      </div>
-                    ) : (
-                      <div className="d-flex">
-                        <p className="text-start fw-medium paraText">
-                          {formik.values.phone}
-                          <button
-                            onClick={() => handleEditClick("phone")}
-                            className="btn btn-sm link-secondary ms-2"
-                            style={{ width: "fit-content" }}
-                          >
-                            <FaEdit size={20} />
-                          </button>
-                        </p>
-                      </div>
-                    )}
-                  </div>
+
+      <div className="container py-5" style={{ overflowX: "hidden" }}>
+        <div className="row">
+          <div className="col-lg-6 col-xl-4 col-12">
+            <div className="card contactDetails p-4">
+              <div className="row">
+                <div className="col-lg-3 col-12 d-flex justify-content-center align-items-center">
+                  <FiPhoneCall color="#e41111" size={60} />
                 </div>
-              </div>
-              <div className="arrow-icon mb-5">
-                <a
-                  href={formik.values.contactCardLink1}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <FaCircleArrowRight />
-                </a>
+                <div className="col-lg-9 col-12">
+                  <h3 className="text-start fw-bold">Phone</h3>
+                  <hr className="my-4" />
+                  {isEditing === "phone" ? (
+                    <div className="d-flex">
+                      <input
+                        type="text"
+                        className="form-control me-2"
+                        name="phone"
+                        {...formik.getFieldProps("phone")}
+                        onChange={formik.handleChange}
+                      />
+                      <FaSave
+                        onClick={() => handleSaveClick("phone")}
+                        className="text-primary mt-2"
+                      />
+                      <FaTimes
+                        onClick={handleCancel}
+                        className="ms-2 text-danger mt-2"
+                      />
+                    </div>
+                  ) : (
+                    <div className="d-flex">
+                      <p className="text-start fw-medium paraText">
+                        {formik.values.phone}
+                        <button
+                          onClick={() => handleEditClick("phone")}
+                          className="btn btn-sm link-secondary ms-2"
+                          style={{ width: "fit-content" }}
+                        >
+                          <FaEdit size={20} />
+                        </button>
+                      </p>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
-            <div className="col-lg-6 col-xl-4 col-12">
-              <div className="card contactDetails p-4">
-                <div className="row">
-                  <div className="col-lg-3 col-12 d-flex justify-content-center align-items-center">
-                    <IoMailOpenOutline color="#e41111" size={60} />
-                  </div>
-                  <div className="col-lg-9 col-12">
-                    <h3 className="text-start fw-bold">Email</h3>
-                    <hr className="my-4" />
-                    {isEditing === "email" ? (
-                      <div className="d-flex">
-                        <input
-                          type="text"
-                          className="form-control me-2"
-                          name="email"
-                          {...formik.getFieldProps("email")}
-                          onChange={formik.handleChange}
-                        />
-                        <FaSave
-                          onClick={() => handleSaveClick("email")}
-                          className="text-primary mt-2"
-                        />
-                        <FaTimes
-                          onClick={handleCancel}
-                          className="ms-2 text-danger mt-2"
-                        />
-                      </div>
-                    ) : (
-                      <div className="d-flex">
-                        <p className="text-start fw-medium paraText">
-                          {formik.values.email}
-                          <button
-                            onClick={() => handleEditClick("email")}
-                            className="btn btn-sm link-secondary ms-2"
-                            style={{ width: "fit-content" }}
-                          >
-                            <FaEdit size={20} />
-                          </button>
-                        </p>
-                      </div>
-                    )}
-                  </div>
+            <div className="arrow-icon mb-5">
+              <a
+                href={formik.values.contactCardLink1}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <FaCircleArrowRight />
+              </a>
+            </div>
+          </div>
+          <div className="col-lg-6 col-xl-4 col-12">
+            <div className="card contactDetails p-4">
+              <div className="row">
+                <div className="col-lg-3 col-12 d-flex justify-content-center align-items-center">
+                  <IoMailOpenOutline color="#e41111" size={60} />
                 </div>
-              </div>
-              <div className="arrow-icon mb-5">
-                <a
-                  href={formik.values.contactCardLink2}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <FaCircleArrowRight />
-                </a>
+                <div className="col-lg-9 col-12">
+                  <h3 className="text-start fw-bold">Email</h3>
+                  <hr className="my-4" />
+                  {isEditing === "email" ? (
+                    <div className="d-flex">
+                      <input
+                        type="text"
+                        className="form-control me-2"
+                        name="email"
+                        {...formik.getFieldProps("email")}
+                        onChange={formik.handleChange}
+                      />
+                      <FaSave
+                        onClick={() => handleSaveClick("email")}
+                        className="text-primary mt-2"
+                      />
+                      <FaTimes
+                        onClick={handleCancel}
+                        className="ms-2 text-danger mt-2"
+                      />
+                    </div>
+                  ) : (
+                    <div className="d-flex">
+                      <p className="text-start fw-medium paraText">
+                        {formik.values.email}
+                        <button
+                          onClick={() => handleEditClick("email")}
+                          className="btn btn-sm link-secondary ms-2"
+                          style={{ width: "fit-content" }}
+                        >
+                          <FaEdit size={20} />
+                        </button>
+                      </p>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
-            <div className="col-lg-6 col-xl-4 col-12">
-              <div className="card contactDetails p-4">
-                <div className="row">
-                  <div className="col-lg-3 col-12 d-flex justify-content-center align-items-center">
-                    <LuMapPin color="#e41111" size={60} />
-                  </div>
-                  <div className="col-lg-9 col-12">
-                    <h3 className="text-start fw-bold">Location</h3>
-                    <hr className="my-4" />
-                    {isEditing === "location" ? (
-                      <div className="d-flex">
-                        <input
-                          type="text"
-                          className="form-control me-2"
-                          name="location"
-                          {...formik.getFieldProps("location")}
-                          onChange={formik.handleChange}
-                        />
-                        <FaSave
-                          onClick={() => handleSaveClick("location")}
-                          className="text-primary mt-2"
-                        />
-                        <FaTimes
-                          onClick={handleCancel}
-                          className="ms-2 text-danger mt-2"
-                        />
-                      </div>
-                    ) : (
-                      <div className="d-flex">
-                        <p className="text-start fw-medium paraText">
-                          {formik.values.location}
-                          <button
-                            onClick={() => handleEditClick("location")}
-                            className="btn btn-sm link-secondary ms-2"
-                            style={{ width: "fit-content" }}
-                          >
-                            <FaEdit size={20} />
-                          </button>
-                        </p>
-                      </div>
-                    )}
-                  </div>
+            <div className="arrow-icon mb-5">
+              <a
+                href={formik.values.contactCardLink2}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <FaCircleArrowRight />
+              </a>
+            </div>
+          </div>
+          <div className="col-lg-6 col-xl-4 col-12">
+            <div className="card contactDetails p-4">
+              <div className="row">
+                <div className="col-lg-3 col-12 d-flex justify-content-center align-items-center">
+                  <LuMapPin color="#e41111" size={60} />
+                </div>
+                <div className="col-lg-9 col-12">
+                  <h3 className="text-start fw-bold">Location</h3>
+                  <hr className="my-4" />
+                  {isEditing === "location" ? (
+                    <div className="d-flex">
+                      <input
+                        type="text"
+                        className="form-control me-2"
+                        name="location"
+                        {...formik.getFieldProps("location")}
+                        onChange={formik.handleChange}
+                      />
+                      <FaSave
+                        onClick={() => handleSaveClick("location")}
+                        className="text-primary mt-2"
+                      />
+                      <FaTimes
+                        onClick={handleCancel}
+                        className="ms-2 text-danger mt-2"
+                      />
+                    </div>
+                  ) : (
+                    <div className="d-flex">
+                      <p className="text-start fw-medium paraText">
+                        {formik.values.location}
+                        <button
+                          onClick={() => handleEditClick("location")}
+                          className="btn btn-sm link-secondary ms-2"
+                          style={{ width: "fit-content" }}
+                        >
+                          <FaEdit size={20} />
+                        </button>
+                      </p>
+                    </div>
+                  )}
                 </div>
               </div>
-              <div className="arrow-icon mb-5">
-                <a
-                  href={formik.values.contactCardLink3}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <FaCircleArrowRight />
-                </a>
-              </div>
+            </div>
+            <div className="arrow-icon mb-5">
+              <a
+                href={formik.values.contactCardLink3}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <FaCircleArrowRight />
+              </a>
             </div>
           </div>
         </div>
+      </div>
+      <form onSubmit={contactFormik.handleSubmit}>
         <div className="container-fluid contactDetails1">
           <div className="container py-5">
             <div className="row py-5">
+              {/* Contact Form */}
               <div className="col-lg-6 col-12">
                 <div
                   className="card text-start p-5"
@@ -318,41 +343,113 @@ function AdminContact() {
                     <label className="form-label">
                       First Name<span className="text-danger">*</span>
                     </label>
-                    <input type="text" className={`form-control`} />
+                    <input
+                      type="text"
+                      className={`form-control ${
+                        contactFormik.touched.firstName &&
+                        contactFormik.errors.firstName
+                          ? "is-invalid"
+                          : ""
+                      }`}
+                      {...contactFormik.getFieldProps("firstName")}
+                    />
+                    {contactFormik.touched.firstName &&
+                      contactFormik.errors.firstName && (
+                        <div className="invalid-feedback">
+                          {contactFormik.errors.firstName}
+                        </div>
+                      )}
                   </div>
                   <div className="mb-3">
                     <label className="form-label">
                       Last Name<span className="text-danger">*</span>
                     </label>
-                    <input type="text" className={`form-control`} />
+                    <input
+                      type="text"
+                      className={`form-control ${
+                        contactFormik.touched.lastName &&
+                        contactFormik.errors.lastName
+                          ? "is-invalid"
+                          : ""
+                      }`}
+                      {...contactFormik.getFieldProps("lastName")}
+                    />
+                    {contactFormik.touched.lastName &&
+                      contactFormik.errors.lastName && (
+                        <div className="invalid-feedback">
+                          {contactFormik.errors.lastName}
+                        </div>
+                      )}
                   </div>
                   <div className="mb-3">
                     <label className="form-label">
                       Email<span className="text-danger">*</span>
                     </label>
-                    <input type="text" className={`form-control`} />
+                    <input
+                      type="text"
+                      className={`form-control ${
+                        contactFormik.touched.email &&
+                        contactFormik.errors.email
+                          ? "is-invalid"
+                          : ""
+                      }`}
+                      {...contactFormik.getFieldProps("email")}
+                    />
+                    {contactFormik.touched.email &&
+                      contactFormik.errors.email && (
+                        <div className="invalid-feedback">
+                          {contactFormik.errors.email}
+                        </div>
+                      )}
                   </div>
                   <div className="mb-3">
                     <label className="form-label">
                       Phone Number<span className="text-danger">*</span>
                     </label>
-                    <input type="text" className={`form-control`} />
+                    <input
+                      type="text"
+                      className={`form-control ${
+                        contactFormik.touched.phoneNumber &&
+                        contactFormik.errors.phoneNumber
+                          ? "is-invalid"
+                          : ""
+                      }`}
+                      {...contactFormik.getFieldProps("phoneNumber")}
+                    />
+                    {contactFormik.touched.phoneNumber &&
+                      contactFormik.errors.phoneNumber && (
+                        <div className="invalid-feedback">
+                          {contactFormik.errors.phoneNumber}
+                        </div>
+                      )}
                   </div>
                   <div className="mb-4">
                     <label className="form-label">Message</label>
-                    <textarea rows={5} className="form-control"></textarea>
+                    <textarea
+                      rows={5}
+                      className="form-control"
+                      {...contactFormik.getFieldProps("message")}
+                    />
                   </div>
                   <div className="mb-3">
                     <button
-                      type="button"
                       className="btn btn-danger py-2"
                       style={{ width: "100%" }}
+                      type="submit"
+                      disabled={loadIndicator}
                     >
+                      {loadIndicator && (
+                        <span
+                          className="spinner-border spinner-border-sm me-2"
+                          aria-hidden="true"
+                        ></span>
+                      )}
                       Send
                     </button>
                   </div>
                 </div>
               </div>
+              {/* Contact Form End */}
               <div className="col-lg-6 col-12 text-start mt-3 px-5">
                 {isEditing === "title" ? (
                   <div className="d-flex">
