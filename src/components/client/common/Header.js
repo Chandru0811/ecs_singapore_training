@@ -1,19 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Link, useNavigate, NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { Navbar, Nav, Button } from "react-bootstrap";
-import logo from "../../../assets/client/CRMLogo.png";
 import { MdKeyboardArrowUp } from "react-icons/md";
 import { MdKeyboardArrowDown } from "react-icons/md";
-import java from "../../../assets/client/javaicon.png";
-import react from "../../../assets/client/reacticon.png";
-import php from "../../../assets/client/php.png";
-import angular from "../../../assets/client/angularicon.png";
-import aws from "../../../assets/client/aws.png";
-import datascience from "../../../assets/client/datasciencicon.png";
-import devops from "../../../assets/client/devopsicon.png";
-import fultter from "../../../assets/client/fluttericon.png";
-import python from "../../../assets/client/pythone.png";
-import node from "../../../assets/client//nodeicon.png";
 import { FaSearch } from "react-icons/fa";
 import ImageURL from "../../../config/ImageURL";
 import api from "../../../config/BaseUrl";
@@ -22,64 +11,12 @@ const Header = ({ handleLogout }) => {
   const [course, setCourse] = useState(false);
   // const [isLoggedIn, setIsLoggedIn] = useState(false);
   const isLoginFromStorage = sessionStorage.getItem("isClientAuthenticated");
-  const expand="lg"
+  const expand = "lg";
   const [apiData, setApiData] = useState({});
-  const navigate = useNavigate();
-  const token = sessionStorage.getItem("token");
   const courseRef = useRef(null);
   const courseRef2 = useRef(null);
-  const courses = [
-    {
-      name: "Java Developer",
-      description: "Master Java from basics to advanced.",
-      icon: java,
-    },
-    {
-      name: "Flutter Developer",
-      description: "Create beautiful mobile applications.",
-      icon: fultter,
-    },
-    {
-      name: "AWS Developer",
-      description: "Leverage AWS for cloud solutions.",
-      icon: aws,
-    },
-    {
-      name: "Node.js Developer",
-      description: "Develop scalable backend systems.",
-      icon: node,
-    },
-    {
-      name: "Data Science",
-      description: "Analyze data and gain actionable insights effectively.",
-      icon: datascience,
-    },
-    {
-      name: "React Developer",
-      description: "Build dynamic web apps with React.",
-      icon: react,
-    },
-    {
-      name: "Angular Developer",
-      description: "Develop robust front-end apps with Angular.",
-      icon: angular,
-    },
-    {
-      name: "PHP Developer",
-      description: "Build dynamic websites with PHP.",
-      icon: php,
-    },
-    {
-      name: "Python Developer",
-      description: "Learn Python for various applications.",
-      icon: python,
-    },
-    {
-      name: "DevOps Engineer",
-      description: "Streamline development and operations.",
-      icon: devops,
-    },
-  ];
+  const [courses, setCourses] = useState([]);
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
@@ -98,6 +35,25 @@ const Header = ({ handleLogout }) => {
     };
   }, []);
 
+  useEffect(() => {
+    const getCourseData = async () => {
+      try {
+        const response = await api.get("header/course");
+        const formattedCourses = response.data.data.map((course) => ({
+          name: course.title,
+          description: course.description,
+          icon: course.logo_path,
+        }));
+        setCourses(formattedCourses);
+        // console.log(formattedCourses)
+      } catch (e) {
+        console.error("Failed to fetch courses", e);
+      }
+    };
+
+    getCourseData();
+  }, []);
+
   const getData = async () => {
     try {
       const response = await api.get("header");
@@ -111,7 +67,7 @@ const Header = ({ handleLogout }) => {
   }, []);
 
   // useEffect(() => {
-  //   const handleStorageChange = (event) => {  
+  //   const handleStorageChange = (event) => {
   //     if (event.key === "isClientAuthenticated") {
   //       if (event.newValue === "false") {0
   //         setIsClientAuthenticated(false);
@@ -120,18 +76,18 @@ const Header = ({ handleLogout }) => {
   //       }
   //     }
   //   };
-  
+
   //   window.addEventListener("storage", handleStorageChange);
-  
+
   //   // Clean up the event listener on component unmount
   //   return () => {
   //     window.removeEventListener("storage", handleStorageChange);
   //   };
   // }, []);
-  
+
   // useEffect(() => {
   //   const isLoginFromStorage = sessionStorage.getItem("isClientAuthenticated");
-    
+
   //   const isLoginBoolean = isLoginFromStorage === "true";
   //   if (isLoggedIn !== isLoginBoolean) {
   //     setIsLoggedIn(isLoginBoolean);
@@ -142,7 +98,12 @@ const Header = ({ handleLogout }) => {
     <>
       <div className="" style={{ position: "sticky", top: "0", zIndex: "999" }}>
         <p className="mb-0 text-light fw-light topHeader">{apiData?.top_bar}</p>
-        <Navbar bg="light" isLoggedIn={expand} expand={expand} className="clientNav shadow">
+        <Navbar
+          bg="light"
+          isLoggedIn={expand}
+          expand={expand}
+          className="clientNav shadow"
+        >
           <Navbar.Brand as={NavLink} to="/" className="ms-3">
             <img
               src={`${ImageURL}${apiData?.logo_path}`}
@@ -193,7 +154,7 @@ const Header = ({ handleLogout }) => {
                 Contact
               </Nav.Link>
               {isLoginFromStorage ? (
-                <Link  onClick={handleLogout}>
+                <Link onClick={handleLogout}>
                   <Button className="loginBtn">logout</Button>
                 </Link>
               ) : (
@@ -228,8 +189,11 @@ const Header = ({ handleLogout }) => {
                 >
                   <div className="col-3">
                     <img
-                      src={course.icon}
-                      alt={`icon`}
+                      src={`${ImageURL}${course.icon}`}
+                      alt={course.icon}
+                      width={50}
+                      height={50}
+                      style={{ borderRadius: "50%" }}
                       className="course-icon"
                     />
                   </div>
