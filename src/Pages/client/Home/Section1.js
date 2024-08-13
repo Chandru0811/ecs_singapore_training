@@ -24,7 +24,7 @@ function Section1() {
 
   return (
     <section>
-      <div className="row mt-3">
+      <div className="row mt-3 mb-4">
         <div className="col-lg-7">
           <div className="d-flex  mb-3">
             <img
