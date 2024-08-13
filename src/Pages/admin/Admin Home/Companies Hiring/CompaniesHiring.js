@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
 import AddCompanyHiring from "./AddCompanyHiring";
 import EditCompanyHiring from "./EditCompanyHiring";
-import DeleteModel from "../../../components/DeleteModel";
-import api from "../../../config/BaseUrl";
-import ImageURL from "../../../config/ImageURL";
+import DeleteModel from "../../../../components/DeleteModel";
+import api from "../../../../config/BaseUrl";
+import ImageURL from "../../../../config/ImageURL";
 import toast from "react-hot-toast";
 
 function CompaniesHiring() {
     const [datas, setDatas] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [loadIndicator, setLoadIndicator] = useState(false);
 
     const getData = async () => {
         setLoading(true);
@@ -21,13 +22,14 @@ function CompaniesHiring() {
             setLoading(false);
         }
     };
-    
+
     useEffect(() => {
         getData();
     }, []);
 
 
     const handlePublish = async () => {
+        setLoadIndicator(true);
         try {
             const response = await api.post('publish/companyhiring');
             if (response.status === 200) {
@@ -39,6 +41,8 @@ function CompaniesHiring() {
         } catch (error) {
             const errorMessage = error.response?.data?.message || error.message;
             toast.error(errorMessage);
+        } finally {
+            setLoadIndicator(false);
         }
     };
 
@@ -48,16 +52,30 @@ function CompaniesHiring() {
                 <h3 className="fw-bold">Top Companies Hiring</h3>
                 <div>
                     <AddCompanyHiring onSuccess={getData} />
-                    <button className="btn btn-danger mx-2" onClick={handlePublish}>Publish</button>
+                    <button className="btn btn-danger mx-2" onClick={handlePublish} disabled={loadIndicator}>
+                        {loadIndicator && (
+                            <span
+                                className="spinner-border spinner-border-sm me-2"
+                                aria-hidden="true"
+                            ></span>
+                        )}
+                        Publish
+                    </button>
                 </div>
             </div>
-            <div className="row m-0">
-                {loading ? (
-                    <div className="spinner-container">
-                        <div className="spinner"></div>
+            {loading ? (
+                <div className="loader-container">
+                    <div className="loader">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
                     </div>
-                ) : (
-                    datas.map((card) => (
+                </div>
+            ) : (
+                <div className="row m-0">
+                    {datas.map((card) => (
                         <div key={card.id} className='col-6 col-md-2 mb-4'>
                             <div className='card'>
                                 <div className='card-body'>
@@ -72,9 +90,9 @@ function CompaniesHiring() {
                                 </div>
                             </div>
                         </div>
-                    ))
-                )}
-            </div>
+                    ))}
+                </div>
+            )}
         </div>
     );
 }

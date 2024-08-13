@@ -7,8 +7,15 @@ import { useFormik } from "formik";
 import AsianStudent from "../../assets/client/About-Aisian-student-scaled.jpeg";
 import api from "../../config/BaseUrl";
 import toast from "react-hot-toast";
+import * as Yup from "yup";
 
 function AdminAboutFaq() {
+  //validation
+  const validationSchema = Yup.object({
+    question: Yup.string().required("*Question field is required"),
+    answer: Yup.string().required("*Answer field is required"),
+  });
+
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -20,7 +27,8 @@ function AdminAboutFaq() {
     answer: "",
   });
   const [datas, setDatas] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [saveloading, setSaveLoading] = useState(false);
+  const [publishloading, setPublishLoading] = useState(false);
 
   const formik = useFormik({
     initialValues: {
@@ -28,6 +36,7 @@ function AdminAboutFaq() {
       aboutFAQTitle: "Frequently Asked Questions",
       faq: [],
     },
+    validationSchema: validationSchema,
     onSubmit: async (values) => {
       const payload = {
         question: formik.values.faq[editingIndex].question,
@@ -48,6 +57,32 @@ function AdminAboutFaq() {
       } finally {
         setIsEditing(null);
         setEditingIndex(null);
+      }
+    },
+  });
+
+  const modalFormik = useFormik({
+    initialValues: {
+      question: "",
+      answer: "",
+    },
+    validationSchema: validationSchema,
+    onSubmit: async (values, { resetForm }) => {
+      const payload = { ...values, about_id: 1 };
+      setSaveLoading(true);
+      try {
+        const response = await api.post("aboutfaq", payload);
+        if (response.status === 200) {
+          toast.success("FAQ added successfully");
+          formik.setFieldValue("faq", [...formik.values.faq, response.data]);
+          handleClose();
+          resetForm(); // Reset the form after successful submission
+        }
+        getData();
+      } catch (error) {
+        toast.error("Error adding FAQ");
+      } finally {
+        setSaveLoading(false);
       }
     },
   });
@@ -89,7 +124,7 @@ function AdminAboutFaq() {
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
-      setLoading(false);
+      setSaveLoading(false);
     }
   };
 
@@ -97,11 +132,8 @@ function AdminAboutFaq() {
     getData();
   }, []);
 
-  if (loading) {
-    return <p>Loading...</p>;
-  }
-
   const handlePublish = async () => {
+    setPublishLoading(true);
     try {
       const response = await api.post("publish/about/faq");
       if (response.status === 200) {
@@ -112,6 +144,8 @@ function AdminAboutFaq() {
       getData();
     } catch (error) {
       toast.error("Error publishing FAQ");
+    }finally {
+      setPublishLoading(false);
     }
   };
 
@@ -121,6 +155,7 @@ function AdminAboutFaq() {
 
   const handleSaveNewAccordion = async () => {
     const payload = { ...newAccordion, about_id: 1 };
+    setSaveLoading(true);
     try {
       const response = await api.post("aboutfaq", payload);
       if (response.status === 200) {
@@ -132,6 +167,8 @@ function AdminAboutFaq() {
       getData();
     } catch (error) {
       toast.error("Error adding FAQ");
+    }finally {
+      setSaveLoading(false);
     }
   };
 
@@ -164,7 +201,13 @@ function AdminAboutFaq() {
     <section>
       <div className="d-flex align-items-center justify-content-between p-2">
         <h4>About Faq</h4>
-        <button className="btn btn-primary" onClick={handlePublish}>
+        <button className="btn btn-primary" onClick={handlePublish} disabled={publishloading}>
+        {publishloading && (
+              <span
+                className="spinner-border spinner-border-sm me-2"
+                aria-hidden="true"
+              ></span>
+            )}
           Publish
         </button>
       </div>
@@ -350,38 +393,76 @@ function AdminAboutFaq() {
           <Modal.Title>Add FAQ</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <form>
+          <form onSubmit={modalFormik.handleSubmit}>
             <div className="form-group mb-3">
-              <label htmlFor="question">Question</label>
+              <label htmlFor="question">
+                Question <span className="text-danger">*</span>
+              </label>
               <input
                 type="text"
-                className="form-control"
                 id="question"
                 name="question"
-                value={newAccordion.question}
-                onChange={handleChangeNewAccordion}
+                value={modalFormik.values.question}
+                onChange={modalFormik.handleChange}
+                onBlur={modalFormik.handleBlur}
+                className={`form-control ${
+                  modalFormik.touched.question && modalFormik.errors.question
+                    ? "is-invalid"
+                    : ""
+                }`}
               />
+              {modalFormik.touched.question && modalFormik.errors.question && (
+                <div className="invalid-feedback mt-0">
+                  {modalFormik.errors.question}
+                </div>
+              )}
             </div>
             <div className="form-group mb-3">
-              <label htmlFor="answer">Answer</label>
+              <label htmlFor="answer">
+                Answer <span className="text-danger">*</span>
+              </label>
               <textarea
-                className="form-control"
                 id="answer"
                 name="answer"
-                value={newAccordion.answer}
-                onChange={handleChangeNewAccordion}
+                value={modalFormik.values.answer}
+                onChange={modalFormik.handleChange}
+                onBlur={modalFormik.handleBlur}
+                className={`form-control ${
+                  modalFormik.touched.answer && modalFormik.errors.answer
+                    ? "is-invalid"
+                    : ""
+                }`}
               />
+              {modalFormik.touched.answer && modalFormik.errors.answer && (
+                <div className="invalid-feedback mt-0">
+                  {modalFormik.errors.answer}
+                </div>
+              )}
+            </div>
+            <div className="text-end">
+              <button
+                type="button"
+                className="btn btn-secondary"
+                onClick={handleClose}
+              >
+                Close
+              </button>
+              <button
+                type="submit"
+                className="btn btn-primary ms-2"
+                disabled={saveloading}
+              >
+                {saveloading && (
+                  <span
+                    className="spinner-border spinner-border-sm me-2"
+                    aria-hidden="true"
+                  ></span>
+                )}
+                Save
+              </button>
             </div>
           </form>
         </Modal.Body>
-        <Modal.Footer>
-          <button className="btn btn-secondary" onClick={handleClose}>
-            Close
-          </button>
-          <button className="btn btn-primary" onClick={handleSaveNewAccordion}>
-            Save
-          </button>
-        </Modal.Footer>
       </Modal>
     </section>
   );

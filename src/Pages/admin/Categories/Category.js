@@ -55,7 +55,6 @@ function Category() {
   };
 
   const refreshData = async () => {
-    destroyDataTable();
     setLoading(true);
     try {
       const response = await api.get("category");
@@ -65,8 +64,20 @@ function Category() {
       console.error("Error refreshing data:", error);
       setLoading(false);
     }
-    initializeDataTable();
   };
+
+  useEffect(() => {
+    if (!loading) {
+      initializeDataTable();
+    }
+    return () => {
+      destroyDataTable();
+    };
+  }, [loading]);
+
+  useEffect(() => {
+    refreshData();
+  }, []);
 
   const handlePublish = async () => {
     try {

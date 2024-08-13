@@ -24,7 +24,8 @@ import toast from "react-hot-toast";
 const HeaderFooter = () => {
   const [course, setCourse] = useState(false);
   const [headerData, setHeaderData] = useState();
-  const [loading, setLoadIndicator] = useState(false);
+  const [loadingIndicator, setLoadIndicator] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const courseRef = useRef(null);
   const courseRef2 = useRef(null);
@@ -105,8 +106,8 @@ const HeaderFooter = () => {
       HeadingText: ``,
     },
     onSubmit: async (values) => {
-      console.log("object",values.header)
-      setLoadIndicator(true);
+      console.log("object", values.header);
+
       const formData = new FormData();
       formData.append("top_bar", values.HeadingText);
       if (
@@ -119,13 +120,11 @@ const HeaderFooter = () => {
         const response = await api.post("update/header", formData);
         if (response.status === 200) {
           getData();
-          toast.success(response.data.message)
+          toast.success(response.data.message);
           console.log("updated", response.data);
         }
       } catch (e) {
         console.log("object", e);
-      }finally{
-        setLoadIndicator(false);
       }
     },
   });
@@ -133,6 +132,7 @@ const HeaderFooter = () => {
   // api Get Data
   const getData = async () => {
     try {
+      setLoading(true);
       const response = await api.get("edit/header");
       if (response.status === 200) {
         formik.setFieldValue("HeadingText", response.data.data.top_bar);
@@ -140,6 +140,8 @@ const HeaderFooter = () => {
       }
     } catch (e) {
       console.log("object", e);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -165,13 +167,16 @@ const HeaderFooter = () => {
   // publish Data
   const publishData = async () => {
     try {
+      setLoadIndicator(true);
       const response = await api.post("publish/header");
       if (response.status === 200) {
-        toast.success(response.data.message)
+        toast.success(response.data.message);
         console.log("published successfully!");
       }
     } catch (e) {
       console.log("object", e);
+    } finally {
+      setLoadIndicator(false);
     }
   };
 
@@ -180,19 +185,31 @@ const HeaderFooter = () => {
   }, []);
 
   return (
-    <div className="container-fluid px-0">
-      <div>
-        <div className="card-header d-flex align-items-center px-0 py-3 mb-2 bg-light">
-          <h3 className="fw-bold">Header</h3>
-          <div className="container-fluid d-flex justify-content-end">
-            {/* <button className="btn btn-sm btn-danger mx-2" onClick={publishData}>Publish</button> */}
-            <button
+    <>
+      {loading ? (
+        <div className="loader-container">
+          <div className="loader">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+      ) : (
+        <div className="container-fluid px-0">
+          <div>
+            <div className="card-header d-flex align-items-center px-0 py-3 mb-2 bg-light">
+              <h3 className="fw-bold">Header</h3>
+              <div className="container-fluid d-flex justify-content-end">
+                {/* <button className="btn btn-sm btn-danger mx-2" onClick={publishData}>Publish</button> */}
+                <button
                   type="submit"
                   className="btn btn-sm btn-danger mx-2"
-                  disabled={loading}
+                  disabled={loadingIndicator}
                   onClick={publishData}
                 >
-                  {loading ? (
+                  {loadingIndicator ? (
                     <span
                       className="spinner-border spinner-border-sm"
                       aria-hidden="true"
@@ -200,62 +217,19 @@ const HeaderFooter = () => {
                   ) : (
                     <span></span>
                   )}
-                   Publish
-                   </button>
-          </div>
-        </div>
-        <div
-          className=""
-          style={{ position: "sticky", top: "0", zIndex: "999" }}
-        >
-          {isEditing === "HeadingText" ? (
-            <div>
-              <div className="d-flex">
-                <button
-                  onClick={() => handleSaveClick("HeadingText")}
-                  className="btn btn-sm link-primary ms-2"
-                  style={{ width: "fit-content" }}
-                >
-                  <FaSave />
-                </button>
-                <button
-                  onClick={handleCancel}
-                  className="btn btn-sm link-danger ms-2"
-                  style={{ width: "fit-content" }}
-                >
-                  <FaTimes />
+                  Publish
                 </button>
               </div>
-              <input
-                type="text"
-                name="HeadingText"
-                {...formik.getFieldProps("HeadingText")}
-                onChange={formik.handleChange}
-                className="form-control"
-              />
             </div>
-          ) : (
-            <div>
-              <p className="mb-0 text-light fw-light topHeader">
-                {formik.values.HeadingText}
-                <button
-                  onClick={() => handleEditClick("HeadingText")}
-                  className="btn btn-sm link-secondary ms-2"
-                  style={{ width: "fit-content" }}
-                >
-                  <FaEdit />
-                </button>
-              </p>
-            </div>
-          )}
-
-          <Navbar bg="light" expand="lg" className="clientNav shadow-lg px-1">
-            <Navbar.Brand className="w-50">
-              {isEditing === "header" ? (
+            <div
+              className=""
+              style={{ position: "sticky", top: "0", zIndex: "999" }}
+            >
+              {isEditing === "HeadingText" ? (
                 <div>
                   <div className="d-flex">
                     <button
-                      onClick={() => handleSaveClick("header")}
+                      onClick={() => handleSaveClick("HeadingText")}
                       className="btn btn-sm link-primary ms-2"
                       style={{ width: "fit-content" }}
                     >
@@ -270,121 +244,174 @@ const HeaderFooter = () => {
                     </button>
                   </div>
                   <input
-                    type="file"
-                    onChange={handleImageChange}
+                    type="text"
+                    name="HeadingText"
+                    {...formik.getFieldProps("HeadingText")}
+                    onChange={formik.handleChange}
                     className="form-control"
                   />
                 </div>
               ) : (
-                <div
-                  className="d-flex align-items-center"
-                  style={{ width: "75%", height: "auto" }}
-                >
-                  <button
-                    onClick={() => handleEditClick("header")}
-                    className="btn btn-sm link-secondary"
-                    style={{ width: "fit-content" }}
-                  >
-                    <FaEdit />
-                  </button>
-                  {formik.values.header && (
-                    <img
-                      src={`${ImageURL}${headerData?.logo_path}`}
-                      alt="logo"
-                      className="img-fluid"
-                      style={{
-                        width: "75%",
-                        height: "auto",
-                        objectFit: "contain",
-                      }}
-                    />
-                  )}
+                <div>
+                  <p className="mb-0 text-light fw-light topHeader">
+                    {formik.values.HeadingText}
+                    <button
+                      onClick={() => handleEditClick("HeadingText")}
+                      className="btn btn-sm link-secondary ms-2"
+                      style={{ width: "fit-content" }}
+                    >
+                      <FaEdit />
+                    </button>
+                  </p>
                 </div>
               )}
 
-              {/* <span className="d-flex">ECS </span> */}
-            </Navbar.Brand>
-
-            <Navbar.Toggle aria-controls="basic-navbar-nav " />
-            <Navbar.Collapse id="basic-navbar-nav" className=" ">
-              <Nav className="gap-3">
-                <div ref={courseRef2}>
-                  <button
-                    className="btn btn-outline-primary rounded-1 courseBtn"
-                    // onClick={() => setCourse(!course)}
-                  >
-                    All Course
-                    {course ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown />}
-                  </button>
-                </div>
-                <div
-                  className="form-group position-relative headerInput"
-                  style={{ width: "40vw" }}
-                >
-                  <input
-                    type="text"
-                    className="form-control"
-                    placeholder="Search"
-                  />
-                  <span className="search-icon">
-                    <FaSearch className="" />
-                  </span>
-                </div>
-              </Nav>
-              <Nav
-                className=" gap-4 justify-content-end me-2"
-                style={{ flexGrow: "inherit !important" }}
+              <Navbar
+                bg="light"
+                expand="lg"
+                className="clientNav shadow-lg px-1"
               >
-                <Nav.Link>Home</Nav.Link>
-                <Nav.Link>About</Nav.Link>
-                <Nav.Link>Blogs</Nav.Link>
-                <Nav.Link>Contact</Nav.Link>
+                <Navbar.Brand className="w-50">
+                  {isEditing === "header" ? (
+                    <div>
+                      <div className="d-flex">
+                        <button
+                          onClick={() => handleSaveClick("header")}
+                          className="btn btn-sm link-primary ms-2"
+                          style={{ width: "fit-content" }}
+                        >
+                          <FaSave />
+                        </button>
+                        <button
+                          onClick={handleCancel}
+                          className="btn btn-sm link-danger ms-2"
+                          style={{ width: "fit-content" }}
+                        >
+                          <FaTimes />
+                        </button>
+                      </div>
+                      <input
+                        type="file"
+                        onChange={handleImageChange}
+                        className="form-control"
+                      />
+                    </div>
+                  ) : (
+                    <div
+                      className="d-flex align-items-center"
+                      style={{ width: "75%", height: "auto" }}
+                    >
+                      <button
+                        onClick={() => handleEditClick("header")}
+                        className="btn btn-sm link-secondary"
+                        style={{ width: "fit-content" }}
+                      >
+                        <FaEdit />
+                      </button>
+                      {formik.values.header && (
+                        <img
+                          src={`${ImageURL}${headerData?.logo_path}`}
+                          alt="logo"
+                          className="img-fluid"
+                          style={{
+                            width: "75%",
+                            height: "auto",
+                            objectFit: "contain",
+                          }}
+                        />
+                      )}
+                    </div>
+                  )}
 
-                <Link>
-                  <Button className="loginBtn">Login</Button>
-                </Link>
-              </Nav>
-            </Navbar.Collapse>
-          </Navbar>
-        </div>
-        {course && (
-          <div
-            className="container-fluid pt-4 shadow CourseDropDown"
-            style={{
-              position: "fixed",
-              // top: "91px",
-              // overflow:"auto",
-              zIndex: "99",
-              backgroundColor: "#f1f6ff",
-              borderBottom: "1px solid #7bbff4",
-            }}
-            ref={courseRef}
-          >
-            <div className="row">
-              {courses.map((course, index) => (
-                <div key={index} className="col-sm-4 col-md-2 col-6 d-flex">
-                  <div className="col-3">
-                    <img
-                      src={course.icon}
-                      alt={`icon`}
-                      className="course-icon"
-                    />
-                  </div>
-                  <div
-                    className="col-9 text-start fw-light"
-                    // style={{ fontSize: "0.8vw" }}
+                  {/* <span className="d-flex">ECS </span> */}
+                </Navbar.Brand>
+
+                <Navbar.Toggle aria-controls="basic-navbar-nav " />
+                <Navbar.Collapse id="basic-navbar-nav" className=" ">
+                  <Nav className="gap-3">
+                    <div ref={courseRef2}>
+                      <button
+                        className="btn btn-outline-primary rounded-1 courseBtn"
+                        // onClick={() => setCourse(!course)}
+                      >
+                        All Course
+                        {course ? (
+                          <MdKeyboardArrowUp />
+                        ) : (
+                          <MdKeyboardArrowDown />
+                        )}
+                      </button>
+                    </div>
+                    <div
+                      className="form-group position-relative headerInput"
+                      style={{ width: "40vw" }}
+                    >
+                      <input
+                        type="text"
+                        className="form-control"
+                        placeholder="Search"
+                      />
+                      <span className="search-icon">
+                        <FaSearch className="" />
+                      </span>
+                    </div>
+                  </Nav>
+                  <Nav
+                    className=" gap-4 justify-content-end me-2"
+                    style={{ flexGrow: "inherit !important" }}
                   >
-                    <h5 className="mb-0">{course.name}</h5>
-                    <p>{course.description}</p>
-                  </div>
-                </div>
-              ))}
-              <p className="text-info text-end mb-0">see more..</p>
+                    <Nav.Link>Home</Nav.Link>
+                    <Nav.Link>About</Nav.Link>
+                    <Nav.Link>Blogs</Nav.Link>
+                    <Nav.Link>Contact</Nav.Link>
+
+                    <Link>
+                      <Button className="loginBtn">Login</Button>
+                    </Link>
+                  </Nav>
+                </Navbar.Collapse>
+              </Navbar>
             </div>
+            {course && (
+              <div
+                className="container-fluid pt-4 shadow CourseDropDown"
+                style={{
+                  position: "fixed",
+                  // top: "91px",
+                  // overflow:"auto",
+                  zIndex: "99",
+                  backgroundColor: "#f1f6ff",
+                  borderBottom: "1px solid #7bbff4",
+                }}
+                ref={courseRef}
+              >
+                <div className="row">
+                  {courses.map((course, index) => (
+                    <div key={index} className="col-sm-4 col-md-2 col-6 d-flex">
+                      <div className="col-3">
+                        <img
+                          src={course.icon}
+                          alt={`icon`}
+                          className="course-icon"
+                        />
+                      </div>
+                      <div
+                        className="col-9 text-start fw-light"
+                        // style={{ fontSize: "0.8vw" }}
+                      >
+                        <h5 className="mb-0">{course.name}</h5>
+                        <p>{course.description}</p>
+                      </div>
+                    </div>
+                  ))}
+                  <p className="text-info text-end mb-0">see more..</p>
+                </div>
+              </div>
+            )}
           </div>
-        )}
-      </div>
-    </div>
+        </div>
+      )}
+    </>
   );
 };
 

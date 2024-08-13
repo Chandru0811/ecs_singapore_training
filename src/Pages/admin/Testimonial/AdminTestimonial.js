@@ -10,7 +10,7 @@ import DeleteModel from "../../../components/DeleteModel";
 import ImageURL from "../../../config/ImageURL";
 
 function AdminTestimonial({ onSuccess }) {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [datas, setDatas] = useState([]);
 
@@ -19,10 +19,8 @@ function AdminTestimonial({ onSuccess }) {
       try {
         const response = await api.get("testimonial");
         setDatas(response.data.data);
-        setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
-        setLoading(false);
       }
     };
     getData();
@@ -79,14 +77,11 @@ function AdminTestimonial({ onSuccess }) {
   });
 
   const refreshData = async () => {
-    setLoading(true);
     try {
       const response = await api.get("testimonial");
       setDatas(response.data.data);
-      setLoading(false);
     } catch (error) {
       console.error("Error refreshing data:", error);
-      setLoading(false);
     }
   };
 
@@ -101,6 +96,7 @@ function AdminTestimonial({ onSuccess }) {
 
   const PublishTestimonial = async () => {
     try {
+      setLoading(true);
       const response = await api.post("publish/testimonial", {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -108,12 +104,13 @@ function AdminTestimonial({ onSuccess }) {
       });
 
       if (response.status === 200) {
+        console.log("Published successfully!");
         toast.success(response.data.message);
-      } else {
-        toast.error(response.data.message);
       }
     } catch (error) {
-      console.error("Error saving data:", error.message);
+      console.error("Error publishing contact data", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -139,10 +136,19 @@ function AdminTestimonial({ onSuccess }) {
           <div className="d-flex">
             <AdminTestimonialAdd onSuccess={refreshData} />
             <button
+              type="submit"
+              className="btn btn-sm btn-danger mx-2"
+              disabled={loading}
               onClick={PublishTestimonial}
-              type="button"
-              className="btn btn-danger mx-2"
             >
+              {loading ? (
+                <span
+                  className="spinner-border spinner-border-sm"
+                  aria-hidden="true"
+                ></span>
+              ) : (
+                <span></span>
+              )}
               Publish
             </button>
           </div>
