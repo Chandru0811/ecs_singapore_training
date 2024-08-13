@@ -14,10 +14,10 @@ const validationSchema = Yup.object({
 function EditCourseVideoTestimonial({ id, onSuccess }) {
     const [show, setShow] = useState(false);
     const [loadIndicator, setLoadIndicator] = useState(false);
-
+const [data,setData]=useState({})
     const handleClose = () => {
         setShow(false);
-        formik.resetForm();
+        formik.setValues(data);
     };
 
     const handleShow = () => setShow(true);
@@ -65,6 +65,7 @@ function EditCourseVideoTestimonial({ id, onSuccess }) {
         const getData = async () => {
             try {
                 const response = await api.get(`videotestimonial/${id}`);
+                setData(response.data.data);
                 formik.setValues(response.data.data);
             } catch (error) {
                 console.error("Error fetching data ", error);
