@@ -5,6 +5,7 @@ import { Modal } from "react-bootstrap";
 import * as Yup from "yup";
 import api from "../../../config/BaseUrl";
 import toast from "react-hot-toast";
+import DeleteModel from "../../../components/DeleteModel";
 
 function TrainingPlacements() {
   const [isEditing, setIsEditing] = useState(false);
@@ -16,6 +17,7 @@ function TrainingPlacements() {
     question: "",
     answer: "",
   });
+  const [loadIndicator, setLoadIndicator] = useState(false);
 
   // Formik validation schema for contact form
   const validationSchema = Yup.object({
@@ -56,6 +58,7 @@ function TrainingPlacements() {
           ques_and_ans: aboutAccordion,
         });
         if (response.status === 200) {
+          toast.success(response.data.message);
           console.log("Updated:", response.data);
           getData();
         }
@@ -90,7 +93,7 @@ function TrainingPlacements() {
     setIsEditing(true);
     setEditingIndex(index);
   };
-  
+
 
   // Save new FAQ item
   const handleSaveNewAccordion = async () => {
@@ -100,27 +103,17 @@ function TrainingPlacements() {
           ques_and_ans: [newAccordion],
         });
         if (response.data.status === 200) {
+          toast.success(response.data.message);
           getData();
           setNewAccordion({ question: "", answer: "" });
           handleClose();
+        } else {
+          toast.error(response.data.message);
         }
       } catch (error) {
+        toast.error("Error deleting data:", error);
         console.error("Failed to save new accordion:", error);
       }
-    } else {
-      handleClose();
-    }
-  };
-
-  // Remove FAQ item
-  const handleRemoveAccordion = async (id) => {
-    try {
-      const response = await api.delete(`homefaq/${id}`);
-      if (response.data.status === 200) {
-        getData();
-      }
-    } catch (error) {
-      console.error("Error removing accordion:", error);
     }
   };
 
@@ -135,6 +128,7 @@ function TrainingPlacements() {
   const handleShow = () => setShow(true);
 
   const handlePublish = async () => {
+    setLoadIndicator(true);
     try {
       const response = await api.post("publish/homefaq");
       if (response.status === 200) {
@@ -142,32 +136,39 @@ function TrainingPlacements() {
       }
     } catch (error) {
       toast.error("Error publishing FAQ");
+    } finally {
+      setLoadIndicator(false);
     }
   };
 
   return (
     <div>
-      {loading ? (
-        <div className="loader-container">
-          <div className="loader">
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-          </div>
+      <div>
+        {/* Header Section */}
+        <div className="container-fluid d-flex justify-content-between p-2 bg-light">
+          <h3 className="fw-bold">Home FAQ</h3>
+          <button className="btn btn-danger" onClick={handlePublish} disabled={loadIndicator}>
+            {loadIndicator && (
+              <span
+                className="spinner-border spinner-border-sm me-2"
+                aria-hidden="true"
+              ></span>
+            )}
+            Publish
+          </button>
         </div>
-      ) : (
-        <div>
-          {/* Header Section */}
-          <div className="container-fluid d-flex justify-content-between p-2 bg-light">
-            <h3 className="fw-bold">Home FAQ</h3>
-            <button className="btn btn-sm btn-danger" onClick={handlePublish}>
-              Publish
-            </button>
+        {loading ? (
+          <div className="loader-container">
+            <div className="loader">
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
           </div>
-
-          {/* Main Content Section */}
+        ) : (
+          /* Main Content Section */
           <div className="container-fluid trainingplacements mt-3 mb-5">
             <h1 className="secondheading text-start mb-3">
               Cloud Ecs, Software Training and Placements in India
@@ -178,7 +179,7 @@ function TrainingPlacements() {
                 <div className="accordion" id="accordionExample">
                   <div className="d-flex align-items-center justify-content-end">
                     <button className="btn" onClick={handleShow}>
-                      <FaPlus /> Add New
+                      <span className="fw-medium">Add New</span> <FaPlus size={12} />
                     </button>
                   </div>
 
@@ -190,14 +191,9 @@ function TrainingPlacements() {
                           className="btn"
                           onClick={() => handleEditClick(index)}
                         >
-                          <FaEdit />
+                          <FaEdit size={18} />
                         </button>
-                        <button
-                          className="btn"
-                          onClick={() => handleRemoveAccordion(item.id)}
-                        >
-                          <FaTrash className="text-danger" />
-                        </button>
+                        <DeleteModel className="text-danger" onSuccess={getData} path={`homefaq/${item.id}`} />
                       </div>
 
                       {isEditing && editingIndex === index ? (
@@ -320,11 +316,10 @@ function TrainingPlacements() {
                         </label>
                         <input
                           type="text"
-                          className={`form-control homeInput ${
-                            formikContact.touched.firstName &&
+                          className={`form-control homeInput ${formikContact.touched.firstName &&
                             formikContact.errors.firstName &&
                             "is-invalid"
-                          }`}
+                            }`}
                           id="firstName"
                           name="firstName"
                           value={formikContact.values.firstName}
@@ -332,7 +327,7 @@ function TrainingPlacements() {
                           onBlur={formikContact.handleBlur}
                         />
                         {formikContact.touched.firstName &&
-                        formikContact.errors.firstName ? (
+                          formikContact.errors.firstName ? (
                           <div className="invalid-feedback">
                             {formikContact.errors.firstName}
                           </div>
@@ -344,11 +339,10 @@ function TrainingPlacements() {
                         </label>
                         <input
                           type="text"
-                          className={`form-control homeInput ${
-                            formikContact.touched.lastName &&
+                          className={`form-control homeInput ${formikContact.touched.lastName &&
                             formikContact.errors.lastName &&
                             "is-invalid"
-                          }`}
+                            }`}
                           id="lastName"
                           name="lastName"
                           value={formikContact.values.lastName}
@@ -356,7 +350,7 @@ function TrainingPlacements() {
                           onBlur={formikContact.handleBlur}
                         />
                         {formikContact.touched.lastName &&
-                        formikContact.errors.lastName ? (
+                          formikContact.errors.lastName ? (
                           <div className="invalid-feedback">
                             {formikContact.errors.lastName}
                           </div>
@@ -370,11 +364,10 @@ function TrainingPlacements() {
                         </label>
                         <input
                           type="email"
-                          className={`form-control homeInput ${
-                            formikContact.touched.email &&
+                          className={`form-control homeInput ${formikContact.touched.email &&
                             formikContact.errors.email &&
                             "is-invalid"
-                          }`}
+                            }`}
                           id="email"
                           name="email"
                           value={formikContact.values.email}
@@ -382,7 +375,7 @@ function TrainingPlacements() {
                           onBlur={formikContact.handleBlur}
                         />
                         {formikContact.touched.email &&
-                        formikContact.errors.email ? (
+                          formikContact.errors.email ? (
                           <div className="invalid-feedback">
                             {formikContact.errors.email}
                           </div>
@@ -394,11 +387,10 @@ function TrainingPlacements() {
                         </label>
                         <input
                           type="text"
-                          className={`form-control homeInput ${
-                            formikContact.touched.phoneNumber &&
+                          className={`form-control homeInput ${formikContact.touched.phoneNumber &&
                             formikContact.errors.phoneNumber &&
                             "is-invalid"
-                          }`}
+                            }`}
                           id="phoneNumber"
                           name="phoneNumber"
                           value={formikContact.values.phoneNumber}
@@ -406,7 +398,7 @@ function TrainingPlacements() {
                           onBlur={formikContact.handleBlur}
                         />
                         {formikContact.touched.phoneNumber &&
-                        formikContact.errors.phoneNumber ? (
+                          formikContact.errors.phoneNumber ? (
                           <div className="invalid-feedback">
                             {formikContact.errors.phoneNumber}
                           </div>
@@ -436,8 +428,8 @@ function TrainingPlacements() {
               </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }
