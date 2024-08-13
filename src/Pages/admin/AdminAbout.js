@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { LuDiamond } from "react-icons/lu";
-import { Tabs, Tab } from "react-bootstrap";
 import { BsBoxSeam } from "react-icons/bs";
 import { useFormik } from "formik";
 import { FaEdit, FaSave, FaTimes } from "react-icons/fa";
@@ -10,7 +9,11 @@ import ImageURL from "../../config/ImageURL";
 
 function AdminAbout() {
   const [isEditing, setIsEditing] = useState(null);
-  const [previewImage, setPreviewImage] = useState(null);
+  const [previewImage, setPreviewImage] = useState({
+    background_image: null,
+    banner_image: null,
+    about_image: null,
+  });
   const [editingIndex, setEditingIndex] = useState(null);
   const [datas, setDatas] = useState([]);
   const [loadIndicator, setLoadIndicator] = useState(false);
@@ -285,8 +288,8 @@ function AdminAbout() {
                             )}
                           </div>
                           <div className="d-flex mb-4">
-                            <button className="btn enroll-btn">Enroll Now</button>
-                            <button className="btn contact-btn ms-3">
+                            <button type="button" className="btn enroll-btn">Enroll Now</button>
+                            <button type="button" className="btn contact-btn ms-3">
                               Contact Us
                             </button>
                           </div>
@@ -426,7 +429,7 @@ function AdminAbout() {
                       <p className="fw-medium">{datas.aboutus_content}</p>
                     </div>
                   )}
-                  <button className="learn-btn">Learn More</button>
+                  <button type="button" className="learn-btn">Learn More</button>
                 </div>
               </div>
             </div>
@@ -554,7 +557,7 @@ function AdminAbout() {
                                 </h1>
                               </>
                             )}
-                            <button className="btn contact-btn">
+                            <button type="button" className="btn contact-btn">
                               All Courses
                             </button>
                           </div>

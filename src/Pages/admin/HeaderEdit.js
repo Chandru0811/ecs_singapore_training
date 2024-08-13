@@ -312,12 +312,13 @@ const HeaderFooter = () => {
                         <img
                           src={`${ImageURL}${headerData?.logo_path}`}
                           alt="logo"
-                          className="img-fluid"
-                          style={{
-                            width: "75%",
-                            height: "auto",
-                            objectFit: "contain",
-                          }}
+                          height="40"
+              className="d-inline-block align-top"
+                          // style={{
+                          //   width: "75%",
+                          //   height: "auto",
+                          //   objectFit: "contain",
+                          // }}
                         />
                       )}
                     </div>

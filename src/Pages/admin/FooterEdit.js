@@ -43,7 +43,7 @@ export const FooterEdit = () => {
           }
         });
         console.log("Response data:", response.data);
-        setApiData(response.data.data);
+        getData();
         setIsEditing(null);
         toast.success(response.data.message);
       } catch (error) {
@@ -64,6 +64,7 @@ export const FooterEdit = () => {
 
   const handleCancel = () => {
     setIsEditing(null);
+    formik.setValues(apiData);
   };
 
   const handleImageUpload = (event) => {
@@ -359,7 +360,7 @@ export const FooterEdit = () => {
                     </div>
                   )}
                   <div>
-                    <Nav.Link href={apiData.youtube_link} target="_blank">
+                    <Nav.Link  target="_blank">
                       <FaYoutube size={18} />
                     </Nav.Link>
                     {!isEditing && (
