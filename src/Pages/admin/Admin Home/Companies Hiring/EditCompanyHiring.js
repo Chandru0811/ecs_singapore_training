@@ -1,16 +1,16 @@
 import { useFormik } from "formik";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 import * as Yup from "yup";
-import api from "../../../config/BaseUrl";
+import { FaEdit } from "react-icons/fa";
+import api from "../../../../config/BaseUrl";
 import toast from "react-hot-toast";
 
 const validationSchema = Yup.object({
     company_name: Yup.string().required("*Name is required"),
-    company_logo: Yup.string().required("*Image is required")
 });
 
-function AddCompanyHiring({ onSuccess }) {
+function EditCompanyHiring({ id, onSuccess }) {
     const [show, setShow] = useState(false);
     const [loadIndicator, setLoadIndicator] = useState(false);
 
@@ -31,13 +31,17 @@ function AddCompanyHiring({ onSuccess }) {
             setLoadIndicator(true);
             try {
                 const formData = new FormData();
-                formData.append('company_name', values.company_name);
-                formData.append('company_logo', values.company_logo);
-                const response = await api.post('companyhiring', formData, {
+                formData.append("_method", "PUT");
+                formData.append("company_name", values.company_name);
+                if (values.company_logo) {
+                    formData.append("company_logo", values.company_logo);
+                }
+                const response = await api.post(`companyhiring/${id}`, formData, {
                     headers: {
-                        'Content-Type': 'multipart/form-data',
+                        "Content-Type": "multipart/form-data",
                     },
                 });
+
                 if (response.status === 200) {
                     onSuccess();
                     handleClose();
@@ -54,15 +58,26 @@ function AddCompanyHiring({ onSuccess }) {
         },
     });
 
+    useEffect(() => {
+        const getData = async () => {
+            try {
+                const response = await api.get(`companyhiring/${id}`);
+                formik.setValues(response.data.data);
+            } catch (error) {
+                console.error("Error fetching data ", error);
+            }
+        };
+        getData();
+    }, [id]);
+
     return (
         <>
-            <button className="btn btn-primary" onClick={handleShow}>
-                Add +
+            <button className="btn text-secondary" onClick={handleShow}>
+                <FaEdit />
             </button>
-
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Add Company Hiring</Modal.Title>
+                    <Modal.Title>Edit Online Training Review</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <form onSubmit={formik.handleSubmit}>
@@ -87,25 +102,20 @@ function AddCompanyHiring({ onSuccess }) {
                         </div>
                         <div className="mb-2">
                             <label className="form-label">
-                                Image<span className="text-danger">*</span>
+                                Image
                             </label>
                             <div className="mb-3">
                                 <input
                                     type="file"
                                     name="company_logo"
-                                    className={`form-control ${formik.touched.company_logo && formik.errors.company_logo
-                                        ? "is-invalid"
-                                        : ""
-                                        }`}
+                                    className={`form-control`}
                                     onChange={(event) => {
-                                        formik.setFieldValue("company_logo", event.currentTarget.files[0]);
+                                        formik.setFieldValue(
+                                            "company_logo",
+                                            event.currentTarget.files[0]
+                                        );
                                     }}
                                 />
-                                {formik.touched.company_logo && formik.errors.company_logo && (
-                                    <div className="invalid-feedback">
-                                        {formik.errors.company_logo}
-                                    </div>
-                                )}
                             </div>
                         </div>
                         <Modal.Footer>
@@ -132,4 +142,4 @@ function AddCompanyHiring({ onSuccess }) {
     );
 }
 
-export default AddCompanyHiring;
+export default EditCompanyHiring;

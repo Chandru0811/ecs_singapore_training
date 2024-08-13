@@ -20,9 +20,8 @@ import { FooterEdit } from "../Pages/admin/FooterEdit";
 import { PrivacyPolicy } from "../Pages/admin/PrivacyPolicy";
 import { TermsAndCondition } from "../Pages/admin/TermsAndCondition";
 import { Toaster } from "react-hot-toast";
-import CompaniesHiring from "../Pages/admin/Companies Hiring/CompaniesHiring";
+import CompaniesHiring from "../Pages/admin/Admin Home/Companies Hiring/CompaniesHiring";
 import HeroSection from "../Pages/admin/Admin Home/HeroSection";
-import TopCourses from "../Pages/admin/Admin Home/TopCourses";
 import TrainingOverview from "../Pages/admin/Admin Home/TrainingOverview";
 import TrainingPlacements from "../Pages/admin/Admin Home/TrainingPlacements";
 import WhyJoinWithUs from "../Pages/admin/Admin Home/WhyJoinWithUS/WhyJoinWithUs";
@@ -75,7 +74,6 @@ const Admin = ({ handleLogout }) => {
             <Route path="/companieshiring" element={<CompaniesHiring />} />
             <Route path="/home/hero" element={<HeroSection />} />
             <Route path="/home/whyjoinwithus" element={<WhyJoinWithUs />} />
-            <Route path="/home/courses" element={<TopCourses />} />
             <Route path="/home/training/overview" element={<TrainingOverview />} />
             <Route path="/home/training/placement" element={<TrainingPlacements />} />
             <Route path="/aboutFaq" element={<AdminAboutFaq />} />
