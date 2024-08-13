@@ -9,6 +9,7 @@ import toast from "react-hot-toast";
 import ReactStars from "react-rating-stars-component";
 import ImageURL from "../../config/ImageURL";
 import EditCourseTestimonial from "./EditCourseTestimonial";
+import DeleteModel from "../../components/DeleteModel";
 
 const validationSchema = Yup.object({
   profile: Yup.mixed().required("*Image is required"),
@@ -18,18 +19,21 @@ const validationSchema = Yup.object({
 });
 
 function CourseTestimonial() {
+  const [loading, setLoading] = useState(true);
   const [show, setShow] = useState(false);
   const [datas, setDatas] = useState([]);
   const [loadSave, setLoadSave] = useState(false);
   const [loadPublish, setLoadPublish] = useState(false);
 
   const fetchDatas = async () => {
+    setLoading(true);
     try {
       const response = await api.get("coursetestimonial");
       setDatas(response.data.data);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -118,7 +122,7 @@ function CourseTestimonial() {
       if (response.status === 200) {
         toast.success(
           response.data.message ||
-            "Course Testimonials Changes Published Successfully!"
+          "Course Testimonials Changes Published Successfully!"
         );
       } else {
         console.error("Publishing Course Testimonial failed");
@@ -177,14 +181,14 @@ function CourseTestimonial() {
                 <div className="d-flex justify-content-between align-items-start p-2">
                   <button
                     type="button"
-                    onClick={() => handleDeleteCard(data.id)}
                     className="btn link-light ms-2"
                     style={{
                       width: "fit-content",
                       height: "fit-content",
                     }}
                   >
-                    <FaTrash className="text-light" />
+                    <DeleteModel onSuccess={fetchDatas}
+                      path={`/coursetestimonial/${data.id}`} onClick={() => handleDeleteCard(data.id)} />
                   </button>
                   <EditCourseTestimonial id={data.id} onSuccess={fetchDatas} />
                 </div>
@@ -267,11 +271,10 @@ function CourseTestimonial() {
                 fullIcon={<i className="fa fa-star"></i>}
                 activeColor="#ffd700"
                 name="rating"
-                className={`form-control ${
-                  formik.touched.rating && formik.errors.rating
+                className={`form-control ${formik.touched.rating && formik.errors.rating
                     ? "is-invalid"
                     : ""
-                }`}
+                  }`}
               />
               {formik.touched.rating && formik.errors.rating && (
                 <div className="error text-danger">{formik.errors.rating}</div>
