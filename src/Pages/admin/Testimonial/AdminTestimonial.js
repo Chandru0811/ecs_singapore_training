@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { IoIosStar } from "react-icons/io";
-import { useFormik } from "formik";
-import * as Yup from "yup";
 import api from "../../../config/BaseUrl";
 import toast from "react-hot-toast";
 import AdminTestimonialAdd from "./AdminTestimonialAdd";
@@ -10,99 +8,34 @@ import DeleteModel from "../../../components/DeleteModel";
 import ImageURL from "../../../config/ImageURL";
 
 function AdminTestimonial({ onSuccess }) {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [datas, setDatas] = useState([]);
 
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        const response = await api.get("testimonial");
-        setDatas(response.data.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-    getData();
-  }, []);
-
-  // Form Validation
-  const validationSchema = Yup.object({
-    client_name: Yup.string().required("*Client Name is required"),
-    designation: Yup.string().required("*Designation is required"),
-    title: Yup.string().required("*Title is required"),
-    description: Yup.string().required("*Description is required"),
-    image: Yup.mixed().required("Image is required"),
-  });
-
-  const formik = useFormik({
-    initialValues: {
-      client_name: "",
-      designation: "",
-      title: "",
-      description: "",
-      image: null,
-    },
-    validationSchema: validationSchema,
-    onSubmit: async (values) => {
-      setLoadIndicator(true);
-      try {
-        const formData = new FormData();
-        formData.append("client_name", values.client_name);
-        formData.append("designation", values.designation);
-        formData.append("title", values.title);
-        formData.append("description", values.description);
-        formData.append("image", values.image);
-
-        const response = await api.post("testimonial", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
-
-        if (response.status === 200) {
-          onSuccess();
-          handleClose();
-          toast.success(response.data.message);
-        } else {
-          toast.error(response.data.message);
-        }
-      } catch (error) {
-        const errorMessage = error.response?.data?.message || error.message;
-        toast.error(errorMessage);
-      } finally {
-        setLoadIndicator(false);
-      }
-    },
-  });
-
-  const refreshData = async () => {
+  const getData = async () => {
+    setLoading(true);
     try {
       const response = await api.get("testimonial");
       setDatas(response.data.data);
     } catch (error) {
-      console.error("Error refreshing data:", error);
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
-  const [show, setShow] = useState(false);
-  const [selectedCard, setSelectedCard] = useState(null);
-
-  const handleClose = () => {
-    setShow(false);
-    setSelectedCard(null);
-    formik.resetForm();
-  };
+  useEffect(() => {
+    getData();
+  }, []);
 
   const PublishTestimonial = async () => {
+    setLoadIndicator(true);
     try {
-      setLoading(true);
       const response = await api.post("publish/testimonial", {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
-
       if (response.status === 200) {
         console.log("Published successfully!");
         toast.success(response.data.message);
@@ -110,7 +43,7 @@ function AdminTestimonial({ onSuccess }) {
     } catch (error) {
       console.error("Error publishing contact data", error);
     } finally {
-      setLoading(false);
+      setLoadIndicator(false);
     }
   };
 
@@ -130,29 +63,37 @@ function AdminTestimonial({ onSuccess }) {
 
   return (
     <div>
-      <form onSubmit={formik.handleSubmit}>
-        <div className="d-flex justify-content-between p-2 bg-light">
-          <h3 className="fw-bold">Testimonials</h3>
-          <div className="d-flex">
-            <AdminTestimonialAdd onSuccess={refreshData} />
-            <button
-              type="submit"
-              className="btn btn-sm btn-danger mx-2"
-              disabled={loading}
-              onClick={PublishTestimonial}
-            >
-              {loading ? (
-                <span
-                  className="spinner-border spinner-border-sm"
-                  aria-hidden="true"
-                ></span>
-              ) : (
-                <span></span>
-              )}
-              Publish
-            </button>
+      <div className="d-flex justify-content-between p-2 bg-light">
+        <h3 className="fw-bold">Testimonials</h3>
+        <div className="d-flex">
+          <AdminTestimonialAdd onSuccess={getData} />
+          <button
+            type="submit"
+            className="btn btn-danger mx-2"
+            disabled={loadIndicator}
+            onClick={PublishTestimonial}
+          >
+            {loadIndicator && (
+              <span
+                className="spinner-border spinner-border-sm me-2"
+                aria-hidden="true"
+              ></span>
+            )}
+            Publish
+          </button>
+        </div>
+      </div>
+      {loading ? (
+        <div className="loader-container">
+          <div className="loader">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
           </div>
         </div>
+      ) : (
         <div className="row m-0 p-3">
           {datas.map((data) => (
             <div key={data.id} className="col-md-4 col-12 p-2 ">
@@ -168,22 +109,14 @@ function AdminTestimonial({ onSuccess }) {
                   >
                     <AdminTestimonialEdit
                       id={data.id}
-                      onSuccess={refreshData}
+                      onSuccess={getData}
                     />
                   </button>
-                  <button
-                    type="button"
-                    className="btn link-light ms-2"
-                    style={{
-                      width: "fit-content",
-                      height: "fit-content",
-                    }}
-                  >
-                    <DeleteModel
-                      onSuccess={refreshData}
-                      path={`/testimonial/${data.id}`}
-                    />
-                  </button>
+                  <DeleteModel
+                    className="text-danger"
+                    onSuccess={getData}
+                    path={`/testimonial/${data.id}`}
+                  />
                 </div>
                 <div className="card-body text-start">
                   <div className="d-flex align-items-center">
@@ -212,7 +145,7 @@ function AdminTestimonial({ onSuccess }) {
             </div>
           ))}
         </div>
-      </form>
+      )}
     </div>
   );
 }

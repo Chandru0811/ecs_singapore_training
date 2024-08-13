@@ -62,7 +62,7 @@ const Admin = ({ handleLogout }) => {
             <Route path="/course" element={<Course />} />
             <Route path="/courseadd" element={<CourseStepAdd />} />
             <Route path="/courseEdit/:id" element={<CourseStepEdit />} />
-            <Route path="/courseView" element={<CourseView />} />
+            <Route path="/courseView/:id" element={<CourseView />} />
 
             <Route path="/courses" element={<Courses />} />
             <Route path="/contact" element={<AdminContact />} />
@@ -70,12 +70,21 @@ const Admin = ({ handleLogout }) => {
             <Route path="/footeredit" element={<FooterEdit />} />
             <Route path="/privacypolicy" element={<PrivacyPolicy />} />
             <Route path="/termsandcondition" element={<TermsAndCondition />} />
-            <Route path="/CourseVideoTestimonial" element={<CourseVideoTestimonial />} />
+            <Route
+              path="/CourseVideoTestimonial"
+              element={<CourseVideoTestimonial />}
+            />
             <Route path="/companieshiring" element={<CompaniesHiring />} />
             <Route path="/home/hero" element={<HeroSection />} />
             <Route path="/home/whyjoinwithus" element={<WhyJoinWithUs />} />
-            <Route path="/home/training/overview" element={<TrainingOverview />} />
-            <Route path="/home/training/placement" element={<TrainingPlacements />} />
+            <Route
+              path="/home/training/overview"
+              element={<TrainingOverview />}
+            />
+            <Route
+              path="/home/training/placement"
+              element={<TrainingPlacements />}
+            />
             <Route path="/aboutFaq" element={<AdminAboutFaq />} />
           </Routes>
         </div>

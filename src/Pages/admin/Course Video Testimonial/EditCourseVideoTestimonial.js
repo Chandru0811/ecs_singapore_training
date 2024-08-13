@@ -61,7 +61,6 @@ const [data,setData]=useState({})
         },
     });
 
-    useEffect(() => {
         const getData = async () => {
             try {
                 const response = await api.get(`videotestimonial/${id}`);
@@ -71,6 +70,8 @@ const [data,setData]=useState({})
                 console.error("Error fetching data ", error);
             }
         };
+
+        useEffect(() => {
         getData();
     }, [id]);
 

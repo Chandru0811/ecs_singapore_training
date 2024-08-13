@@ -8,14 +8,18 @@ import toast from "react-hot-toast";
 
 const validationSchema = Yup.object({
   title: Yup.string().required("*Title is required"),
-  description: Yup.string().required("*Description is required")
+  description: Yup.string().required("*Description is required"),
 });
 
 function CategoryEdit({ id, onSuccess }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
+  const [data, setData] = useState({});
 
-  const handleClose = () => setShow(false);
+  const handleClose = () => {
+    setShow(false);
+    formik.setValues(data);
+  };
   const handleShow = () => setShow(true);
 
   const formik = useFormik({
@@ -63,6 +67,7 @@ function CategoryEdit({ id, onSuccess }) {
       try {
         const response = await api.get(`category/${id}`);
         formik.setValues(response.data.data);
+        setData(response.data.data);
       } catch (error) {
         console.error("Error fetching data ", error);
       }
@@ -77,7 +82,7 @@ function CategoryEdit({ id, onSuccess }) {
       </span>
 
       <Modal show={show} onHide={handleClose}>
-        <Modal.Header>
+        <Modal.Header closeButton>
           <Modal.Title>Edit Category</Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -100,7 +105,11 @@ function CategoryEdit({ id, onSuccess }) {
               <input
                 type="text"
                 name="title"
-                className={`form-control ${formik.touched.title && formik.errors.title ? "is-invalid" : ""}`}
+                className={`form-control ${
+                  formik.touched.title && formik.errors.title
+                    ? "is-invalid"
+                    : ""
+                }`}
                 {...formik.getFieldProps("title")}
               />
               {formik.touched.title && formik.errors.title && (
@@ -108,14 +117,22 @@ function CategoryEdit({ id, onSuccess }) {
               )}
             </div>
             <div className="mb-2">
-              <label className="form-label">Description<span className="text-danger">*</span></label>
+              <label className="form-label">
+                Description<span className="text-danger">*</span>
+              </label>
               <textarea
                 name="description"
-                className={`form-control ${formik.touched.description && formik.errors.description ? "is-invalid" : ""}`}
+                className={`form-control ${
+                  formik.touched.description && formik.errors.description
+                    ? "is-invalid"
+                    : ""
+                }`}
                 {...formik.getFieldProps("description")}
               />
               {formik.touched.description && formik.errors.description && (
-                <div className="invalid-feedback">{formik.errors.description}</div>
+                <div className="invalid-feedback">
+                  {formik.errors.description}
+                </div>
               )}
             </div>
             <Modal.Footer>
@@ -124,7 +141,10 @@ function CategoryEdit({ id, onSuccess }) {
               </Button>
               <Button variant="primary" type="submit" disabled={loadIndicator}>
                 {loadIndicator && (
-                  <span className="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+                  <span
+                    className="spinner-border spinner-border-sm me-2"
+                    aria-hidden="true"
+                  ></span>
                 )}
                 Submit
               </Button>

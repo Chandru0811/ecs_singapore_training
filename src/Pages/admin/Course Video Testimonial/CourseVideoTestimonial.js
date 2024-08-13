@@ -9,11 +9,13 @@ import toast from "react-hot-toast";
 
 function CourseVideoTestimonial() {
   const [datas, setDatas] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [iconState, setIconState] = useState({}); // State to manage play/pause icons
-  const videoRefs = useRef({}); // Ref object to store video references
+  const [loadIndicator, setLoadIndicator] = useState(false);
+  const [iconState, setIconState] = useState({});
+  const videoRefs = useRef({});
+  const [loading, setLoading] = useState(true);
 
   const getData = async () => {
+    setLoading(true);
     try {
       const response = await api.get("videotestimonial");
       setDatas(response.data.data);
@@ -30,7 +32,7 @@ function CourseVideoTestimonial() {
 
   const handlePublish = async () => {
     try {
-      setLoading(true);
+      setLoadIndicator(true);
       const response = await api.post("publish/videotestimonial");
       if (response.status === 200) {
         toast.success(response.data.message);
@@ -42,7 +44,7 @@ function CourseVideoTestimonial() {
       const errorMessage = error.response?.data?.message || error.message;
       toast.error(errorMessage);
     } finally {
-      setLoading(false);
+      setLoadIndicator(false);
     }
   };
 
@@ -79,11 +81,11 @@ function CourseVideoTestimonial() {
           <AddCourseVideoTestimonial onSuccess={getData} />
           <button
             type="submit"
-            className="btn btn-sm btn-danger mx-2"
-            disabled={loading}
+            className="btn btn-danger mx-2"
+            disabled={loadIndicator}
             onClick={handlePublish}
           >
-            {loading ? (
+            {loadIndicator ? (
               <span
                 className="spinner-border spinner-border-sm"
                 aria-hidden="true"
@@ -95,13 +97,19 @@ function CourseVideoTestimonial() {
           </button>
         </div>
       </div>
-      <div className="row m-0 p-3">
-        {loading ? (
-          <div className="spinner-container">
-            <div className="spinner"></div>
+      {loading ? (
+        <div className="loader-container">
+          <div className="loader">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
           </div>
-        ) : (
-          datas.map((card) => (
+        </div>
+      ) : (
+        <div className="row m-0 p-3">
+          {datas.map((card) => (
             <div key={card.id} className="col-md-3 col-12 p-2">
               <div className="h-100 rounded video-card p-2 position-relative">
                 <div className="d-flex justify-content-between">
@@ -157,9 +165,9 @@ function CourseVideoTestimonial() {
                 </div>
               </div>
             </div>
-          ))
-        )}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

@@ -163,113 +163,6 @@ function UserCourse() {
   const renderContent = () => {
     switch (activeTab) {
       case "home":
-        return (
-          <div className="container-fluid p-5">
-            <div className="row">
-              {cardData.map((card, index) => (
-                <div className="col-lg-3 col-md-6 col-12 p-2">
-                  <div
-                    className="h-75 rounded"
-                    style={{
-                      border: "2px solid #118AEF",
-                      cursor: "pointer",
-                      minHeight: "280px",
-                      transition: "border 0.5s, min-height 0.5s",
-                    }}
-                    onMouseEnter={() => setHoveredIndex(index)}
-                    onMouseLeave={() => setHoveredIndex(null)}
-                  >
-                    <Link
-                      to={"/courseview"}
-                      style={{ textDecoration: "none" }}
-                      className="text-dark"
-                    >
-                      <div key={card.id}>
-                        <div className="card-content container-fluid px-0">
-                          <div
-                            className="bg-primary px-2"
-                            style={{ minHeight: "24vh" }}
-                          >
-                            <div className="heading-content py-2 d-flex justify-content-between">
-                              <h5 className="name text-light">{card.name}</h5>
-                              <div className="rating text-light">
-                                <span>
-                                  {[...Array(4)].map((_, starIndex) => (
-                                    <IoIosStar
-                                      key={starIndex}
-                                      style={{ color: "gold" }}
-                                    />
-                                  ))}
-                                </span>
-                                Rating &nbsp;{card.rating}
-                              </div>
-                            </div>
-                            <div className="image-content  p-2 d-flex justify-content-center align-items-center">
-                              <img
-                                src={card.CardImg}
-                                alt="companyLogo"
-                                className="img-fluid w-50"
-                              />
-                            </div>
-                          </div>
-                          {hoveredIndex === index ? (
-                            <div
-                              className="text-content p-2 fit-content bg-light rounded"
-                              style={{
-                                position: "relative",
-                                top: "-80px",
-                                height: "110px",
-                              }}
-                            >
-                              <p className="card-title text-start py-2">
-                                {card.textContent}
-                              </p>
-                              <div className="text-start">
-                                <p className="fw-light">
-                                  Training Mode : ${card.trainingMode}
-                                </p>
-                                <p>
-                                  ${card.learners}&nbsp;&nbsp;&nbsp;
-                                  <del className="fw-light">${card.price}</del>
-                                  &nbsp;&nbsp;&nbsp;
-                                  <span className="rounded bg-primary p-1 text-light">
-                                    ${card.percentage} % off
-                                  </span>
-                                </p>
-                              </div>
-                              <div className="d-flex justify-content-between align-items-center ">
-                                <button className="btn btn-sm btn-primary mx-2">
-                                  Enroll Now <ImUserPlus />
-                                </button>
-                                <button className="btn btn-sm btn-outline-primary">
-                                  Read More <FaArrowRightLong />
-                                </button>
-                              </div>
-                            </div>
-                          ) : (
-                            <div className="text-content p-2 fit-content">
-                              <p className="card-title text-start py-1">
-                                {card.textContent}
-                              </p>
-                              <div className="d-flex justify-content-between align-items-center py-1 fit-content">
-                                <div className="sub-contents p-1">
-                                  ${card.subContent}
-                                </div>
-                                <div className="learners-count p-1">
-                                  learners ${card.learners}
-                                </div>
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    </Link>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        );
       case "profile":
         return (
           <div className="container-fluid p-5">
@@ -378,6 +271,22 @@ function UserCourse() {
             </div>
           </div>
         );
+      case "longer-tab":
+      case "new-tab":
+      case "pg-tab":
+      case "software-tab":
+      case "web-tab":
+        return (
+          <div className="container-fluid p-5">
+            <div className="row">
+              <div className="col-12 text-center">
+                <h3>Courses unavailable</h3>
+                <p>We are working to add new courses in this category. Please check back later.</p>
+              </div>
+            </div>
+          </div>
+        );
+
       default:
         return null;
     }
@@ -554,9 +463,8 @@ function UserCourse() {
             </div>
             <div className="col-6 col-md-3 col-lg-2 py-2">
               <button
-                className={`w-100 ${
-                  activeTab === "longer-tab" ? "active" : ""
-                }`}
+                className={`w-100 ${activeTab === "longer-tab" ? "active" : ""
+                  }`}
                 onClick={() => setActiveTab("longer-tab")}
               >
                 <span className="p-2">Data Science & AI</span>
@@ -582,9 +490,8 @@ function UserCourse() {
             <div className="row tabs-header">
               <div className="col-6 col-md-3 col-lg-2 py-2">
                 <button
-                  className={`w-100 ${
-                    activeTab === "software-tab" ? "active" : ""
-                  }`}
+                  className={`w-100 ${activeTab === "software-tab" ? "active" : ""
+                    }`}
                   onClick={() => setActiveTab("software-tab")}
                 >
                   <span className="p-2">Software Testing</span>

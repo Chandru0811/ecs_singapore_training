@@ -8,7 +8,6 @@ import { FaEdit } from "react-icons/fa";
 import api from "../../config/BaseUrl";
 
 const validationSchema = Yup.object({
-    // profile: Yup.mixed().required("*Image is required"),
     client_name: Yup.string().required("*Client Name is required"),
     rating: Yup.string().required("*Rating is required"),
     description: Yup.string().required("*Description is required"),
@@ -60,28 +59,28 @@ function EditCourseTestimonial({ id, onSuccess }) {
         },
     });
 
-    useEffect(() => {
-        const getData = async () => {
-            try {
-                const response = await api.get(`coursetestimonial/${id}`);
-                const data = response.data.data;
-                formik.setValues({
-                    profile: data.profile,
-                    client_name: data.client_name,
-                    rating: data.rating,
-                    description: data.description,
-                });
-            } catch (error) {
-                console.error("Error fetching data ", error);
-            }
-        };
-        if (show) {
-            getData();
+    const getData = async () => {
+        try {
+            const response = await api.get(`coursetestimonial/${id}`);
+            const data = response.data.data;
+            formik.setValues({
+                profile: data.profile,
+                client_name: data.client_name,
+                rating: data.rating,
+                description: data.description,
+            });
+        } catch (error) {
+            console.error("Error fetching data ", error);
         }
-    }, [id, show]);
+    };
+
+    useEffect(() => {
+        getData();
+    }, [id]);
 
     const handleClose = () => {
         setShow(false);
+        getData();
     };
 
     const handleShow = () => {
@@ -100,7 +99,7 @@ function EditCourseTestimonial({ id, onSuccess }) {
         <div>
             <button
                 type="button"
-                className="btn link-light ms-2"
+                className="btn link-secondary ms-2"
                 style={{ width: "fit-content", height: "fit-content" }}
                 onClick={handleShow}
             >

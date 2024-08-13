@@ -100,7 +100,7 @@ function AdminTestimonialAdd({ onSuccess }) {
 
   return (
     <>
-      <button className="btn btn-primary btn-sm" onClick={handleShow}>
+      <button className="btn btn-primary" onClick={handleShow}>
         Add +
       </button>
 

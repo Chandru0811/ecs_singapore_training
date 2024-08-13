@@ -38,7 +38,7 @@ function AdminLandingPage2() {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [data, setData] = useState([]);
 
-  const validationSchema = Yup.object({
+  const validationSchema1 = Yup.object({
     fullName: Yup.string().required("*Full Name is required"),
     email: Yup.string()
       .email("*Invalid email address")
@@ -46,12 +46,33 @@ function AdminLandingPage2() {
     mobileNumber: Yup.string().required("*Number is required"),
   });
 
+  const formik1 = useFormik({
+    initialValues: {
+      fullName: "",
+      email: "",
+      mobileNumber: "",
+    },
+    validationSchema: validationSchema1,
+    onSubmit: (values, { resetForm }) => {
+      setLoadIndicator(true);
+      console.log("Enroll Datas:", values);
+      setTimeout(() => {
+        setLoadIndicator(false);
+        toast.success("Enroll Form Submitted Successfully!");
+        resetForm();
+      }, 2000);
+    },
+  });
+
   const getData = async () => {
+    setLoading(true);
     try {
       const response = await api.get("landingpage2");
       setData(response.data.data);
     } catch (error) {
       console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -59,26 +80,20 @@ function AdminLandingPage2() {
     getData();
   }, []);
 
-  const formik = useFormik({
+  const formik2 = useFormik({
     initialValues: {
       name: "",
       description: "",
       image_path: null,
-      fullName: "",
-      email: "",
-      mobileNumber: "",
     },
-    // validationSchema: validationSchema,
     onSubmit: async (values) => {
       console.log("Form data2", values);
-      setLoadIndicator(true);
       const formData = new FormData();
       formData.append("name", values.name);
       formData.append("description", values.description);
       if (values.image_path) {
         formData.append("image_path", values.image_path);
       }
-
       try {
         const response = await api.post("update/landingpage2", formData);
         if (response.status === 200) {
@@ -91,19 +106,8 @@ function AdminLandingPage2() {
     },
   });
 
-  const refreshData = async () => {
-    setLoading(true);
-    try {
-      const response = await api.get("landingpage2");
-      setData(response.data.data);
-      setLoading(false);
-    } catch (error) {
-      console.error("Error refreshing data:", error);
-      setLoading(false);
-    }
-  };
-
   const PublishLandingCards = async () => {
+    setLoadIndicator(true);
     try {
       const response = await api.post("publish/landingpage2", {
         headers: {
@@ -118,30 +122,44 @@ function AdminLandingPage2() {
       }
     } catch (error) {
       console.error("Error saving data:", error.message);
+    } finally {
+      setLoadIndicator(false);
     }
   };
 
   return (
     <>
-      <form onSubmit={formik.handleSubmit}>
-        <div className="d-flex justify-content-between p-3 bg-light">
-          <h3 className="fw-bold">Landing Page</h3>
-          <div className="d-flex">
-            <div className="px-2">
-              <AdminLandingCardAdd onSuccess={refreshData} />
-            </div>
-            <div className="px-2">
-              <button
-                onClick={PublishLandingCards}
-                type="button"
-                className="btn btn-sm btn-danger"
-              >
-                Publish
-              </button>
-            </div>
+      <div className="d-flex justify-content-between p-3 bg-light">
+        <h3 className="fw-bold">Landing Page</h3>
+        <div className="d-flex">
+          <AdminLandingCardAdd onSuccess={getData} />
+          <button
+            onClick={PublishLandingCards}
+            disabled={loadIndicator}
+            type="button"
+            className="btn btn-danger mx-2"
+          >
+            {loadIndicator && (
+              <span
+                className="spinner-border spinner-border-sm me-2"
+                aria-hidden="true"
+              ></span>
+            )}
+            Publish
+          </button>
+        </div>
+      </div>
+      {loading ? (
+        <div className="loader-container">
+          <div className="loader">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
           </div>
         </div>
-
+      ) : (
         <div>
           {/* carousel section */}
           <div className="container">
@@ -181,23 +199,14 @@ function AdminLandingPage2() {
                           >
                             <AdminLandingModalEdit
                               id={card.id}
-                              onSuccess={refreshData}
+                              onSuccess={getData}
                             />
                           </button>
-                          <button
-                            type="button"
-                            className="btn link-danger ms-2"
-                            style={{
-                              width: "fit-content",
-                              height: "fit-content",
-                            }}
-                          >
-                            <DeleteModel
-                              className={"text-light"}
-                              onSuccess={refreshData}
-                              path={`/landingpage2/${card.id}`}
-                            />
-                          </button>
+                          <DeleteModel
+                            className="text-danger"
+                            onSuccess={getData}
+                            path={`/landingpage2/${card.id}`}
+                          />
                         </div>
                         <div className="text-start w-25 py-2">
                           <img
@@ -221,78 +230,83 @@ function AdminLandingPage2() {
             <div className="row">
               <div className="col-md-7 col-12 px-5 text-start"> </div>
               <div className="col-md-5 col-12 p-5">
-                <div className="card text-start p-4 py-3">
-                  <h3 className="input-title fw-bold">Enroll Now</h3>
-                  <div className="py-3">
-                    <label htmlFor="fullName">Full Name</label>
-                    <input
-                      type="fullName"
-                      className={`form-control ${
-                        formik.touched.fullName && formik.errors.fullName
+                <form onSubmit={formik1.handleSubmit}>
+                  <div className="card text-start p-4 py-3">
+                    <h3 className="input-title fw-bold">Enroll Now</h3>
+                    <div className="py-3">
+                      <label htmlFor="fullName">Full Name</label>
+                      <input
+                        type="fullName"
+                        className={`form-control ${formik1.touched.fullName && formik1.errors.fullName
                           ? "is-invalid"
                           : ""
-                      }`}
-                      style={{ borderRadius: "3px" }}
-                      placeholder="Enter fullName"
-                      {...formik.getFieldProps("fullName")}
-                    />
-                    {formik.touched.fullName && formik.errors.fullName && (
-                      <div className="invalid-feedback">
-                        {formik.errors.fullName}
-                      </div>
-                    )}
-                  </div>
-                  <div className="py-3">
-                    <label htmlFor="mobileNumber">Mobile Number</label>
-                    <input
-                      type="mobileNumber"
-                      className={`form-control ${
-                        formik.touched.mobileNumber &&
-                        formik.errors.mobileNumber
-                          ? "is-invalid"
-                          : ""
-                      }`}
-                      style={{ borderRadius: "3px" }}
-                      placeholder="Enter mobileNumber"
-                      {...formik.getFieldProps("mobileNumber")}
-                    />
-                    {formik.touched.mobileNumber &&
-                      formik.errors.mobileNumber && (
+                          }`}
+                        style={{ borderRadius: "3px" }}
+                        placeholder="Enter fullName"
+                        {...formik1.getFieldProps("fullName")}
+                      />
+                      {formik1.touched.fullName && formik1.errors.fullName && (
                         <div className="invalid-feedback">
-                          {formik.errors.mobileNumber}
+                          {formik1.errors.fullName}
                         </div>
                       )}
-                  </div>
-                  <div className="py-3">
-                    <label htmlFor="email">Email</label>
-                    <input
-                      type="email"
-                      className={`form-control ${
-                        formik.touched.email && formik.errors.email
+                    </div>
+                    <div className="py-3">
+                      <label htmlFor="mobileNumber">Mobile Number</label>
+                      <input
+                        type="mobileNumber"
+                        className={`form-control ${formik1.touched.mobileNumber &&
+                          formik1.errors.mobileNumber
                           ? "is-invalid"
                           : ""
-                      }`}
-                      style={{ borderRadius: "3px" }}
-                      placeholder="Enter email"
-                      {...formik.getFieldProps("email")}
-                    />
-                    {formik.touched.email && formik.errors.email && (
-                      <div className="invalid-feedback">
-                        {formik.errors.email}
-                      </div>
-                    )}
+                          }`}
+                        style={{ borderRadius: "3px" }}
+                        placeholder="Enter mobileNumber"
+                        {...formik1.getFieldProps("mobileNumber")}
+                      />
+                      {formik1.touched.mobileNumber &&
+                        formik1.errors.mobileNumber && (
+                          <div className="invalid-feedback">
+                            {formik1.errors.mobileNumber}
+                          </div>
+                        )}
+                    </div>
+                    <div className="py-3">
+                      <label htmlFor="email">Email</label>
+                      <input
+                        type="email"
+                        className={`form-control ${formik1.touched.email && formik1.errors.email
+                          ? "is-invalid"
+                          : ""
+                          }`}
+                        style={{ borderRadius: "3px" }}
+                        placeholder="Enter email"
+                        {...formik1.getFieldProps("email")}
+                      />
+                      {formik1.touched.email && formik1.errors.email && (
+                        <div className="invalid-feedback">
+                          {formik1.errors.email}
+                        </div>
+                      )}
+                    </div>
+                    <div className="float-end">
+                      <button type="submit" className="enrollbtn" disabled={loadIndicator}>
+                        {loadIndicator && (
+                          <span
+                            className="spinner-border spinner-border-sm me-2"
+                            aria-hidden="true"
+                          ></span>
+                        )}
+                        Send
+                      </button>
+                    </div>
                   </div>
-                  <div className="float-end">
-                    <button type="submit" className="enrollbtn">
-                      Send
-                    </button>
-                  </div>
-                </div>
+                </form>
               </div>
             </div>
           </div>
         </div>
-      </form>
+      )}
     </>
   );
 }
