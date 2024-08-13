@@ -25,7 +25,6 @@ const validationSchema = Yup.object({
 function AddCourseVideoTestimonial({ onSuccess }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
-  const [loading, setLoading] = useState(false);
 
   const handleClose = () => {
     setShow(false);
@@ -71,21 +70,9 @@ function AddCourseVideoTestimonial({ onSuccess }) {
 
   return (
     <>
-      {loading ? (
-        <div className="loader-container">
-          <div class="loader">
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-          </div>
-        </div>
-      ) : (
-        <button className="btn btn-primary btn-sm" onClick={handleShow}>
-          Add +
-        </button>
-      )}
+      <button className="btn btn-primary" onClick={handleShow}>
+        Add +
+      </button>
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Add Online Training Review</Modal.Title>
@@ -100,11 +87,10 @@ function AddCourseVideoTestimonial({ onSuccess }) {
                 <input
                   type="text"
                   name="client_name"
-                  className={`form-control ${
-                    formik.touched.client_name && formik.errors.client_name
+                  className={`form-control ${formik.touched.client_name && formik.errors.client_name
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   {...formik.getFieldProps("client_name")}
                 />
                 {formik.touched.client_name && formik.errors.client_name && (
@@ -122,11 +108,10 @@ function AddCourseVideoTestimonial({ onSuccess }) {
                 <textarea
                   name="description"
                   rows="5"
-                  className={`form-control ${
-                    formik.touched.description && formik.errors.description
+                  className={`form-control ${formik.touched.description && formik.errors.description
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   {...formik.getFieldProps("description")}
                 />
                 {formik.touched.description && formik.errors.description && (
@@ -144,11 +129,10 @@ function AddCourseVideoTestimonial({ onSuccess }) {
                 <input
                   type="file"
                   name="video"
-                  className={`form-control ${
-                    formik.touched.video && formik.errors.video
+                  className={`form-control ${formik.touched.video && formik.errors.video
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   onChange={(event) => {
                     formik.setFieldValue("video", event.currentTarget.files[0]);
                   }}

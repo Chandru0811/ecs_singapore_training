@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
 import { FaEye } from "react-icons/fa";
 import api from "../../../config/BaseUrl";
@@ -44,12 +44,16 @@ function CategoryView({ id }) {
                   </div>
                   <div className="col-6">
                     <p className="text-muted text-sm">
-                      : <img src={`${ImageURL}${data.logo_path}`} alt={data.title}
+                      :{" "}
+                      <img
+                        src={`${ImageURL}${data.logo_path}`}
+                        alt={data.title}
                         style={{
                           width: "50px",
                           height: "50px",
                           objectFit: "cover",
-                        }} />
+                        }}
+                      />
                     </p>
                   </div>
                 </div>
@@ -62,9 +66,7 @@ function CategoryView({ id }) {
                     </p>
                   </div>
                   <div className="col-6">
-                    <p className="text-muted text-sm">
-                      : {data.title}
-                    </p>
+                    <p className="text-muted text-sm">: {data.title}</p>
                   </div>
                 </div>
               </div>
@@ -76,9 +78,7 @@ function CategoryView({ id }) {
                     </p>
                   </div>
                   <div className="col-6">
-                    <p className="text-muted text-sm">
-                      : {data.description}
-                    </p>
+                    <p className="text-muted text-sm">: {data.description}</p>
                   </div>
                 </div>
               </div>

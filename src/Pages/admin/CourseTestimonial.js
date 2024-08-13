@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { FaTrash } from "react-icons/fa";
 import { IoIosStar } from "react-icons/io";
 import { Modal, Button, Form } from "react-bootstrap";
 import { useFormik } from "formik";
@@ -22,8 +21,7 @@ function CourseTestimonial() {
   const [loading, setLoading] = useState(true);
   const [show, setShow] = useState(false);
   const [datas, setDatas] = useState([]);
-  const [loadSave, setLoadSave] = useState(false);
-  const [loadPublish, setLoadPublish] = useState(false);
+  const [loadIndicator, setLoadIndicator] = useState(false);
 
   const fetchDatas = async () => {
     setLoading(true);
@@ -49,7 +47,7 @@ function CourseTestimonial() {
     },
     validationSchema,
     onSubmit: async (values) => {
-      setLoadSave(true);
+      setLoadIndicator(true);
       try {
         const formData = new FormData();
         formData.append("profile", values.profile);
@@ -74,7 +72,7 @@ function CourseTestimonial() {
         const errorMessage = error.response?.data?.message || error.message;
         toast.error(errorMessage);
       } finally {
-        setLoadSave(false);
+        setLoadIndicator(false);
       }
     },
   });
@@ -96,23 +94,8 @@ function CourseTestimonial() {
     formik.setFieldValue("rating", newRating);
   };
 
-  const handleDeleteCard = async (id) => {
-    try {
-      const response = await api.delete(`coursetestimonial/${id}`);
-      if (response.status === 200) {
-        toast.success(response.data.message);
-        fetchDatas();
-      } else {
-        toast.error(response.data.message);
-      }
-    } catch (error) {
-      const errorMessage = error.response?.data?.message || error.message;
-      toast.error(errorMessage);
-    }
-  };
-
   const PublishCourseTestimonial = async () => {
-    setLoadPublish(true);
+    setLoadIndicator(true);
     try {
       const response = await api.post("/publish/coursetestimonial", null, {
         headers: {
@@ -137,7 +120,7 @@ function CourseTestimonial() {
         "An error occurred during publishing.";
       toast.error(errorMessage);
     } finally {
-      setLoadPublish(false);
+      setLoadIndicator(false);
     }
   };
 
@@ -158,79 +141,79 @@ function CourseTestimonial() {
             type="button"
             className="btn btn-danger mx-2"
             onClick={PublishCourseTestimonial}
-            disabled={loadPublish}
+            disabled={loadIndicator}
           >
-            {loadPublish ? (
+            {loadIndicator && (
               <span
-                className="spinner-border spinner-border-sm"
+                className="spinner-border spinner-border-sm me-2"
                 aria-hidden="true"
               ></span>
-            ) : (
-              <span></span>
             )}
             Publish
           </button>
         </div>
       </div>
-
-      <div className="row m-0 p-3">
-        {datas.map((data) => (
-          <div key={data.id} className="col-md-3 col-12 p-2">
-            <div className="h-100 course-cards">
-              <div className="card-header head-content">
-                <div className="d-flex justify-content-between align-items-start p-2">
-                  <button
-                    type="button"
-                    className="btn link-light ms-2"
-                    style={{
-                      width: "fit-content",
-                      height: "fit-content",
-                    }}
-                  >
-                    <DeleteModel onSuccess={fetchDatas}
-                      path={`/coursetestimonial/${data.id}`} onClick={() => handleDeleteCard(data.id)} />
-                  </button>
-                  <EditCourseTestimonial id={data.id} onSuccess={fetchDatas} />
-                </div>
-                <div className="row">
-                  <div
-                    className="col-md-9 col-12"
-                    style={{ minHeight: "70px" }}
-                  >
-                    <div className="d-flex align-items-center">
-                      <img
-                        className="img-fluid rounded-circle"
-                        src={`${ImageURL}${data.profile_path}`}
-                        alt="image"
-                        style={{ width: "30%", height: "30%" }}
-                      />
-                      <p className="text-light fw-bold ps-1 text-start">
-                        {data.client_name}
-                      </p>
+      {loading ? (
+        <div className="loader-container">
+          <div className="loader">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+      ) : (
+        <div className="row m-0 p-3">
+          {datas.map((data) => (
+            <div key={data.id} className="col-md-3 col-12 p-2">
+              <div className="h-100 course-cards">
+                <div className="card-header head-content">
+                  <div className="d-flex justify-content-between align-items-start p-2">
+                    <EditCourseTestimonial id={data.id} onSuccess={fetchDatas} />
+                    <DeleteModel onSuccess={fetchDatas} className="text-danger"
+                      path={`/coursetestimonial/${data.id}`} />
+                  </div>
+                  <div className="row">
+                    <div
+                      className="col-md-9 col-12"
+                      style={{ minHeight: "70px" }}
+                    >
+                      <div className="d-flex align-items-center">
+                        <img
+                          className="img-fluid rounded-circle"
+                          src={`${ImageURL}${data.profile_path}`}
+                          alt="image"
+                          style={{ width: "30%", height: "30%" }}
+                        />
+                        <p className="text-light fw-bold ps-1 text-start">
+                          {data.client_name}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="col-md-3 col-12">
+                      <div className="d-flex align-items-center">
+                        <span
+                          className="ms-2 rounded text-light fw-light px-1"
+                          style={{ border: "2px solid #fff" }}
+                        >
+                          {data.rating}
+                          <IoIosStar size={18} style={{ color: "white" }} />
+                        </span>
+                      </div>
                     </div>
                   </div>
-                  <div className="col-md-3 col-12">
-                    <div className="d-flex align-items-center">
-                      <span
-                        className="ms-2 rounded text-light fw-light px-1"
-                        style={{ border: "2px solid #fff" }}
-                      >
-                        {data.rating}
-                        <IoIosStar size={18} style={{ color: "white" }} />
-                      </span>
-                    </div>
-                  </div>
                 </div>
-              </div>
-              <div className="card-body">
-                <div className="p-3 text-secondary text-start">
-                  <p className="card-text">{data.description}</p>
+                <div className="card-body">
+                  <div className="p-3 text-secondary text-start">
+                    <p className="card-text">{data.description}</p>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
@@ -272,8 +255,8 @@ function CourseTestimonial() {
                 activeColor="#ffd700"
                 name="rating"
                 className={`form-control ${formik.touched.rating && formik.errors.rating
-                    ? "is-invalid"
-                    : ""
+                  ? "is-invalid"
+                  : ""
                   }`}
               />
               {formik.touched.rating && formik.errors.rating && (
@@ -315,8 +298,8 @@ function CourseTestimonial() {
               <Button variant="secondary" onClick={handleClose}>
                 Close
               </Button>
-              <Button variant="primary" type="submit" disabled={loadSave}>
-                {loadSave && (
+              <Button variant="primary" type="submit" disabled={loadIndicator}>
+                {loadIndicator && (
                   <span
                     className="spinner-border spinner-border-sm me-2"
                     aria-hidden="true"
