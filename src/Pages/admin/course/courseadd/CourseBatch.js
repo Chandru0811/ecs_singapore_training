@@ -61,13 +61,10 @@ const CourseBatch = forwardRef(
    
 
     const calculateDuration = (startTime, endTime) => {
-      const [startHour, startMinute] = startTime.split(":").map(Number);
-      const [endHour, endMinute] = endTime.split(":").map(Number);
+      const start = new Date(`1970-01-01T${startTime}:00Z`);
+      const end = new Date(`1970-01-01T${endTime}:00Z`);
 
-      const start = new Date(0, 0, 0, startHour, startMinute, 0);
-      const end = new Date(0, 0, 0, endHour, endMinute, 0);
-
-      let diff = (end - start) / 60000; // difference in minutes
+      const diff = Math.abs(end - start) / 60000; // difference in minutes
       const hours = Math.floor(diff / 60);
       const minutes = diff % 60;
 
@@ -77,8 +74,8 @@ const CourseBatch = forwardRef(
     const handleTimeChange = (index, field, value) => {
       formik.setFieldValue(`batches.${index}.${field}`, value);
 
-      const startTime = formik.values.batches[index].start_time;
-      const endTime = formik.values.batches[index].end_time;
+      const startTime = field === "start_time" ? value : formik.values.batches[index].start_time;
+      const endTime = field === "end_time" ? value : formik.values.batches[index].end_time;
 
       if (startTime && endTime) {
         const duration = calculateDuration(startTime, endTime);

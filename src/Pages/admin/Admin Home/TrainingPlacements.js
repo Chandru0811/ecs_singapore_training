@@ -12,7 +12,10 @@ function TrainingPlacements() {
   const [datas, setDatas] = useState([]);
   const [editingIndex, setEditingIndex] = useState(null);
   const [show, setShow] = useState(false);
-  const [newAccordion, setNewAccordion] = useState({ question: "", answer: "" });
+  const [newAccordion, setNewAccordion] = useState({
+    question: "",
+    answer: "",
+  });
 
   // Formik validation schema for contact form
   const validationSchema = Yup.object({
@@ -49,7 +52,9 @@ function TrainingPlacements() {
     onSubmit: async (values) => {
       const { id, aboutAccordion } = values;
       try {
-        const response = await api.put(`homefaq/${id}`, { ques_and_ans: aboutAccordion });
+        const response = await api.put(`homefaq/${id}`, {
+          ques_and_ans: aboutAccordion,
+        });
         if (response.status === 200) {
           console.log("Updated:", response.data);
           getData();
@@ -79,24 +84,31 @@ function TrainingPlacements() {
 
   // Set values for editing
   const handleEditClick = (index) => {
-    const selectedData = datas[index]?.ques_and_ans[0] || {};
-    formik.setFieldValue("aboutAccordion", [selectedData]);
+    const selectedData = datas[index]?.ques_and_ans[0] || { question: "", answer: "" };
+    formik.setFieldValue("aboutAccordion", [{ ...selectedData }]);
     formik.setFieldValue("id", datas[index]?.id || null);
     setIsEditing(true);
     setEditingIndex(index);
   };
+  
 
   // Save new FAQ item
   const handleSaveNewAccordion = async () => {
-    try {
-      const response = await api.post("homefaq", { ques_and_ans: [newAccordion] });
-      if (response.data.status === 200) {
-        getData();
-        setNewAccordion({ question: "", answer: "" });
-        handleClose();
+    if (newAccordion.question && newAccordion.answer) {
+      try {
+        const response = await api.post("homefaq", {
+          ques_and_ans: [newAccordion],
+        });
+        if (response.data.status === 200) {
+          getData();
+          setNewAccordion({ question: "", answer: "" });
+          handleClose();
+        }
+      } catch (error) {
+        console.error("Failed to save new accordion:", error);
       }
-    } catch (error) {
-      console.error("Failed to save new accordion:", error);
+    } else {
+      handleClose();
     }
   };
 
@@ -116,7 +128,10 @@ function TrainingPlacements() {
     getData();
   }, []);
 
-  const handleClose = () => setShow(false);
+  const handleClose = () => {
+    setNewAccordion({ question: "", answer: "" });
+    setShow(false);
+  };
   const handleShow = () => setShow(true);
 
   const handlePublish = async () => {
@@ -147,9 +162,11 @@ function TrainingPlacements() {
           {/* Header Section */}
           <div className="container-fluid d-flex justify-content-between p-2 bg-light">
             <h3 className="fw-bold">Home FAQ</h3>
-            <button className="btn btn-sm btn-danger" onClick={handlePublish}>Publish</button>
+            <button className="btn btn-sm btn-danger" onClick={handlePublish}>
+              Publish
+            </button>
           </div>
-  
+
           {/* Main Content Section */}
           <div className="container-fluid trainingplacements mt-3 mb-5">
             <h1 className="secondheading text-start mb-3">
@@ -164,31 +181,41 @@ function TrainingPlacements() {
                       <FaPlus /> Add New
                     </button>
                   </div>
-  
+
                   {/* Accordion Items */}
                   {datas.map((item, index) => (
                     <div className="accordion-item mb-2" key={item.id}>
                       <div className="d-flex align-items-end justify-content-end">
-                        <button className="btn" onClick={() => handleEditClick(index)}>
+                        <button
+                          className="btn"
+                          onClick={() => handleEditClick(index)}
+                        >
                           <FaEdit />
                         </button>
-                        <button className="btn" onClick={() => handleRemoveAccordion(item.id)}>
+                        <button
+                          className="btn"
+                          onClick={() => handleRemoveAccordion(item.id)}
+                        >
                           <FaTrash className="text-danger" />
                         </button>
                       </div>
-  
+
                       {isEditing && editingIndex === index ? (
                         <div className="p-3">
                           <input
                             type="text"
-                            name="question"
-                            value={formik.values.aboutAccordion[0]?.question || ""}
+                            name="aboutAccordion[0].question"
+                            value={
+                              formik.values.aboutAccordion[0]?.question || ""
+                            }
                             onChange={formik.handleChange}
                             className="form-control mb-3"
                           />
                           <textarea
-                            name="answer"
-                            value={formik.values.aboutAccordion[0]?.answer || ""}
+                            name="aboutAccordion[0].answer"
+                            value={
+                              formik.values.aboutAccordion[0]?.answer || ""
+                            }
                             onChange={formik.handleChange}
                             className="form-control mb-3"
                           />
@@ -233,7 +260,7 @@ function TrainingPlacements() {
                     </div>
                   ))}
                 </div>
-  
+
                 {/* Modal for Adding New Accordion */}
                 <Modal show={show} onHide={handleClose}>
                   <Modal.Header closeButton>
@@ -246,7 +273,10 @@ function TrainingPlacements() {
                       placeholder="Question"
                       value={newAccordion.question}
                       onChange={(e) =>
-                        setNewAccordion((prev) => ({ ...prev, question: e.target.value }))
+                        setNewAccordion((prev) => ({
+                          ...prev,
+                          question: e.target.value,
+                        }))
                       }
                       className="form-control mb-3"
                     />
@@ -256,18 +286,29 @@ function TrainingPlacements() {
                       placeholder="Answer"
                       value={newAccordion.answer}
                       onChange={(e) =>
-                        setNewAccordion((prev) => ({ ...prev, answer: e.target.value }))
+                        setNewAccordion((prev) => ({
+                          ...prev,
+                          answer: e.target.value,
+                        }))
                       }
                       className="form-control mb-3"
                     />
                   </Modal.Body>
                   <Modal.Footer>
-                    <FaSave onClick={handleSaveNewAccordion} className="mx-2 text-primary" role="button" />
-                    <FaTimes onClick={handleClose} className="text-danger" role="button" />
+                    <FaSave
+                      onClick={handleSaveNewAccordion}
+                      className="mx-2 text-primary"
+                      role="button"
+                    />
+                    <FaTimes
+                      onClick={handleClose}
+                      className="text-danger"
+                      role="button"
+                    />
                   </Modal.Footer>
                 </Modal>
               </div>
-  
+
               {/* Contact Form Section */}
               <div className="col-md-6">
                 <div className="card p-4 enquiryform">
@@ -290,8 +331,11 @@ function TrainingPlacements() {
                           onChange={formikContact.handleChange}
                           onBlur={formikContact.handleBlur}
                         />
-                        {formikContact.touched.firstName && formikContact.errors.firstName ? (
-                          <div className="invalid-feedback">{formikContact.errors.firstName}</div>
+                        {formikContact.touched.firstName &&
+                        formikContact.errors.firstName ? (
+                          <div className="invalid-feedback">
+                            {formikContact.errors.firstName}
+                          </div>
                         ) : null}
                       </div>
                       <div className="col-md-6 text-start">
@@ -311,8 +355,11 @@ function TrainingPlacements() {
                           onChange={formikContact.handleChange}
                           onBlur={formikContact.handleBlur}
                         />
-                        {formikContact.touched.lastName && formikContact.errors.lastName ? (
-                          <div className="invalid-feedback">{formikContact.errors.lastName}</div>
+                        {formikContact.touched.lastName &&
+                        formikContact.errors.lastName ? (
+                          <div className="invalid-feedback">
+                            {formikContact.errors.lastName}
+                          </div>
                         ) : null}
                       </div>
                     </div>
@@ -334,8 +381,11 @@ function TrainingPlacements() {
                           onChange={formikContact.handleChange}
                           onBlur={formikContact.handleBlur}
                         />
-                        {formikContact.touched.email && formikContact.errors.email ? (
-                          <div className="invalid-feedback">{formikContact.errors.email}</div>
+                        {formikContact.touched.email &&
+                        formikContact.errors.email ? (
+                          <div className="invalid-feedback">
+                            {formikContact.errors.email}
+                          </div>
                         ) : null}
                       </div>
                       <div className="col-md-6 text-start">
@@ -355,7 +405,8 @@ function TrainingPlacements() {
                           onChange={formikContact.handleChange}
                           onBlur={formikContact.handleBlur}
                         />
-                        {formikContact.touched.phoneNumber && formikContact.errors.phoneNumber ? (
+                        {formikContact.touched.phoneNumber &&
+                        formikContact.errors.phoneNumber ? (
                           <div className="invalid-feedback">
                             {formikContact.errors.phoneNumber}
                           </div>
@@ -389,7 +440,6 @@ function TrainingPlacements() {
       )}
     </div>
   );
-  
 }
 
 export default TrainingPlacements;

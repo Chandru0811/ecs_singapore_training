@@ -4,13 +4,15 @@ import logo from "../../../assets/client/CRMLogo.png";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { CgProfile } from "react-icons/cg";
 import { HiDotsHorizontal } from "react-icons/hi";
 import { PiDotsThree } from "react-icons/pi";
 function AdminHeader({ handleLogout }) {
-  const handelLogin = () => {
-    alert("Hii");
+  const navigate =useNavigate();
+  const handelLogout = () => {
+    handleLogout();
+navigate("/")
   };
 
   return (
@@ -170,7 +172,7 @@ function AdminHeader({ handleLogout }) {
               id="basic-nav-dropdown"
             >
               <NavDropdown.Item
-                onClick={handleLogout}
+                onClick={handelLogout}
                 style={{ color: "#007bff" }}
               >
                 Logout
