@@ -8,8 +8,10 @@ const DeleteModel = ({ onSuccess, path, className }) => {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+  const [loadIndicator, setLoadIndicator] = useState(false);
 
   const handelDelete = async () => {
+    setLoadIndicator(true);
     try {
       const response = await api.delete(path);
       if (response.status === 201) {
@@ -25,6 +27,8 @@ const DeleteModel = ({ onSuccess, path, className }) => {
       }
     } catch (error) {
       toast.error("Error deleting data:", error);
+    }finally {
+      setLoadIndicator(false);
     }
   };
 
@@ -51,7 +55,14 @@ const DeleteModel = ({ onSuccess, path, className }) => {
           <Button
             className="btn btn-sm btn-danger text-danger-hover linkPadding"
             onClick={handelDelete}
+            disabled={loadIndicator}
           >
+            {loadIndicator && (
+              <span
+                className="spinner-border spinner-border-sm me-2"
+                aria-hidden="true"
+              ></span>
+            )}
             Delete
           </Button>
         </Modal.Footer>
