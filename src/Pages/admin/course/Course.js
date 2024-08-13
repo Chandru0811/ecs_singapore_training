@@ -20,7 +20,7 @@ const Course = () => {
   //     destroyDataTable();
   //   };
   // }, [loading]);
-  
+
   const initializeDataTable = () => {
     if ($.fn.DataTable.isDataTable(tableRef.current)) {
       return;
@@ -37,7 +37,7 @@ const Course = () => {
   };
 
   const getData = async () => {
-    setLoading(true)
+    setLoading(true);
     try {
       const response = await api.get("courses");
       if (response.data.status === 200) {
@@ -65,77 +65,82 @@ const Course = () => {
 
   return (
     <div>
-    {loading ? (
-      <div className="loader-container">
-        <div className="loader">
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
+      {loading ? (
+        <div className="loader-container">
+          <div className="loader">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
         </div>
-      </div>
-    ) : (
-    <div className="container-fluid shadow px-0 ">
-      <div className="card-header d-flex align-items-center p-2 bg-light">
-        <h3 className="fw-bold">Course</h3>
-        <div className="container-fluid d-flex justify-content-end">
-          <Link to={"/courseadd"}>
-            <button className="btn btn-primary">Add +</button>
-          </Link>
-          <button className="btn btn-danger mx-2">Publish</button>
-        </div>
-      </div>
-      <div>
-        <div className="table-responsive p-2">
-          <table ref={tableRef} className="display">
-            <thead className="thead-light">
-              <tr className="text-start">
-                <th
-                  scope="col"
-                  className="text-center"
-                  style={{ whiteSpace: "nowrap" }}
-                >
-                  S.NO
-                </th>
-                <th scope="col">Course</th>
-                <th scope="col">Description</th>
-                <th scope="col" className="text-center">
-                  ACTION
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {datas?.map((data, index) => (
-                <tr key={data.id} className="text-start">
-                  <td className="text-center">{index + 1}</td>
-                  <td>{data.title}</td>
-                  <td>{data.description}</td>
-                  <td>
-                    <div className="d-flex justify-content-center">
-                      <Link to={"/courseView"}>
-                        <button className="btn btn-light border-2 btn-sm mx-1">
-                          <FaEye />
-                        </button>
-                      </Link>
-                      <Link to={`/courseEdit/${data.id}`}>
-                        <button className="btn btn-light border-2 btn-sm mx-1">
-                          <FaEdit />
-                        </button>
-                      </Link>
-                      <DeleteModel path={`course/${data.id}`} onSuccess={getData} className={"btn btn-light border-2 btn-sm mx-1"}/>
-                      {/* <button className="btn btn-light border-2 btn-sm mx-1">
+      ) : (
+        <div className="container-fluid shadow px-0 ">
+          <div className="card-header d-flex align-items-center p-2 bg-light">
+            <h3 className="fw-bold">Course</h3>
+            <div className="container-fluid d-flex justify-content-end">
+              <Link to={"/courseadd"}>
+                <button className="btn btn-primary">Add +</button>
+              </Link>
+              {/* <button className="btn btn-danger mx-2">Publish</button> */}
+            </div>
+          </div>
+          <div>
+            <div className="table-responsive p-2">
+              <table ref={tableRef} className="display">
+                <thead className="thead-light">
+                  <tr className="text-start">
+                    <th
+                      scope="col"
+                      className="text-center"
+                      style={{ whiteSpace: "nowrap" }}
+                    >
+                      S.NO
+                    </th>
+                    <th scope="col">Course</th>
+                    <th scope="col">Description</th>
+                    <th scope="col" className="text-center">
+                      ACTION
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {datas?.map((data, index) => (
+                    <tr key={data.id} className="text-start">
+                      <td className="text-center">{index + 1}</td>
+                      <td>{data.title}</td>
+                      <td>{data.description}</td>
+                      <td>
+                        <div className="d-flex justify-content-center">
+                          <Link to={`/courseView/${data.id}`}>
+                            <button className="btn btn-light border-2 btn-sm mx-1">
+                              <FaEye />
+                            </button>
+                          </Link>
+                          {/* <Link to={`/courseEdit/${data.id}`}>
+                            <button className="btn btn-light border-2 btn-sm mx-1">
+                              <FaEdit />
+                            </button>
+                          </Link> */}
+                          <DeleteModel
+                            path={`course/${data.id}`}
+                            onSuccess={getData}
+                            className={"btn btn-light border-2 btn-sm mx-1"}
+                          />
+                          {/* <button className="btn btn-light border-2 btn-sm mx-1">
                         <FaTrash /> 
                       </button> */}
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>)}
+      )}
     </div>
   );
 };
