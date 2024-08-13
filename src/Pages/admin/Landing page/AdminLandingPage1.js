@@ -21,6 +21,14 @@ function AdminLandingPage1() {
   };
 
   const handleCancel = () => {
+    if (data) {
+      formik.setValues({
+        title: data.title || "",
+        description: data.description || "",
+        image_path: null,
+        youtube_link: data.youtube_link || "",
+      });
+    }
     setIsEditing(null);
   };
 
