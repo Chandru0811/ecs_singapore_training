@@ -55,7 +55,7 @@ const Footer = () => {
         <div className="col-md-3 col-12  mb-0 text-start">
           <div className="d-flex">
             <img src={`${ImageURL}${apiData?.logo_path}`} alt="Logo" className="img-fluid mb-3" style={{ height: '15%', width: "15%" }} />
-            <h4 className="mx-2 mt-2 fw-bold">{apiData.footer_title}</h4>
+            <h4 className="mx-2 mt-2 fw-bold">{apiData?.footer_title}</h4>
           </div>
           <p className="fw-light text-start">
             {apiData?.footer_content}

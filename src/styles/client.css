@@ -135,6 +135,21 @@
   --bs-btn-border-radius: 2.5px !important;
 }
 
+.categoryName{
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.categoryDesc{
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 /* Contact Start */
 .contactCard {
   border: none;
@@ -818,6 +833,7 @@ hr {
     transform: rotate(360deg);
   }
 }
+
 /* / Loader / */
 /* HTML: <div class="loader"></div> */
 .loader-container {
@@ -866,12 +882,12 @@ hr {
   animation: load-spin 1s infinite;
 }
 
-p {
+/* p {
   position: absolute;
   top: 0;
   left: 50%;
   transform: translatex(-50%);
-}
+} */
 
 .loader div {
   background: blue;
@@ -916,4 +932,3 @@ p {
     filter: contrast(30) hue-rotate(10deg) brightness(3);
   }
 }
-

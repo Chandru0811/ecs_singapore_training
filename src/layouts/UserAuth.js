@@ -36,7 +36,7 @@ const UserAuth = ({ handleLogin,handleClientLogin,handleLogout }) => {
             <Route path="/about" element={<ClientAbout />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/course" element={<UserCourse />} />
-            <Route path="/courseview" element={<UserCourseView />} />
+            <Route path="/courseview/:id" element={<UserCourseView />} />
             <Route path="/termsandcondition" element={<ClientTermsAndCondition />} />
             <Route path="/privacypolicy" element={<ClientPrivacyPolicy />} />
           </Routes>

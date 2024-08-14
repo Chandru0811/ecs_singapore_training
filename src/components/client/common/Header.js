@@ -1,15 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { Navbar, Nav, Button } from "react-bootstrap";
-import { MdKeyboardArrowUp } from "react-icons/md";
-import { MdKeyboardArrowDown } from "react-icons/md";
+import { MdKeyboardArrowUp, MdKeyboardArrowDown } from "react-icons/md";
 import { FaSearch } from "react-icons/fa";
 import ImageURL from "../../../config/ImageURL";
 import api from "../../../config/BaseUrl";
 
 const Header = ({ handleLogout }) => {
   const [course, setCourse] = useState(false);
-  // const [isLoggedIn, setIsLoggedIn] = useState(false);
   const isLoginFromStorage = sessionStorage.getItem("isClientAuthenticated");
   const expand = "lg";
   const [apiData, setApiData] = useState({});
@@ -40,12 +38,12 @@ const Header = ({ handleLogout }) => {
       try {
         const response = await api.get("header/course");
         const formattedCourses = response.data.data.map((course) => ({
+          id: course.id, // Ensure this field is included
           name: course.title,
           description: course.description,
           icon: course.logo_path,
         }));
         setCourses(formattedCourses);
-        // console.log(formattedCourses)
       } catch (e) {
         console.error("Failed to fetch courses", e);
       }
@@ -62,45 +60,17 @@ const Header = ({ handleLogout }) => {
       console.error("Error fetching data:", error);
     }
   };
+
   useEffect(() => {
     getData();
   }, []);
 
-  // useEffect(() => {
-  //   const handleStorageChange = (event) => {
-  //     if (event.key === "isClientAuthenticated") {
-  //       if (event.newValue === "false") {0
-  //         setIsClientAuthenticated(false);
-  //       }else if(event.newValue === "true"){
-  //         setIsClientAuthenticated(true);
-  //       }
-  //     }
-  //   };
-
-  //   window.addEventListener("storage", handleStorageChange);
-
-  //   // Clean up the event listener on component unmount
-  //   return () => {
-  //     window.removeEventListener("storage", handleStorageChange);
-  //   };
-  // }, []);
-
-  // useEffect(() => {
-  //   const isLoginFromStorage = sessionStorage.getItem("isClientAuthenticated");
-
-  //   const isLoginBoolean = isLoginFromStorage === "true";
-  //   if (isLoggedIn !== isLoginBoolean) {
-  //     setIsLoggedIn(isLoginBoolean);
-  //   }
-
-  // }, []);
   return (
     <>
       <div className="" style={{ position: "sticky", top: "0", zIndex: "999" }}>
         <p className="mb-0 text-light fw-light topHeader">{apiData?.top_bar}</p>
         <Navbar
           bg="light"
-          isLoggedIn={expand}
           expand={expand}
           className="clientNav shadow"
         >
@@ -111,11 +81,10 @@ const Header = ({ handleLogout }) => {
               className="d-inline-block align-top"
               alt="ECS Training"
             />
-            <div>{/* <span>{apiData?.title}</span> */}</div>
           </Navbar.Brand>
 
           <Navbar.Toggle aria-controls="basic-navbar-nav " />
-          <Navbar.Collapse id="basic-navbar-nav" className=" ">
+          <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="gap-3">
               <div ref={courseRef2}>
                 <button
@@ -136,12 +105,12 @@ const Header = ({ handleLogout }) => {
                   placeholder="Search"
                 />
                 <span className="search-icon">
-                  <FaSearch className="" />
+                  <FaSearch />
                 </span>
               </div>
             </Nav>
             <Nav
-              className=" gap-4 justify-content-end me-2"
+              className="gap-4 justify-content-end me-2"
               style={{ flexGrow: "inherit !important" }}
             >
               <Nav.Link as={NavLink} to="/home">
@@ -155,7 +124,7 @@ const Header = ({ handleLogout }) => {
               </Nav.Link>
               {isLoginFromStorage ? (
                 <Link onClick={handleLogout}>
-                  <Button className="loginBtn">logout</Button>
+                  <Button className="loginBtn">Logout</Button>
                 </Link>
               ) : (
                 <Link to="/login">
@@ -171,8 +140,6 @@ const Header = ({ handleLogout }) => {
           className="container-fluid pt-4 shadow CourseDropDown"
           style={{
             position: "fixed",
-            // top: "91px",
-            // overflow:"auto",
             zIndex: "99",
             backgroundColor: "#f1f6ff",
             borderBottom: "1px solid #7bbff4",
@@ -180,29 +147,30 @@ const Header = ({ handleLogout }) => {
           ref={courseRef}
         >
           <div className="row">
-            {courses.map((course, index) => (
-              <div key={index} className="col-sm-4 col-md-2 col-6 d-flex">
+            {courses.map((course) => (
+              <div key={course.id} className="col-sm-4 col-md-2 col-6 d-flex">
                 <Link
-                  to={"/course"}
+                  to={`/course?categoryID=${course.id}`}
                   style={{ textDecoration: "none" }}
                   onClick={() => setCourse(false)}
                 >
-                  <div className="col-3">
-                    <img
-                      src={`${ImageURL}${course.icon}`}
-                      alt={course.icon}
-                      width={50}
-                      height={50}
-                      style={{ borderRadius: "50%" }}
-                      className="course-icon"
-                    />
-                  </div>
-                  <div
-                    className="col-9 text-start text-dark fw-light"
-                    style={{ textDecoration: "none" }}
-                  >
-                    <h5 className="mb-0">{course.name}</h5>
-                    <p>{course.description}</p>
+                  <div className="row">
+                    <div className="col-3 d-flex justify-content-center">
+                      <img
+                        src={`${ImageURL}${course.icon}`}
+                        alt={course.name}
+                        width={50}
+                        height={50}
+                        className="course-icon"
+                      />
+                    </div>
+                    <div
+                      className="col-9 text-start text-dark fw-light"
+                      style={{ textDecoration: "none" }}
+                    >
+                      <h5 className="mb-0 categoryName">{course.name}</h5>
+                      <p className="categoryDesc">{course.description}</p>
+                    </div>
                   </div>
                 </Link>
               </div>
@@ -212,7 +180,7 @@ const Header = ({ handleLogout }) => {
               style={{ textDecoration: "none" }}
               onClick={() => setCourse(false)}
             >
-              <p className="text-info text-end mb-0">see more..</p>
+              <p className="text-info text-end mb-0">See more..</p>
             </Link>
           </div>
         </div>
