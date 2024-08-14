@@ -37,11 +37,9 @@ function CourseTestimonial() {
         <div className="d-flex align-items-center justify-content-center">
           <h5 className="fw-bold py-2">Big Date Master Program</h5>
           &nbsp;&nbsp;
-          <div>
-            <span>$3942</span>&nbsp;
-            <span>
-              <del className="text-muted">$232</del>
-            </span>
+          <div className="d-flex align-items-center justify-content-center">
+            <h5 className="fw-bold" style={{color:"#118aef"}}>$3942</h5>&nbsp;
+            <h6> <del className="text-muted">$232</del></h6>
           </div>
         </div>
         <div className="row">
@@ -49,17 +47,17 @@ function CourseTestimonial() {
           <div className="col-md-3 col-12">
             <div className="row">
               <div className="col-6">
-                <div className="text-start fw-bold ps-1">
-                  <p>Training Mode :</p>
-                  <p>Skill Levels :</p>
-                  <p>Total Learners :</p>
+                <div className="text-end fw-bold ps-1">
+                  <p className="mb-1">Training Mode :</p>
+                  <p className="mb-1">Skill Levels :</p>
+                  <p className="mb-1">Total Learners :</p>
                 </div>
               </div>
               <div className="col-6">
                 <div className="text-start fw-light">
-                  <p>Online | classroom</p>
-                  <p>Expert</p>
-                  <p>2352 Learners</p>
+                  <p className="mb-1">Online | classroom</p>
+                  <p className="mb-1">Expert</p>
+                  <p className="mb-1">2352 Learners</p>
                 </div>
               </div>
             </div>

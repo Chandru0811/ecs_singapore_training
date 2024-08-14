@@ -320,7 +320,10 @@ function TrainingOverview() {
                       placeholder="Enter new point"
                     />
                     <FaTimes
-                      onClick={() => setIsAddingPoint(false)}
+                     onClick={() => {
+                      setIsAddingPoint(false);
+                      setNewPoint("");
+                    }}
                       className="text-danger ms-2"
                     />
                   </div>

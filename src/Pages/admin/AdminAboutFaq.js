@@ -17,7 +17,9 @@ function AdminAboutFaq() {
   });
 
   const [show, setShow] = useState(false);
-  const handleClose = () => setShow(false);
+  const handleClose = () => {
+    modalFormik.resetForm()
+    setShow(false)};
   const handleShow = () => setShow(true);
   const [isEditing, setIsEditing] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
