@@ -22,9 +22,11 @@ function ContactUs() {
   const [selectedTime, setSelectedTime] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const [isBookingConfirmed, setIsBookingConfirmed] = useState(false);
+  const [loader, setLoader] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoader(true);
       try {
         const response = await api.get("user/contactus");
         if (response.status === 200) {
@@ -33,6 +35,8 @@ function ContactUs() {
         }
       } catch (error) {
         console.error("Error fetching data:", error);
+      } finally {
+        setLoader(false);
       }
     };
     fetchData();
@@ -185,480 +189,505 @@ function ContactUs() {
     date && !showForm ? "col-md-3 col-12" : "col-md-6 col-12";
 
   return (
+    <>
+      {loader ? (
+      <section class="dots-container">
+  <div class="dot"></div>
+  <div class="dot"></div>
+  <div class="dot"></div>
+  <div class="dot"></div>
+  <div class="dot"></div>
+</section>
+      ) : (
     <section className="mt-5 contactUs">
-      <div className="container-fluid py-5">
-        <div className="row">
-          <div className="offset-lg-1 col-lg-10 col-12">
-            <div className="card contactCard">
-              <div className="row">
-                {!isBookingConfirmed ? (
-                  <>
-                    <div className={leftColumnClass + " py-5"}>
-                      <div className="d-flex align-items-center justify-content-center mb-5">
-                        <img
-                          src={logo}
-                          height="70"
-                          className="d-inline-block align-top"
-                          alt="ECS Training"
-                        />
-                        <div className="logoText mt-2">
-                          <h2 className="mb-0 fw-bold">ECS</h2>
-                          <h6 className="fw-bold">Training</h6>
-                        </div>
-                      </div>
-                      <hr className="mb-4" />
-                      <div
-                        className="text-start"
-                        style={{ marginLeft: "50px" }}
-                      >
-                        <h6 className="logoText fw-bold">Design Team</h6>
-                        <h2>30 Minute Meeting</h2>
-                        <div className="logoText d-flex align-items-center">
-                          <FaRegClock />
-                          <span className="fw-medium mx-1">30 min</span>
-                        </div>
-                      </div>
-                    </div>
-                    {!showForm && (
-                      <div
-                        className={
-                          calendarColumnClass +
-                          " py-4 text-start contactCard-right"
-                        }
-                      >
-                        <h5 className="fw-bold mb-4 mx-2">
-                          Select a Date & Time
-                        </h5>
-                        <div className="row">
-                          <div className="col-md-12">
-                            <div className="calendar-container">
-                              <Calendar
-                                onChange={handleDateChange}
-                                value={date}
-                                minDate={today}
-                                maxDate={maxDate}
-                                minDetail="month"
-                                maxDetail="month"
-                                tileDisabled={tileDisabled}
-                                className="mb-4"
-                              />
+        <>
+          <div className="container-fluid py-5">
+            <div className="row">
+              <div className="offset-lg-1 col-lg-10 col-12">
+                <div className="card contactCard">
+                  <div className="row">
+                    {!isBookingConfirmed ? (
+                      <>
+                        <div className={leftColumnClass + " py-5"}>
+                          <div className="d-flex align-items-center justify-content-center mb-5">
+                            <img
+                              src={logo}
+                              height="70"
+                              className="d-inline-block align-top"
+                              alt="ECS Training"
+                            />
+                            <div className="logoText mt-2">
+                              <h2 className="mb-0 fw-bold">ECS</h2>
+                              <h6 className="fw-bold">Training</h6>
                             </div>
-                            <h5 className="fw-bold mb-3 mx-2">Time Zone</h5>
-                            <div className="time-zone">
-                              <FaGlobeAsia color="#515B6F" />
-                              <span className="mx-1">
-                                Singapore Time ({singaporeTime})
-                              </span>
+                          </div>
+                          <hr className="mb-4" />
+                          <div
+                            className="text-start"
+                            style={{ marginLeft: "50px" }}
+                          >
+                            <h6 className="logoText fw-bold">Design Team</h6>
+                            <h2>30 Minute Meeting</h2>
+                            <div className="logoText d-flex align-items-center">
+                              <FaRegClock />
+                              <span className="fw-medium mx-1">30 min</span>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    )}
-                    {date && !isWeekend(date) && !showForm && (
-                      <div className={rightColumnClass + " py-4 text-start"}>
-                        <h6 className="mb-4 mt-3 mx-5">
-                          {formatSelectedDate()}
-                        </h6>
-                        <div className="time-slots">
-                          {timeSlots.map((time, index) => (
+                        {!showForm && (
+                          <div
+                            className={
+                              calendarColumnClass +
+                              " py-4 text-start contactCard-right"
+                            }
+                          >
+                            <h5 className="fw-bold mb-4 mx-2">
+                              Select a Date & Time
+                            </h5>
+                            <div className="row">
+                              <div className="col-md-12">
+                                <div className="calendar-container">
+                                  <Calendar
+                                    onChange={handleDateChange}
+                                    value={date}
+                                    minDate={today}
+                                    maxDate={maxDate}
+                                    minDetail="month"
+                                    maxDetail="month"
+                                    tileDisabled={tileDisabled}
+                                    className="mb-4"
+                                  />
+                                </div>
+                                <h5 className="fw-bold mb-3 mx-2">Time Zone</h5>
+                                <div className="time-zone">
+                                  <FaGlobeAsia color="#515B6F" />
+                                  <span className="mx-1">
+                                    Singapore Time ({singaporeTime})
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                        {date && !isWeekend(date) && !showForm && (
+                          <div
+                            className={rightColumnClass + " py-4 text-start"}
+                          >
+                            <h6 className="mb-4 mt-3 mx-5">
+                              {formatSelectedDate()}
+                            </h6>
+                            <div className="time-slots">
+                              {timeSlots.map((time, index) => (
+                                <div
+                                  key={index}
+                                  className="time-slot-btn-container"
+                                >
+                                  <button
+                                    className={`time-slot-btn ${
+                                      selectedTime === time ? "selected" : ""
+                                    }`}
+                                    onClick={() => handleTimeSlotClick(time)}
+                                  >
+                                    {time.toLocaleTimeString([], {
+                                      hour: "2-digit",
+                                      minute: "2-digit",
+                                      hour12: true,
+                                    })}
+                                  </button>
+                                  {selectedTime === time && (
+                                    <button
+                                      className="next-btn"
+                                      onClick={handleNextClick}
+                                    >
+                                      Next
+                                    </button>
+                                  )}
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                        {showForm && (
+                          <div className="col-md-6 contactCard-right">
                             <div
-                              key={index}
-                              className="time-slot-btn-container"
+                              className="back-arrow text-start mt-3"
+                              onClick={handleBackClick}
+                              style={{ cursor: "pointer" }}
                             >
-                              <button
-                                className={`time-slot-btn ${
-                                  selectedTime === time ? "selected" : ""
-                                }`}
-                                onClick={() => handleTimeSlotClick(time)}
-                              >
-                                {time.toLocaleTimeString([], {
-                                  hour: "2-digit",
-                                  minute: "2-digit",
-                                  hour12: true,
-                                })}
-                              </button>
-                              {selectedTime === time && (
-                                <button
-                                  className="next-btn"
-                                  onClick={handleNextClick}
-                                >
-                                  Next
-                                </button>
-                              )}
+                              <FaCircleArrowLeft />
                             </div>
-                          ))}
+                            <div className="row mt-3">
+                              <div className="offset-1 col-10 text-start">
+                                <h2 className="mb-3">Add your Details</h2>
+                                <form onSubmit={formik1.handleSubmit}>
+                                  <div className="mb-3">
+                                    <label className="form-label">
+                                      Full Name
+                                      <span className="text-danger">*</span>
+                                    </label>
+                                    <input
+                                      type="text"
+                                      className={`form-control ${
+                                        formik1.touched.fullName &&
+                                        formik1.errors.fullName
+                                          ? "is-invalid"
+                                          : ""
+                                      }`}
+                                      {...formik1.getFieldProps("fullName")}
+                                    />
+                                    {formik1.touched.fullName &&
+                                      formik1.errors.fullName && (
+                                        <div className="invalid-feedback">
+                                          {formik1.errors.fullName}
+                                        </div>
+                                      )}
+                                  </div>
+                                  <div className="mb-3">
+                                    <label className="form-label">
+                                      Email
+                                      <span className="text-danger">*</span>
+                                    </label>
+                                    <input
+                                      type="text"
+                                      className={`form-control ${
+                                        formik1.touched.email &&
+                                        formik1.errors.email
+                                          ? "is-invalid"
+                                          : ""
+                                      }`}
+                                      {...formik1.getFieldProps("email")}
+                                    />
+                                    {formik1.touched.email &&
+                                      formik1.errors.email && (
+                                        <div className="invalid-feedback">
+                                          {formik1.errors.email}
+                                        </div>
+                                      )}
+                                  </div>
+                                  <div className="mb-3">
+                                    <label className="form-label">
+                                      Phone Number
+                                      <span className="text-danger">*</span>
+                                    </label>
+                                    <input
+                                      type="text"
+                                      className={`form-control ${
+                                        formik1.touched.phoneNumber &&
+                                        formik1.errors.phoneNumber
+                                          ? "is-invalid"
+                                          : ""
+                                      }`}
+                                      {...formik1.getFieldProps("phoneNumber")}
+                                    />
+                                    {formik1.touched.phoneNumber &&
+                                      formik1.errors.phoneNumber && (
+                                        <div className="invalid-feedback">
+                                          {formik1.errors.phoneNumber}
+                                        </div>
+                                      )}
+                                  </div>
+                                  <div className="mb-4">
+                                    <label className="form-label">
+                                      Message
+                                    </label>
+                                    <textarea
+                                      rows={5}
+                                      className="form-control"
+                                      {...formik1.getFieldProps("message")}
+                                    />
+                                  </div>
+                                  <div className="mb-5">
+                                    <button
+                                      type="submit"
+                                      className="btn btn-primary"
+                                    >
+                                      Schedule the Event
+                                    </button>
+                                  </div>
+                                </form>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </>
+                    ) : (
+                      <div className="col-12 py-5">
+                        <div className="mb-4">
+                          <video
+                            src={success}
+                            autoPlay
+                            loop
+                            muted
+                            style={{ maxHeight: "150px" }}
+                          />
+                          <h5 className="fw-bold text-success">
+                            Thank you for scheduling your event!
+                          </h5>
                         </div>
-                      </div>
-                    )}
-                    {showForm && (
-                      <div className="col-md-6 contactCard-right">
-                        <div
-                          className="back-arrow text-start mt-3"
-                          onClick={handleBackClick}
-                          style={{ cursor: "pointer" }}
-                        >
-                          <FaCircleArrowLeft />
-                        </div>
-                        <div className="row mt-3">
-                          <div className="offset-1 col-10 text-start">
-                            <h2 className="mb-3">Add your Details</h2>
-                            <form onSubmit={formik1.handleSubmit}>
-                              <div className="mb-3">
-                                <label className="form-label">
-                                  Full Name
-                                  <span className="text-danger">*</span>
-                                </label>
-                                <input
-                                  type="text"
-                                  className={`form-control ${
-                                    formik1.touched.fullName &&
-                                    formik1.errors.fullName
-                                      ? "is-invalid"
-                                      : ""
-                                  }`}
-                                  {...formik1.getFieldProps("fullName")}
-                                />
-                                {formik1.touched.fullName &&
-                                  formik1.errors.fullName && (
-                                    <div className="invalid-feedback">
-                                      {formik1.errors.fullName}
-                                    </div>
-                                  )}
-                              </div>
-                              <div className="mb-3">
-                                <label className="form-label">
-                                  Email<span className="text-danger">*</span>
-                                </label>
-                                <input
-                                  type="text"
-                                  className={`form-control ${
-                                    formik1.touched.email &&
-                                    formik1.errors.email
-                                      ? "is-invalid"
-                                      : ""
-                                  }`}
-                                  {...formik1.getFieldProps("email")}
-                                />
-                                {formik1.touched.email &&
-                                  formik1.errors.email && (
-                                    <div className="invalid-feedback">
-                                      {formik1.errors.email}
-                                    </div>
-                                  )}
-                              </div>
-                              <div className="mb-3">
-                                <label className="form-label">
-                                  Phone Number
-                                  <span className="text-danger">*</span>
-                                </label>
-                                <input
-                                  type="text"
-                                  className={`form-control ${
-                                    formik1.touched.phoneNumber &&
-                                    formik1.errors.phoneNumber
-                                      ? "is-invalid"
-                                      : ""
-                                  }`}
-                                  {...formik1.getFieldProps("phoneNumber")}
-                                />
-                                {formik1.touched.phoneNumber &&
-                                  formik1.errors.phoneNumber && (
-                                    <div className="invalid-feedback">
-                                      {formik1.errors.phoneNumber}
-                                    </div>
-                                  )}
-                              </div>
-                              <div className="mb-4">
-                                <label className="form-label">Message</label>
-                                <textarea
-                                  rows={5}
-                                  className="form-control"
-                                  {...formik1.getFieldProps("message")}
-                                />
-                              </div>
-                              <div className="mb-5">
-                                <button
-                                  type="submit"
-                                  className="btn btn-primary"
-                                >
-                                  Schedule the Event
-                                </button>
-                              </div>
-                            </form>
+                        <div className="d-flex align-items-center justify-content-center mb-5">
+                          <img
+                            src={logo}
+                            height="70"
+                            className="d-inline-block align-top"
+                            alt="ECS Training"
+                          />
+                          <div className="logoText mt-2">
+                            <h2 className="mb-0 fw-bold">ECS</h2>
+                            <h6 className="fw-bold">Training</h6>
                           </div>
                         </div>
+                        <hr className="mb-5" />
+                        <h6 className="mb-3">
+                          Your appointment scheduled for {formatSelectedDate()}{" "}
+                          {selectedTime &&
+                            ` at ${selectedTime.toLocaleTimeString([], {
+                              hour: "2-digit",
+                              minute: "2-digit",
+                              hour12: true,
+                            })}`}{" "}
+                          has been confirmed.
+                        </h6>
+                        <p className="paraText mb-3">
+                          For further details check your mail.
+                        </p>
+                        <button
+                          className="btn btn-primary"
+                          onClick={handleNewBookingClick}
+                        >
+                          New Booking
+                        </button>
                       </div>
                     )}
-                  </>
-                ) : (
-                  <div className="col-12 py-5">
-                    <div className="mb-4">
-                      <video
-                        src={success}
-                        autoPlay
-                        loop
-                        muted
-                        style={{ maxHeight: "150px" }}
-                      />
-                      <h5 className="fw-bold text-success">
-                        Thank you for scheduling your event!
-                      </h5>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="container py-5" style={{ overflowX: "hidden" }}>
+            <div className="row">
+              <div className="col-lg-6 col-xl-4 col-12">
+                <div className="card contactDetails p-4">
+                  <div className="row">
+                    <div className="col-lg-3 col-12 d-flex justify-content-center align-items-center">
+                      <FiPhoneCall color="#e41111" size={60} />
                     </div>
-                    <div className="d-flex align-items-center justify-content-center mb-5">
-                      <img
-                        src={logo}
-                        height="70"
-                        className="d-inline-block align-top"
-                        alt="ECS Training"
-                      />
-                      <div className="logoText mt-2">
-                        <h2 className="mb-0 fw-bold">ECS</h2>
-                        <h6 className="fw-bold">Training</h6>
+                    <div className="col-lg-9 col-12">
+                      <h3 className="text-start fw-bold">Phone</h3>
+                      <hr className="my-4" />
+                      <p className="text-start fw-medium paraText">
+                        {apiData?.phone}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div className="arrow-icon mb-5">
+                  <a href="tel:8608163189">
+                    <FaCircleArrowRight />
+                  </a>
+                </div>
+              </div>
+              <div className="col-lg-6 col-xl-4 col-12">
+                <div className="card contactDetails p-4">
+                  <div className="row">
+                    <div className="col-lg-3 col-12 d-flex justify-content-center align-items-center">
+                      <IoMailOpenOutline color="#e41111" size={60} />
+                    </div>
+                    <div className="col-lg-9 col-12">
+                      <h3 className="text-start fw-bold">Email</h3>
+                      <hr className="my-4" />
+                      <p className="text-start fw-medium paraText">
+                        {apiData?.email}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div className="arrow-icon mb-5">
+                  <a href={`mailto:${apiData?.email}`} target="_blank">
+                    <FaCircleArrowRight />
+                  </a>
+                </div>
+              </div>
+              <div className="col-lg-6 col-xl-4 col-12">
+                <div className="card contactDetails p-4">
+                  <div className="row">
+                    <div className="col-lg-3 col-12 d-flex justify-content-center align-items-center">
+                      <LuMapPin color="#e41111" size={60} />
+                    </div>
+                    <div className="col-lg-9 col-12">
+                      <h3 className="text-start fw-bold">Location</h3>
+                      <hr className="my-4" />
+                      <p className="text-start fw-medium paraText">
+                        {apiData?.location}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div className="arrow-icon mb-5">
+                  <a
+                    href="https://maps.app.goo.gl/Y4UnULL1Gs7nAGRS8"
+                    target="_blank"
+                  >
+                    <FaCircleArrowRight />
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="container-fluid contactDetails1">
+            <div className="container py-5">
+              <div className="row py-5">
+                <div className="col-lg-6 col-12">
+                  <form onSubmit={formik2.handleSubmit}>
+                    <div
+                      className="card text-start p-5"
+                      style={{ border: "none", borderRadius: "30px" }}
+                    >
+                      <h3 className="fw-bold mb-5">We Are Ready To Help You</h3>
+                      <div className="mb-3">
+                        <label className="form-label">
+                          First Name<span className="text-danger">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          className={`form-control ${
+                            formik2.touched.firstName &&
+                            formik2.errors.firstName
+                              ? "is-invalid"
+                              : ""
+                          }`}
+                          {...formik2.getFieldProps("firstName")}
+                        />
+                        {formik2.touched.firstName &&
+                          formik2.errors.firstName && (
+                            <div className="invalid-feedback">
+                              {formik2.errors.firstName}
+                            </div>
+                          )}
+                      </div>
+                      <div className="mb-3">
+                        <label className="form-label">
+                          Last Name<span className="text-danger">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          className={`form-control ${
+                            formik2.touched.lastName && formik2.errors.lastName
+                              ? "is-invalid"
+                              : ""
+                          }`}
+                          {...formik2.getFieldProps("lastName")}
+                        />
+                        {formik2.touched.lastName &&
+                          formik2.errors.lastName && (
+                            <div className="invalid-feedback">
+                              {formik2.errors.lastName}
+                            </div>
+                          )}
+                      </div>
+                      <div className="mb-3">
+                        <label className="form-label">
+                          Email<span className="text-danger">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          className={`form-control ${
+                            formik2.touched.email && formik2.errors.email
+                              ? "is-invalid"
+                              : ""
+                          }`}
+                          {...formik2.getFieldProps("email")}
+                        />
+                        {formik2.touched.email && formik2.errors.email && (
+                          <div className="invalid-feedback">
+                            {formik2.errors.email}
+                          </div>
+                        )}
+                      </div>
+                      <div className="mb-3">
+                        <label className="form-label">
+                          Phone Number<span className="text-danger">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          className={`form-control ${
+                            formik2.touched.phoneNumber &&
+                            formik2.errors.phoneNumber
+                              ? "is-invalid"
+                              : ""
+                          }`}
+                          {...formik2.getFieldProps("phoneNumber")}
+                        />
+                        {formik2.touched.phoneNumber &&
+                          formik2.errors.phoneNumber && (
+                            <div className="invalid-feedback">
+                              {formik2.errors.phoneNumber}
+                            </div>
+                          )}
+                      </div>
+                      <div className="mb-4">
+                        <label className="form-label">Message</label>
+                        <textarea
+                          className="form-control"
+                          rows={5}
+                          {...formik2.getFieldProps("message")}
+                        ></textarea>
+                      </div>
+                      <div className="mb-3">
+                        <button
+                          type="submit"
+                          className="btn btn-danger py-2"
+                          style={{ width: "100%" }}
+                        >
+                          Send
+                        </button>
                       </div>
                     </div>
-                    <hr className="mb-5" />
-                    <h6 className="mb-3">
-                      Your appointment scheduled for {formatSelectedDate()}{" "}
-                      {selectedTime &&
-                        ` at ${selectedTime.toLocaleTimeString([], {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                          hour12: true,
-                        })}`}{" "}
-                      has been confirmed.
-                    </h6>
-                    <p className="paraText mb-3">
-                      For further details check your mail.
-                    </p>
-                    <button
-                      className="btn btn-primary"
-                      onClick={handleNewBookingClick}
+                  </form>
+                </div>
+                <div className="col-lg-6 col-12 text-start mt-5 px-5">
+                  <h1 className="fw-bold mb-3">
+                    {apiData?.contact_description?.title}
+                  </h1>
+                  <p className="fw-medium paraText mb-4">
+                    {apiData?.contact_description?.subTitle}
+                  </p>
+                  <div
+                    className="d-flex align-items-center justify-content-center mb-4"
+                    style={{ marginLeft: "1.25rem" }}
+                  >
+                    <span>
+                      <BiSolidQuoteRight size={70} color="#e41111" />
+                    </span>
+                    <h5
+                      className="fw-bold text-break"
+                      style={{ marginLeft: "0.5rem" }}
                     >
-                      New Booking
-                    </button>
+                      {apiData?.contact_description?.detail}
+                    </h5>
                   </div>
-                )}
+                  <div
+                    className="card"
+                    style={{ borderRadius: "30px", overflow: "hidden" }}
+                  >
+                    <iframe
+                      src={apiData?.map_url}
+                      width="100%"
+                      height="400"
+                      style={{ border: "none", borderRadius: "30px" }}
+                      allowFullScreen=""
+                      loading="lazy"
+                      title="Map"
+                      referrerPolicy="no-referrer-when-downgrade"
+                    ></iframe>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
-      <div className="container py-5" style={{ overflowX: "hidden" }}>
-        <div className="row">
-          <div className="col-lg-6 col-xl-4 col-12">
-            <div className="card contactDetails p-4">
-              <div className="row">
-                <div className="col-lg-3 col-12 d-flex justify-content-center align-items-center">
-                  <FiPhoneCall color="#e41111" size={60} />
-                </div>
-                <div className="col-lg-9 col-12">
-                  <h3 className="text-start fw-bold">Phone</h3>
-                  <hr className="my-4" />
-                  <p className="text-start fw-medium paraText">
-                    {apiData?.phone}
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className="arrow-icon mb-5">
-              <a href="tel:8608163189">
-                <FaCircleArrowRight />
-              </a>
-            </div>
-          </div>
-          <div className="col-lg-6 col-xl-4 col-12">
-            <div className="card contactDetails p-4">
-              <div className="row">
-                <div className="col-lg-3 col-12 d-flex justify-content-center align-items-center">
-                  <IoMailOpenOutline color="#e41111" size={60} />
-                </div>
-                <div className="col-lg-9 col-12">
-                  <h3 className="text-start fw-bold">Email</h3>
-                  <hr className="my-4" />
-                  <p className="text-start fw-medium paraText">
-                    {apiData?.email}
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className="arrow-icon mb-5">
-              <a href={`mailto:${apiData?.email}`} target="_blank">
-                <FaCircleArrowRight />
-              </a>
-            </div>
-          </div>
-          <div className="col-lg-6 col-xl-4 col-12">
-            <div className="card contactDetails p-4">
-              <div className="row">
-                <div className="col-lg-3 col-12 d-flex justify-content-center align-items-center">
-                  <LuMapPin color="#e41111" size={60} />
-                </div>
-                <div className="col-lg-9 col-12">
-                  <h3 className="text-start fw-bold">Location</h3>
-                  <hr className="my-4" />
-                  <p className="text-start fw-medium paraText">
-                    {apiData?.location}
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className="arrow-icon mb-5">
-              <a
-                href="https://maps.app.goo.gl/Y4UnULL1Gs7nAGRS8"
-                target="_blank"
-              >
-                <FaCircleArrowRight />
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="container-fluid contactDetails1">
-        <div className="container py-5">
-          <div className="row py-5">
-            <div className="col-lg-6 col-12">
-              <form onSubmit={formik2.handleSubmit}>
-                <div
-                  className="card text-start p-5"
-                  style={{ border: "none", borderRadius: "30px" }}
-                >
-                  <h3 className="fw-bold mb-5">We Are Ready To Help You</h3>
-                  <div className="mb-3">
-                    <label className="form-label">
-                      First Name<span className="text-danger">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      className={`form-control ${
-                        formik2.touched.firstName && formik2.errors.firstName
-                          ? "is-invalid"
-                          : ""
-                      }`}
-                      {...formik2.getFieldProps("firstName")}
-                    />
-                    {formik2.touched.firstName && formik2.errors.firstName && (
-                      <div className="invalid-feedback">
-                        {formik2.errors.firstName}
-                      </div>
-                    )}
-                  </div>
-                  <div className="mb-3">
-                    <label className="form-label">
-                      Last Name<span className="text-danger">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      className={`form-control ${
-                        formik2.touched.lastName && formik2.errors.lastName
-                          ? "is-invalid"
-                          : ""
-                      }`}
-                      {...formik2.getFieldProps("lastName")}
-                    />
-                    {formik2.touched.lastName && formik2.errors.lastName && (
-                      <div className="invalid-feedback">
-                        {formik2.errors.lastName}
-                      </div>
-                    )}
-                  </div>
-                  <div className="mb-3">
-                    <label className="form-label">
-                      Email<span className="text-danger">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      className={`form-control ${
-                        formik2.touched.email && formik2.errors.email
-                          ? "is-invalid"
-                          : ""
-                      }`}
-                      {...formik2.getFieldProps("email")}
-                    />
-                    {formik2.touched.email && formik2.errors.email && (
-                      <div className="invalid-feedback">
-                        {formik2.errors.email}
-                      </div>
-                    )}
-                  </div>
-                  <div className="mb-3">
-                    <label className="form-label">
-                      Phone Number<span className="text-danger">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      className={`form-control ${
-                        formik2.touched.phoneNumber &&
-                        formik2.errors.phoneNumber
-                          ? "is-invalid"
-                          : ""
-                      }`}
-                      {...formik2.getFieldProps("phoneNumber")}
-                    />
-                    {formik2.touched.phoneNumber &&
-                      formik2.errors.phoneNumber && (
-                        <div className="invalid-feedback">
-                          {formik2.errors.phoneNumber}
-                        </div>
-                      )}
-                  </div>
-                  <div className="mb-4">
-                    <label className="form-label">Message</label>
-                    <textarea
-                      className="form-control"
-                      rows={5}
-                      {...formik2.getFieldProps("message")}
-                    ></textarea>
-                  </div>
-                  <div className="mb-3">
-                    <button
-                      type="submit"
-                      className="btn btn-danger py-2"
-                      style={{ width: "100%" }}
-                    >
-                      Send
-                    </button>
-                  </div>
-                </div>
-              </form>
-            </div>
-            <div className="col-lg-6 col-12 text-start mt-5 px-5">
-              <h1 className="fw-bold mb-3">
-                {apiData?.contact_description?.title}
-              </h1>
-              <p className="fw-medium paraText mb-4">
-                {apiData?.contact_description?.subTitle}
-              </p>
-              <div
-                className="d-flex align-items-center justify-content-center mb-4"
-                style={{ marginLeft: "1.25rem" }}
-              >
-                <span>
-                  <BiSolidQuoteRight size={70} color="#e41111" />
-                </span>
-                <h5 className="fw-bold" style={{ marginLeft: "0.5rem" }}>
-                  {apiData?.contact_description?.detail}
-                </h5>
-              </div>
-              <div
-                className="card"
-                style={{ borderRadius: "30px", overflow: "hidden" }}
-              >
-                <iframe
-                  src={apiData?.map_url}
-                  width="100%"
-                  height="400"
-                  style={{ border: "none", borderRadius: "30px" }}
-                  allowFullScreen=""
-                  loading="lazy"
-                  title="Map"
-                  referrerPolicy="no-referrer-when-downgrade"
-                ></iframe>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+        </>
+        </section>
+      )}
+      </>
   );
 }
 

@@ -836,7 +836,7 @@ hr {
 
 /* / Loader / */
 /* HTML: <div class="loader"></div> */
-.loader-container {
+/* .loader-container {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -867,68 +867,60 @@ hr {
   83% {
     clip-path: inset(0 -100px 0 0);
   }
-}
-
-/* Loader */
-.loader {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  display: flex;
-  filter: contrast(30);
-  background: #fff;
-  padding: 3.5rem 5rem;
-  animation: load-spin 1s infinite;
-}
-
-/* p {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translatex(-50%);
 } */
 
-.loader div {
-  background: blue;
-  height: 20px;
-  width: 20px;
-  border-radius: 100px;
-  filter: blur(5px);
-  animation: loading 1s infinite;
+/* Loader */
+
+.dots-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 80vh;
+  width: 100%;
 }
 
-.loader div:nth-of-type(1) {
-  --default: translate(10px, 0);
-  --loading: translate(5px, 3px);
+.dot {
+  height: 10px;
+  width: 10px;
+  margin-right: 10px;
+  border-radius: 10px;
+  background-color: #365377;
+  animation: pulse 1.5s infinite ease-in-out;
 }
 
-.loader div:nth-of-type(2) {
-  --default: translate(0px, -15px);
-  --loading: translate(0px, -18px);
+.dot:last-child {
+  margin-right: 0;
 }
 
-.loader div:nth-of-type(3) {
-  --default: translate(-10px, 0);
-  --loading: translate(-5px, 3px);
+.dot:nth-child(1) {
+  animation-delay: -0.3s;
 }
 
-@keyframes loading {
-  0%,
-  100% {
-    transform: var(--default);
+.dot:nth-child(2) {
+  animation-delay: -0.1s;
+}
+
+.dot:nth-child(3) {
+  animation-delay: 0.1s;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0.8);
+    background-color: #82b0e7;
+    box-shadow: 0 0 0 0 rgba(178, 212, 252, 0.7);
   }
+
   50% {
-    transform: var(--loading);
+    transform: scale(1.2);
+    background-color: #426ed4;
+    box-shadow: 0 0 0 10px rgba(178, 212, 252, 0);
   }
-}
 
-@keyframes load-spin {
-  0%,
   100% {
-    filter: contrast(30) hue-rotate(0deg);
-  }
-  50% {
-    filter: contrast(30) hue-rotate(10deg) brightness(3);
+    transform: scale(0.8);
+    background-color: #082f5e;
+    box-shadow: 0 0 0 0 rgba(178, 212, 252, 0.7);
   }
 }
+ 
