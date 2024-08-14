@@ -539,7 +539,7 @@ function AdminContact() {
                       />
                     </div>
                   ) : (
-                    <h5 className="fw-bold" style={{ marginLeft: "0.5rem" }}>
+                    <h5 className="fw-bold text-break" style={{ marginLeft: "0.5rem" }}>
                       {formik.values.detail}
                       <FaEdit
                         size={20}
