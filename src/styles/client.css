@@ -852,3 +852,68 @@ hr {
     clip-path: inset(0 -100px 0 0);
   }
 }
+
+/* Loader */
+.loader {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  filter: contrast(30);
+  background: #fff;
+  padding: 3.5rem 5rem;
+  animation: load-spin 1s infinite;
+}
+
+p {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translatex(-50%);
+}
+
+.loader div {
+  background: blue;
+  height: 20px;
+  width: 20px;
+  border-radius: 100px;
+  filter: blur(5px);
+  animation: loading 1s infinite;
+}
+
+.loader div:nth-of-type(1) {
+  --default: translate(10px, 0);
+  --loading: translate(5px, 3px);
+}
+
+.loader div:nth-of-type(2) {
+  --default: translate(0px, -15px);
+  --loading: translate(0px, -18px);
+}
+
+.loader div:nth-of-type(3) {
+  --default: translate(-10px, 0);
+  --loading: translate(-5px, 3px);
+}
+
+@keyframes loading {
+  0%,
+  100% {
+    transform: var(--default);
+  }
+  50% {
+    transform: var(--loading);
+  }
+}
+
+@keyframes load-spin {
+  0%,
+  100% {
+    filter: contrast(30) hue-rotate(0deg);
+  }
+  50% {
+    filter: contrast(30) hue-rotate(10deg) brightness(3);
+  }
+}
+
