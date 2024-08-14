@@ -222,7 +222,7 @@ function CourseView() {
                     padding: 0,
                   }}
                 >
-                  {courseValue.features.map((feature, index) => (
+                  {courseValue.features?.map((feature, index) => (
                     <li
                       key={index}
                       style={{ flex: "0 0 50%", textDecoration: "none" }}
@@ -244,7 +244,7 @@ function CourseView() {
                 {courseValue.title} Certification Course FAQs
               </h5>
               <div className="accordion accordion-flush" id="accordionExample">
-                {courseValue.faqs.map((faq, index) => (
+                {courseValue.faqs?.map((faq, index) => (
                   <div className="accordion-item" key={index}>
                     <h2 className="accordion-header" id={`heading${index}`}>
                       <button
@@ -287,7 +287,7 @@ function CourseView() {
                 >
                   {courseValue.syllabus
                     .slice(0, showAllSections ? courseValue.syllabus.length : 3)
-                    .map((section, index) => (
+                    ?.map((section, index) => (
                       <div className="mb-3" key={index}>
                         <div className="card-body">
                           <h6 className="text-start fw-bold">
@@ -295,7 +295,7 @@ function CourseView() {
                           </h6>
                           <div className="row">
                             <div className="col-md-6 col-12 text-start">
-                              {section.lessons.map((lesson, i) => (
+                              {section?.lessons?.map((lesson, i) => (
                                 <div key={i}>{lesson.lesson}</div>
                               ))}
                             </div>
@@ -309,7 +309,7 @@ function CourseView() {
                               className="col-md-3 col-12"
                               style={{ color: "#118AEF" }}
                             >
-                              {section.lessons.map((lesson, i) => (
+                              {section.lessons?.map((lesson, i) => (
                                 <div key={i}>{lesson.duration}</div>
                               ))}
                             </div>
