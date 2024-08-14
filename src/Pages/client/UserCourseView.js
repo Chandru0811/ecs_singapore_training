@@ -107,8 +107,8 @@ function CourseView() {
                     </div>
                     <div className="col-md-7 col-12 mt-2 d-flex flex-column align-items-start justify-content-start">
                       <p className="text-start">
-                        {courseValue.syllabus
-                          .map((syllabus) => syllabus.session)
+                        {courseValue?.syllabus
+                          ?.map((syllabus) => syllabus.session)
                           .join(", ")}
                       </p>
                       <p className="text-start">
@@ -166,7 +166,7 @@ function CourseView() {
                   </tr>
                 </thead>
                 <tbody style={{ border: "1px solid #118AEF" }}>
-                  {courseValue.batches.map((batch, index) => (
+                  {courseValue.batches?.map((batch, index) => (
                     <tr key={index}>
                       <td style={{ borderRight: "1px solid #118AEF" }}>
                         {batch.date}
