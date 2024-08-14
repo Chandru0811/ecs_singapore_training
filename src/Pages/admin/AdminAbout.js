@@ -17,6 +17,7 @@ function AdminAbout() {
   const [editingIndex, setEditingIndex] = useState(null);
   const [datas, setDatas] = useState([]);
   const [loadIndicator, setLoadIndicator] = useState(false);
+  const [loadPublish, setLoadPublish] = useState(false);
   const [dataImg, setDataImg] = useState('');
   const [loading, setLoading] = useState(true);
 
@@ -118,7 +119,7 @@ function AdminAbout() {
 
   // publish Data
   const publishData = async () => {
-    setLoadIndicator(true);
+    setLoadPublish(true);
     try {
       const response = await api.post("publish/about");
       if (response.status === 200) {
@@ -128,7 +129,7 @@ function AdminAbout() {
     } catch (e) {
       console.log("object", e);
     } finally {
-      setLoadIndicator(false);
+      setLoadPublish(false);
     }
   };
 
@@ -140,8 +141,8 @@ function AdminAbout() {
     <section>
       <div className="d-flex align-items-center justify-content-between p-2">
         <h4>About</h4>
-        <button className="btn btn-danger" onClick={publishData} disabled={loadIndicator}>
-          {loadIndicator && (
+        <button className="btn btn-danger" onClick={publishData} disabled={loadPublish}>
+          {loadPublish && (
             <span
               className="spinner-border spinner-border-sm me-2"
               aria-hidden="true"
@@ -328,7 +329,7 @@ function AdminAbout() {
                             <div>
                               {/* <FaEdit onClick={() => handleEditClick('banner_image')} className="text-warning" /> */}
                               <img
-                                src={`${ImageURL}${formik.values.banner_image}`}
+                                src={`${ImageURL}${datas.banner_image}`}
                                 alt="About Hero"
                                 className="img-fluid"
                               />
@@ -378,7 +379,7 @@ function AdminAbout() {
                     <div>
                       {/* <FaEdit onClick={() => handleEditClick('about_image')} className="text-secondary" /> */}
                       <img
-                        src={`${ImageURL}${formik.values.about_image}`}
+                        src={`${ImageURL}${datas.about_image}`}
                         alt="img"
                         className="img-fluid"
                       />
