@@ -30,15 +30,19 @@ const responsive = {
 
 function Testimonial() {
   const [data, setData] = useState([]);
+  const [loader, setLoader] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoader(true);
       try {
         const response = await api.get("testimonials");
         console.log(response.data);
         setData(Array.isArray(response.data.data) ? response.data.data : []);
       } catch (error) {
         console.error(`Error Fetching Data: ${error.message}`);
+      } finally {
+        setLoader(false);
       }
     };
 
@@ -60,41 +64,56 @@ function Testimonial() {
   };
 
   return (
-    <div>
-      <h1 className="fw-bolder py-3">Testimonial</h1>
-      <Carousel
-        responsive={responsive}
-        infinite={true}
-        autoPlay={false}
-        showDots={false}
-      >
-        {data.map((card, index) => (
-          <div key={index} className="mx-4 my-5 p-1 h-75 shadow rounded card">
-            <div className="d-flex align-items-center px-2">
-              <div className="w-25 p-1">
-                <img
-                  src={`${ImgUrl}${card.image_path}`}
-                  alt={card.title}
-                  className="img-fluid"
-                  style={{ width: "80%", height: "80%" }}
-                />
+    <>
+      {loader ? (
+        <section class="dots-container">
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+        </section>
+      ) : (
+        <div>
+          <h1 className="fw-bolder py-3">Testimonial</h1>
+          <Carousel
+            responsive={responsive}
+            infinite={true}
+            autoPlay={false}
+            showDots={false}
+          >
+            {data.map((card, index) => (
+              <div
+                key={index}
+                className="mx-4 my-5 p-1 h-75 shadow rounded card"
+              >
+                <div className="d-flex align-items-center px-2">
+                  <div className="w-25 p-1">
+                    <img
+                      src={`${ImgUrl}${card.image_path}`}
+                      alt={card.title}
+                      className="img-fluid"
+                      style={{ width: "80%", height: "80%" }}
+                    />
+                  </div>
+                  <div className="text-start">
+                    <h5>{card.client_name}</h5>
+                    <p>
+                      {card.designation}
+                      <span>{renderStars(card.rating)}</span>
+                    </p>
+                  </div>
+                </div>
+                <div className="p-2 fit-content">
+                  <h5 className="text-start">{card.title}</h5>
+                  <p className="text-start">{card.description}</p>
+                </div>
               </div>
-              <div className="text-start">
-                <h5>{card.client_name}</h5>
-                <p>
-                  {card.designation}
-                  <span>{renderStars(card.rating)}</span>
-                </p>
-              </div>
-            </div>
-            <div className="p-2 fit-content">
-              <h5 className="text-start">{card.title}</h5>
-              <p className="text-start">{card.description}</p>
-            </div>
-          </div>
-        ))}
-      </Carousel>
-    </div>
+            ))}
+          </Carousel>
+        </div>
+      )}
+    </>
   );
 }
 
