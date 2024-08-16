@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Modal, Button } from "react-bootstrap";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { LuDownload } from "react-icons/lu";
 
 const EnrollModel = ({ from }) => {
   const [show, setShow] = useState(false);
@@ -43,7 +44,7 @@ const EnrollModel = ({ from }) => {
     } else if (from === "Syllabus") {
       return (
         <button type="button" className="btn btn-outline-primary ms-2" onClick={handleShow}>
-          Download Syllabus
+          <LuDownload /> Syllabus
         </button>
       );
     }else if (from ==="RequestBatch"){

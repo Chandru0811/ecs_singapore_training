@@ -9,6 +9,7 @@ import ImgUrl from "../../config/ImageURL";
 import { useParams } from "react-router-dom";
 import { jsPDF } from "jspdf";
 import imgData from "../../assets/admin/Logo.png";
+import EnrollModel from "./EnrollModel";
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required("*Name is required"),
@@ -212,10 +213,9 @@ Testing Qualifications Board (ISTQB) examination.`,
                         </p>
                       </div>
                       <div className="d-flex align-items-center justify-content-center">
-                        <button className="btn btn-primary">Enroll Now</button>
-                        <button className="btn btn-outline-primary ms-2">
-                          Download Syllabus
-                        </button>
+                        <EnrollModel from={"CourseEnroll"}/>
+                        <EnrollModel from={"Syllabus"}/>
+                        
                       </div>
                     </div>
                   </div>
@@ -287,16 +287,10 @@ Testing Qualifications Board (ISTQB) examination.`,
               <div className="d-flex align-items-center justify-content-between">
                 <p>Can’t find a batch you’re looking for!</p>
                 <p>
-                  {" "}
-                  <a href="#" className="ms-2">
-                    Request a Batch
-                  </a>
+                  <EnrollModel from={"RequestBatch"}/>
                 </p>
                 <p>
-                  {" "}
-                  <a href="#" className="ms-2">
-                    Request a Callback
-                  </a>
+                <EnrollModel from={"RequestCallback"}/>
                 </p>
               </div>
             </div>

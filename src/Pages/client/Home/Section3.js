@@ -44,7 +44,7 @@ function Section3() {
               <h1 className="secondheading text-start">Top Companies Hiring</h1>
             </div>
             <div>
-              {datas.length > 8 && (
+              {datas?.length > 8 && (
                 <button className="btn btn-sm btn-primary" onClick={toggleView}>
                   {showAll ? "Show Less" : "Show More"}
                 </button>
