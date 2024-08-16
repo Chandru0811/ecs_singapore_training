@@ -4,7 +4,7 @@ import { TbMail } from "react-icons/tb";
 import { Nav } from "react-bootstrap";
 import { AiFillInstagram } from "react-icons/ai";
 import { IoLogoWhatsapp } from "react-icons/io";
-import EnrollModel from "../../../Pages/admin/EnrollModel";
+import EnrollModel from "../../../Pages/client/EnrollModel";
 import api from '../../../config/BaseUrl';
 import { useFormik } from "formik";
 import ImageURL from "../../../config/ImageURL";
@@ -85,15 +85,15 @@ const Footer = () => {
         <div className="col-md-2 col-6 mb-md-0 text-start">
           <h5 className="mb-4 ">For Businesses</h5>
           <ul className="list-unstyled ">
-            <Nav.Link href="#courses" className="mb-2">Courses</Nav.Link>
+            <Nav.Link as={Link} to="/course" className="mb-2">Courses</Nav.Link>
           </ul>
         </div>
         <div className="col-md-2 col-6 mb-md-0 text-start">
           <h5 className="mb-4 ">Company</h5>
           <ul className="list-unstyled">
             <div className="d-flex flex-column">
-              <Nav.Link href="#about" className="mb-2">About</Nav.Link>
-              <Nav.Link href="#contact-us" className="mb-2">Contact Us</Nav.Link>
+              <Nav.Link as={Link} to="/about" className="mb-2">About</Nav.Link>
+              <Nav.Link as={Link} to="/contact" className="mb-2">Contact Us</Nav.Link>
             </div>
           </ul>
         </div>
