@@ -38,7 +38,7 @@ const Header = ({ handleLogout }) => {
       try {
         const response = await api.get("header/course");
         const formattedCourses = response.data.data.map((course) => ({
-          id: course.id, // Ensure this field is included
+          id: course.id, 
           name: course.title,
           description: course.description,
           icon: course.logo_path,
@@ -82,19 +82,18 @@ const Header = ({ handleLogout }) => {
               alt="ECS Training"
             />
           </Navbar.Brand>
-
-          <Navbar.Toggle aria-controls="basic-navbar-nav " />
-          <Navbar.Collapse id="basic-navbar-nav">
-            <Nav className="gap-3">
-              <div ref={courseRef2}>
+          <div ref={courseRef2} className="mx-2 flex-fill text-start text-lg-center">
                 <button
-                  className="btn btn-outline-primary rounded-1 courseBtn"
+                  className="btn btn-outline-primary rounded-1 courseBtn "
                   onClick={() => setCourse(!course)}
                 >
                   All Course
                   {course ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown />}
                 </button>
               </div>
+          <Navbar.Toggle aria-controls="basic-navbar-nav " />
+          <Navbar.Collapse id="basic-navbar-nav">
+            <Nav className="align-items-center">     
               <div
                 className="form-group position-relative headerInput"
                 style={{ width: "40vw" }}
@@ -135,9 +134,9 @@ const Header = ({ handleLogout }) => {
           </Navbar.Collapse>
         </Navbar>
       </div>
-      {course && (
+      {course &&  (
         <div
-          className="container-fluid pt-4 shadow CourseDropDown"
+          className="container-fluid pt-4 shadow CourseDropDown py-2"
           style={{
             position: "fixed",
             zIndex: "99",
@@ -175,13 +174,16 @@ const Header = ({ handleLogout }) => {
                 </Link>
               </div>
             ))}
-            <Link
+            {course.length > 7 && (
+              <Link
               to={"/course"}
               style={{ textDecoration: "none" }}
               onClick={() => setCourse(false)}
             >
               <p className="text-info text-end mb-0">See more..</p>
             </Link>
+            )}
+            
           </div>
         </div>
       )}
