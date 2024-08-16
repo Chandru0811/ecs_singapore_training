@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import api from '../../../config/BaseUrl';
+import React, { useEffect, useState } from "react";
+import api from "../../../config/BaseUrl";
 import ImageURL from "../../../config/ImageURL";
 
 function Section2() {
@@ -8,14 +8,14 @@ function Section2() {
   const [loader, setLoader] = useState(true);
 
   const getData = async () => {
-    setLoader(true)
+    setLoader(true);
     try {
       const response = await api.get("joinwithus");
       setDatas(response.data.data);
     } catch (error) {
       console.error("Error fetching data:", error);
-    }finally{
-      setLoader(false)
+    } finally {
+      setLoader(false);
     }
   };
   useEffect(() => {
@@ -47,9 +47,14 @@ function Section2() {
                 </h1>
               </div>
               <div>
-                <button className="btn btn-primary" onClick={toggleView}>
-                  {showAll ? "Show Less" : "Show More"}
-                </button>
+                {datas.length > 8 && (
+                  <button
+                    className="btn btn-sm btn-primary"
+                    onClick={toggleView}
+                  >
+                    {showAll ? "Show Less" : "Show More"}
+                  </button>
+                )}
               </div>
             </div>
             <div className="row">
@@ -80,4 +85,4 @@ function Section2() {
   );
 }
 
-export default Section2
+export default Section2;

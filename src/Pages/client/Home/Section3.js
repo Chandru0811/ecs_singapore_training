@@ -9,14 +9,14 @@ function Section3() {
 
   useEffect(() => {
     const getData = async () => {
-      setLoader(true)
+      setLoader(true);
       try {
         const response = await api.get("companieshiring");
         setDatas(response.data.data);
       } catch (error) {
         console.error("Error fetching data:", error);
-      }finally{
-        setLoader(false)
+      } finally {
+        setLoader(false);
       }
     };
     getData();
@@ -44,9 +44,11 @@ function Section3() {
               <h1 className="secondheading text-start">Top Companies Hiring</h1>
             </div>
             <div>
-              <button className="btn btn-primary" onClick={toggleView}>
-                {showAll ? "Show Less" : "Show More"}
-              </button>
+              {datas.length > 8 && (
+                <button className="btn btn-sm btn-primary" onClick={toggleView}>
+                  {showAll ? "Show Less" : "Show More"}
+                </button>
+              )}
             </div>
           </div>
           <div className="row">

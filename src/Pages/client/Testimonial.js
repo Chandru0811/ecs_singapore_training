@@ -73,6 +73,18 @@ function Testimonial() {
           <div class="dot"></div>
           <div class="dot"></div>
         </section>
+      ) : data.length === 0 ? (
+        <div className="container-fluid p-5">
+          <div className="row">
+            <div className="col-12 text-center">
+              <h3>Testimonial unavailable</h3>
+              <p>
+                We are working to add new testimonial in this section. Please
+                check back later.
+              </p>
+            </div>
+          </div>
+        </div>
       ) : (
         <div>
           <h1 className="fw-bolder py-3">Testimonial</h1>
