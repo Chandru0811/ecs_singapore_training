@@ -129,26 +129,6 @@ function AdminLandingPage2() {
 
   return (
     <>
-      <div className="d-flex justify-content-between p-3 bg-light">
-        <h3 className="fw-bold">Landing Page</h3>
-        <div className="d-flex">
-          <AdminLandingCardAdd onSuccess={getData} />
-          <button
-            onClick={PublishLandingCards}
-            disabled={loadIndicator}
-            type="button"
-            className="btn btn-danger mx-2"
-          >
-            {loadIndicator && (
-              <span
-                className="spinner-border spinner-border-sm me-2"
-                aria-hidden="true"
-              ></span>
-            )}
-            Publish
-          </button>
-        </div>
-      </div>
       {loading ? (
         <div className="loader-container">
           <div className="loader">
@@ -160,152 +140,183 @@ function AdminLandingPage2() {
           </div>
         </div>
       ) : (
-        <div>
-          {/* carousel section */}
-          <div className="container">
-            <div className="row py-4 m-0">
-              <div className="col-md-2 col-12 py-3">
-                <p className="sub-content">What We Do Know</p>
-                <h5 className="text-start fw-bolder">
-                  Lorem, ipsum dolor sit amet consectetur.
-                </h5>
-                <h6 className="text-start fw-light">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Deleniti quibusdam inventore quis corporis error, culpa
-                  assumenda! Voluptas aliquid magni fugit omnis ut.
-                </h6>
-              </div>
+        <>
+          <div className="d-flex justify-content-between p-3 bg-light">
+            <h3 className="fw-bold">Landing Page</h3>
+            <div className="d-flex">
+              <AdminLandingCardAdd onSuccess={getData} />
+              <button
+                onClick={PublishLandingCards}
+                disabled={loadIndicator}
+                type="button"
+                className="btn btn-danger mx-2"
+              >
+                {loadIndicator && (
+                  <span
+                    className="spinner-border spinner-border-sm me-2"
+                    aria-hidden="true"
+                  ></span>
+                )}
+                Publish
+              </button>
+            </div>
+          </div>
 
-              <div className="col-md-10 col-12 px-1 position-relative">
-                <Carousel
-                  responsive={responsive}
-                  infinite={true}
-                  autoPlay={false}
-                >
-                  {data?.map((card) => (
-                    <div
-                      key={card.id}
-                      className="h-75 card mx-4 my-5 p-2 bg-primary text-light  text-start shadow"
-                    >
-                      <div className="d-flex flex-column">
-                        <div className="d-flex justify-content-between align-items-start p-2">
-                          <button
-                            type="button"
-                            className="btn link-light ms-2"
-                            style={{
-                              width: "fit-content",
-                              height: "fit-content",
-                            }}
-                          >
-                            <AdminLandingModalEdit
-                              id={card.id}
+          <div>
+            {/* carousel section */}
+            <div className="container">
+              <div className="row py-4 m-0">
+                <div className="col-md-2 col-12 py-3">
+                  <p className="sub-content">What We Do Know</p>
+                  <h5 className="text-start fw-bolder">
+                    Lorem, ipsum dolor sit amet consectetur.
+                  </h5>
+                  <h6 className="text-start fw-light">
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Deleniti quibusdam inventore quis corporis error, culpa
+                    assumenda! Voluptas aliquid magni fugit omnis ut.
+                  </h6>
+                </div>
+
+                <div className="col-md-10 col-12 px-1">
+                  <Carousel
+                    responsive={responsive}
+                    infinite={true}
+                    autoPlay={false}
+                  >
+                    {data?.map((card) => (
+                      <div
+                        key={card.id}
+                        className="h-75 card mx-4 my-5 p-2 bg-primary text-light  text-start shadow"
+                      >
+                        <div className="my-2">
+                          <div className="d-flex justify-content-between align-items-start p-2">
+                            <button
+                              type="button"
+                              className="btn link-light ms-2"
+                              style={{
+                                width: "fit-content",
+                                height: "fit-content",
+                              }}
+                            >
+                              <AdminLandingModalEdit
+                                id={card.id}
+                                onSuccess={getData}
+                              />
+                            </button>
+                            <DeleteModel
+                              className="text-danger"
                               onSuccess={getData}
+                              path={`/landingpage2/${card.id}`}
                             />
-                          </button>
-                          <DeleteModel
-                            className="text-danger"
-                            onSuccess={getData}
-                            path={`/landingpage2/${card.id}`}
-                          />
-                        </div>
-                        <div className="text-start w-25 py-2">
-                          <img
-                            src={`${ImgUrl}${card.image_path}`}
-                            alt="cardImg"
-                            className="img-fluid rounded-circle"
-                          />
-                        </div>
-                        <div className="flex-grow-1">
-                          <h6 className="card-title">{card.name}</h6>
-                          <p>{card.description}</p>
+                          </div>
+                          <div className="text-start w-25 py-1">
+                            <img
+                              src={`${ImgUrl}${card.image_path}`}
+                              alt="cardImg"
+                              className="img-fluid rounded-circle"
+                            />
+                          </div>
+                          <div>
+                            <h5 className="py-1">{card.name}</h5>
+                            <p>{card.description}</p>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
-                </Carousel>
+                    ))}
+                  </Carousel>
+                </div>
               </div>
             </div>
-          </div>
-          <div className="container">
-            <div className="row">
-              <div className="col-md-7 col-12 px-5 text-start"> </div>
-              <div className="col-md-5 col-12 p-5">
-                <form onSubmit={formik1.handleSubmit}>
-                  <div className="card text-start p-4 py-3">
-                    <h3 className="input-title fw-bold">Enroll Now</h3>
-                    <div className="py-3">
-                      <label htmlFor="fullName">Full Name</label>
-                      <input
-                        type="fullName"
-                        className={`form-control ${formik1.touched.fullName && formik1.errors.fullName
-                          ? "is-invalid"
-                          : ""
+            <div className="container">
+              <div className="row">
+                <div className="col-md-7 col-12 px-5 text-start"> </div>
+                <div className="col-md-5 col-12 p-5">
+                  <form onSubmit={formik1.handleSubmit}>
+                    <div className="card text-start p-4 py-3">
+                      <h3 className="input-title fw-bold">Enroll Now</h3>
+                      <div className="py-3">
+                        <label htmlFor="fullName">Full Name</label>
+                        <input
+                          type="fullName"
+                          className={`form-control ${
+                            formik1.touched.fullName && formik1.errors.fullName
+                              ? "is-invalid"
+                              : ""
                           }`}
-                        style={{ borderRadius: "3px" }}
-                        placeholder="Enter fullName"
-                        {...formik1.getFieldProps("fullName")}
-                      />
-                      {formik1.touched.fullName && formik1.errors.fullName && (
-                        <div className="invalid-feedback">
-                          {formik1.errors.fullName}
-                        </div>
-                      )}
-                    </div>
-                    <div className="py-3">
-                      <label htmlFor="mobileNumber">Mobile Number</label>
-                      <input
-                        type="mobileNumber"
-                        className={`form-control ${formik1.touched.mobileNumber &&
-                          formik1.errors.mobileNumber
-                          ? "is-invalid"
-                          : ""
+                          style={{ borderRadius: "3px" }}
+                          placeholder="Enter fullName"
+                          {...formik1.getFieldProps("fullName")}
+                        />
+                        {formik1.touched.fullName &&
+                          formik1.errors.fullName && (
+                            <div className="invalid-feedback">
+                              {formik1.errors.fullName}
+                            </div>
+                          )}
+                      </div>
+                      <div className="py-3">
+                        <label htmlFor="mobileNumber">Mobile Number</label>
+                        <input
+                          type="mobileNumber"
+                          className={`form-control ${
+                            formik1.touched.mobileNumber &&
+                            formik1.errors.mobileNumber
+                              ? "is-invalid"
+                              : ""
                           }`}
-                        style={{ borderRadius: "3px" }}
-                        placeholder="Enter mobileNumber"
-                        {...formik1.getFieldProps("mobileNumber")}
-                      />
-                      {formik1.touched.mobileNumber &&
-                        formik1.errors.mobileNumber && (
+                          style={{ borderRadius: "3px" }}
+                          placeholder="Enter mobileNumber"
+                          {...formik1.getFieldProps("mobileNumber")}
+                        />
+                        {formik1.touched.mobileNumber &&
+                          formik1.errors.mobileNumber && (
+                            <div className="invalid-feedback">
+                              {formik1.errors.mobileNumber}
+                            </div>
+                          )}
+                      </div>
+                      <div className="py-3">
+                        <label htmlFor="email">Email</label>
+                        <input
+                          type="email"
+                          className={`form-control ${
+                            formik1.touched.email && formik1.errors.email
+                              ? "is-invalid"
+                              : ""
+                          }`}
+                          style={{ borderRadius: "3px" }}
+                          placeholder="Enter email"
+                          {...formik1.getFieldProps("email")}
+                        />
+                        {formik1.touched.email && formik1.errors.email && (
                           <div className="invalid-feedback">
-                            {formik1.errors.mobileNumber}
+                            {formik1.errors.email}
                           </div>
                         )}
+                      </div>
+                      <div className="float-end">
+                        <button
+                          type="submit"
+                          className="enrollbtn"
+                          disabled={loadIndicator}
+                        >
+                          {loadIndicator && (
+                            <span
+                              className="spinner-border spinner-border-sm me-2"
+                              aria-hidden="true"
+                            ></span>
+                          )}
+                          Send
+                        </button>
+                      </div>
                     </div>
-                    <div className="py-3">
-                      <label htmlFor="email">Email</label>
-                      <input
-                        type="email"
-                        className={`form-control ${formik1.touched.email && formik1.errors.email
-                          ? "is-invalid"
-                          : ""
-                          }`}
-                        style={{ borderRadius: "3px" }}
-                        placeholder="Enter email"
-                        {...formik1.getFieldProps("email")}
-                      />
-                      {formik1.touched.email && formik1.errors.email && (
-                        <div className="invalid-feedback">
-                          {formik1.errors.email}
-                        </div>
-                      )}
-                    </div>
-                    <div className="float-end">
-                      <button type="submit" className="enrollbtn" disabled={loadIndicator}>
-                        {loadIndicator && (
-                          <span
-                            className="spinner-border spinner-border-sm me-2"
-                            aria-hidden="true"
-                          ></span>
-                        )}
-                        Send
-                      </button>
-                    </div>
-                  </div>
-                </form>
+                  </form>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        </>
       )}
     </>
   );
