@@ -11,6 +11,8 @@ const Course = () => {
   const tableRef = useRef(null);
   const [loading, setLoading] = useState(false);
   const [datas, setDatas] = useState([]);
+  const [loader, setLoader] = useState(true);
+  const [loadIndicator, setLoadIndicator] = useState(false);
 
   // useEffect(() => {
   //   $(tableRef.current).DataTable({
@@ -31,12 +33,19 @@ const Course = () => {
   };
   const destroyDataTable = () => {
     const table = $(tableRef.current).DataTable();
-    if (table && $.fn.DataTable.isDataTable(tableRef.current)) {
+    if (table) {
       table.destroy();
     }
   };
+  // const destroyDataTable = () => {
+  //   const table = $(tableRef.current).DataTable();
+  //   if (table && $.fn.DataTable.isDataTable(tableRef.current)) {
+  //     table.destroy();
+  //   }
+  // };
 
   const getData = async () => {
+    setLoader(true);
     setLoading(true);
     try {
       const response = await api.get("courses");
@@ -46,6 +55,7 @@ const Course = () => {
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
+      setLoader(false);
       setLoading(false);
     }
   };
@@ -65,16 +75,14 @@ const Course = () => {
 
   return (
     <div>
-      {loading ? (
-        <div className="loader-container">
-          <div className="loader">
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-          </div>
-        </div>
+      {loader ? (
+        <section className="dots-container">
+          <div className="dot"></div>
+          <div className="dot"></div>
+          <div className="dot"></div>
+          <div className="dot"></div>
+          <div className="dot"></div>
+        </section>
       ) : (
         <div className="container-fluid shadow px-0 ">
           <div className="card-header d-flex align-items-center p-2 bg-light">
@@ -83,7 +91,14 @@ const Course = () => {
               <Link to={"/courseadd"}>
                 <button className="btn btn-primary">Add +</button>
               </Link>
-              {/* <button className="btn btn-danger mx-2">Publish</button> */}
+              {/* <button className="btn btn-danger mx-2" disabled={loadIndicator}>
+              {loadIndicator && (
+                  <span
+                    className="spinner-border spinner-border-sm me-2"
+                    aria-hidden="true"
+                  ></span>
+                )}
+                Publish</button> */}
             </div>
           </div>
           <div>

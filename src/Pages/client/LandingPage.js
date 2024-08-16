@@ -4,11 +4,11 @@ import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import EnrollModel from "../admin/EnrollModel";
 import EnrollForm from "./EnrollForm";
 import api from "../../config/BaseUrl";
 import ImageURL from "../../config/ImageURL";
 import Testimonial from "./Testimonial";
+import EnrollModel from "./EnrollModel";
 
 const responsive = {
   superLargeDesktop: {

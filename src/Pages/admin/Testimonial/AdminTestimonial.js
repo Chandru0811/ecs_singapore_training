@@ -8,19 +8,19 @@ import DeleteModel from "../../../components/DeleteModel";
 import ImageURL from "../../../config/ImageURL";
 
 function AdminTestimonial({ onSuccess }) {
-  const [loading, setLoading] = useState(true);
+  const [loader, setLoader] = useState(true);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [datas, setDatas] = useState([]);
 
   const getData = async () => {
-    setLoading(true);
+    setLoader(true);
     try {
       const response = await api.get("testimonial");
       setDatas(response.data.data);
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
-      setLoading(false);
+      setLoader(false);
     }
   };
 
@@ -62,91 +62,88 @@ function AdminTestimonial({ onSuccess }) {
   };
 
   return (
-    <div>
-      <div className="d-flex justify-content-between p-2 bg-light">
-        <h3 className="fw-bold">Testimonials</h3>
-        <div className="d-flex">
-          <AdminTestimonialAdd onSuccess={getData} />
-          <button
-            type="submit"
-            className="btn btn-danger mx-2"
-            disabled={loadIndicator}
-            onClick={PublishTestimonial}
-          >
-            {loadIndicator && (
-              <span
-                className="spinner-border spinner-border-sm me-2"
-                aria-hidden="true"
-              ></span>
-            )}
-            Publish
-          </button>
-        </div>
-      </div>
-      {loading ? (
-        <div className="loader-container">
-          <div className="loader">
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-          </div>
-        </div>
+    <>
+      {loader ? (
+        <section class="dots-container">
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+        </section>
       ) : (
-        <div className="row m-0 p-3">
-          {datas.map((data) => (
-            <div key={data.id} className="col-md-4 col-12 p-2 ">
-              <div className="card h-100">
-                <div className="d-flex justify-content-between align-items-start p-2">
-                  <button
-                    type="button"
-                    className="btn link-light ms-2"
-                    style={{
-                      width: "fit-content",
-                      height: "fit-content",
-                    }}
-                  >
-                    <AdminTestimonialEdit
-                      id={data.id}
+        <div>
+          <div className="d-flex justify-content-between p-2 bg-light">
+            <h3 className="fw-bold">Testimonials</h3>
+            <div className="d-flex">
+              <AdminTestimonialAdd onSuccess={getData} />
+              <button
+                type="submit"
+                className="btn btn-danger mx-2"
+                disabled={loadIndicator}
+                onClick={PublishTestimonial}
+              >
+                {loadIndicator && (
+                  <span
+                    className="spinner-border spinner-border-sm me-2"
+                    aria-hidden="true"
+                  ></span>
+                )}
+                Publish
+              </button>
+            </div>
+          </div>
+          <div className="row m-0 p-3">
+            {datas.map((data) => (
+              <div key={data.id} className="col-md-4 col-12 p-2 ">
+                <div className="card h-100">
+                  <div className="d-flex justify-content-between align-items-start p-2">
+                    <button
+                      type="button"
+                      className="btn link-light ms-2"
+                      style={{
+                        width: "fit-content",
+                        height: "fit-content",
+                      }}
+                    >
+                      <AdminTestimonialEdit id={data.id} onSuccess={getData} />
+                    </button>
+                    <DeleteModel
+                      className="text-danger"
                       onSuccess={getData}
+                      path={`/testimonial/${data.id}`}
                     />
-                  </button>
-                  <DeleteModel
-                    className="text-danger"
-                    onSuccess={getData}
-                    path={`/testimonial/${data.id}`}
-                  />
-                </div>
-                <div className="card-body text-start">
-                  <div className="d-flex align-items-center">
-                    <div className="w-25 h-25 fit-content">
-                      <img
-                        className="img-fluid rounded-circle p-2"
-                        src={`${ImageURL}${data.image_path}`}
-                        alt="Admin Testimonial"
-                        style={{ width: "70%", height: "70%" }}
-                      />
-                    </div>
-                    <div>
-                      <h5 className="card-title">{data.client_name}</h5>
-                      <h6 className="card-subtitle mb-2 text-muted">
-                        {data.designation}
-                      </h6>
-                      <div>{renderStars(data.rating)}</div>
-                    </div>
                   </div>
-                  <div className="p-2">
-                    <h5>{data.title}</h5>
-                    <p className="card-text">{data.description}</p>
+                  <div className="card-body text-start">
+                    <div className="d-flex align-items-center">
+                      <div className="w-25 h-25 fit-content">
+                        <img
+                          className="img-fluid rounded-circle p-2"
+                          src={`${ImageURL}${data.image_path}`}
+                          alt="Admin Testimonial"
+                          style={{ width: "70%", height: "70%" }}
+                        />
+                      </div>
+                      <div>
+                        <h5 className="card-title">{data.client_name}</h5>
+                        <h6 className="card-subtitle mb-2 text-muted">
+                          {data.designation}
+                        </h6>
+                        <div>{renderStars(data.rating)}</div>
+                      </div>
+                    </div>
+                    <div className="p-2">
+                      <h5>{data.title}</h5>
+                      <p className="card-text">{data.description}</p>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       )}
-    </div>
+    </>
   );
 }
 

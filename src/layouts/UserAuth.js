@@ -14,6 +14,7 @@ import UserCourseView from "../Pages/client/UserCourseView";
 import { TermsAndCondition } from "../Pages/admin/TermsAndCondition";
 import ClientTermsAndCondition from "../Pages/client/ClientTermsAndCondition";
 import ClientPrivacyPolicy from "../Pages/client/ClientPrivacyPolicy";
+import RestPassword from "../components/client/common/RestPassword";
 
 const UserAuth = ({ handleLogin,handleClientLogin,handleLogout }) => {
   return (
@@ -32,6 +33,7 @@ const UserAuth = ({ handleLogin,handleClientLogin,handleLogout }) => {
             <Route path="/home" element={<Home />} />
             <Route path="/login" element={<Login handleLogin={handleLogin} handleClientLogin={handleClientLogin}/>} />
             <Route path="/forgotpassword" element={<ForgotPassword/>} />
+            <Route path="/resetpassword" element={<RestPassword/>} />
             <Route path="/register" element={<Register handleClientLogin={handleClientLogin}/>} />
             <Route path="/about" element={<ClientAbout />} />
             <Route path="/contact" element={<Contact />} />

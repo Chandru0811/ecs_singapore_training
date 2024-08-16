@@ -39,7 +39,7 @@ const EnrollForm = () => {
       style={{
         boxShadow: "1px 1px 4px 0px #118AEF",
         position: "sticky",
-        top:"6rem"
+        top: "6rem",
       }}
     >
       <h4 className="mt-3" style={{ color: "#118AEF" }}>
@@ -125,7 +125,9 @@ const EnrollForm = () => {
           </div>
         </div>
         <div className="">
-          <button className="btn btn-primary">SUBMIT</button>
+          <button type="button" className="btn btn-primary">
+            SUBMIT
+          </button>
         </div>
       </form>
     </div>

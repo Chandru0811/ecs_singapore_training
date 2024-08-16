@@ -36,13 +36,13 @@ const EnrollModel = ({ from }) => {
   const renderButton = (from) => {
     if (from === "CourseEnroll") {
       return (
-        <button className="btn btn-primary" onClick={handleShow}>
+        <button type="button" className="btn btn-primary" onClick={handleShow}>
           Enroll Now
         </button>
       );
     } else if (from === "Syllabus") {
       return (
-        <button className="btn btn-outline-primary ms-2" onClick={handleShow}>
+        <button type="button" className="btn btn-outline-primary ms-2" onClick={handleShow}>
           Download Syllabus
         </button>
       );
@@ -57,17 +57,17 @@ const EnrollModel = ({ from }) => {
     </span>);
     } 
     else if (from ==="About"){
-      return (<button className="btn enroll-btn" onClick={handleShow}>
+      return (<button type="button" className="btn enroll-btn" onClick={handleShow}>
         Enroll Now
       </button>);
     } 
     else if (from ==="Landing"){
       return (
-        <button className="enrollbtn" onClick={handleShow}>Enroll</button>);
+        <button type="button" className="enrollbtn" onClick={handleShow}>Enroll</button>);
     } 
     else {
       return (
-        <button className="btn enroll-btn" onClick={handleShow}>
+        <button type="button" className="btn enroll-btn" onClick={handleShow}>
           Enroll Now
         </button>
       );

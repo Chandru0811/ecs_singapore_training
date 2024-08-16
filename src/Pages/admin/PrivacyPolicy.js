@@ -8,7 +8,8 @@ export const PrivacyPolicy = () => {
   const [isEditing, setIsEditing] = useState(null);
   const [PrivacyData, setPrivacyData] = useState();
   const [loadingIndicator, setLoadIndicator] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loader, setLoader] = useState(true);
+
   const formik = useFormik({
     initialValues: {
       title: "",
@@ -44,7 +45,7 @@ export const PrivacyPolicy = () => {
 
   const getData = async () => {
     try {
-      setLoading(true);
+      setLoader(true);
       const response = await api.get("edit/privacypolicy");
       if (response.status === 200) {
         formik.setValues(response.data.data);
@@ -53,7 +54,7 @@ export const PrivacyPolicy = () => {
     } catch (e) {
       console.log("object", e);
     } finally {
-      setLoading(false);
+      setLoader(false);
     }
   };
 
@@ -78,19 +79,16 @@ export const PrivacyPolicy = () => {
 
   return (
     <>
-      {loading ? (
-        <div className="loader-container">
-          <div className="loader">
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-          </div>
-        </div>
+      {loader ? (
+        <section class="dots-container">
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+        </section>
       ) : (
         <div>
-          {" "}
           <div className="container-fluid d-flex align-items-center justify-content-between p-2">
             <h4>Privacy Policy</h4>
             <button

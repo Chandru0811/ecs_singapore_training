@@ -25,7 +25,7 @@ const HeaderFooter = () => {
   const [course, setCourse] = useState(false);
   const [headerData, setHeaderData] = useState();
   const [loadingIndicator, setLoadIndicator] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loader, setLoader] = useState(true);
 
   const courseRef = useRef(null);
   const courseRef2 = useRef(null);
@@ -132,7 +132,7 @@ const HeaderFooter = () => {
   // api Get Data
   const getData = async () => {
     try {
-      setLoading(true);
+      setLoader(true);
       const response = await api.get("edit/header");
       if (response.status === 200) {
         formik.setFieldValue("HeadingText", response.data.data.top_bar);
@@ -141,7 +141,7 @@ const HeaderFooter = () => {
     } catch (e) {
       console.log("object", e);
     } finally {
-      setLoading(false);
+      setLoader(false);
     }
   };
 
@@ -186,16 +186,14 @@ const HeaderFooter = () => {
 
   return (
     <>
-      {loading ? (
-        <div className="loader-container">
-          <div className="loader">
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-          </div>
-        </div>
+      {loader ? (
+        <section class="dots-container">
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+        </section>
       ) : (
         <div className="container-fluid px-0">
           <div>
@@ -313,7 +311,7 @@ const HeaderFooter = () => {
                           src={`${ImageURL}${headerData?.logo_path}`}
                           alt="logo"
                           height="40"
-              className="d-inline-block align-top"
+                          className="d-inline-block align-top"
                           // style={{
                           //   width: "75%",
                           //   height: "auto",

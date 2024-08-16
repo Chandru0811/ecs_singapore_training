@@ -10,6 +10,7 @@ function AdminLandingPage1() {
   const [isEditing, setIsEditing] = useState(null);
   const [data, setData] = useState();
   const [loading, setLoading] = useState(false);
+  const [loader, setLoader] = useState(true);
 
   const handleEditClick = (field) => {
     setIsEditing(field);
@@ -60,6 +61,7 @@ function AdminLandingPage1() {
   });
 
   const getData = async () => {
+    setLoader(true);
     try {
       const response = await api.get("edit/landingsection1");
       if (response.status === 200) {
@@ -74,6 +76,8 @@ function AdminLandingPage1() {
       }
     } catch (e) {
       console.error("Error fetching landing page data:", e);
+    } finally {
+      setLoader(false);
     }
   };
 
@@ -105,232 +109,246 @@ function AdminLandingPage1() {
 
   return (
     <>
-      <div className="d-flex justify-content-between p-3 bg-light">
-        <h3 className="fw-bold">Landing Page</h3>
-        <button
-          type="submit"
-          className="btn btn-sm btn-danger mx-2"
-          disabled={loading}
-          onClick={publishData}
-        >
-          {loading ? (
-            <span
-              className="spinner-border spinner-border-sm"
-              aria-hidden="true"
-            ></span>
-          ) : (
-            <span></span>
-          )}
-          Publish
-        </button>
-      </div>
-      <div className="container">
-        <div className="row py-5 d-flex align-items-center">
-          <div className="col-md-7 col-12 py-3 text-start">
-            {isEditing === "title" ? (
-              <div>
-                <div className="d-flex">
-                  <button
-                    type="button"
-                    onClick={handleSaveClick}
-                    className="btn btn-sm link-primary ms-2"
-                    style={{ width: "fit-content" }}
-                  >
-                    <FaSave />
-                  </button>
-                  <button
-                    type="button"
-                    onClick={handleCancel}
-                    className="btn btn-sm link-danger ms-2"
-                    style={{ width: "fit-content" }}
-                  >
-                    <FaTimes />
-                  </button>
+      {loader ? (
+        <section class="dots-container">
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+        </section>
+      ) : (
+        <>
+          <div className="d-flex justify-content-between p-3 bg-light">
+            <h3 className="fw-bold">Landing Page</h3>
+            <button
+              type="submit"
+              className="btn btn-sm btn-danger mx-2"
+              disabled={loading}
+              onClick={publishData}
+            >
+              {loading ? (
+                <span
+                  className="spinner-border spinner-border-sm"
+                  aria-hidden="true"
+                ></span>
+              ) : (
+                <span></span>
+              )}
+              Publish
+            </button>
+          </div>
+          <div className="container">
+            <div className="row py-5 d-flex align-items-center">
+              <div className="col-md-7 col-12 py-3 text-start">
+                {isEditing === "title" ? (
+                  <div>
+                    <div className="d-flex">
+                      <button
+                        type="button"
+                        onClick={handleSaveClick}
+                        className="btn btn-sm link-primary ms-2"
+                        style={{ width: "fit-content" }}
+                      >
+                        <FaSave />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={handleCancel}
+                        className="btn btn-sm link-danger ms-2"
+                        style={{ width: "fit-content" }}
+                      >
+                        <FaTimes />
+                      </button>
+                    </div>
+                    <input
+                      type="text"
+                      {...formik.getFieldProps("title")}
+                      className="form-control"
+                    />
+                  </div>
+                ) : (
+                  <div>
+                    <button
+                      type="button"
+                      onClick={() => handleEditClick("title")}
+                      className="btn btn-sm link-secondary ms-2"
+                      style={{ width: "fit-content" }}
+                    >
+                      <FaEdit />
+                    </button>
+                    <h2 className="display-3 fw-bolder text-dark">
+                      {data?.title}
+                    </h2>
+                  </div>
+                )}
+                {isEditing === "description" ? (
+                  <div>
+                    <div className="d-flex">
+                      <button
+                        type="button"
+                        onClick={handleSaveClick}
+                        className="btn btn-sm link-primary ms-2"
+                        style={{ width: "fit-content" }}
+                      >
+                        <FaSave />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={handleCancel}
+                        className="btn btn-sm link-danger ms-2"
+                        style={{ width: "fit-content" }}
+                      >
+                        <FaTimes />
+                      </button>
+                    </div>
+                    <textarea
+                      {...formik.getFieldProps("description")}
+                      className="form-control"
+                    />
+                  </div>
+                ) : (
+                  <div>
+                    <button
+                      type="button"
+                      onClick={() => handleEditClick("description")}
+                      className="btn btn-sm link-secondary ms-2"
+                      style={{ width: "fit-content" }}
+                    >
+                      <FaEdit />
+                    </button>
+                    <h6 className="py-3 fw-light">{data?.description}</h6>
+                  </div>
+                )}
+                <div className="py-3">
+                  <button className="enrollbtn">Enroll</button>
                 </div>
-                <input
-                  type="text"
-                  {...formik.getFieldProps("title")}
-                  className="form-control"
-                />
               </div>
-            ) : (
-              <div>
-                <button
-                  type="button"
-                  onClick={() => handleEditClick("title")}
-                  className="btn btn-sm link-secondary ms-2"
-                  style={{ width: "fit-content" }}
-                >
-                  <FaEdit />
-                </button>
-                <h2 className="display-3 fw-bolder text-dark">{data?.title}</h2>
+              <div className="col-md-5 col-12">
+                {isEditing === "image_path" ? (
+                  <div>
+                    <div className="d-flex">
+                      <button
+                        type="button"
+                        onClick={handleSaveClick}
+                        className="btn btn-sm link-primary ms-2"
+                        style={{ width: "fit-content" }}
+                      >
+                        <FaSave />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={handleCancel}
+                        className="btn btn-sm link-danger ms-2"
+                        style={{ width: "fit-content" }}
+                      >
+                        <FaTimes />
+                      </button>
+                    </div>
+                    <input
+                      type="file"
+                      name="image_path"
+                      onChange={handleImageChange}
+                      className="form-control"
+                    />
+                    {data?.image_path && (
+                      <img
+                        src={ImgUrl + data?.image_path}
+                        alt="heroImg"
+                        className="img-fluid my-2"
+                      />
+                    )}
+                  </div>
+                ) : (
+                  <div>
+                    <button
+                      type="button"
+                      onClick={() => handleEditClick("image_path")}
+                      className="btn btn-sm link-secondary"
+                      style={{ width: "fit-content" }}
+                    >
+                      <FaEdit />
+                    </button>
+                    {data?.image_path && (
+                      <img
+                        src={ImgUrl + data?.image_path}
+                        alt="heroImg"
+                        className="img-fluid"
+                      />
+                    )}
+                  </div>
+                )}
               </div>
-            )}
-            {isEditing === "description" ? (
-              <div>
-                <div className="d-flex">
-                  <button
-                    type="button"
-                    onClick={handleSaveClick}
-                    className="btn btn-sm link-primary ms-2"
-                    style={{ width: "fit-content" }}
-                  >
-                    <FaSave />
-                  </button>
-                  <button
-                    type="button"
-                    onClick={handleCancel}
-                    className="btn btn-sm link-danger ms-2"
-                    style={{ width: "fit-content" }}
-                  >
-                    <FaTimes />
-                  </button>
-                </div>
-                <textarea
-                  {...formik.getFieldProps("description")}
-                  className="form-control"
-                />
-              </div>
-            ) : (
-              <div>
-                <button
-                  type="button"
-                  onClick={() => handleEditClick("description")}
-                  className="btn btn-sm link-secondary ms-2"
-                  style={{ width: "fit-content" }}
-                >
-                  <FaEdit />
-                </button>
-                <h6 className="py-3 fw-light">{data?.description}</h6>
-              </div>
-            )}
-            <div className="py-3">
-              <button className="enrollbtn">Enroll</button>
             </div>
           </div>
-          <div className="col-md-5 col-12">
-            {isEditing === "image_path" ? (
-              <div>
-                <div className="d-flex">
-                  <button
-                    type="button"
-                    onClick={handleSaveClick}
-                    className="btn btn-sm link-primary ms-2"
-                    style={{ width: "fit-content" }}
-                  >
-                    <FaSave />
-                  </button>
-                  <button
-                    type="button"
-                    onClick={handleCancel}
-                    className="btn btn-sm link-danger ms-2"
-                    style={{ width: "fit-content" }}
-                  >
-                    <FaTimes />
-                  </button>
-                </div>
-                <input
-                  type="file"
-                  name="image_path"
-                  onChange={handleImageChange}
-                  className="form-control"
-                />
-                {data?.image_path && (
-                  <img
-                    src={ImgUrl + data?.image_path}
-                    alt="heroImg"
-                    className="img-fluid my-2"
-                  />
+          <div className="container">
+            <div className="row">
+              <div className="col-md-7 col-12 p-5 text-start">
+                <h4 className="fw-bold py-2">Available Online Live Courses</h4>
+                {isEditing === "youtube_link" ? (
+                  <div>
+                    <div className="d-flex">
+                      <button
+                        type="button"
+                        onClick={handleSaveClick}
+                        className="btn btn-sm link-primary ms-2"
+                        style={{ width: "fit-content" }}
+                      >
+                        <FaSave />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={handleCancel}
+                        className="btn btn-sm link-danger ms-2"
+                        style={{ width: "fit-content" }}
+                      >
+                        <FaTimes />
+                      </button>
+                    </div>
+                    <input
+                      type="text"
+                      {...formik.getFieldProps("youtube_link")}
+                      className="form-control"
+                    />
+                    {data?.youtube_link && (
+                      <ReactPlayer
+                        url={data?.youtube_link}
+                        controls
+                        className="rounded"
+                        width="100%"
+                        height="400px"
+                        title="YouTube Video"
+                      />
+                    )}
+                  </div>
+                ) : (
+                  <div>
+                    <button
+                      type="button"
+                      onClick={() => handleEditClick("youtube_link")}
+                      className="btn btn-sm link-secondary"
+                      style={{ width: "fit-content" }}
+                    >
+                      <FaEdit />
+                    </button>
+                    {data?.youtube_link && (
+                      <ReactPlayer
+                        url={data?.youtube_link}
+                        controls
+                        className="rounded"
+                        width="100%"
+                        height="400px"
+                        title="YouTube Video"
+                      />
+                    )}
+                  </div>
                 )}
               </div>
-            ) : (
-              <div>
-                <button
-                  type="button"
-                  onClick={() => handleEditClick("image_path")}
-                  className="btn btn-sm link-secondary"
-                  style={{ width: "fit-content" }}
-                >
-                  <FaEdit />
-                </button>
-                {data?.image_path && (
-                  <img
-                    src={ImgUrl + data?.image_path}
-                    alt="heroImg"
-                    className="img-fluid"
-                  />
-                )}
-              </div>
-            )}
+              <div className="col-md-5 col-12 p-5"></div>
+            </div>
           </div>
-        </div>
-      </div>
-      <div className="container">
-        <div className="row">
-          <div className="col-md-7 col-12 p-5 text-start">
-            <h4 className="fw-bold py-2">Available Online Live Courses</h4>
-            {isEditing === "youtube_link" ? (
-              <div>
-                <div className="d-flex">
-                  <button
-                    type="button"
-                    onClick={handleSaveClick}
-                    className="btn btn-sm link-primary ms-2"
-                    style={{ width: "fit-content" }}
-                  >
-                    <FaSave />
-                  </button>
-                  <button
-                    type="button"
-                    onClick={handleCancel}
-                    className="btn btn-sm link-danger ms-2"
-                    style={{ width: "fit-content" }}
-                  >
-                    <FaTimes />
-                  </button>
-                </div>
-                <input
-                  type="text"
-                  {...formik.getFieldProps("youtube_link")}
-                  className="form-control"
-                />
-                {data?.youtube_link && (
-                  <ReactPlayer
-                    url={data?.youtube_link}
-                    controls
-                    className="rounded"
-                    width="100%"
-                    height="400px"
-                    title="YouTube Video"
-                  />
-                )}
-              </div>
-            ) : (
-              <div>
-                <button
-                  type="button"
-                  onClick={() => handleEditClick("youtube_link")}
-                  className="btn btn-sm link-secondary"
-                  style={{ width: "fit-content" }}
-                >
-                  <FaEdit />
-                </button>
-                {data?.youtube_link && (
-                  <ReactPlayer
-                    url={data?.youtube_link}
-                    controls
-                    className="rounded"
-                    width="100%"
-                    height="400px"
-                    title="YouTube Video"
-                  />
-                )}
-              </div>
-            )}
-          </div>
-          <div className="col-md-5 col-12 p-5"></div>
-        </div>
-      </div>
+        </>
+      )}
     </>
   );
 }

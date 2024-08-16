@@ -12,17 +12,17 @@ function CourseVideoTestimonial() {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [iconState, setIconState] = useState({});
   const videoRefs = useRef({});
-  const [loading, setLoading] = useState(true);
+  const [loader, setLoader] = useState(true);
 
   const getData = async () => {
-    setLoading(true);
+    setLoader(true);
     try {
       const response = await api.get("videotestimonial");
       setDatas(response.data.data);
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
-      setLoading(false);
+      setLoader(false);
     }
   };
 
@@ -74,101 +74,103 @@ function CourseVideoTestimonial() {
   };
 
   return (
-    <div>
-      <div className="card-header d-flex align-items-center justify-content-between p-2 bg-light">
-        <h3 className="fw-bold">Online Training Review</h3>
-        <div>
-          <AddCourseVideoTestimonial onSuccess={getData} />
-          <button
-            type="submit"
-            className="btn btn-danger mx-2"
-            disabled={loadIndicator}
-            onClick={handlePublish}
-          >
-            {loadIndicator ? (
-              <span
-                className="spinner-border spinner-border-sm"
-                aria-hidden="true"
-              ></span>
-            ) : (
-              <span></span>
-            )}
-            Publish
-          </button>
-        </div>
-      </div>
-      {loading ? (
-        <div className="loader-container">
-          <div className="loader">
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-          </div>
-        </div>
+    <>
+      {loader ? (
+        <section class="dots-container">
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+        </section>
       ) : (
-        <div className="row m-0 p-3">
-          {datas.map((card) => (
-            <div key={card.id} className="col-md-3 col-12 p-2">
-              <div className="h-100 rounded video-card p-2 position-relative">
-                <div className="d-flex justify-content-between">
-                  <EditCourseVideoTestimonial
-                    id={card.id}
-                    onSuccess={getData}
-                  />
-                  <DeleteModel
-                    className="text-danger"
-                    onSuccess={getData}
-                    path={`videotestimonial/${card.id}`}
-                  />
-                </div>
-                <div
-                  className="video-container"
-                  style={{ position: "relative", height: "200px" }}
-                >
-                  <div
-                    className="play-pause-overlay"
-                    onClick={() => handlePlayPause(card.id)}
-                    style={{
-                      position: "absolute",
-                      top: "50%",
-                      left: "50%",
-                      transform: "translate(-50%, -50%)",
-                      cursor: "pointer",
-                      zIndex: 1,
-                      fontSize: "2rem",
-                      color: "white",
-                    }}
-                  >
-                    {iconState[card.id] !== false ? (
-                      <IoMdPlay />
-                    ) : (
-                      <IoIosPause />
-                    )}
+        <div>
+          <div className="card-header d-flex align-items-center justify-content-between p-2 bg-light">
+            <h3 className="fw-bold">Online Training Review</h3>
+            <div>
+              <AddCourseVideoTestimonial onSuccess={getData} />
+              <button
+                type="submit"
+                className="btn btn-danger mx-2"
+                disabled={loadIndicator}
+                onClick={handlePublish}
+              >
+                {loadIndicator ? (
+                  <span
+                    className="spinner-border spinner-border-sm"
+                    aria-hidden="true"
+                  ></span>
+                ) : (
+                  <span></span>
+                )}
+                Publish
+              </button>
+            </div>
+          </div>
+          <div className="row m-0 p-3">
+            {datas.map((card) => (
+              <div key={card.id} className="col-md-3 col-12 p-2">
+                <div className="h-100 rounded video-card p-2 position-relative">
+                  <div className="d-flex justify-content-between">
+                    <EditCourseVideoTestimonial
+                      id={card.id}
+                      onSuccess={getData}
+                    />
+                    <DeleteModel
+                      className="text-danger"
+                      onSuccess={getData}
+                      path={`videotestimonial/${card.id}`}
+                    />
                   </div>
-                  <video
-                    ref={(el) => (videoRefs.current[card.id] = el)}
-                    src={`${ImageURL}${card.video_path}`}
-                    style={{ width: "100%", height: "200px" }}
-                    controls={false}
-                  />
-                </div>
-                <div className="p-2 text-start">
-                  <h4
-                    className="card-text text-primary"
-                    style={{ borderBottom: "2px solid" }}
+                  <div
+                    className="video-container"
+                    style={{ position: "relative", height: "200px" }}
                   >
-                    {card.client_name}
-                  </h4>
-                  <p className="card-text text-secondary">{card.description}</p>
+                    <div
+                      className="play-pause-overlay"
+                      onClick={() => handlePlayPause(card.id)}
+                      style={{
+                        position: "absolute",
+                        top: "50%",
+                        left: "50%",
+                        transform: "translate(-50%, -50%)",
+                        cursor: "pointer",
+                        zIndex: 1,
+                        fontSize: "2rem",
+                        color: "white",
+                      }}
+                    >
+                      {iconState[card.id] !== false ? (
+                        <IoMdPlay />
+                      ) : (
+                        <IoIosPause />
+                      )}
+                    </div>
+                    <video
+                      ref={(el) => (videoRefs.current[card.id] = el)}
+                      src={`${ImageURL}${card.video_path}`}
+                      style={{ width: "100%", height: "200px" }}
+                      controls={false}
+                    />
+                  </div>
+                  <div className="p-2 text-start">
+                    <h4
+                      className="card-text text-primary"
+                      style={{ borderBottom: "2px solid" }}
+                    >
+                      {card.client_name}
+                    </h4>
+                    <p className="card-text text-secondary">
+                      {card.description}
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       )}
-    </div>
+    </>
   );
 }
 

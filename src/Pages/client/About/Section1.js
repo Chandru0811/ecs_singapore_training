@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { LuDiamond } from "react-icons/lu";
 import { BsBoxSeam } from "react-icons/bs";
-import EnrollModel from "../../admin/EnrollModel";
+import EnrollModel from "../EnrollModel";
 import { Link } from "react-router-dom";
 import api from "../../../config/BaseUrl";
 import ImageURL from "../../../config/ImageURL";

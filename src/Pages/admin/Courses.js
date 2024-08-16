@@ -13,6 +13,8 @@ function Courses() {
   const [isAddingPoint, setIsAddingPoint] = useState(false);
   const [newPoint, setNewPoint] = useState("");
   const [editPointId, setEditPointId] = useState(null);
+  const [loader, setLoader] = useState(true);
+  const [loadIndicator, setLoadIndicator] = useState(false);
 
   const formik = useFormik({
     initialValues: {
@@ -30,10 +32,8 @@ function Courses() {
       const formData = new FormData();
       formData.append("heading_section", values.heading_section);
       formData.append("description", values.description);
-      values.features.forEach((fea)=>( 
-        formData.append("features[]",fea)
-      ))
-      
+      values.features.forEach((fea) => formData.append("features[]", fea));
+
       if (
         values.image_path instanceof ArrayBuffer ||
         values.image_path instanceof Blob
@@ -41,6 +41,7 @@ function Courses() {
         formData.append("image", values.image_path);
       }
       try {
+        setLoader(true);
         const response = await api.post("update/course/content", formData);
         if (response.status === 200) {
           toast.success(response?.data?.message);
@@ -49,11 +50,14 @@ function Courses() {
         }
       } catch (e) {
         console.log("object", e);
+      }finally{
+        setLoader(false)
       }
     },
   });
 
   const getData = async () => {
+    setLoader(true);
     try {
       const response = await api.get("edit/course/content");
       if (response.status === 200) {
@@ -62,6 +66,8 @@ function Courses() {
       }
     } catch (e) {
       console.log("object", e);
+    } finally {
+      setLoader(false);
     }
   };
 
@@ -85,7 +91,7 @@ function Courses() {
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
-        formik.setFieldValue("image_path", file);
+      formik.setFieldValue("image_path", file);
     }
   };
 
@@ -104,6 +110,7 @@ function Courses() {
   };
 
   const publishData = async () => {
+    setLoadIndicator(true);
     try {
       const response = await api.post("publish/course/content");
       if (response.status === 200) {
@@ -111,6 +118,8 @@ function Courses() {
       }
     } catch (e) {
       console.log("object", e);
+    } finally {
+      setLoadIndicator(false);
     }
   };
 
@@ -119,224 +128,249 @@ function Courses() {
   }, []);
 
   return (
-    <div className="container-fluid" style={{ backgroundColor: "#FAFCFF" }}>
-      <div className="d-flex align-items-center justify-content-between p-2">
-        <h4>Courses</h4>
-        <button className="btn btn-primary" onClick={publishData}>
-          Publish
-        </button>
-      </div>
-      <div className="container">
-        <form onSubmit={formik.handleSubmit}>
-          <div className="row CoursesHome">
-            <div className="col-md-8 pt-5">
-              {isEditing === "heading_section" ? (
-                <div className="d-flex flex-column">
-                  <input
-                    type="text"
-                    name="heading_section"
-                    value={formik.values?.heading_section}
-                    onChange={formik.handleChange}
-                    className="form-control mb-2"
-                  />
-                  <div className="d-flex justify-content-end">
-                    <FaSave
-                      onClick={handleSaveClick}
-                      className="text-secondary me-2"
-                    />
-                    <FaTimes
-                      onClick={handleCancel}
-                      className="text-secondary"
-                    />
-                  </div>
-                </div>
-              ) : (
-                <div className="d-flex align-items-center">
-                  <h1 className="display-5 text-start fw-bold">
-                    {headerData?.heading_section}
-                  </h1>
-                  <FaEdit
-                    onClick={() => handleEditClick("heading_section")}
-                    className="text-secondary ms-3"
-                    style={{ width: "30px", height: "30px" }}
-                  />
-                </div>
+    <>
+      {loader ? (
+        <section class="dots-container">
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+        </section>
+      ) : (
+        <div className="container-fluid" style={{ backgroundColor: "#FAFCFF" }}>
+          <div className="d-flex align-items-center justify-content-between p-2">
+            <h4>Courses</h4>
+            <button
+              className="btn btn-primary"
+              onClick={publishData}
+              disabled={loadIndicator}
+            >
+              {loadIndicator && (
+                <span
+                  className="spinner-border spinner-border-sm me-2"
+                  aria-hidden="true"
+                ></span>
               )}
-              {isEditing === "description" ? (
-                <div className="d-flex flex-column">
-                  <textarea
-                    name="description"
-                    value={formik.values?.description}
-                    onChange={formik.handleChange}
-                    className="form-control mb-2"
-                  />
-                  <div className="d-flex justify-content-end">
-                    <FaSave
-                      onClick={handleSaveClick}
-                      className="text-secondary me-2"
-                    />
-                    <FaTimes
-                      onClick={handleCancel}
-                      className="text-secondary"
-                    />
-                  </div>
-                </div>
-              ) : (
-                <div className="d-flex align-items-center">
-                  <p className="text-start coursepara">
-                    {headerData?.description}
-                  </p>
-                  <FaEdit
-                    onClick={() => handleEditClick("description")}
-                    className="text-secondary ms-3"
-                  />
-                </div>
-              )}
+              Publish
+            </button>
+          </div>
+          <div className="container">
+            <form onSubmit={formik.handleSubmit}>
+              <div className="row CoursesHome">
+                <div className="col-md-8 pt-5">
+                  {isEditing === "heading_section" ? (
+                    <div className="d-flex flex-column">
+                      <input
+                        type="text"
+                        name="heading_section"
+                        value={formik.values?.heading_section}
+                        onChange={formik.handleChange}
+                        className="form-control mb-2"
+                      />
+                      <div className="d-flex justify-content-end">
+                        <FaSave
+                          onClick={handleSaveClick}
+                          className="text-secondary me-2"
+                        />
+                        <FaTimes
+                          onClick={handleCancel}
+                          className="text-secondary"
+                        />
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="d-flex align-items-center">
+                      <h1 className="display-5 text-start fw-bold">
+                        {headerData?.heading_section}
+                      </h1>
+                      <FaEdit
+                        onClick={() => handleEditClick("heading_section")}
+                        className="text-secondary ms-3"
+                        style={{ width: "30px", height: "30px" }}
+                      />
+                    </div>
+                  )}
+                  {isEditing === "description" ? (
+                    <div className="d-flex flex-column">
+                      <textarea
+                        name="description"
+                        value={formik.values?.description}
+                        onChange={formik.handleChange}
+                        className="form-control mb-2"
+                      />
+                      <div className="d-flex justify-content-end">
+                        <FaSave
+                          onClick={handleSaveClick}
+                          className="text-secondary me-2"
+                        />
+                        <FaTimes
+                          onClick={handleCancel}
+                          className="text-secondary"
+                        />
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="d-flex align-items-center">
+                      <p className="text-start coursepara">
+                        {headerData?.description}
+                      </p>
+                      <FaEdit
+                        onClick={() => handleEditClick("description")}
+                        className="text-secondary ms-3"
+                      />
+                    </div>
+                  )}
 
-              <div className="row pt-4 mb-4">
-                {isEditing === "features" ? (
-                  <>
-                    <div className="col-md-12">
+                  <div className="row pt-4 mb-4">
+                    {isEditing === "features" ? (
+                      <>
+                        <div className="col-md-12">
+                          <ul style={{ listStyle: "none", padding: 0 }}>
+                            <div className="row">
+                              {formik.values.features?.map((course, index) => (
+                                <div className="col-md-6" key={course.id}>
+                                  <li className="d-flex align-items-center">
+                                    <img
+                                      src={StarIcon}
+                                      className="me-2"
+                                      style={{ width: "18px", height: "18px" }}
+                                      alt="Star Icon"
+                                    />
+                                    <input
+                                      type="text"
+                                      name={`features[${index}]`}
+                                      value={formik.values.features[index]}
+                                      onChange={formik.handleChange}
+                                      className="form-control mb-2"
+                                    />
+                                    <FaTrash
+                                      onClick={() => handleDeletePoint(index)}
+                                      className="text-secondary ms-2"
+                                    />
+                                  </li>
+                                </div>
+                              ))}
+                            </div>
+                          </ul>
+                        </div>
+                        {isAddingPoint ? (
+                          <div className="col-md-6 d-flex align-items-center mb-2">
+                            <input
+                              type="text"
+                              value={newPoint}
+                              onChange={(e) => setNewPoint(e.target.value)}
+                              className="form-control me-2"
+                              placeholder="Enter new point"
+                            />
+                            <FaTimes
+                              onClick={() => setIsAddingPoint(false)}
+                              className="text-secondary"
+                            />
+                          </div>
+                        ) : (
+                          <div className="d-flex align-items-center mb-2">
+                            <FaPlus
+                              onClick={() => setIsAddingPoint(true)}
+                              className="text-secondary"
+                            />
+                          </div>
+                        )}
+                        <div className="d-flex justify-content-center">
+                          <FaSave
+                            onClick={() => {
+                              if (newPoint.trim()) {
+                                handleAddPoint();
+                                formik.handleSubmit();
+                              } else {
+                                handleSaveClick();
+                              }
+                            }}
+                            className="text-secondary ms-2"
+                          />
+                          <FaTimes
+                            onClick={handleCancel}
+                            className="text-secondary"
+                          />
+                        </div>
+                      </>
+                    ) : (
                       <ul style={{ listStyle: "none", padding: 0 }}>
                         <div className="row">
-                          {formik.values.features?.map((course, index) => (
-                            <div className="col-md-6" key={course.id}>
-                              <li className="d-flex align-items-center">
+                          {headerData?.features?.map((course) => (
+                            <div className="col-md-6 mb-2" key={course.id}>
+                              <li className="d-flex align-items-center mb-3">
                                 <img
                                   src={StarIcon}
                                   className="me-2"
                                   style={{ width: "18px", height: "18px" }}
                                   alt="Star Icon"
                                 />
-                                <input
-                                  type="text"
-                                  name={`features[${index}]`}
-                                  value={formik.values.features[index]}
-                                  onChange={formik.handleChange}
-                                  className="form-control mb-2"
-                                />
-                                <FaTrash
-                                  onClick={() => handleDeletePoint(index)}
-                                  className="text-secondary ms-2"
-                                />
+                                <p className="mb-0">{course}</p>
                               </li>
                             </div>
                           ))}
                         </div>
+                        <FaEdit
+                          onClick={() => handleEditClick("features")}
+                          className="text-secondary ms-3"
+                        />
                       </ul>
-                    </div>
-                    {isAddingPoint ? (
-                      <div className="col-md-6 d-flex align-items-center mb-2">
-                        <input
-                          type="text"
-                          value={newPoint}
-                          onChange={(e) => setNewPoint(e.target.value)}
-                          className="form-control me-2"
-                          placeholder="Enter new point"
-                        />
-                        <FaTimes
-                          onClick={() => setIsAddingPoint(false)}
-                          className="text-secondary"
-                        />
-                      </div>
-                    ) : (
-                      <div className="d-flex align-items-center mb-2">
-                        <FaPlus
-                          onClick={() => setIsAddingPoint(true)}
-                          className="text-secondary"
-                        />
-                      </div>
                     )}
-                    <div className="d-flex justify-content-center">
-                      <FaSave
-                        onClick={() => {
-                            if (newPoint.trim()) {
-                              handleAddPoint();
-                              formik.handleSubmit();
-                            }else{handleSaveClick()}
-                          }}
-                        className="text-secondary ms-2"
-                      />
-                      <FaTimes
-                        onClick={handleCancel}
-                        className="text-secondary"
-                      />
-                    </div>
-                  </>
-                ) : (
-                  <ul style={{ listStyle: "none", padding: 0 }}>
-                    <div className="row">
-                      {headerData?.features?.map((course) => (
-                        <div className="col-md-6 mb-2" key={course.id}>
-                          <li className="d-flex align-items-center mb-3">
-                            <img
-                              src={StarIcon}
-                              className="me-2"
-                              style={{ width: "18px", height: "18px" }}
-                              alt="Star Icon"
-                            />
-                            <p className="mb-0">{course}</p>
-                          </li>
-                        </div>
-                      ))}
-                    </div>
-                    <FaEdit
-                      onClick={() => handleEditClick("features")}
-                      className="text-secondary ms-3"
-                    />
-                  </ul>
-                )}
-              </div>
-            </div>
-            <div className="col-md-4 pt-5">
-            <div className="d-flex flex-column align-items-center mb-3">
-                  {headerData?.image_path && (
-                    <img
-                      src={`${ImageURL}${headerData?.image_path}`}
-                      className="img-fluid"
-                      alt="CourseImage"
-                    />
-                  ) }</div>
-              {isEditing === "image_path" ? (
-                <div>
-                  <input
-                    type="file"
-                    name="image_path"
-                    accept="image/*"
-                    onChange={handleImageUpload}
-                    className="form-control mb-2"
-                  />
-                  <div className="d-flex justify-content-end">
-                    <FaSave
-                      onClick={handleSaveClick}
-                      className="text-secondary me-2"
-                    />
-                    <FaTimes
-                      onClick={handleCancel}
-                      className="text-secondary"
-                    />
                   </div>
                 </div>
-              ) : (
-                <div className="d-flex flex-column align-items-center">
-                  {/* {headerData?.image_path && (
+                <div className="col-md-4 pt-5">
+                  <div className="d-flex flex-column align-items-center mb-3">
+                    {headerData?.image_path && (
+                      <img
+                        src={`${ImageURL}${headerData?.image_path}`}
+                        className="img-fluid"
+                        alt="CourseImage"
+                      />
+                    )}
+                  </div>
+                  {isEditing === "image_path" ? (
+                    <div>
+                      <input
+                        type="file"
+                        name="image_path"
+                        accept="image/*"
+                        onChange={handleImageUpload}
+                        className="form-control mb-2"
+                      />
+                      <div className="d-flex justify-content-end">
+                        <FaSave
+                          onClick={handleSaveClick}
+                          className="text-secondary me-2"
+                        />
+                        <FaTimes
+                          onClick={handleCancel}
+                          className="text-secondary"
+                        />
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="d-flex flex-column align-items-center">
+                      {/* {headerData?.image_path && (
                     <img
                       src={`${ImageURL}${headerData?.image_path}`}
                       className="img-fluid"
                       alt="CourseImage"
                     />
                   ) } */}
-                  <FaEdit
-                    onClick={() => handleEditClick("image_path")}
-                    className="text-secondary mt-2"
-                  />
+                      <FaEdit
+                        onClick={() => handleEditClick("image_path")}
+                        className="text-secondary mt-2"
+                      />
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>
+              </div>
+            </form>
           </div>
-        </form>
-      </div>
-    </div>
+        </div>
+      )}
+    </>
   );
 }
 

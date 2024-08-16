@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import api from "../../../config/BaseUrl";
 import ImageURL from "../../../config/ImageURL";
 import Star from "../../../assets/client/starimg.png";
-// import HomeImg from "../../../assets/client/homeImg.png";
+import { Link } from "react-router-dom";
 import BookImg from "../../../assets/client/bookImg.png";
 import Duration from "../../../assets/client/durationImg.png";
 import CourseDuration from "../../../assets/client/nextCourseImg.png";
@@ -52,15 +52,19 @@ function Section1() {
                 <h1 className="display-4 fw-bold">{apiData?.title}</h1>
                 <p className="mt-4 paraContent">{apiData?.description}</p>
                 <div className="mt-4">
+                  <Link to="/course">
                   <button type="button" className="btn btn-primary btn-lg mr-3">
                     Get Started
                   </button>
+                  </Link>
+                  <Link to="/course">
                   <button
                     type="button"
                     className="mx-2 btn btn-outline-primary btn-lg"
                   >
                     Learn More
                   </button>
+                  </Link>
                 </div>
               </div>
             </div>
