@@ -35,6 +35,7 @@ const responsive = {
 
 function UserCourse() {
   const [hoveredIndex, setHoveredIndex] = useState(null);
+  const [carouselHovered, setCarouselHovered] = useState(null);
   const [activeTab, setActiveTab] = useState(null);
   const [apiData, setApiData] = useState({});
   const [searchParams] = useSearchParams();
@@ -69,7 +70,12 @@ function UserCourse() {
                         border: "2px solid #118AEF",
                         cursor: "pointer",
                         minHeight: "280px",
-                        transition: "border 0.5s, min-height 0.5s",
+                        transition:
+                          "transform 0.5s ease, border 0.5s, min-height 0.5s",
+                        transform:
+                          hoveredIndex === index
+                            ? "translateY(-10px)"
+                            : "translateY(0)",
                       }}
                       onMouseEnter={() => setHoveredIndex(index)}
                       onMouseLeave={() => setHoveredIndex(null)}
@@ -83,23 +89,12 @@ function UserCourse() {
                           <div className="card-content container-fluid px-0">
                             <div
                               className="bg-primary px-2"
-                              style={{ minHeight: "26vh" }}
+                              style={{ minHeight: "10rem" }}
                             >
                               <div className="heading-content py-2 d-flex justify-content-between">
                                 <h5 className="text-light fw-bold">
                                   CloudeECS
                                 </h5>
-                                {/* <div className="rating text-light">
-                              <span>
-                                {[...Array(4)].map((_, starIndex) => (
-                                  <IoIosStar
-                                    key={starIndex}
-                                    style={{ color: "gold" }}
-                                  />
-                                ))}
-                              </span>
-                              Rating &nbsp;{card.rating}
-                            </div> */}
                               </div>
                               <div className="image-content d-flex justify-content-center align-items-center">
                                 <img
@@ -111,14 +106,14 @@ function UserCourse() {
                             </div>
                             {hoveredIndex === index ? (
                               <div
-                                className="text-content px-2 fit-content bg-light rounded"
+                                className="text-content px-2 pt-2 fit-content bg-light rounded"
                                 style={{
                                   position: "relative",
                                   top: "-80px",
                                   height: "110px",
                                 }}
                               >
-                                <p className="card-title text-start mb-0 text-truncate fw-bold">
+                                <p className="card-title text-start  mb-0 text-truncate fw-bold">
                                   {card.title}
                                 </p>
                                 <p className="card-title text-start py-2 text-truncate">
@@ -305,27 +300,34 @@ function UserCourse() {
                         border: "2px solid #118AEF",
                         cursor: "pointer",
                         minHeight: "280px",
-                        transition: "border 0.5s, min-height 0.5s",
+                        transition:
+                          "transform 0.6s ease, border 0.5s, min-height 0.5s",
+                        transform:
+                        carouselHovered === index
+                            ? "translateY(-10px)"
+                            : "translateY(0)",
                       }}
-                      onMouseEnter={() => setHoveredIndex(index)}
-                      onMouseLeave={() => setHoveredIndex(null)}
+                      onMouseEnter={() => setCarouselHovered(index)}
+                      onMouseLeave={() => setCarouselHovered(null)}
                     >
                       <Link
                         to={`/courseview/${card.id}`}
                         style={{ textDecoration: "none" }}
                         className="text-dark"
                       >
-                        <div key={card.id}>
-                          <div className="card-content container-fluid px-0">
-                            <div
-                              className="bg-primary px-2"
-                              style={{ minHeight: "24vh" }}
-                            >
-                              <div className="heading-content py-2 d-flex justify-content-between">
-                                <h5 className="text-start ms-2 text-light fw-bold">
-                                  CloudECS
-                                </h5>
-                                {/* <div className="rating text-light">
+                        <div
+                          key={card.id}
+                          className="card-content container-fluid px-0"
+                        >
+                          <div
+                            className="bg-primary px-2"
+                            style={{ minHeight: "10rem" }}
+                          >
+                            <div className="heading-content py-2 d-flex justify-content-between">
+                              <h5 className="text-start ms-2 text-light fw-bold">
+                                CloudECS
+                              </h5>
+                              {/* <div className="rating text-light">
                               <span>
                                 {[...Array(4)].map((_, starIndex) => (
                                   <IoIosStar
@@ -336,74 +338,74 @@ function UserCourse() {
                               </span>
                               Rating &nbsp;{card.rating}
                             </div> */}
+                            </div>
+                            <div className="image-content d-flex justify-content-center align-items-center">
+                              <img
+                                src={`${ImageURL}${card.logo_path}`}
+                                alt="companyLogo"
+                                className="img-fluid w-25"
+                              />
+                            </div>
+                          </div>
+                          {carouselHovered === index ? (
+                            <div
+                              className="text-content px-2 pt-2 fit-content bg-light rounded"
+                              style={{
+                                position: "relative",
+                                top: "-80px",
+                                height: "100px",
+                                // transition: "top 0.5s ease, height 0.5s ease"
+                              }}
+                            >
+                              <p className="card-title text-start mb-0 text-truncate fw-bold">
+                                {card.title}
+                              </p>
+                              <p className="card-title text-start py-2 text-truncate">
+                                {card.description}
+                              </p>
+                              <div className="text-start">
+                                <p className="fw-medium">
+                                  Training Mode :{" "}
+                                  <span className="fw-light">Online</span>
+                                </p>
+                                <p>
+                                  ${parseFloat(card.offer_price).toFixed(2)}
+                                  &nbsp;&nbsp;&nbsp;
+                                  <del className="fw-light">
+                                    ${parseFloat(card.price).toFixed(2)}
+                                  </del>
+                                  &nbsp;&nbsp;&nbsp;
+                                  <span className="rounded bg-primary p-1 text-light">
+                                    {calculateDiscountPercentage(
+                                      card.price,
+                                      card.offer_price
+                                    ).toFixed(0)}
+                                    % off
+                                  </span>
+                                </p>
                               </div>
-                              <div className="image-content d-flex justify-content-center align-items-center">
-                                <img
-                                  src={`${ImageURL}${card.logo_path}`}
-                                  alt="companyLogo"
-                                  className="img-fluid w-25"
-                                />
+                              <div className="d-flex justify-content-between align-items-center">
+                                <button className="btn btn-sm btn-primary mx-2">
+                                  Enroll Now <ImUserPlus />
+                                </button>
+                                <button className="btn btn-sm btn-outline-primary">
+                                  Read More <FaArrowRightLong />
+                                </button>
                               </div>
                             </div>
-                            {hoveredIndex === index ? (
-                              <div
-                                className="text-content px-2 fit-content bg-light rounded"
-                                style={{
-                                  position: "relative",
-                                  top: "-80px",
-                                  height: "100px",
-                                }}
-                              >
-                                <p className="card-title text-start mb-0 text-truncate fw-bold">
-                                  {card.title}
-                                </p>
-                                <p className="card-title text-start py-2 text-truncate">
-                                  {card.description}
-                                </p>
-                                <div className="text-start">
-                                  <p className="fw-medium">
-                                    Training Mode :{" "}
-                                    <span className="fw-light">Online</span>
-                                  </p>
-                                  <p>
-                                    ${parseFloat(card.offer_price).toFixed(2)}
-                                    &nbsp;&nbsp;&nbsp;
-                                    <del className="fw-light">
-                                      ${parseFloat(card.price).toFixed(2)}
-                                    </del>
-                                    &nbsp;&nbsp;&nbsp;
-                                    <span className="rounded bg-primary p-1 text-light">
-                                      {calculateDiscountPercentage(
-                                        card.price,
-                                        card.offer_price
-                                      ).toFixed(0)}
-                                      % off
-                                    </span>
-                                  </p>
-                                </div>
-                                <div className="d-flex justify-content-between align-items-center">
-                                  <button className="btn btn-sm btn-primary mx-2">
-                                    Enroll Now <ImUserPlus />
-                                  </button>
-                                  <button className="btn btn-sm btn-outline-primary">
-                                    Read More <FaArrowRightLong />
-                                  </button>
+                          ) : (
+                            <div  className="text-content p-2 fit-content">
+                              <p className="card-title text-start py-1 text-truncate fw-bold">
+                                {card.title}
+                              </p>
+                              <div className="d-flex justify-content-between align-items-center py-1">
+                                <div className="sub-contents">Beginner</div>
+                                <div className="learners-count p-1">
+                                  Learners (5000)
                                 </div>
                               </div>
-                            ) : (
-                              <div className="text-content p-2 fit-content">
-                                <p className="card-title text-start py-1 text-truncate fw-bold">
-                                  {card.title}
-                                </p>
-                                <div className="d-flex justify-content-between align-items-center py-1">
-                                  <div className="sub-contents">Beginner</div>
-                                  <div className="learners-count p-1">
-                                    Learners (5000)
-                                  </div>
-                                </div>
-                              </div>
-                            )}
-                          </div>
+                            </div>
+                          )}
                         </div>
                       </Link>
                     </div>

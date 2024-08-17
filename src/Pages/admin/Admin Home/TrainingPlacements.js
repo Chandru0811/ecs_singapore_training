@@ -174,18 +174,6 @@ function TrainingPlacements() {
                 Publish
               </button>
             </div>
-            {loading ? (
-              <div className="loader-container">
-                <div className="loader">
-                  <span></span>
-                  <span></span>
-                  <span></span>
-                  <span></span>
-                  <span></span>
-                </div>
-              </div>
-            ) : (
-              /* Main Content Section */
               <div className="container-fluid trainingplacements mt-3 mb-5">
                 <h1 className="secondheading text-start mb-3">
                   Cloud Ecs, Software Training and Placements in India
@@ -455,7 +443,6 @@ function TrainingPlacements() {
                   </div>
                 </div>
               </div>
-            )}
           </div>
         </div>
       )}
