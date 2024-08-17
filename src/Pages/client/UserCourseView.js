@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { FaStar } from "react-icons/fa6";
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
-import { LuDownload } from "react-icons/lu";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import api from "../../config/BaseUrl";
 import ImgUrl from "../../config/ImageURL";
 import { useParams } from "react-router-dom";
-import { jsPDF } from "jspdf";
-import imgData from "../../assets/admin/Logo.png";
 import EnrollModel from "./EnrollModel";
 
 const validationSchema = Yup.object().shape({
@@ -87,75 +84,6 @@ function CourseView() {
       ? parseFloat(courseValue.price) - parseFloat(courseValue.offer_price)
       : 0;
 
-  const generatePDF = (action = "download") => {
-    const doc = new jsPDF();
-
-    doc.addImage(imgData, "PNG", 70, 10, 60, 20);
-
-    // Add text
-    doc.setFontSize(16);
-    doc.setTextColor("#118AEF");
-    doc.text("Software Testing training Course Syllabus", 55, 35);
-
-    doc.setFontSize(16);
-    doc.setTextColor("#118AEF");
-    doc.text("Course Content:", 15, 50);
-
-    doc.setFontSize(13);
-    doc.setTextColor("#000000");
-    doc.text(
-      "Software Testing (Manual, Automation, SQL) - Training Plan",
-      15,
-      60
-    );
-
-    doc.setFontSize(10);
-    doc.text(
-      `Software Testing (Manual, Automation, SQL) course contents have been developed 
-working together with hundreds of hiring companies in India to prepare fresh graduates 
-to work as Software Testing Engineer OR Quality Analyst.`,
-      15,
-      70
-    );
-
-    doc.text(
-      `The Software Testing course contains Manual Testing, Automation Testing & SQL, and 
-the syllabus will help candidates in their preparation for the International Software 
-Testing Qualifications Board (ISTQB) examination.`,
-      15,
-      85
-    );
-
-    doc.setFontSize(13);
-    doc.setTextColor("#118AEF");
-    doc.text("Introduction of Software Testing", 15, 103);
-
-    doc.setFontSize(10);
-    doc.setTextColor("#000000");
-    doc.text("* What is Software testing", 15, 110);
-    doc.text("* What is Quality", 15, 115);
-    doc.text("* Importance of testing", 15, 120);
-    doc.text("* Tools used for Testing", 15, 125);
-
-    doc.setFontSize(13);
-    doc.setTextColor("#118AEF");
-    doc.text("Software Development Life Cycle", 15, 135);
-
-    doc.setFontSize(10);
-    doc.setTextColor("#000000");
-    doc.text("* What is Software testing", 15, 145);
-    doc.text("* What is Quality", 15, 150);
-    doc.text("* Importance of testing", 15, 155);
-    doc.text("* Tools used for Testing", 15, 160);
-
-    // Save or download the PDF
-    if (action === "download") {
-      doc.save("Syllabus.pdf");
-    } else {
-      window.open(doc.output("bloburl"));
-    }
-  };
-
   return (
     <>
       <section className="mt-1 container-fluid">
@@ -213,9 +141,8 @@ Testing Qualifications Board (ISTQB) examination.`,
                         </p>
                       </div>
                       <div className="d-flex align-items-center justify-content-center">
-                        <EnrollModel from={"CourseEnroll"}/>
-                        <EnrollModel from={"Syllabus"}/>
-                        
+                        <EnrollModel from={"CourseEnroll"} />
+                        <EnrollModel from={"Syllabus"} />
                       </div>
                     </div>
                   </div>
@@ -287,10 +214,10 @@ Testing Qualifications Board (ISTQB) examination.`,
               <div className="d-flex align-items-center justify-content-between">
                 <p>Can’t find a batch you’re looking for!</p>
                 <p>
-                  <EnrollModel from={"RequestBatch"}/>
+                  <EnrollModel from={"RequestBatch"} />
                 </p>
                 <p>
-                <EnrollModel from={"RequestCallback"}/>
+                  <EnrollModel from={"RequestCallback"} />
                 </p>
               </div>
             </div>
@@ -368,15 +295,17 @@ Testing Qualifications Board (ISTQB) examination.`,
               <div className="row">
                 <div className="d-flex justify-content-between mb-3">
                   <h5 className="text-start mb-3">
-                    AWS Master Program Syllabus
+                    {courseValue.title} Master Program Syllabus
                   </h5>
-                  <button
+                  {/* <button
                     className="btn btn-outline-primary"
                     onClick={() => generatePDF("download")}
                   >
                     <LuDownload />
                     Syllabus
-                  </button>
+                  </button> */}
+
+                  <EnrollModel from={"Syllabus"} data={courseValue} />
                 </div>
                 {courseValue.syllabus && courseValue.syllabus.length > 0 ? (
                   <div

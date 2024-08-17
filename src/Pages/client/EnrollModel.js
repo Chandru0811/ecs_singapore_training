@@ -3,11 +3,16 @@ import { Modal, Button } from "react-bootstrap";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { LuDownload } from "react-icons/lu";
+import imgData from "../../assets/admin/Logo.png";
+import { jsPDF } from "jspdf";
 
-const EnrollModel = ({ from }) => {
+const EnrollModel = ({ from, data }) => {
   const [show, setShow] = useState(false);
 
-  const handleClose = () => setShow(false);
+  const handleClose = () => {
+    setShow(false);
+    formik.resetForm();
+  };
   const handleShow = () => setShow(true);
 
   const validationSchema = Yup.object({
@@ -31,6 +36,9 @@ const EnrollModel = ({ from }) => {
     validationSchema: validationSchema,
     onSubmit: (values) => {
       console.log("Form values:", values); // Log form values to console
+      if (from === "Syllabus") {
+        generatePDF("download");
+      }
       handleClose(); // Close the modal after form submission
     },
   });
@@ -43,30 +51,47 @@ const EnrollModel = ({ from }) => {
       );
     } else if (from === "Syllabus") {
       return (
-        <button type="button" className="btn btn-outline-primary ms-2" onClick={handleShow}>
+        <button
+          type="button"
+          className="btn btn-outline-primary ms-2"
+          onClick={handleShow}
+        >
           <LuDownload /> Syllabus
         </button>
       );
-    }else if (from ==="RequestBatch"){
-      return (<span onClick={handleShow} className="ms-2 text-primary text-decoration-underline" style={{cursor :"pointer"}}>
-      Request a Batch
-    </span>);
-    } 
-    else if (from ==="RequestCallback"){
-      return (<span onClick={handleShow} className="ms-2 text-primary text-decoration-underline" style={{cursor :"pointer"}}>
-      Request a Callback
-    </span>);
-    } 
-    else if (from ==="About"){
-      return (<button type="button" className="btn enroll-btn" onClick={handleShow}>
-        Enroll Now
-      </button>);
-    } 
-    else if (from ==="Landing"){
+    } else if (from === "RequestBatch") {
       return (
-        <button type="button" className="enrollbtn" onClick={handleShow}>Enroll</button>);
-    } 
-    else {
+        <span
+          onClick={handleShow}
+          className="ms-2 text-primary text-decoration-underline"
+          style={{ cursor: "pointer" }}
+        >
+          Request a Batch
+        </span>
+      );
+    } else if (from === "RequestCallback") {
+      return (
+        <span
+          onClick={handleShow}
+          className="ms-2 text-primary text-decoration-underline"
+          style={{ cursor: "pointer" }}
+        >
+          Request a Callback
+        </span>
+      );
+    } else if (from === "About") {
+      return (
+        <button type="button" className="btn enroll-btn" onClick={handleShow}>
+          Enroll Now
+        </button>
+      );
+    } else if (from === "Landing") {
+      return (
+        <button type="button" className="enrollbtn" onClick={handleShow}>
+          Enroll
+        </button>
+      );
+    } else {
       return (
         <button type="button" className="btn enroll-btn" onClick={handleShow}>
           Enroll Now
@@ -74,6 +99,71 @@ const EnrollModel = ({ from }) => {
       );
     }
   };
+
+  const generatePDF = (action = "download") => {
+    const syllabusData = data;
+
+    if (from === "Syllabus") {
+      const doc = new jsPDF();
+
+      doc.addImage(imgData, "PNG", 70, 10, 60, 20);
+
+      // Add text
+      doc.setFontSize(16);
+      doc.setTextColor("#118AEF");
+      // Center-align the syllabus title
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const titleWidth = doc.getTextWidth(syllabusData.title);
+      const titleX = (pageWidth - titleWidth) / 2;
+      doc.text(syllabusData.title, titleX, 35);
+
+      doc.setFontSize(16);
+      doc.setTextColor("#118AEF");
+      doc.text("Course Content:", 15, 50);
+
+      doc.setFontSize(13);
+      doc.setTextColor("#000000");
+      doc.text(`${syllabusData.title}-Training Plan`, 15, 60);
+
+      doc.setFontSize(10);
+      const benefitsText = doc.splitTextToSize(
+        syllabusData.benefits,
+        pageWidth - 30
+      );
+      doc.text(benefitsText, 15, 70);
+
+      doc.setFontSize(16);
+      doc.text(`Introduction of ${syllabusData.title}`, 15, 95);
+
+      // Add syllabus details
+      let yPos = 103;
+      const bulletPointSpacing = 15;
+      syllabusData.syllabus.forEach((session, index) => {
+        doc.setFontSize(14);
+        doc.setTextColor("#118AEF");
+        doc.text(`Session ${index + 1}: ${session.session}`, 15, yPos);
+
+        yPos += 7;
+
+        session.lessons.forEach((lesson) => {
+          doc.setFontSize(12);
+          doc.setTextColor("#000000");
+          doc.text(`• ${lesson.lesson} (${lesson.duration})`, 20, yPos);
+          yPos += 7;
+        });
+
+        yPos += 15; // Add space between sessions
+      });
+
+      // Save or download the PDF
+      if (action === "download") {
+        doc.save("Syllabus.pdf");
+      } else {
+        window.open(doc.output("bloburl"));
+      }
+    }
+  };
+
   return (
     <>
       {renderButton(from)}
