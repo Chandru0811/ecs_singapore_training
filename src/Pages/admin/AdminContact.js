@@ -53,9 +53,12 @@ function AdminContact() {
           getData();
           toast.success(response.data.message);
           console.log("updated", response.data);
+        } else {
+          toast.error(response.data.message);
         }
-      } catch (e) {
-        console.log("Error updating contact data:", e);
+      } catch (error) {
+        console.log("Error updating contact data:", error);
+        toast.error("Error updating contact data:", error);
       }
     },
   });
@@ -157,7 +160,7 @@ function AdminContact() {
                 <div>
                   <button
                     type="submit"
-                    className="btn btn-sm btn-danger mx-2"
+                    className="btn btn-danger"
                     disabled={loading}
                     onClick={publishData}
                   >
@@ -223,7 +226,7 @@ function AdminContact() {
                 </div>
                 <div className="arrow-icon mb-5">
                   <a
-                    href={formik.values.contactCardLink1}
+                    href={`tel:${formik.values.phone}`}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
@@ -277,8 +280,7 @@ function AdminContact() {
                 </div>
                 <div className="arrow-icon mb-5">
                   <a
-                    href={formik.values.contactCardLink2}
-                    target="_blank"
+                    href={`mailto:${formik.values.email}`}
                     rel="noopener noreferrer"
                   >
                     <FaCircleArrowRight />
@@ -331,7 +333,7 @@ function AdminContact() {
                 </div>
                 <div className="arrow-icon mb-5">
                   <a
-                    href={formik.values.contactCardLink3}
+                    href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(formik.values.location)}`}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
@@ -484,7 +486,7 @@ function AdminContact() {
                       </div>
                     ) : (
                       <div className="d-flex">
-                        <p className="text-start fw-medium paraText">
+                        <h1 className="fw-bold">
                           {formik.values.title}
                           <FaEdit
                             size={20}
@@ -492,7 +494,7 @@ function AdminContact() {
                             style={{ cursor: "pointer" }}
                             onClick={() => handleEditClick("title")}
                           />
-                        </p>
+                        </h1>
                       </div>
                     )}
                     {isEditing === "subTitle" ? (
@@ -518,7 +520,7 @@ function AdminContact() {
                         {formik.values.subTitle}
                         <FaEdit
                           size={20}
-                          className="text-dark ms-3"
+                          className="text-secondary ms-3"
                           style={{ cursor: "pointer" }}
                           onClick={() => handleEditClick("subTitle")}
                         />

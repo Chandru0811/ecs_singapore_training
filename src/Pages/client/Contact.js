@@ -481,7 +481,7 @@ function ContactUs() {
                   </div>
                 </div>
                 <div className="arrow-icon mb-5">
-                  <a href="tel:8608163189">
+                  <a href={`tel:${apiData?.phone}`}>
                     <FaCircleArrowRight />
                   </a>
                 </div>
@@ -524,7 +524,7 @@ function ContactUs() {
                 </div>
                 <div className="arrow-icon mb-5">
                   <a
-                    href="https://maps.app.goo.gl/Y4UnULL1Gs7nAGRS8"
+                    href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(apiData?.location)}`}
                     target="_blank"
                   >
                     <FaCircleArrowRight />

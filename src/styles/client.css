@@ -519,6 +519,7 @@ hr {
   padding: 10px 20px;
   cursor: pointer;
 }
+
 .sub-content {
   color: var(--client-primary-color);
   text-align: start;

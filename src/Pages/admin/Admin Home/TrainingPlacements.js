@@ -197,7 +197,7 @@ function TrainingPlacements() {
                               className="btn"
                               onClick={() => handleEditClick(index)}
                             >
-                              <FaEdit size={18} />
+                              <FaEdit size={18} className="text-secondary" />
                             </button>
                             <DeleteModel
                               className="text-danger"

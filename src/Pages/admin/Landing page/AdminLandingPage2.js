@@ -245,7 +245,7 @@ function AdminLandingPage2() {
                               : ""
                           }`}
                           style={{ borderRadius: "3px" }}
-                          placeholder="Enter fullName"
+                          placeholder="Enter a Full Name"
                           {...formik1.getFieldProps("fullName")}
                         />
                         {formik1.touched.fullName &&
@@ -266,7 +266,7 @@ function AdminLandingPage2() {
                               : ""
                           }`}
                           style={{ borderRadius: "3px" }}
-                          placeholder="Enter mobileNumber"
+                          placeholder="Enter a Mobile Number"
                           {...formik1.getFieldProps("mobileNumber")}
                         />
                         {formik1.touched.mobileNumber &&
@@ -286,7 +286,7 @@ function AdminLandingPage2() {
                               : ""
                           }`}
                           style={{ borderRadius: "3px" }}
-                          placeholder="Enter email"
+                          placeholder="Enter a Email ID"
                           {...formik1.getFieldProps("email")}
                         />
                         {formik1.touched.email && formik1.errors.email && (

@@ -4,7 +4,6 @@ import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import EnrollForm from "./EnrollForm";
 import api from "../../config/BaseUrl";
 import ImageURL from "../../config/ImageURL";
 import Testimonial from "./Testimonial";
@@ -47,12 +46,14 @@ function LandingPage() {
   const formik = useFormik({
     initialValues: {
       fullName: "",
-      email: "",
       mobileNumber: "",
+      email: "",
     },
     validationSchema: validationSchema,
-    onSubmit: (values) => {
-      console.log("Form data", values);
+    onSubmit: (values, { resetForm }) => {
+      console.log("Enroll Data:", values);
+      // Optionally reset form after submission
+      resetForm();
     },
   });
 
@@ -99,19 +100,19 @@ function LandingPage() {
   return (
     <>
       {loader ? (
-        <section class="dots-container">
-          <div class="dot"></div>
-          <div class="dot"></div>
-          <div class="dot"></div>
-          <div class="dot"></div>
-          <div class="dot"></div>
+        <section className="dots-container">
+          <div className="dot"></div>
+          <div className="dot"></div>
+          <div className="dot"></div>
+          <div className="dot"></div>
+          <div className="dot"></div>
         </section>
       ) : (
         <div>
-          <form>
+          <form onSubmit={formik.handleSubmit}>
             {/* banner */}
             <div className="container">
-              <div className="row py-5  d-flex align-items-center">
+              <div className="row py-5 d-flex align-items-center">
                 <div className="col-md-7 col-12 py-3 text-start">
                   <h2 className="display-3 fw-bolder text-dark">
                     {apiData?.title}
@@ -133,7 +134,7 @@ function LandingPage() {
             {/* banner */}
             {/* carousel section */}
             <div className="container">
-              <div className="row py-4 m-0 ">
+              <div className="row py-4 m-0">
                 <div className="col-md-2 col-12 px-1 py-5">
                   <p className="sub-content">WHAT WE GIVE</p>
                   <h5 className="text-start fw-bolder">
@@ -153,7 +154,7 @@ function LandingPage() {
                     {data?.map((card, index) => (
                       <div
                         key={index}
-                        className="h-75 card mx-4 my-5 p-2 bg-primary text-light  text-start shadow"
+                        className="h-75 card mx-4 my-5 p-2 bg-primary text-light text-start shadow"
                       >
                         <div className="my-2">
                           <div className="text-start w-25 py-1">
@@ -175,7 +176,7 @@ function LandingPage() {
               </div>
             </div>
             {/* carousel section */}
-            {/* input section  */}
+            {/* input section */}
             <div className="container">
               <div className="row">
                 <div className="col-md-7 col-12 px-5 text-start">
@@ -192,7 +193,59 @@ function LandingPage() {
                   />
                 </div>
                 <div className="col-md-5 col-12 p-5">
-                  <EnrollForm />
+                  <div className="card text-start p-4 py-3">
+                    <h3 className="input-title fw-bold">Enroll Now</h3>
+                    <div className="py-3">
+                      <label htmlFor="fullName">Full Name</label>
+                      <input
+                        type="text"
+                        id="fullName"
+                        name="fullName"
+                        className={`form-control ${formik.touched.fullName && formik.errors.fullName ? "is-invalid" : ""}`}
+                        style={{ borderRadius: "3px" }}
+                        placeholder="Enter a Full Name"
+                        {...formik.getFieldProps("fullName")}
+                      />
+                      {formik.touched.fullName && formik.errors.fullName && (
+                        <div className="invalid-feedback">{formik.errors.fullName}</div>
+                      )}
+                    </div>
+                    <div className="py-3">
+                      <label htmlFor="mobileNumber">Mobile Number</label>
+                      <input
+                        type="text"
+                        id="mobileNumber"
+                        name="mobileNumber"
+                        className={`form-control ${formik.touched.mobileNumber && formik.errors.mobileNumber ? "is-invalid" : ""}`}
+                        style={{ borderRadius: "3px" }}
+                        placeholder="Enter a Mobile Number"
+                        {...formik.getFieldProps("mobileNumber")}
+                      />
+                      {formik.touched.mobileNumber && formik.errors.mobileNumber && (
+                        <div className="invalid-feedback">{formik.errors.mobileNumber}</div>
+                      )}
+                    </div>
+                    <div className="py-3">
+                      <label htmlFor="email">Email</label>
+                      <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        className={`form-control ${formik.touched.email && formik.errors.email ? "is-invalid" : ""}`}
+                        style={{ borderRadius: "3px" }}
+                        placeholder="Enter an Email ID"
+                        {...formik.getFieldProps("email")}
+                      />
+                      {formik.touched.email && formik.errors.email && (
+                        <div className="invalid-feedback">{formik.errors.email}</div>
+                      )}
+                    </div>
+                    <div className="mb-3">
+                      <button type="submit" className="enrollbtn">
+                        Send
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

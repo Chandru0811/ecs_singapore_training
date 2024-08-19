@@ -203,7 +203,7 @@ const Register = ({ handleLogin,handleClientLogin }) => {
                 <span className="" style={{ fontSize: ".8vw" }}>
                   I’ve read and agree with your{" "}
                   <a
-                    href="/terms-and-conditions"
+                    href="/termsandcondition"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
@@ -211,7 +211,7 @@ const Register = ({ handleLogin,handleClientLogin }) => {
                   </a>{" "}
                   and{" "}
                   <a
-                    href="/privacy-policy"
+                    href="/privacypolicy"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
