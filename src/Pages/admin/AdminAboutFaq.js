@@ -23,7 +23,6 @@ function AdminAboutFaq() {
   const handleShow = () => setShow(true);
   const [isEditing, setIsEditing] = useState(null);
   const [editingIndex, setEditingIndex] = useState(null);
-  const [datas, setDatas] = useState([]);
   const [saveloading, setSaveLoading] = useState(false);
   const [publishloading, setPublishLoading] = useState(false);
   const [loader, setLoader] = useState(false);
@@ -106,7 +105,7 @@ function AdminAboutFaq() {
       const response = await api.get("aboutfaq");
       const fetchedData = response.data.data;
       formik.setValues({ ...fetchedData, faq: fetchedData });
-      setDatas(fetchedData);
+      formik.setValues({ ...formik.values, faq: fetchedData });
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
