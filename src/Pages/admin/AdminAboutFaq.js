@@ -32,7 +32,6 @@ function AdminAboutFaq() {
     initialValues: {
       faq: [],
     },
-    validationSchema: validationSchema,
     onSubmit: async (values) => {
       const payload = {
         question: formik.values.faq[editingIndex].question,
@@ -46,11 +45,11 @@ function AdminAboutFaq() {
           const response = await api.put(`aboutfaq/${faqId}`, payload);
           if (response.status === 200) {
             getData();
-            toast.success("FAQ updated successfully");
+            toast.success(response.data.message);
           }
         }
-      } catch (e) {
-        toast.error("Error updating FAQ");
+      } catch (error) {
+        toast.error("Error updating FAQ", error);
       } finally {
         setIsEditing(null);
         setEditingIndex(null);
@@ -71,14 +70,14 @@ function AdminAboutFaq() {
       try {
         const response = await api.post("aboutfaq", payload);
         if (response.status === 200) {
-          toast.success("FAQ added successfully");
+          toast.success(response.data.message);
           formik.setFieldValue("faq", [...formik.values.faq, response.data]);
           handleClose();
           resetForm(); // Reset the form after successful submission
         }
         getData();
       } catch (error) {
-        toast.error("Error adding FAQ");
+        toast.error("Error adding FAQ", error);
       } finally {
         setSaveLoading(false);
       }
@@ -131,7 +130,7 @@ function AdminAboutFaq() {
       }
       getData();
     } catch (error) {
-      toast.error("Error publishing FAQ");
+      toast.error("Error publishing FAQ", error);
     } finally {
       setPublishLoading(false);
     }
